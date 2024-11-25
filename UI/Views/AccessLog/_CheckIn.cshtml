@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+}
+<div class="modal-dialog">
+    <form id="frnCheckinCreate">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="h4CheckinTitle">
+                    Check in
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 form-group">
+                        <label>Resource <span class="red-required">*</span></label>
+                        <select class="form-control" id="ddlResource" required></select>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>Password<span class="red-required">*</span></label>
+                        <input type="password" id="txtPassword" class="form-control" placeholder="Password" required />
+                    </div>
+
+                    <div class="col-12 form-group">
+                        <label>Room<span class="red-required">*</span></label>
+                        <select class="form-control" id="ddlRoom" required></select>
+                    </div>
+
+                    <div class="col-12 form-group">
+                        <label>Purpose</label>
+                        @* <input type="text" id="txtPurpose" class="form-control" placeholder="Purpose" /> *@
+                        <select class="form-control" id="ddlPurpose"></select>
+                    </div>
+
+                    <div class="col-12 form-group">
+                        <label>Remarks</label>
+                        <input type="text" id="txtRemarks" class="form-control" placeholder="Remarks" />
+                    </div>
+
+
+                    <div class="col-12 form-group">
+                        <label>Visitor</label>
+                        <textarea type="text" id="txtVisitor" class="form-control" placeholder="Visitor"> </textarea>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SaveCheckin();">Check in</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </form>
+</div>

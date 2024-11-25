@@ -1,0 +1,152 @@
+﻿@{
+    ViewData["Title"] = "Access Log";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Access Log</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+                    <li class="breadcrumb-item active">Access Log</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-9">
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-block btn-primary mb-3 float-right" onclick="ExcelDownload()"><i class="fas fa-file-excel">&nbsp;</i>Excel Download</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="AccessLogTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts
+{
+    <script>
+        var GetAllAccessLogUrl = '@Url.Action("GetAll", "AccessLog")';
+
+        $(function () {
+            $('.nav-link').removeClass('active').removeClass("menu-open");
+            $('#liAccessLogmenu').addClass('active');
+            $('#liAccessLogmenu').parents('li').parents('li').addClass('menu-open');
+
+
+            GetAllAccessLog();
+        });
+
+        function GetAllAccessLog() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'roomName', title: 'Room' },
+                { data: 'resourceName', title: 'Resource' },
+                { data: 'timeIn', title: 'Check In' },
+                { data: 'timeOut', title: 'Check Out' },
+                { data: 'purpose', title: 'Purpose' },
+                { data: 'remarks', title: 'Remarks' },
+                { data: 'visitor', title: 'Visitor' },
+            ];
+
+            $.ajax({
+                url: GetAllAccessLogUrl,
+                type: "POST",
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    if ($.fn.dataTable.isDataTable('#AccessLogTable')) {
+                        $('#AccessLogTable').DataTable().clear().destroy();
+                    }
+                },
+                success: function (response) {
+                    if (response.data) {
+                        dataToShow = response.data;
+                        $('#AccessLogTable').DataTable({ //init table
+                            dom: "Bfrtip", //button Strip
+                            searching: true, //show search
+                            paging: false, //no paging
+                            processing: true, //processing
+                            scrollY: 'auto', //fixed height
+                            scrollCollapse: true,//scroll
+                            order: [[0, 'desc']], //order
+                            language: { // search anf info bars
+                                search: '',
+                                emptyTable: 'No data available',
+                                searchPlaceholder: 'Search',
+                                info: "Showing _TOTAL_ entries",
+                                infoEmpty: "Showing 0 entries",
+                                infoFiltered: "(filtered from _MAX_ entries)",
+                            },
+                            data: dataToShow, // data to display
+                            // columnDefs: [ // set action column
+                            //     {
+                            //         //set column order for action
+                            //         targets: columnList.length,
+                            //         //remove sorting on action
+                            //         orderable: false,
+                            //         //set width of action column
+                            //         width: "10%",
+                            //         render: function (data, type, full, meta) {
+                            //             //edit button
+                            //             // var edit = '<a onclick="openAccessLogModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+
+                            //             var btn = '';
+                            //             // btn = edit + Preview;
+                            //             data = '<div class="text-nowrap">' + btn + '</div>';
+                            //             return data;
+                            //         }
+                            //     }
+                            // ],
+                            columns: columnList, //column list
+
+                            buttons: [ //set buttons above table
+                                //Excel Export Button
+                                {
+                                    extend: 'excel',
+                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+                                    className: 'form-control btn-c-secondary d-none',
+                                    exportOptions: {
+                                        columns: ':visible:not(.sorting_disabled)'
+
+                                    }
+                                },
+                            ],
+                            drawCallback: function () {
+                                // BUTTON EVENT ON THE DATA TABLE
+                            }
+                        });
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+            });
+        }
+        function ExcelDownload() {
+            $('.buttons-excel').click();
+        }
+    </script>
+}

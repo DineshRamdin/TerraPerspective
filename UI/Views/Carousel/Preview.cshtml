@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "Preview";
+}
+@model List<BL.Models.Administration.PreviewCarouselPosterMappingDTO>
+
+@* <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/luxonauta/luxacss@latest/dist/compressed/luxa.min.css'>
+<link rel='stylesheet' href='https://api.fontshare.com/v2/css?f[]=satoshi@1&amp;display=swap'> *@
+<link href="~/css/Carouselstyle.css" rel="stylesheet" />
+
+<div class="outer_main">
+    <main class="carousel-container">
+        <button class="btn home" onclick="Gotohome();">Home</button>
+        <div class="carousel">
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="item @(i==0 ? "active":string.Empty)" data-interval="@Model[i].Duration">
+                    <img src="data:image/png;base64,@Model[i].PosterImageBase64" alt="@Model[i].PosterName" />
+                    <p class="caption">@Model[i].PosterName</p>
+                </div>
+            }
+
+        </div>
+        <button class="btn prev"><img src="~/image/left-arrow.png" alt="Alternate Text" /></button>
+        <button class="btn next"><img src="~/image/right-arrow.png" alt="Alternate Text" /></button>
+        <div class="dots"></div>
+
+    </main>
+</div>
+
+@section scripts
+{
+    <script>
+
+        var GotohomeUrl = '@Url.Action("index", "Carousel")';
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let carousel = document.querySelector(".carousel");
+            let items = carousel.querySelectorAll(".item");
+            let dotsContainer = document.querySelector(".dots");
+
+            // Insert dots into the DOM
+            items.forEach((_, index) => {
+                let dot = document.createElement("span");
+                dot.classList.add("dot");
+                if (index === 0) dot.classList.add("active");
+                dot.dataset.index = index;
+                dotsContainer.appendChild(dot);
+            });
+
+            let dots = document.querySelectorAll(".dot");
+
+            // Function to show a specific item
+            function showItem(index) {
+                items.forEach((item, idx) => {
+                    item.classList.remove("active");
+                    dots[idx].classList.remove("active");
+                    if (idx === index) {
+                        item.classList.add("active");
+                        dots[idx].classList.add("active");
+                    }
+                    let interval = $('.item').eq(index).attr('data-interval');
+                    let intervalInt = parseInt(interval, 10);
+
+                    if (isNaN(intervalInt)) {
+                        intervalInt = 1;
+                    }
+
+                    let intervalValue = intervalInt * 1000;
+
+                    resetAutoScroll(intervalValue);
+                });
+
+            }
+
+            // Event listeners for buttons
+            document.querySelector(".prev").addEventListener("click", () => {
+                let index = [...items].findIndex((item) =>
+                    item.classList.contains("active")
+                );
+                showItem((index - 1 + items.length) % items.length);
+            });
+
+            document.querySelector(".next").addEventListener("click", () => {
+                let index = [...items].findIndex((item) =>
+                    item.classList.contains("active")
+                );
+                showItem((index + 1) % items.length);
+            });
+
+            // Event listeners for dots
+            dots.forEach((dot) => {
+                dot.addEventListener("click", () => {
+                    let index = parseInt(dot.dataset.index);
+                    showItem(index);
+                });
+            });
+        });
+
+        let Firstinterval = $('.item').first().attr('data-interval');
+        let FirstintervalInt = parseInt(Firstinterval, 10);
+
+        if (isNaN(FirstintervalInt)) {
+            FirstintervalInt = 1;
+        }
+
+        let FirstintervalValue = FirstintervalInt * 1000;
+
+        let autoScrollInterval = setInterval(nextItem, FirstintervalValue);
+
+        function resetAutoScroll(interval) {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = setInterval(nextItem, interval);
+        }
+
+        function nextItem() {
+            $('.next').click();
+        }
+        function Gotohome() {
+            window.location.href = GotohomeUrl;
+        }
+    </script>
+}

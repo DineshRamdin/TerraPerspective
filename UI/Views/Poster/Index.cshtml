@@ -1,0 +1,296 @@
+﻿@{
+    ViewData["Title"] = "Poster";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Poster</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+                    <li class="breadcrumb-item active">Poster</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="PosterTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddPosterModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddPoster.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+    <script>
+        var GetAllPosterUrl = '@Url.Action("GetAll", "Poster")';
+        var PosterGetByIdUrl = '@Url.Action("GetById", "Poster")';
+        var getPosterDropDownUrl = '@Url.Action("GetAllDropdownValues", "Poster")';
+        var CreateUpdatePosterUrl = '@Url.Action("CreateUpdate", "Poster")';
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#lipostermenu').addClass('active');
+
+            GetAllPoster();
+        });
+
+        function GetAllPoster() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'name', title: 'Poster Name' },
+                { data: 'typeName', title: 'Type' },
+            ];
+
+            $.ajax({
+                url: GetAllPosterUrl,
+                type: "POST",
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    if ($.fn.dataTable.isDataTable('#PosterTable')) {
+                        $('#PosterTable').DataTable().clear().destroy();
+                    }
+                },
+                success: function (response) {
+                    if (response.data) {
+                        dataToShow = response.data;
+                        $('#PosterTable').DataTable({ //init table
+                            dom: "Bfrtip", //button Strip
+                            searching: true, //show search
+                            paging: false, //no paging
+                            processing: true, //processing
+                            scrollY: 'auto', //fixed height
+                            scrollCollapse: true,//scroll
+                            order: [[0, 'desc']], //order
+                            language: { // search anf info bars
+                                search: '',
+                                emptyTable: 'No data available',
+                                searchPlaceholder: 'Search',
+                                info: "Showing _TOTAL_ entries",
+                                infoEmpty: "Showing 0 entries",
+                                infoFiltered: "(filtered from _MAX_ entries)",
+                            },
+                            data: dataToShow, // data to display
+                            columnDefs: [ // set action column
+                                {
+                                    //set column order for action
+                                    targets: columnList.length,
+                                    //remove sorting on action
+                                    orderable: false,
+                                    //set width of action column
+                                    width: "10%",
+                                    render: function (data, type, full, meta) {
+                                        //edit button
+                                        var edit = '<a onclick="openPosterModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+                                        //list of buttons
+                                        var btn = '';
+                                        btn = edit
+                                        data = '<div class="text-nowrap">' + btn + '</div>';
+                                        return data;
+                                    }
+                                }
+                            ],
+                            columns: columnList, //column list
+
+                            buttons: [ //set buttons above table
+                                //Excel Export Button
+                                {
+                                    extend: 'excel',
+                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+                                    className: 'form-control btn-c-secondary d-none',
+                                    exportOptions: {
+                                        columns: ':visible:not(.sorting_disabled)'
+
+                                    }
+                                },
+                                //Open Add popup
+
+                                '<a><button class="form-control btn-c-primary d-inline" onclick="openPosterModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+                            ],
+                            drawCallback: function () {
+                                // BUTTON EVENT ON THE DATA TABLE
+                            }
+                        });
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+            });
+        }
+
+        function openPosterModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: PosterGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearPosterModal();
+                    GetDropdownData();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4PosterTitle").html("Modify Poster");
+                        else
+                            $("#h4PosterTitle").html("Add Poster");
+
+                        $("#hdnId").val(response.data.id);
+                        $("#txtPosterName").val(response.data.name);
+                        $("#ddlType").val(response.data.type == null || response.data.type == 0 ? "" : response.data.type);
+                        $('#chkStatus').prop('checked', response.data.status == null ? true : response.data.status);
+
+                        if (response.data.posterImageBase64 != null && response.data.posterImageBase64 != "") {
+                            $("#oldimage").val(response.data.posterImageBase64);
+
+                            $("#viewImage").attr("src", "data:image/png;base64," + response.data.posterImageBase64);
+                            $("#viewImage").css("display", "");
+
+                        }
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddPosterModal').modal('show');
+                $("#frnPosterCreate").validate({}).resetForm();;
+            });
+
+
+        }
+
+        function ClearPosterModal() {
+            $("#h4PosterTitle").html("Add Poster");
+            $("#hdnId").val(0);
+            $("#txtPosterName").val("");
+            $("#ddlType").val("");
+            $('#chkStatus').prop('checked', true);
+            $("#txtMobile").val("");
+            $("#imagefile").val(null);
+            $("#oldimage").val("");
+            $("#viewImage").attr("src", "");
+            $("#viewImage").css("display", "none");
+        }
+
+        function GetDropdownData() {
+            $.ajax({
+                url: getPosterDropDownUrl,
+                type: "POST",
+                async: false,
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    $("#ddlType").html('');
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $.each(response.data, function (key, value) {
+                            if (value.title == "Type") {
+                                $("#ddlType").append($("<option></option>").val('').html("Select Type"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    // toastr.error("Error:" + error);
+                }
+
+            });
+        }
+
+        async function SavePoster() {
+
+            let valid = formValidation(["txtPosterName", "ddlType"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtPosterName").val();
+                dataObject.Type = $("#ddlType").val();
+                dataObject.Status = $('#chkStatus').prop('checked');
+                
+                var FileData = await FiletoBase64string("imagefile");
+
+                if (FileData == "") {
+                    FileData = $('#oldimage').val();
+                }
+                
+                dataObject.PosterImageBase64 = FileData;
+
+                $.ajax({
+                    url: CreateUpdatePosterUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddPosterModal').modal('hide');
+                            GetAllPoster();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("Please fill in required field(s)");
+            }
+        }
+
+    </script>
+}

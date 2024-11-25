@@ -1,0 +1,427 @@
+﻿@{
+    ViewData["Title"] = "Carousel";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Carousel</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+                    <li class="breadcrumb-item active">Carousel</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openCarouselModal(0)">Add</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="CarouselTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddCarouselModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddCarousel.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+    <script>
+        var GetAllCarouselUrl = '@Url.Action("GetAll", "Carousel")';
+        var CarouselGetByIdUrl = '@Url.Action("GetById", "Carousel")';
+        var CarouselPreviewUrl = '@Url.Action("Preview", "Carousel")';
+        var getCarouselDropDownUrl = '@Url.Action("GetAllDropdownValues", "Carousel")';
+        var CreateUpdateCarouselUrl = '@Url.Action("CreateUpdate", "Carousel")';
+        var CarouselChildDataByParentIdUrl = '@Url.Action("CarouselChildDataByParentId", "Carousel")';
+
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#liCarouselmenu').addClass('active');
+
+            GetAllCarousel();
+        });
+
+        function GetAllCarousel() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'name', title: 'Carousel Name' },
+                // { data: 'header', title: 'Header' },
+                { data: 'duration', title: 'Duration' },
+            ];
+
+            $.ajax({
+                url: GetAllCarouselUrl,
+                type: "POST",
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    if ($.fn.dataTable.isDataTable('#CarouselTable')) {
+                        $('#CarouselTable').DataTable().clear().destroy();
+                    }
+                },
+                success: function (response) {
+                    if (response.data) {
+                        dataToShow = response.data;
+                        $('#CarouselTable').DataTable({ //init table
+                            dom: "Bfrtip", //button Strip
+                            searching: true, //show search
+                            paging: false, //no paging
+                            processing: true, //processing
+                            scrollY: 'auto', //fixed height
+                            scrollCollapse: true,//scroll
+                            order: [[0, 'desc']], //order
+                            language: { // search anf info bars
+                                search: '',
+                                emptyTable: 'No data available',
+                                searchPlaceholder: 'Search',
+                                info: "Showing _TOTAL_ entries",
+                                infoEmpty: "Showing 0 entries",
+                                infoFiltered: "(filtered from _MAX_ entries)",
+                            },
+                            data: dataToShow, // data to display
+                            columnDefs: [ // set action column
+                                {
+                                    //set column order for action
+                                    targets: columnList.length,
+                                    //remove sorting on action
+                                    orderable: false,
+                                    //set width of action column
+                                    width: "10%",
+                                    render: function (data, type, full, meta) {
+                                        //edit button
+                                        var edit = '<a onclick="openCarouselModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+                                        //list of buttons
+                                        var Preview = '<a onclick="PreviewCarouselModal(\'' + full.id + '\')" title="Preview"><i class="fa fa-eye text-secondary ms-1"></i></a> ';
+                                        var btn = '';
+                                        btn = edit + Preview;
+                                        data = '<div class="text-nowrap">' + btn + '</div>';
+                                        return data;
+                                    }
+                                }
+                            ],
+                            columns: columnList, //column list
+
+                            buttons: [ //set buttons above table
+                                //Excel Export Button
+                                {
+                                    extend: 'excel',
+                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+                                    className: 'form-control btn-c-secondary d-none',
+                                    exportOptions: {
+                                        columns: ':visible:not(.sorting_disabled)'
+
+                                    }
+                                },
+                                //Open Add popup
+
+                                '<a><button class="form-control btn-c-primary d-inline" onclick="openCarouselModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+                            ],
+                            drawCallback: function () {
+                                // BUTTON EVENT ON THE DATA TABLE
+                            }
+                        });
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+            });
+        }
+        function PreviewCarouselModal(id) {
+            window.open(CarouselPreviewUrl + "?id=" + id, '_blank');
+        }
+        function openCarouselModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: CarouselGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearCarouselModal();
+                    GetDropdownData();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4CarouselTitle").html("Modify Carousel");
+                        else
+                            $("#h4CarouselTitle").html("Add Carousel");
+
+                        $("#hdnId").val(response.data.id);
+                        $("#txtCarouselName").val(response.data.name);
+                        $('#txtDuration').val(response.data.duration);
+                        // $("#txtHeader").val(response.data.header);
+                        // $("#txtdetails").val(response.data.details);
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddCarouselModal').modal('show');
+                $("#frnCarouselCreate").validate({}).resetForm();
+                GetChildData();
+            });
+        }
+
+        function ClearCarouselModal() {
+            $("#h4CarouselTitle").html("Add Carousel");
+            $("#hdnId").val("");
+            $("#txtCarouselName").val("");
+            // $("#txtHeader").val("");
+            // $("#txtdetails").val("");
+            $("#txtDuration").val("");
+        }
+
+        function GetDropdownData() {
+            $.ajax({
+                url: getCarouselDropDownUrl,
+                type: "POST",
+                async: false,
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    $("#ddlPoster").html('');
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $.each(response.data, function (key, value) {
+                            if (value.title == "Poster") {
+                                $("#ddlPoster").append($("<option></option>").val('').html("Select Type"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlPoster").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    // toastr.error("Error:" + error);
+                }
+
+            });
+        }
+
+        function SaveCarousel() {
+
+            // let valid = formValidation(["txtCarouselName", "txtHeader", "txtDuration"]);
+            let valid = formValidation(["txtCarouselName"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtCarouselName").val();
+                // dataObject.Header = $("#txtHeader").val();
+                // dataObject.Details = $('#txtdetails').val();
+                dataObject.Duration = $('#txtDuration').val();
+                dataObject.PosterData = PosterData;
+
+                $.ajax({
+                    url: CreateUpdateCarouselUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddCarouselModal').modal('hide');
+                            GetAllCarousel();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("Please fill in required field(s)");
+            }
+        }
+        var PosterData = [];
+        function SavePoster() {
+            if ($("#ddlPoster").val() != "") {
+                if (!PosterData.some(obj => obj['posterId'] == $("#ddlPoster").val())) {
+                    PosterData.push({
+                        id: 0,
+                        posterId: $("#ddlPoster").val(),
+                        posterName: $("#ddlPoster option:selected").text()
+                    });
+
+                    $("#ddlPoster").val('');
+                }
+
+
+                GetAllPoster();
+            }
+            else {
+                toastr.warning("Please select Proper Poster..!");
+            }
+        }
+
+        function GetAllPoster() {
+
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'posterName', title: 'Poster Name' },
+            ];
+
+            if (!$("#GridPoster").data("jsGrid")) {
+                $("#GridPoster").jsGrid({
+                    height: "auto",
+                    width: "100%",
+
+                    sorting: true,
+                    paging: true,
+
+                    data: PosterData,
+
+                    fields: [
+                        { name: "posterName", type: "text", width: 150, title: "Poster Name" },
+                        // { name: "Age", type: "number", width: 50 },
+                        // { name: "Address", type: "text", width: 200 },
+                        // { name: "Country", type: "select", items: db.countries, valueField: "Id", textField: "Name" },
+                        // { name: "Married", type: "checkbox", title: "Is Married" }
+                    ],
+                    gridview: true,
+                });
+            }
+            else {
+                $("#GridPoster").jsGrid("refresh"); // Force a refresh
+            }
+
+            // if ($.fn.dataTable.isDataTable('#PosterTable')) {
+            //     $('#PosterTable').DataTable().clear().destroy();
+            // }
+
+
+            // $('#PosterTable').DataTable({ //init table
+            //     dom: "Bfrtip", //button Strip
+            //     searching: true, //show search
+            //     paging: false, //no paging
+            //     processing: true, //processing
+            //     scrollY: 'auto', //fixed height
+            //     scrollCollapse: true,//scroll
+            //     order: [[0, 'desc']], //order
+            //     language: { // search anf info bars
+            //         search: '',
+            //         emptyTable: 'No data available',
+            //         searchPlaceholder: 'Search',
+            //         info: "Showing _TOTAL_ entries",
+            //         infoEmpty: "Showing 0 entries",
+            //         infoFiltered: "(filtered from _MAX_ entries)",
+            //     },
+            //     data: PosterData, // data to display
+            //     columnDefs: [ // set action column
+            //         {
+            //             //set column order for action
+            //             targets: columnList.length,
+            //             //remove sorting on action
+            //             orderable: false,
+            //             //set width of action column
+            //             width: "10%",
+            //             render: function (data, type, full, meta) {
+            //                 //edit button
+            //                 // var edit = '<a onclick="openCarouselModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+            //                 //list of buttons
+            //                 var btn = '';
+            //                 // btn = edit
+            //                 data = '<div class="text-nowrap">' + btn + '</div>';
+            //                 return data;
+            //             }
+            //         }
+            //     ],
+            //     columns: columnList, //column list
+
+            //     buttons: [ //set buttons above table
+            //         //Excel Export Button
+            //         {
+            //             extend: 'excel',
+            //             text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+            //             className: 'form-control btn-c-secondary d-none',
+            //             exportOptions: {
+            //                 columns: ':visible:not(.sorting_disabled)'
+
+            //             }
+            //         },
+            //         //Open Add popup
+
+            //         '<a><button class="form-control btn-c-primary d-inline" onclick="openCarouselModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+            //     ],
+            //     drawCallback: function () {
+            //         // BUTTON EVENT ON THE DATA TABLE
+            //     }
+            // });
+
+        }
+
+        function GetChildData() {
+            var dataObject = {};
+            dataObject.Id = $("#hdnId").val();
+
+            $.ajax({
+                url: CarouselChildDataByParentIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    PosterData = [];
+                },
+                success: function (response) {
+                    if (response.data) {
+                        PosterData = response.data;
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                GetAllPoster();
+            });
+        }
+    </script>
+}

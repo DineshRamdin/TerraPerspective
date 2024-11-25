@@ -1,0 +1,246 @@
+﻿@{
+    ViewData["Title"] = "Room";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Room</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+                    <li class="breadcrumb-item active">Room</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openRoomModal(0)">Add</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="RoomTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="AddRoomModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddRoom.cshtml" />
+</div>
+
+@section scripts
+{
+    <script>
+        var GetAllRoomUrl = '@Url.Action("GetAll", "Room")';
+        var RoomGetByIdUrl = '@Url.Action("GetById", "Room")';
+        var CreateUpdateRoomUrl = '@Url.Action("CreateUpdate", "Room")';
+
+        $(function () {
+            $('.nav-link').removeClass('active').removeClass("menu-open");
+            $('#liRoommenu').addClass('active');
+            $('#liRoommenu').parents('li').parents('li').addClass('menu-open');
+
+            GetAllRoom();
+        });
+
+        function GetAllRoom() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'name', title: 'Room Name' },
+                { data: 'type', title: 'Room Type' },
+                { data: 'location', title: 'Room Location' },
+            ];
+
+            $.ajax({
+                url: GetAllRoomUrl,
+                type: "POST",
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    if ($.fn.dataTable.isDataTable('#RoomTable')) {
+                        $('#RoomTable').DataTable().clear().destroy();
+                    }
+                },
+                success: function (response) {
+                    if (response.data) {
+                        dataToShow = response.data;
+                        $('#RoomTable').DataTable({ //init table
+                            dom: "Bfrtip", //button Strip
+                            searching: true, //show search
+                            paging: false, //no paging
+                            processing: true, //processing
+                            scrollY: 'auto', //fixed height
+                            scrollCollapse: true,//scroll
+                            order: [[0, 'desc']], //order
+                            language: { // search anf info bars
+                                search: '',
+                                emptyTable: 'No data available',
+                                searchPlaceholder: 'Search',
+                                info: "Showing _TOTAL_ entries",
+                                infoEmpty: "Showing 0 entries",
+                                infoFiltered: "(filtered from _MAX_ entries)",
+                            },
+                            data: dataToShow, // data to display
+                            columnDefs: [ // set action column
+                                {
+                                    //set column order for action
+                                    targets: columnList.length,
+                                    //remove sorting on action
+                                    orderable: false,
+                                    //set width of action column
+                                    width: "10%",
+                                    render: function (data, type, full, meta) {
+                                        //edit button
+                                        var edit = '<a onclick="openRoomModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+                                        //list of buttons
+                                        var btn = '';
+                                        btn = edit
+                                        data = '<div class="text-nowrap">' + btn + '</div>';
+                                        return data;
+                                    }
+                                }
+                            ],
+                            columns: columnList, //column list
+
+                            buttons: [ //set buttons above table
+                                //Excel Export Button
+                                {
+                                    extend: 'excel',
+                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+                                    className: 'form-control btn-c-secondary d-none',
+                                    exportOptions: {
+                                        columns: ':visible:not(.sorting_disabled)'
+
+                                    }
+                                },
+                                //Open Add popup
+
+                                '<a><button class="form-control btn-c-primary d-inline" onclick="openRoomModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+                            ],
+                            drawCallback: function () {
+                                // BUTTON EVENT ON THE DATA TABLE
+                            }
+                        });
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+            });
+        }
+
+        function openRoomModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: RoomGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearRoomModal();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4RoomTitle").html("Modify Room");
+                        else
+                            $("#h4RoomTitle").html("Add Room");
+
+                        $("#hdnId").val(response.data.id);
+                        $("#txtRoomName").val(response.data.name);
+                        $("#txtRoomType").val(response.data.type);
+                        $("#txtRoomLocation").val(response.data.location);
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddRoomModal').modal('show');
+                $("#frnRoomCreate").validate({}).resetForm();;
+            });
+
+
+        }
+
+        function ClearRoomModal() {
+            $("#h4RoomTitle").html("Add Room");
+            $("#hdnId").val(0);
+            $("#txtRoomName").val("");
+            $("#txtRoomType").val("");
+            $("#txtRoomLocation").val("");
+        }
+
+        async function SaveRoom() {
+
+            let valid = formValidation(["txtRoomName","txtRoomType", "txtRoomLocation"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtRoomName").val();
+                dataObject.Type = $("#txtRoomType").val();
+                dataObject.Location = $("#txtRoomLocation").val();
+              
+                $.ajax({
+                    url: CreateUpdateRoomUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddRoomModal').modal('hide');
+                            GetAllRoom();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("Please fill in required field(s)");
+            }
+        }
+
+    </script>
+}

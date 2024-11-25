@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="modal-dialog">
+    <form id="frnResourceCreate">
+        <input type="hidden" id="hdnResourceId" value="0" />
+        <input type="hidden" id="hdnResourceAId" value="" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="h4ResourceTitle">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 form-group">
+                        <label>Code<span class="red-required">*</span></label>
+                        <input type="text" id="txtCode" class="form-control" placeholder="Code" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>Type<span class="red-required">*</span></label>
+                        <input type="text" id="txtType" class="form-control" placeholder="Type" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>Surname<span class="red-required">*</span></label>
+                        <input type="text" id="txtSurname" class="form-control" placeholder="Surname" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>Othername<span class="red-required">*</span></label>
+                        <input type="text" id="txtOthername" class="form-control" placeholder="Othername" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>Email<span class="red-required">*</span></label>
+                        <input type="text" id="txtEmail" class="form-control" placeholder="Email" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>Mobile No<span class="red-required">*</span></label>
+                        <input type="text" id="txtMobile" class="form-control" placeholder="Mobile" required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SaveResource();">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </form>
+</div>

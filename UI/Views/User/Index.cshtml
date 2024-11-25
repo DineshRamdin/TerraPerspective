@@ -1,0 +1,302 @@
+﻿@{
+    ViewData["Title"] = "User";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">User</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+                    <li class="breadcrumb-item active">User</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openUserModal()">Add</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="UserTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddUserModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddUser.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+    <script>
+        var GetAllUserUrl = '@Url.Action("GetAll", "User")';
+        var UserGetByIdUrl = '@Url.Action("GetById", "User")';
+        var getUserDropDownUrl = '@Url.Action("getUserDropDown", "User")';
+        var CreateUpdateUserUrl = '@Url.Action("CreateUpdate", "User")';
+
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#liusermenu').addClass('active');
+
+            GetAllUser();
+        });
+
+        function GetAllUser() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'surname', title: 'Surname' },
+                { data: 'othername', title: 'Othername' },
+                { data: 'email', title: 'Email' },
+                { data: 'roleName', title: 'Role Name' },
+            ];
+
+            $.ajax({
+                url: GetAllUserUrl,
+                type: "POST",
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    if ($.fn.dataTable.isDataTable('#UserTable')) {
+                        $('#UserTable').DataTable().clear().destroy();
+                    }
+                },
+                success: function (response) {
+                    if (response.data) {
+                        dataToShow = response.data;
+                        $('#UserTable').DataTable({ //init table
+                            dom: "Bfrtip", //button Strip
+                            searching: true, //show search
+                            paging: false, //no paging
+                            processing: true, //processing
+                            scrollY: 'auto', //fixed height
+                            scrollCollapse: true,//scroll
+                            order: [[0, 'desc']], //order
+                            language: { // search anf info bars
+                                search: '',
+                                emptyTable: 'No data available',
+                                searchPlaceholder: 'Search',
+                                info: "Showing _TOTAL_ entries",
+                                infoEmpty: "Showing 0 entries",
+                                infoFiltered: "(filtered from _MAX_ entries)",
+                            },
+                            data: dataToShow, // data to display
+                            columnDefs: [ // set action column
+                                {
+                                    //set column order for action
+                                    targets: columnList.length,
+                                    //remove sorting on action
+                                    orderable: false,
+                                    //set width of action column
+                                    width: "10%",
+                                    render: function (data, type, full, meta) {
+                                        //edit button
+                                        var edit = '<a onclick="openUserModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+                                        //list of buttons
+                                        var btn = '';
+                                        btn = edit
+                                        data = '<div class="text-nowrap">' + btn + '</div>';
+                                        return data;
+                                    }
+                                }
+                            ],
+                            columns: columnList, //column list
+
+                            buttons: [ //set buttons above table
+                                //Excel Export Button
+                                {
+                                    extend: 'excel',
+                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+                                    className: 'form-control btn-c-secondary d-none',
+                                    exportOptions: {
+                                        columns: ':visible:not(.sorting_disabled)'
+
+                                    }
+                                },
+                                //Open Add popup
+
+                                '<a><button class="form-control btn-c-primary d-inline" onclick="openUserModal("")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+                            ],
+                            drawCallback: function () {
+                                // BUTTON EVENT ON THE DATA TABLE
+                            }
+                        });
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+            });
+        }
+        function openUserModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: UserGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearUserModal();
+                    GetDropdownData();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id != undefined && response.data.id != null && response.data.id != "")
+                            $("#h4UserTitle").html("Modify User");
+                        else {
+                            $("#h4UserTitle").html("Add User");
+                        }
+                        
+                        $("#hdnuserId").val(response.data.id);
+                        $("#txtSurname").val(response.data.surname);
+                        $("#txtOthername").val(response.data.othername);
+                        $("#txtEmail").val(response.data.email);
+                        $("#txtMobile").val(response.data.phoneNumber);
+                        $("#ddlRole").val(response.data.role);
+                        if (response.data.profileImagebase64 != null && response.data.profileImagebase64 != "") {
+                            $("#oldprofileimage").val(response.data.profileImagebase64);
+
+                            $("#viewProfileImage").attr("src", "data:image/png;base64," + response.data.profileImagebase64);
+                            $("#viewProfileImage").css("display", "");
+
+                        }
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddUserModal').modal('show');
+                $("#frnUserCreate").validate({}).resetForm();
+            });
+
+
+        }
+
+        function ClearUserModal() {
+            $("#h4UserTitle").html("Add User");
+            $("#hdnuserId").val("");
+            $("#txtSurname").val("");
+            $("#txtOthername").val("");
+            $("#txtEmail").val("");
+            $("#txtMobile").val("");
+            $("#profileimagefile").val(null);
+            $("#oldprofileimage").val("");
+            $("#viewProfileImage").attr("src", "");
+            $("#viewProfileImage").css("display", "none");
+        }
+
+        function GetDropdownData() {
+            $.ajax({
+                url: getUserDropDownUrl,
+                type: "POST",
+                async: false,
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    $("#ddlRole").html('');
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $.each(response.data, function (key, value) {
+                            if (value.title == "Roles") {
+                                $("#ddlRole").append($("<option></option>").val('').html("Select Role"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlRole").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    // toastr.error("Error:" + error);
+                }
+
+            });
+        }
+
+        async function SaveUser() {
+
+            let valid = formValidation(["txtSurname", "txtOthername", "txtEmail", "ddlRole", "txtMobile"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.id = $("#hdnuserId").val();
+                dataObject.Surname = $("#txtSurname").val();
+                dataObject.Othername = $("#txtOthername").val();
+                dataObject.Email = $("#txtEmail").val();
+                dataObject.PhoneNumber = $("#txtMobile").val();
+                dataObject.Role = $("#ddlRole").val();
+
+                var FileData = await FiletoBase64string("profileimagefile");
+
+                if (FileData == "") {
+                    FileData = $('#oldprofileimage').val();
+                }
+
+                dataObject.ProfileImagebase64 = FileData;
+
+                $.ajax({
+                    url: CreateUpdateUserUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddUserModal').modal('hide');
+                            GetAllUser();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("Please fill in required field(s)");
+            }
+        }
+
+    </script>
+}
