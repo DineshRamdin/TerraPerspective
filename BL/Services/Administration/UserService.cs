@@ -414,5 +414,13 @@ namespace BL.Services.Administration
             return dto;
         }
 
+        public string UserProfileImage(string Id)
+        {
+            string Profile = (from ur in context.SYS_User
+                              join u in context.SYS_UserDetails on ur.Id equals u.User.Id
+                              where ur.AId == Id
+                              select u.ProfileImagebase64).FirstOrDefault();
+            return Profile;
+        }
     }
 }

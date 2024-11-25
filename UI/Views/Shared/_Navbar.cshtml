@@ -1,8 +1,17 @@
 ﻿@{
     Layout = null;
 }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
+@{
+    // Get the Base64 string from session
+    var base64Image = HttpContextAccessor.HttpContext.Session.GetString("ProfileImage");
+    var profileImage = string.IsNullOrEmpty(base64Image)
+        ? "/images/default-profile.png" // Use default image if no Base64 image is stored
+        : $"data:image/png;base64,{base64Image}"; // Prepend the Base64 string with the data type
 
+}
   <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -99,10 +108,25 @@
                 <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
             </div>
         </li> *@
+       
         <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Base" asp-action="Logout" role="button">
-                <i class="fas fa-sign-out-alt"></i>
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <img id="profileUserImg" class="img-circle img-size-32" src="@profileImage" />
             </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-key mr-2"></i> Change Password
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-cog mr-2"></i> Settings
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" asp-area="" asp-controller="Base" asp-action="Logout" role="button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">

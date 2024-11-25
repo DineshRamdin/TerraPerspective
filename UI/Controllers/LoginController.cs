@@ -16,11 +16,13 @@ namespace UI.Controllers
         #region constructor
 
         public DeviceService _Deviceservice;
+        public UserService _UserService;
 
         public LoginController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext)
         : base(userManager, signInManager, rolemanager, Dbcontext)
         {
             _Deviceservice = new DeviceService();
+            _UserService = new UserService();
         }
         #endregion
         public IActionResult Index()
@@ -61,8 +63,10 @@ namespace UI.Controllers
                 var clientIp = Request.Host;
                 var MacAddress = NetworkHelper.GetServerMacAddress();
 
-
+                
                 BaseResponseDTO<ApplicationUser> ncb = await LoginService.Login(model, _signInManager, _userManager, _roleManager, clientIp.Value, MacAddress);
+                string image = _UserService.UserProfileImage(ncb.Data.Id);
+                ncb.Data.ProfileImage = image;
                 if (ncb.QryResult != new QueryResult().FAILED)
                 {
                     var key = "b14ca5898a4e4133bbce2ea2315a1916";
@@ -72,6 +76,7 @@ namespace UI.Controllers
                     session.SetString("Username", ncb.Data.UserName.ToString());
                     session.SetString("Role", ncb.Role.ToString());
                     session.SetString("RoleId", ncb.RoleId.ToString());
+                    session.SetString("ProfileImage", string.IsNullOrEmpty(ncb.Data.ProfileImage) ? "" : ncb.Data.ProfileImage.ToString());
                 }
                 return Ok(ncb);
 
