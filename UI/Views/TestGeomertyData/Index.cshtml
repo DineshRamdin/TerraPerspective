@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Test Geomerty Data";
+}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="" />
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Test Geomerty Data</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+                    <li class="breadcrumb-item active">Test Geomerty Data</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <div id="map" style="height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts
+{
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+
+        var GetAllTestGeomertyDataUrl = '@Url.Action("GetAll", "TestGeomertyData")';
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#liTestGeomertyDatamenu').addClass('active');
+
+
+            initMap();
+        });
+
+        function initMap() {
+            var MapData = [];
+            $.ajax({
+                url: GetAllTestGeomertyDataUrl,
+                type: "POST",
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    MapData = [];
+                },
+                success: function (response) {
+                    console.log("response.data", response.data);
+                    if (response.data) {
+                        MapData = response.data;
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                const map = L.map('map').setView([51.505, -0.09], 13);
+
+                const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                // Loop through the data array and process each feature
+                MapData.forEach(function (item) {
+                    // Parse the GeoJSON string
+                    var geoJsonData = JSON.parse(item.featureGeoJson);
+                    
+                    // Add the GeoJSON polygon to the map
+                    L.geoJSON(geoJsonData).addTo(map);
+                });
+            });
+
+        }
+    </script>
+
+}
