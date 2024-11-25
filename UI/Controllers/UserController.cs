@@ -112,5 +112,34 @@ namespace UI.Controllers
 
 
         }
+
+        [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<bool>>> ResetUserPassword(string Id)
+        {
+            try
+            {
+
+                try
+                {
+                    BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+                    if (!string.IsNullOrEmpty(Id))
+                    {
+                        dt = await service.ResetUserPassword(Id, _userManager);
+                    }
+
+                    return Ok(dt);
+                }
+                catch (Exception)
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+
+        }
     }
 }

@@ -6,6 +6,7 @@ using DAL.Context;
 using DAL.Models;
 using DAL.Models.Administration;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -366,6 +367,47 @@ namespace BL.Services.Administration
             {
                 dto.Data = false;
                 dto.ErrorMessage = "User save Fail";
+                dto.QryResult = new QueryResult().FAILED;
+            }
+
+            return dto;
+        }
+
+        public async Task<BaseResponseDTO<bool>> ResetUserPassword(string Id,UserManager<ApplicationUser> userManager)
+        {
+            BaseResponseDTO<bool> dto = new BaseResponseDTO<bool>();
+            string message = "";
+
+            try
+            {
+
+                ApplicationUser au = context.Users.Where(x => x.Id == Id).FirstOrDefault();
+
+                if (au != null)
+                {
+
+                    var randPassword = "Admin@123.";//ConversionService.GenerateRandomPassword();
+                    var user = await userManager.FindByEmailAsync(au.Email);
+                    var token = userManager.GeneratePasswordResetTokenAsync(user).Result; //generate password reset token
+                    IdentityResult resultResetPasword = userManager.ResetPasswordAsync(user, token, randPassword).Result; //reset password using token
+                   
+                    dto.Data = true;
+                    dto.ErrorMessage = "Reset User Password Successfully";
+                    dto.QryResult = new QueryResult().SUCEEDED;
+
+                }
+                else
+                {
+                    dto.Data = false;
+                    dto.ErrorMessage = "Reset User Password Fail";
+                    dto.QryResult = new QueryResult().FAILED;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                dto.Data = false;
+                dto.ErrorMessage = "Reset User Password Fail";
                 dto.QryResult = new QueryResult().FAILED;
             }
 

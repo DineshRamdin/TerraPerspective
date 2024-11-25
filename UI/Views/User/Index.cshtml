@@ -53,6 +53,7 @@
         var UserGetByIdUrl = '@Url.Action("GetById", "User")';
         var getUserDropDownUrl = '@Url.Action("getUserDropDown", "User")';
         var CreateUpdateUserUrl = '@Url.Action("CreateUpdate", "User")';
+        var ResetUserPasswordUrl = '@Url.Action("ResetUserPassword", "User")';
 
 
         $(function () {
@@ -113,7 +114,9 @@
                                         var edit = '<a onclick="openUserModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
                                         //list of buttons
                                         var btn = '';
-                                        btn = edit
+                                        btn = edit;
+                                        var reset = '<a onclick="ResetUserPassword(\'' + full.id + '\')" title="Reset Password"><i class="fas fa-undo text-secondary ms-1"></i></a>';
+                                        btn += reset;
                                         data = '<div class="text-nowrap">' + btn + '</div>';
                                         return data;
                                     }
@@ -202,6 +205,35 @@
             });
 
 
+        }
+
+        function ResetUserPassword(id){
+            var dataObject = {};
+            dataObject.id = id;
+            $.ajax({
+                url: ResetUserPasswordUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    if (response.data) {
+                        toastr.success(response.errorMessage);
+                        GetAllUser();
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+
+            });
         }
 
         function ClearUserModal() {
