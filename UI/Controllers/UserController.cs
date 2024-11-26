@@ -118,13 +118,42 @@ namespace UI.Controllers
         {
             try
             {
-
                 try
                 {
                     BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
                     if (!string.IsNullOrEmpty(Id))
                     {
                         dt = await service.ResetUserPassword(Id, _userManager);
+                    }
+
+                    return Ok(dt);
+                }
+                catch (Exception)
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<bool>>> ChangeUserPassword(ChangePasswordDTO dto)
+        {
+            try
+            {
+                try
+                {
+                    ISession session = HttpContext.Session;
+                    string Id = HttpContext.Session.GetString("UserId");
+                    BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+                    if (dto!=null)
+                    {
+                        dt = await service.ChangeUserPassword(dto, Id, _userManager);
                     }
 
                     return Ok(dt);

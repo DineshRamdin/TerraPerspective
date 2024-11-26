@@ -76,6 +76,7 @@ namespace UI.Controllers
                     session.SetString("Username", ncb.Data.UserName.ToString());
                     session.SetString("Role", ncb.Role.ToString());
                     session.SetString("RoleId", ncb.RoleId.ToString());
+                    session.SetString("UserId", string.IsNullOrEmpty(ncb.Data.Id) ? "" : ncb.Data.Id.ToString());
                     session.SetString("ProfileImage", string.IsNullOrEmpty(ncb.Data.ProfileImage) ? "" : ncb.Data.ProfileImage.ToString());
                 }
                 return Ok(ncb);

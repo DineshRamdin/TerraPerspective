@@ -1,6 +1,7 @@
 ﻿using BL.Constants;
 using BL.Models.Administration;
 using BL.Models.Common;
+using BL.Services.Common;
 using DAL.Common;
 using DAL.Context;
 using DAL.Models;
@@ -390,7 +391,10 @@ namespace BL.Services.Administration
                     var user = await userManager.FindByEmailAsync(au.Email);
                     var token = userManager.GeneratePasswordResetTokenAsync(user).Result; //generate password reset token
                     IdentityResult resultResetPasword = userManager.ResetPasswordAsync(user, token, randPassword).Result; //reset password using token
-                   
+                    user.LockoutEnd = null;
+                    user.AccessFailedCount = 0;
+                    user.LastPasswordChangedDate = DateTime.UtcNow;
+                    await userManager.UpdateAsync(user);
                     dto.Data = true;
                     dto.ErrorMessage = "Reset User Password Successfully";
                     dto.QryResult = new QueryResult().SUCEEDED;
@@ -408,6 +412,50 @@ namespace BL.Services.Administration
             {
                 dto.Data = false;
                 dto.ErrorMessage = "Reset User Password Fail";
+                dto.QryResult = new QueryResult().FAILED;
+            }
+
+            return dto;
+        }
+
+        public async Task<BaseResponseDTO<bool>> ChangeUserPassword(ChangePasswordDTO changePasswordDTO,string Id, UserManager<ApplicationUser> userManager)
+        {
+            BaseResponseDTO<bool> dto = new BaseResponseDTO<bool>();
+            string message = "";
+
+            try
+            {
+                
+                ApplicationUser au = context.Users.Where(x => x.Id == Id).FirstOrDefault();
+
+                if (au != null)
+                {
+
+                    var randPassword = changePasswordDTO.NewPassword;
+                    var user = await userManager.FindByEmailAsync(au.Email);
+                    var token = userManager.GeneratePasswordResetTokenAsync(user).Result; //generate password reset token
+                    IdentityResult resultResetPasword = userManager.ResetPasswordAsync(user, token, randPassword).Result; //reset password using token
+                    user.LockoutEnd = null;
+                    user.AccessFailedCount = 0;
+                    user.LastPasswordChangedDate = DateTime.UtcNow;
+                    await userManager.UpdateAsync(user);
+                    dto.Data = true;
+                    dto.ErrorMessage = "Change User Password Successfully";
+                    dto.QryResult = new QueryResult().SUCEEDED;
+
+                }
+                else
+                {
+                    dto.Data = false;
+                    dto.ErrorMessage = "Change User Password Fail";
+                    dto.QryResult = new QueryResult().FAILED;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                dto.Data = false;
+                dto.ErrorMessage = "Change User Password Fail";
                 dto.QryResult = new QueryResult().FAILED;
             }
 

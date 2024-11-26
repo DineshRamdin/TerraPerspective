@@ -48,7 +48,9 @@
             All rights reserved.
         </footer>
     </div>
-
+    <div class="modal fade" id="ChangePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <partial name="_ChangePassword.cshtml" />
+    </div>
     <!-- jQuery -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -66,8 +68,10 @@
     <script src="~/js/common/fileupload.js"></script>
     <script src="~/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <script src="~/plugins/jsgrid/jsgrid.min.js"></script>
-
+    <script src="~/js/common/common.js"></script>
     <script>
+        var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';
+
         $(document).ready(function () {
             $.validator.setDefaults({
                 focusInvalid: false,
