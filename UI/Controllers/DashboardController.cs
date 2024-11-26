@@ -20,5 +20,11 @@ namespace UI.Controllers
         {
             return View();
         }
+
+        public ActionResult ChangePassword()
+        {
+            // Pass any necessary data to the view
+            return PartialView("_ChangePassword");
+        }
     }
 }

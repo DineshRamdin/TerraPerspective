@@ -53,7 +53,9 @@
 			All rights reserved.
 		</footer>
 	</div>
-
+	<div class="modal fade" id="ChangePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<partial name="_ChangePassword.cshtml" />
+	</div>
 	<!-- jQuery -->
 	<script src="~/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
@@ -84,12 +86,15 @@
 	<script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 	<script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
 	<script src="~/plugins/daterangepicker/daterangepicker.js"></script>
 	<script src="~/plugins/inputmask/jquery.inputmask.min.js"></script>
-
+	<script src="~/js/common/common.js"></script>
 
 
 	<script>
+		var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';
+
 		$(document).ready(function () {
 			$.validator.setDefaults({
 				focusInvalid: false,

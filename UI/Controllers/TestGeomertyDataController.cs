@@ -5,6 +5,9 @@ using DAL.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
+using System.Data.SqlTypes;
 using UI.Controllers.Common;
 
 namespace UI.Controllers
@@ -17,16 +20,8 @@ namespace UI.Controllers
             service = new GeomertyDataService();
         }
 
-        public IActionResult Index(bool dataAdd = false)
+        public IActionResult Index()
         {
-            if (dataAdd)
-            {
-
-                string geoJson = "{\"type\":\"Polygon\",\"coordinates\":[[[51.509, -0.08], [51.503, -0.06], [51.51, -0.047], [51.509, -0.08]]]}";
-                string zone = "Zone1";
-
-                service.AddGeometryData(zone, geoJson);
-            }
             return View();
         }
 
@@ -45,10 +40,29 @@ namespace UI.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<bool>>> CreateUpdate(GeomertyDataDTO dto)
+        {
+            try
+            {
+                BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+
+                var reader = new WKTReader();
+                dto.geometry = reader.Read(dto.FeatureGeoJson);
+                dto.geometry.SRID = 4326;
+                dt = await service.SaveAsync(dto);
+
+                return Ok(dt);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
 
 
         }
 
-        
     }
 }
