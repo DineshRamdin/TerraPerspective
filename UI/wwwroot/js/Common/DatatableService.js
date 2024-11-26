@@ -27,7 +27,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                     // $('#' + tableID).DataTable().destroy();
                     $('#' + tableID).DataTable({ //init table
                         dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl', // Search on the left, buttons on the right
-                        /*dom: '<"top"B><"top"f>rt<"bottom"ip>', */
+                        /*dom: '<"top"Bf>rt<"bottom"ip>', */
                         searching: true, //show search
                         paging: false, //no paging
                         processing: true, //processing
@@ -121,7 +121,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         buttons: [
                             {
                                 text: '<i class="fa fa-plus me-2"></i>Add New',
-                                className: 'btn btn-block btn-primary custom-class mb-3 addbtn',
+                                className: 'btn btn-sm btn-primary custom-class addbtn',
                                 action: function (e, dt, node, config) {
                                     // Replace this with your custom action
                                     // You can dynamically invoke a function if onclickPartial is a string
