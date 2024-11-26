@@ -455,6 +455,8 @@ namespace DAL.Context
         public DbSet<SYS_Device> SYS_Device { get; set; }
         public DbSet<SYS_LookUpType> SYS_LookUpType { get; set; }
         public DbSet<SYS_LookUpValue> SYS_LookUpValue { get; set; }
-        
+        public DbSet<SYS_GeomertyData> SYS_GeomertyData { get; set; }
+
+
     }
 }

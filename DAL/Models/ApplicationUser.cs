@@ -38,6 +38,9 @@ namespace DAL.Models
 
         [NotMapped]
         public string Role { get; set; }
+
+        [NotMapped]
+        public string ProfileImage { get; set; }
     }
 
     public enum UserStatus
