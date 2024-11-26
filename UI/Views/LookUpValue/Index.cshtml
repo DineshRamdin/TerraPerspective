@@ -1,273 +1,275 @@
 ﻿@{
-    ViewData["Title"] = "LookUp Value";
+	ViewData["Title"] = "LookUp Value";
 }
 
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">LookUp Value</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-                    <li class="breadcrumb-item active">LookUp Value</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">LookUp Value</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+					<li class="breadcrumb-item active">LookUp Value</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="row">
-                    <div class="col-10">
-                    </div>
-                    <div class="col-2">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*  <div class="col-2">
                         <button type="button" class="btn btn-block btn-primary mb-3" onclick="openLookUpValueModal(0)">Add</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12  mb-10">
-                        <table id="LookUpValueTable"></table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    </div> *@
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="LookUpValueTable" class="table table-bordered table-striped"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 <div class="modal fade" id="AddLookUpValueModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <partial name="_AddLookUpValue.cshtml" />
+	<partial name="_AddLookUpValue.cshtml" />
 </div>
 <!-- /.modal -->
 @section scripts
 {
-    <script>
-        var GetAllLookUpValueUrl = '@Url.Action("GetAll", "LookUpValue")';
-        var LookUpValueGetByIdUrl = '@Url.Action("GetById", "LookUpValue")';
-        var getLookUpValueDropDownUrl = '@Url.Action("GetAllDropdownValues", "LookUpValue")';
-        var CreateUpdateLookUpValueUrl = '@Url.Action("CreateUpdate", "LookUpValue")';
+	<script>
+		var GetAllLookUpValueUrl = '@Url.Action("GetAll", "LookUpValue")';
+		var LookUpValueGetByIdUrl = '@Url.Action("GetById", "LookUpValue")';
+		var getLookUpValueDropDownUrl = '@Url.Action("GetAllDropdownValues", "LookUpValue")';
+		var CreateUpdateLookUpValueUrl = '@Url.Action("CreateUpdate", "LookUpValue")';
 
-        $(function () {
-            $('.nav-link').removeClass('active');
-            $('#liLookUpValuemenu').addClass('active');
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liLookUpValuemenu').addClass('active');
 
-            GetAllLookUpValue();
-        });
+			GetAllLookUpValue();
+		});
 
-        function GetAllLookUpValue() {
-            var columnList = [
-                { data: 'id', title: 'Id', visible: false },
-                { data: 'name', title: 'LookUp Value' },
-                { data: 'lookUpType', title: 'LookUp Type' },
-                { data: 'description', title: 'Description' },
-            ];
+		function GetAllLookUpValue() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'name', title: 'LookUp Value' },
+				{ data: 'lookUpType', title: 'LookUp Type' },
+				{ data: 'description', title: 'Description' },
+			];
 
-            $.ajax({
-                url: GetAllLookUpValueUrl,
-                type: "POST",
-                // data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    if ($.fn.dataTable.isDataTable('#LookUpValueTable')) {
-                        $('#LookUpValueTable').DataTable().clear().destroy();
-                    }
-                },
-                success: function (response) {
-                    if (response.data) {
-                        dataToShow = response.data;
-                        $('#LookUpValueTable').DataTable({ //init table
-                            dom: "Bfrtip", //button Strip
-                            searching: true, //show search
-                            paging: false, //no paging
-                            processing: true, //processing
-                            scrollY: 'auto', //fixed height
-                            scrollCollapse: true,//scroll
-                            order: [[0, 'desc']], //order
-                            language: { // search anf info bars
-                                search: '',
-                                emptyTable: 'No data available',
-                                searchPlaceholder: 'Search',
-                                info: "Showing _TOTAL_ entries",
-                                infoEmpty: "Showing 0 entries",
-                                infoFiltered: "(filtered from _MAX_ entries)",
-                            },
-                            data: dataToShow, // data to display
-                            columnDefs: [ // set action column
-                                {
-                                    //set column order for action
-                                    targets: columnList.length,
-                                    //remove sorting on action
-                                    orderable: false,
-                                    //set width of action column
-                                    width: "10%",
-                                    render: function (data, type, full, meta) {
-                                        //edit button
-                                        var edit = '<a onclick="openLookUpValueModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
-                                        //list of buttons
-                                        var btn = '';
-                                        btn = edit
-                                        data = '<div class="text-nowrap">' + btn + '</div>';
-                                        return data;
-                                    }
-                                }
-                            ],
-                            columns: columnList, //column list
+			 initializeDataGrid('LookUpValueTable', 'openLookUpValueModal', GetAllLookUpValueUrl, columnList, false,true,true,false);
 
-                            buttons: [ //set buttons above table
-                                //Excel Export Button
-                                {
-                                    extend: 'excel',
-                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-                                    className: 'form-control btn-c-secondary d-none',
-                                    exportOptions: {
-                                        columns: ':visible:not(.sorting_disabled)'
+			// $.ajax({
+			//     url: GetAllLookUpValueUrl,
+			//     type: "POST",
+			//     // data: dataObject,  // Send data if needed
+			//     beforeSend: function () {
+			//         if ($.fn.dataTable.isDataTable('#LookUpValueTable')) {
+			//             $('#LookUpValueTable').DataTable().clear().destroy();
+			//         }
+			//     },
+			//     success: function (response) {
+			//         if (response.data) {
+			//             dataToShow = response.data;
+			//             $('#LookUpValueTable').DataTable({ //init table
+			//                 dom: "Bfrtip", //button Strip
+			//                 searching: true, //show search
+			//                 paging: false, //no paging
+			//                 processing: true, //processing
+			//                 scrollY: 'auto', //fixed height
+			//                 scrollCollapse: true,//scroll
+			//                 order: [[0, 'desc']], //order
+			//                 language: { // search anf info bars
+			//                     search: '',
+			//                     emptyTable: 'No data available',
+			//                     searchPlaceholder: 'Search',
+			//                     info: "Showing _TOTAL_ entries",
+			//                     infoEmpty: "Showing 0 entries",
+			//                     infoFiltered: "(filtered from _MAX_ entries)",
+			//                 },
+			//                 data: dataToShow, // data to display
+			//                 columnDefs: [ // set action column
+			//                     {
+			//                         //set column order for action
+			//                         targets: columnList.length,
+			//                         //remove sorting on action
+			//                         orderable: false,
+			//                         //set width of action column
+			//                         width: "10%",
+			//                         render: function (data, type, full, meta) {
+			//                             //edit button
+			//                             var edit = '<a onclick="openLookUpValueModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+			//                             //list of buttons
+			//                             var btn = '';
+			//                             btn = edit
+			//                             data = '<div class="text-nowrap">' + btn + '</div>';
+			//                             return data;
+			//                         }
+			//                     }
+			//                 ],
+			//                 columns: columnList, //column list
 
-                                    }
-                                },
-                                //Open Add popup
+			//                 buttons: [ //set buttons above table
+			//                     //Excel Export Button
+			//                     {
+			//                         extend: 'excel',
+			//                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+			//                         className: 'form-control btn-c-secondary d-none',
+			//                         exportOptions: {
+			//                             columns: ':visible:not(.sorting_disabled)'
 
-                                '<a><button class="form-control btn-c-primary d-inline" onclick="openLookUpValueModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
-                            ],
-                            drawCallback: function () {
-                                // BUTTON EVENT ON THE DATA TABLE
-                            }
-                        });
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-            });
-        }
+			//                         }
+			//                     },
+			//                     //Open Add popup
 
-        function openLookUpValueModal(id) {
-            var dataObject = {};
-            dataObject.id = id;
+			//                     '<a><button class="form-control btn-c-primary d-inline" onclick="openLookUpValueModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+			//                 ],
+			//                 drawCallback: function () {
+			//                     // BUTTON EVENT ON THE DATA TABLE
+			//                 }
+			//             });
+			//         }
+			//         else {
+			//             toastr.error(response.errorMessage);
+			//         }
+			//         // Handle success (e.g., update UI with response data)
+			//     },
+			//     error: function (error) {
+			//         console.log("Error:", error);
+			//         toastr.error("Error:" + error);
+			//     }
+			// }).done(function () {
+			// });
+		}
 
-            $.ajax({
-                url: LookUpValueGetByIdUrl,
-                type: "POST",
-                data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    ClearLookUpValueModal();
-                    GetDropdownData();
-                },
-                success: function (response) {
-                    if (response.data) {
-                        if (response.data.id > 0)
-                            $("#h4LookUpValueTitle").html("Modify LookUp Value");
-                        else
-                            $("#h4LookUpValueTitle").html("Add LookUp Value");
+		function openLookUpValueModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
 
-                        $("#hdnId").val(response.data.id);
-                        $("#txtLookUpValueName").val(response.data.name);
-                        $("#txtDescription").val(response.data.description);
-                        $("#ddlLookUpType").val(response.data.lookUpType == 0 ? "" : response.data.lookUpType)
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-                $('#AddLookUpValueModal').modal('show');
-                $("#frnLookUpValueCreate").validate({}).resetForm();;
-            });
-        }
+			$.ajax({
+				url: LookUpValueGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearLookUpValueModal();
+					GetDropdownData();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id > 0)
+							$("#h4LookUpValueTitle").html("Modify LookUp Value");
+						else
+							$("#h4LookUpValueTitle").html("Add LookUp Value");
 
-        function ClearLookUpValueModal() {
-            $("#h4LookUpValueTitle").html("Add LookUp Value");
-            $("#hdnId").val(0);
-            $("#txtLookUpValueName").val("");
-            $("#txtDescription").val("");
-        }
+						$("#hdnId").val(response.data.id);
+						$("#txtLookUpValueName").val(response.data.name);
+						$("#txtDescription").val(response.data.description);
+						$("#ddlLookUpType").val(response.data.lookUpType == 0 ? "" : response.data.lookUpType)
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddLookUpValueModal').modal('show');
+				$("#frnLookUpValueCreate").validate({}).resetForm();;
+			});
+		}
 
-        function GetDropdownData() {
-            $.ajax({
-                url: getLookUpValueDropDownUrl,
-                type: "POST",
-                async: false,
-                // data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    $("#ddlLookUpType").html('');
-                },
-                success: function (response) {
-                    if (response.data) {
-                        $.each(response.data, function (key, value) {
-                            if (value.title == "LookUp Type") {
-                                $("#ddlLookUpType").append($("<option></option>").val('').html("Select Type"));
-                                $.each(value.items, function (itemskey, itemsvalue) {
-                                    $("#ddlLookUpType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-                                });
-                            }
-                        });
-                    }
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    // toastr.error("Error:" + error);
-                }
+		function ClearLookUpValueModal() {
+			$("#h4LookUpValueTitle").html("Add LookUp Value");
+			$("#hdnId").val(0);
+			$("#txtLookUpValueName").val("");
+			$("#txtDescription").val("");
+		}
 
-            });
-        }
+		function GetDropdownData() {
+			$.ajax({
+				url: getLookUpValueDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlLookUpType").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						$.each(response.data, function (key, value) {
+							if (value.title == "LookUp Type") {
+								$("#ddlLookUpType").append($("<option></option>").val('').html("Select Type"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlLookUpType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
 
-        function SaveLookUpValue() {
+			});
+		}
 
-            let valid = formValidation(["txtLookUpValueName", "ddlLookUpType"]);
+		function SaveLookUpValue() {
 
-            if (valid) {
-                var dataObject = {};
-                dataObject.Id = $("#hdnId").val();
-                dataObject.Name = $("#txtLookUpValueName").val();
-                dataObject.LookUpType = $("#ddlLookUpType").val();
-                dataObject.Description = $("#txtDescription").val();
+			let valid = formValidation(["txtLookUpValueName", "ddlLookUpType"]);
 
-                $.ajax({
-                    url: CreateUpdateLookUpValueUrl,
-                    type: "POST",
-                    data: dataObject,  // Send data if needed
-                    beforeSend: function () {
+			if (valid) {
+				var dataObject = {};
+				dataObject.Id = $("#hdnId").val();
+				dataObject.Name = $("#txtLookUpValueName").val();
+				dataObject.LookUpType = $("#ddlLookUpType").val();
+				dataObject.Description = $("#txtDescription").val();
 
-                    },
-                    success: function (response) {
-                        if (response.data) {
-                            toastr.success(response.errorMessage);
-                            $('#AddLookUpValueModal').modal('hide');
-                            GetAllLookUpValue();
-                        }
-                        else {
-                            toastr.error(response.errorMessage);
-                        }
-                        // Handle success (e.g., update UI with response data)
-                    },
-                    error: function (error) {
-                        console.log("Error:", error);
-                        toastr.error("Error:" + error);
-                    }
-                }).done(function () {
+				$.ajax({
+					url: CreateUpdateLookUpValueUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
 
-                });
-            }
-            else {
-                toastr.warning("Please fill in required field(s)");
-            }
-        }
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddLookUpValueModal').modal('hide');
+							GetAllLookUpValue();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
 
-    </script>
+				});
+			}
+			else {
+				toastr.warning("Please fill in required field(s)");
+			}
+		}
+
+	</script>
 }

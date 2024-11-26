@@ -1,263 +1,265 @@
 ﻿@{
-    ViewData["Title"] = "Resource";
+	ViewData["Title"] = "Resource";
 }
 
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Resource</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-                    <li class="breadcrumb-item active">Resource</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">Resource</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+					<li class="breadcrumb-item active">Resource</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="row">
-                    <div class="col-10">
-                    </div>
-                    <div class="col-2">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*   <div class="col-2">
                         <button type="button" class="btn btn-block btn-primary mb-3" onclick="openResourceModal()">Add</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12  mb-10">
-                        <table id="ResourceTable"></table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    </div> *@
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="ResourceTable" class="table table-bordered table-striped"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 <div class="modal fade" id="AddResourceModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <partial name="_AddResource.cshtml" />
+	<partial name="_AddResource.cshtml" />
 </div>
 <!-- /.modal -->
 @section scripts
 {
-    <script>
-        var GetAllResourceUrl = '@Url.Action("GetAll", "Resource")';
-        var ResourceGetByIdUrl = '@Url.Action("GetById", "Resource")';
-        var CreateUpdateResourceUrl = '@Url.Action("CreateUpdate", "Resource")';
+	<script>
+		var GetAllResourceUrl = '@Url.Action("GetAll", "Resource")';
+		var ResourceGetByIdUrl = '@Url.Action("GetById", "Resource")';
+		var CreateUpdateResourceUrl = '@Url.Action("CreateUpdate", "Resource")';
 
 
-        $(function () {
-            $('.nav-link').removeClass('active').removeClass("menu-open");
-            $('#liResourcemenu').addClass('active');
-            $('#liResourcemenu').parents('li').parents('li').addClass('menu-open');
+		$(function () {
+			$('.nav-link').removeClass('active').removeClass("menu-open");
+			$('#liResourcemenu').addClass('active');
+			$('#liResourcemenu').parents('li').parents('li').addClass('menu-open');
 
-            GetAllResource();
-        });
+			GetAllResource();
+		});
 
-        function GetAllResource() {
-            var columnList = [
-                { data: 'id', title: 'Id', visible: false },
-                { data: 'code', title: 'Code' },
-                { data: 'type', title: 'Type' },
-                { data: 'surname', title: 'Surname' },
-                { data: 'othername', title: 'Othername' },
-                { data: 'email', title: 'Email' },
-                { data: 'mobileNo', title: 'Mobile No' },
-            ];
+		function GetAllResource() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'code', title: 'Code' },
+				{ data: 'type', title: 'Type' },
+				{ data: 'surname', title: 'Surname' },
+				{ data: 'othername', title: 'Othername' },
+				{ data: 'email', title: 'Email' },
+				{ data: 'mobileNo', title: 'Mobile No' },
+			];
 
-            $.ajax({
-                url: GetAllResourceUrl,
-                type: "POST",
-                // data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    if ($.fn.dataTable.isDataTable('#ResourceTable')) {
-                        $('#ResourceTable').DataTable().clear().destroy();
-                    }
-                },
-                success: function (response) {
-                    if (response.data) {
-                        dataToShow = response.data;
-                        $('#ResourceTable').DataTable({ //init table
-                            dom: "Bfrtip", //button Strip
-                            searching: true, //show search
-                            paging: false, //no paging
-                            processing: true, //processing
-                            scrollY: 'auto', //fixed height
-                            scrollCollapse: true,//scroll
-                            order: [[0, 'desc']], //order
-                            language: { // search anf info bars
-                                search: '',
-                                emptyTable: 'No data available',
-                                searchPlaceholder: 'Search',
-                                info: "Showing _TOTAL_ entries",
-                                infoEmpty: "Showing 0 entries",
-                                infoFiltered: "(filtered from _MAX_ entries)",
-                            },
-                            data: dataToShow, // data to display
-                            columnDefs: [ // set action column
-                                {
-                                    //set column order for action
-                                    targets: columnList.length,
-                                    //remove sorting on action
-                                    orderable: false,
-                                    //set width of action column
-                                    width: "10%",
-                                    render: function (data, type, full, meta) {
-                                        //edit button
-                                        var edit = '<a onclick="openResourceModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
-                                        //list of buttons
-                                        var btn = '';
-                                        btn = edit
-                                        data = '<div class="text-nowrap">' + btn + '</div>';
-                                        return data;
-                                    }
-                                }
-                            ],
-                            columns: columnList, //column list
+				 initializeDataGrid('ResourceTable', 'openResourceModal', GetAllResourceUrl, columnList, false,true,true,false);
 
-                            buttons: [ //set buttons above table
-                                //Excel Export Button
-                                {
-                                    extend: 'excel',
-                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-                                    className: 'form-control btn-c-secondary d-none',
-                                    exportOptions: {
-                                        columns: ':visible:not(.sorting_disabled)'
+			// $.ajax({
+			//     url: GetAllResourceUrl,
+			//     type: "POST",
+			//     // data: dataObject,  // Send data if needed
+			//     beforeSend: function () {
+			//         if ($.fn.dataTable.isDataTable('#ResourceTable')) {
+			//             $('#ResourceTable').DataTable().clear().destroy();
+			//         }
+			//     },
+			//     success: function (response) {
+			//         if (response.data) {
+			//             dataToShow = response.data;
+			//             $('#ResourceTable').DataTable({ //init table
+			//                 dom: "Bfrtip", //button Strip
+			//                 searching: true, //show search
+			//                 paging: false, //no paging
+			//                 processing: true, //processing
+			//                 scrollY: 'auto', //fixed height
+			//                 scrollCollapse: true,//scroll
+			//                 order: [[0, 'desc']], //order
+			//                 language: { // search anf info bars
+			//                     search: '',
+			//                     emptyTable: 'No data available',
+			//                     searchPlaceholder: 'Search',
+			//                     info: "Showing _TOTAL_ entries",
+			//                     infoEmpty: "Showing 0 entries",
+			//                     infoFiltered: "(filtered from _MAX_ entries)",
+			//                 },
+			//                 data: dataToShow, // data to display
+			//                 columnDefs: [ // set action column
+			//                     {
+			//                         //set column order for action
+			//                         targets: columnList.length,
+			//                         //remove sorting on action
+			//                         orderable: false,
+			//                         //set width of action column
+			//                         width: "10%",
+			//                         render: function (data, type, full, meta) {
+			//                             //edit button
+			//                             var edit = '<a onclick="openResourceModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+			//                             //list of buttons
+			//                             var btn = '';
+			//                             btn = edit
+			//                             data = '<div class="text-nowrap">' + btn + '</div>';
+			//                             return data;
+			//                         }
+			//                     }
+			//                 ],
+			//                 columns: columnList, //column list
 
-                                    }
-                                },
-                                //Open Add popup
+			//                 buttons: [ //set buttons above table
+			//                     //Excel Export Button
+			//                     {
+			//                         extend: 'excel',
+			//                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+			//                         className: 'form-control btn-c-secondary d-none',
+			//                         exportOptions: {
+			//                             columns: ':visible:not(.sorting_disabled)'
 
-                                '<a><button class="form-control btn-c-primary d-inline" onclick="openResourceModal("")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
-                            ],
-                            drawCallback: function () {
-                                // BUTTON EVENT ON THE DATA TABLE
-                            }
-                        });
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-            });
-        }
-        function openResourceModal(id) {
-            var dataObject = {};
-            dataObject.id = id;
+			//                         }
+			//                     },
+			//                     //Open Add popup
 
-            $.ajax({
-                url: ResourceGetByIdUrl,
-                type: "POST",
-                data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    ClearResourceModal();
-                },
-                success: function (response) {
-                    if (response.data) {
+			//                     '<a><button class="form-control btn-c-primary d-inline" onclick="openResourceModal("")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+			//                 ],
+			//                 drawCallback: function () {
+			//                     // BUTTON EVENT ON THE DATA TABLE
+			//                 }
+			//             });
+			//         }
+			//         else {
+			//             toastr.error(response.errorMessage);
+			//         }
+			//         // Handle success (e.g., update UI with response data)
+			//     },
+			//     error: function (error) {
+			//         console.log("Error:", error);
+			//         toastr.error("Error:" + error);
+			//     }
+			// }).done(function () {
+			// });
+		}
+		function openResourceModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
 
-                        if (response.data.id > 0)
-                            $("#h4ResourceTitle").html("Modify Resource");
-                        else {
-                            $("#h4ResourceTitle").html("Add Resource");
-                        }
+			$.ajax({
+				url: ResourceGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearResourceModal();
+				},
+				success: function (response) {
+					if (response.data) {
 
-                        $("#hdnResourceId").val(response.data.id);
-                        $("#hdnResourceAId").val(response.data.aId);
-                        $("#txtCode").val(response.data.code);
-                        $("#txtType").val(response.data.type);
-                        $("#txtSurname").val(response.data.surname);
-                        $("#txtOthername").val(response.data.othername);
-                        $("#txtEmail").val(response.data.email);
-                        $("#txtMobile").val(response.data.mobileNo);
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-                $('#AddResourceModal').modal('show');
-                $("#frnResourceCreate").validate({}).resetForm();
-            });
+						if (response.data.id > 0)
+							$("#h4ResourceTitle").html("Modify Resource");
+						else {
+							$("#h4ResourceTitle").html("Add Resource");
+						}
+
+						$("#hdnResourceId").val(response.data.id);
+						$("#hdnResourceAId").val(response.data.aId);
+						$("#txtCode").val(response.data.code);
+						$("#txtType").val(response.data.type);
+						$("#txtSurname").val(response.data.surname);
+						$("#txtOthername").val(response.data.othername);
+						$("#txtEmail").val(response.data.email);
+						$("#txtMobile").val(response.data.mobileNo);
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddResourceModal').modal('show');
+				$("#frnResourceCreate").validate({}).resetForm();
+			});
 
 
-        }
+		}
 
-        function ClearResourceModal() {
-            $("#h4ResourceTitle").html("Add Resource");
-            $("#hdnResourceId").val("0");
-            $("#hdnResourceAId").val("");
-            $("#txtCode").val("");
-            $("#txtType").val("");
-            $("#txtSurname").val("");
-            $("#txtOthername").val("");
-            $("#txtEmail").val("");
-            $("#txtMobile").val("");
-        }
+		function ClearResourceModal() {
+			$("#h4ResourceTitle").html("Add Resource");
+			$("#hdnResourceId").val("0");
+			$("#hdnResourceAId").val("");
+			$("#txtCode").val("");
+			$("#txtType").val("");
+			$("#txtSurname").val("");
+			$("#txtOthername").val("");
+			$("#txtEmail").val("");
+			$("#txtMobile").val("");
+		}
 
-        function SaveResource() {
+		function SaveResource() {
 
-            let valid = formValidation(["txtType", "txtSurname", "txtOthername", "txtEmail", "txtMobile"]);
+			let valid = formValidation(["txtType", "txtSurname", "txtOthername", "txtEmail", "txtMobile"]);
 
-            if (valid) {
-                var dataObject = {};
-                dataObject.id = $("#hdnResourceId").val();
-                dataObject.aid = $("#hdnResourceAId").val();
-                dataObject.Code = $("#txtCode").val();
-                dataObject.Surname = $("#txtSurname").val();
-                dataObject.Othername = $("#txtOthername").val();
-                dataObject.Email = $("#txtEmail").val();
-                dataObject.MobileNo = $("#txtMobile").val();
-                dataObject.Type = $("#txtType").val();
+			if (valid) {
+				var dataObject = {};
+				dataObject.id = $("#hdnResourceId").val();
+				dataObject.aid = $("#hdnResourceAId").val();
+				dataObject.Code = $("#txtCode").val();
+				dataObject.Surname = $("#txtSurname").val();
+				dataObject.Othername = $("#txtOthername").val();
+				dataObject.Email = $("#txtEmail").val();
+				dataObject.MobileNo = $("#txtMobile").val();
+				dataObject.Type = $("#txtType").val();
 
-                $.ajax({
-                    url: CreateUpdateResourceUrl,
-                    type: "POST",
-                    data: dataObject,  // Send data if needed
-                    beforeSend: function () {
+				$.ajax({
+					url: CreateUpdateResourceUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
 
-                    },
-                    success: function (response) {
-                        if (response.data) {
-                            toastr.success(response.errorMessage);
-                            $('#AddResourceModal').modal('hide');
-                            GetAllResource();
-                        }
-                        else {
-                            toastr.error(response.errorMessage);
-                        }
-                        // Handle success (e.g., update UI with response data)
-                    },
-                    error: function (error) {
-                        console.log("Error:", error);
-                        toastr.error("Error:" + error);
-                    }
-                }).done(function () {
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddResourceModal').modal('hide');
+							GetAllResource();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
 
-                });
-            }
-            else {
-                toastr.warning("Please fill in required field(s)");
-            }
-        }
+				});
+			}
+			else {
+				toastr.warning("Please fill in required field(s)");
+			}
+		}
 
-    </script>
+	</script>
 }
