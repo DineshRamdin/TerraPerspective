@@ -148,10 +148,12 @@
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         maxZoom: 19
                     }).addTo(Createmap);
+
+                     // Add drawing control
+                    var drawnItems = new L.FeatureGroup();
+                    Createmap.addLayer(drawnItems);
                  }
-                // Add drawing control
-            var drawnItems = new L.FeatureGroup();
-            Createmap.addLayer(drawnItems);
+               
 
             var drawControl = new L.Control.Draw({
                 edit: {
