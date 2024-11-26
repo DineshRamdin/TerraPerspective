@@ -121,5 +121,23 @@ namespace UI.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult<BaseResponseDTO<List<DropDown>>> GetAllDropdownValues()
+        {
+            try
+            {
+                BaseResponseDTO<List<DropDown>> List = new BaseResponseDTO<List<DropDown>>();
+                List = service.GetAllDropDownValues();
+                return Ok(List);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+
+            }
+        }
     }
 }

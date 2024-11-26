@@ -214,5 +214,42 @@ namespace BL.Services.Administration
             return BaseDto;
         }
 
+        public BaseResponseDTO<List<DropDown>> GetAllDropDownValues()
+        {
+            BaseResponseDTO<List<DropDown>> dto = new BaseResponseDTO<List<DropDown>>();
+            List<DropDown> Ddl = new List<DropDown>();
+            DropDown Dd = new DropDown();
+            string errorMsg = "No Data Found";
+            try
+            {
+                //Poster Type
+                Dd = new DropDown();
+                Dd.title = "Testing";
+                Dd.items = new List<DropDownItem>();
+
+                var enumList = Enum.GetValues(typeof(TestingType))
+                    .Cast<TestingType>()
+                    .Select(e => new DropDownItem { Id = (int)e, text = e.ToString() })
+                    .ToList();
+
+                Dd.items.AddRange(enumList);
+
+                Ddl.Add(Dd);
+
+               
+
+                dto.Data = Ddl;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                dto.Data = Ddl;
+                dto.ErrorMessage = errorMsg;
+
+                dto.QryResult = queryResult.FAILED;
+            }
+            return dto;
+        }
+
     }
 }
