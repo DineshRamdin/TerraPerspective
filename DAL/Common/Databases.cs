@@ -31,4 +31,12 @@ namespace DAL.Common
         ThinClient = 2,
         TV = 3,
     }
+
+    public enum TestingType
+    {
+        Testing1 = 1,
+        Testing2 = 2,
+        Testing3 = 3,
+    }
+
 }
