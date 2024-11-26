@@ -100,7 +100,6 @@ namespace BL.Services.Administration
             string errorMsg = "No Data Found";
             try
             {
-                //Animal Microchip No
                 Dd = new DropDown();
                 Dd.title = "Poster";
                 Dd.items = new List<DropDownItem>();
