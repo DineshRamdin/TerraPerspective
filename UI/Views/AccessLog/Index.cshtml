@@ -27,13 +27,13 @@
                 <div class="row">
                     <div class="col-9">
                     </div>
-                    <div class="col-3">
+                    @* <div class="col-3">
                         <button type="button" class="btn btn-block btn-primary mb-3 float-right" onclick="ExcelDownload()"><i class="fas fa-file-excel">&nbsp;</i>Excel Download</button>
-                    </div>
+                    </div> *@
                 </div>
                 <div class="row">
                     <div class="col-12  mb-10">
-                        <table id="AccessLogTable"></table>
+                        <table id="AccessLogTable" class="table table-bordered table-striped"></table>
                     </div>
                 </div>
             </div>
@@ -66,84 +66,86 @@
                 { data: 'visitor', title: 'Visitor' },
             ];
 
-            $.ajax({
-                url: GetAllAccessLogUrl,
-                type: "POST",
-                // data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    if ($.fn.dataTable.isDataTable('#AccessLogTable')) {
-                        $('#AccessLogTable').DataTable().clear().destroy();
-                    }
-                },
-                success: function (response) {
-                    if (response.data) {
-                        dataToShow = response.data;
-                        $('#AccessLogTable').DataTable({ //init table
-                            dom: "Bfrtip", //button Strip
-                            searching: true, //show search
-                            paging: false, //no paging
-                            processing: true, //processing
-                            scrollY: 'auto', //fixed height
-                            scrollCollapse: true,//scroll
-                            order: [[0, 'desc']], //order
-                            language: { // search anf info bars
-                                search: '',
-                                emptyTable: 'No data available',
-                                searchPlaceholder: 'Search',
-                                info: "Showing _TOTAL_ entries",
-                                infoEmpty: "Showing 0 entries",
-                                infoFiltered: "(filtered from _MAX_ entries)",
-                            },
-                            data: dataToShow, // data to display
-                            // columnDefs: [ // set action column
-                            //     {
-                            //         //set column order for action
-                            //         targets: columnList.length,
-                            //         //remove sorting on action
-                            //         orderable: false,
-                            //         //set width of action column
-                            //         width: "10%",
-                            //         render: function (data, type, full, meta) {
-                            //             //edit button
-                            //             // var edit = '<a onclick="openAccessLogModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+              initializeDataGrid('AccessLogTable',null, GetAllAccessLogUrl, columnList, false,false,false,false,false,null,true);
 
-                            //             var btn = '';
-                            //             // btn = edit + Preview;
-                            //             data = '<div class="text-nowrap">' + btn + '</div>';
-                            //             return data;
-                            //         }
-                            //     }
-                            // ],
-                            columns: columnList, //column list
+            // $.ajax({
+            //     url: GetAllAccessLogUrl,
+            //     type: "POST",
+            //     // data: dataObject,  // Send data if needed
+            //     beforeSend: function () {
+            //         if ($.fn.dataTable.isDataTable('#AccessLogTable')) {
+            //             $('#AccessLogTable').DataTable().clear().destroy();
+            //         }
+            //     },
+            //     success: function (response) {
+            //         if (response.data) {
+            //             dataToShow = response.data;
+            //             $('#AccessLogTable').DataTable({ //init table
+            //                 dom: "Bfrtip", //button Strip
+            //                 searching: true, //show search
+            //                 paging: false, //no paging
+            //                 processing: true, //processing
+            //                 scrollY: 'auto', //fixed height
+            //                 scrollCollapse: true,//scroll
+            //                 order: [[0, 'desc']], //order
+            //                 language: { // search anf info bars
+            //                     search: '',
+            //                     emptyTable: 'No data available',
+            //                     searchPlaceholder: 'Search',
+            //                     info: "Showing _TOTAL_ entries",
+            //                     infoEmpty: "Showing 0 entries",
+            //                     infoFiltered: "(filtered from _MAX_ entries)",
+            //                 },
+            //                 data: dataToShow, // data to display
+            //                 // columnDefs: [ // set action column
+            //                 //     {
+            //                 //         //set column order for action
+            //                 //         targets: columnList.length,
+            //                 //         //remove sorting on action
+            //                 //         orderable: false,
+            //                 //         //set width of action column
+            //                 //         width: "10%",
+            //                 //         render: function (data, type, full, meta) {
+            //                 //             //edit button
+            //                 //             // var edit = '<a onclick="openAccessLogModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
 
-                            buttons: [ //set buttons above table
-                                //Excel Export Button
-                                {
-                                    extend: 'excel',
-                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-                                    className: 'form-control btn-c-secondary d-none',
-                                    exportOptions: {
-                                        columns: ':visible:not(.sorting_disabled)'
+            //                 //             var btn = '';
+            //                 //             // btn = edit + Preview;
+            //                 //             data = '<div class="text-nowrap">' + btn + '</div>';
+            //                 //             return data;
+            //                 //         }
+            //                 //     }
+            //                 // ],
+            //                 columns: columnList, //column list
 
-                                    }
-                                },
-                            ],
-                            drawCallback: function () {
-                                // BUTTON EVENT ON THE DATA TABLE
-                            }
-                        });
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-            });
+            //                 buttons: [ //set buttons above table
+            //                     //Excel Export Button
+            //                     {
+            //                         extend: 'excel',
+            //                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+            //                         className: 'form-control btn-c-secondary d-none',
+            //                         exportOptions: {
+            //                             columns: ':visible:not(.sorting_disabled)'
+
+            //                         }
+            //                     },
+            //                 ],
+            //                 drawCallback: function () {
+            //                     // BUTTON EVENT ON THE DATA TABLE
+            //                 }
+            //             });
+            //         }
+            //         else {
+            //             toastr.error(response.errorMessage);
+            //         }
+            //         // Handle success (e.g., update UI with response data)
+            //     },
+            //     error: function (error) {
+            //         console.log("Error:", error);
+            //         toastr.error("Error:" + error);
+            //     }
+            // }).done(function () {
+            // });
         }
         function ExcelDownload() {
             $('.buttons-excel').click();

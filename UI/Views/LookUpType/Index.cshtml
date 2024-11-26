@@ -28,13 +28,13 @@
                 <div class="row">
                     <div class="col-10">
                     </div>
-                    <div class="col-2">
+                  @*   <div class="col-2">
                         <button type="button" class="btn btn-block btn-primary mb-3" onclick="openLookUpTypeModal(0)">Add</button>
-                    </div>
+                    </div> *@
                 </div>
                 <div class="row">
                     <div class="col-12  mb-10">
-                        <table id="LookUpTypeTable"></table>
+                        <table id="LookUpTypeTable" class="table table-bordered table-striped"></table>
                     </div>
                 </div>
             </div>
@@ -67,87 +67,89 @@
                 { data: 'description', title: 'Description' },
             ];
 
-            $.ajax({
-                url: GetAllLookUpTypeUrl,
-                type: "POST",
-                // data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    if ($.fn.dataTable.isDataTable('#LookUpTypeTable')) {
-                        $('#LookUpTypeTable').DataTable().clear().destroy();
-                    }
-                },
-                success: function (response) {
-                    if (response.data) {
-                        dataToShow = response.data;
-                        $('#LookUpTypeTable').DataTable({ //init table
-                            dom: "Bfrtip", //button Strip
-                            searching: true, //show search
-                            paging: false, //no paging
-                            processing: true, //processing
-                            scrollY: 'auto', //fixed height
-                            scrollCollapse: true,//scroll
-                            order: [[0, 'desc']], //order
-                            language: { // search anf info bars
-                                search: '',
-                                emptyTable: 'No data available',
-                                searchPlaceholder: 'Search',
-                                info: "Showing _TOTAL_ entries",
-                                infoEmpty: "Showing 0 entries",
-                                infoFiltered: "(filtered from _MAX_ entries)",
-                            },
-                            data: dataToShow, // data to display
-                            columnDefs: [ // set action column
-                                {
-                                    //set column order for action
-                                    targets: columnList.length,
-                                    //remove sorting on action
-                                    orderable: false,
-                                    //set width of action column
-                                    width: "10%",
-                                    render: function (data, type, full, meta) {
-                                        //edit button
-                                        var edit = '<a onclick="openLookUpTypeModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
-                                        //list of buttons
-                                        var btn = '';
-                                        btn = edit
-                                        data = '<div class="text-nowrap">' + btn + '</div>';
-                                        return data;
-                                    }
-                                }
-                            ],
-                            columns: columnList, //column list
+             initializeDataGrid('LookUpTypeTable', 'openLookUpTypeModal', GetAllLookUpTypeUrl, columnList, false,true,true,false);
 
-                            buttons: [ //set buttons above table
-                                //Excel Export Button
-                                {
-                                    extend: 'excel',
-                                    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-                                    className: 'form-control btn-c-secondary d-none',
-                                    exportOptions: {
-                                        columns: ':visible:not(.sorting_disabled)'
+            // $.ajax({
+            //     url: GetAllLookUpTypeUrl,
+            //     type: "POST",
+            //     // data: dataObject,  // Send data if needed
+            //     beforeSend: function () {
+            //         if ($.fn.dataTable.isDataTable('#LookUpTypeTable')) {
+            //             $('#LookUpTypeTable').DataTable().clear().destroy();
+            //         }
+            //     },
+            //     success: function (response) {
+            //         if (response.data) {
+            //             dataToShow = response.data;
+            //             $('#LookUpTypeTable').DataTable({ //init table
+            //                 dom: "Bfrtip", //button Strip
+            //                 searching: true, //show search
+            //                 paging: false, //no paging
+            //                 processing: true, //processing
+            //                 scrollY: 'auto', //fixed height
+            //                 scrollCollapse: true,//scroll
+            //                 order: [[0, 'desc']], //order
+            //                 language: { // search anf info bars
+            //                     search: '',
+            //                     emptyTable: 'No data available',
+            //                     searchPlaceholder: 'Search',
+            //                     info: "Showing _TOTAL_ entries",
+            //                     infoEmpty: "Showing 0 entries",
+            //                     infoFiltered: "(filtered from _MAX_ entries)",
+            //                 },
+            //                 data: dataToShow, // data to display
+            //                 columnDefs: [ // set action column
+            //                     {
+            //                         //set column order for action
+            //                         targets: columnList.length,
+            //                         //remove sorting on action
+            //                         orderable: false,
+            //                         //set width of action column
+            //                         width: "10%",
+            //                         render: function (data, type, full, meta) {
+            //                             //edit button
+            //                             var edit = '<a onclick="openLookUpTypeModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+            //                             //list of buttons
+            //                             var btn = '';
+            //                             btn = edit
+            //                             data = '<div class="text-nowrap">' + btn + '</div>';
+            //                             return data;
+            //                         }
+            //                     }
+            //                 ],
+            //                 columns: columnList, //column list
 
-                                    }
-                                },
-                                //Open Add popup
+            //                 buttons: [ //set buttons above table
+            //                     //Excel Export Button
+            //                     {
+            //                         extend: 'excel',
+            //                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+            //                         className: 'form-control btn-c-secondary d-none',
+            //                         exportOptions: {
+            //                             columns: ':visible:not(.sorting_disabled)'
 
-                                '<a><button class="form-control btn-c-primary d-inline" onclick="openLookUpTypeModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
-                            ],
-                            drawCallback: function () {
-                                // BUTTON EVENT ON THE DATA TABLE
-                            }
-                        });
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-            });
+            //                         }
+            //                     },
+            //                     //Open Add popup
+
+            //                     '<a><button class="form-control btn-c-primary d-inline" onclick="openLookUpTypeModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+            //                 ],
+            //                 drawCallback: function () {
+            //                     // BUTTON EVENT ON THE DATA TABLE
+            //                 }
+            //             });
+            //         }
+            //         else {
+            //             toastr.error(response.errorMessage);
+            //         }
+            //         // Handle success (e.g., update UI with response data)
+            //     },
+            //     error: function (error) {
+            //         console.log("Error:", error);
+            //         toastr.error("Error:" + error);
+            //     }
+            // }).done(function () {
+            // });
         }
 
         function openLookUpTypeModal(id) {

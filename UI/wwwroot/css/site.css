@@ -20,3 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+.custom-table {
+    background-color: #ccf5ef !important;
+    color: #3b5c4a !important;
+}
