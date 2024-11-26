@@ -1,6 +1,7 @@
 ﻿
 
-function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null, showExcel = false) {
+function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
+    showExcel = false, onclickDelete = null) {
 
     var dataToShow = null; //init data variable
     var access = null; // init access variable
@@ -26,14 +27,17 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                 if ($('#' + tableID).length > 0) { //check if table exists
                     // $('#' + tableID).DataTable().destroy();
                     $('#' + tableID).DataTable({ //init table
-                        dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl', // Search on the left, buttons on the right
-                        /*dom: '<"top"Bf>rt<"bottom"ip>', */
+                        /*dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl', // Search on the left, buttons on the right*/
+                        /* dom: '<"top"Bf>rt<"bottom"ip>', */
+                        dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl',
                         searching: true, //show search
                         paging: false, //no paging
                         processing: true, //processing
                         scrollY: 'auto', //fixed height
                         scrollCollapse: true,//scroll
                         order: [[0, 'desc']], //order
+                        autoWidth: false,
+
                         language: { // search anf info bars
                             search: '',
                             emptyTable: 'No data available',
@@ -57,7 +61,8 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                     //edit button
                                     var edit = '<a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
                                     //delete button
-                                    var del = ' | <a href="#" onclick="delete(\'' + full.id + '\')" title="Delete"><i class="fa fa-xmark text-danger"></i></a>';
+                                    /*var del = ' | <a href="#" onclick="delete(\'' + full.id + '\')" title="Delete"><i class="fa fa-delete text-secondary "></i></a>';*/
+                                    var del = '<a href="#" onclick="' + onclickDelete + '(\'' + full.id + '\')" title="Edit"><i class="fa fa-trash text-secondary ms-1"></i></a> ';
                                     //reset user 
                                     var reset = '| <a href="#" onclick="ResetUserPassword(\'' + full.id + '\')"  title="Reset Password To Default"><i class="fas fa-undo text-secondary ms-1"></i></a> ';
                                     //list of buttons
@@ -145,6 +150,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
                         ],
 
+
                         //buttons: [ //set buttons above table
                         //    //Excel Export Button
                         //    //{
@@ -162,6 +168,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         //],
                         drawCallback: function () {
 
+                            /*$('.dataTables_filter').css('margin-right', '33px');*/
                             // BUTTON EVENT ON THE DATA TABLE
                             // $('table.dataTable thead').addClass('custom-table');
                         },
@@ -171,6 +178,8 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                     $('div.dt-buttons').css('float', 'inline-end');
                     $('.custom-class').removeClass('btn-secondary');
                     $('.dt-scroll-headInner table thead').addClass('custom-table');
+                    $('.dataTables_filter').css('float', 'inline-start');
+
 
                     if (showAdd) {
                         $('.addbtn').removeClass('d-none');

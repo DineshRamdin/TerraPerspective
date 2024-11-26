@@ -1,0 +1,75 @@
+﻿@{
+	Layout = null;
+}
+
+<div class="modal-dialog">
+	<form id="frnTestingCreate">
+		<input type="hidden" id="hdnId" value="" />
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="h4UserTitle">
+				</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12 form-group">
+						<label>Testing Name<span class="red-required">*</span></label>
+						<input type="text" id="txtTestingName" class="form-control" placeholder="Testing Name" required />
+					</div>
+
+					<div class="col-12 form-group">
+						<label>Testing Type</label>
+						<select class="form-control" id="ddlTestingType" required></select>
+					</div>
+
+					<div class="col-12 form-group">
+						<label>Testing Code<span class="red-required">*</span></label>
+						<input type="text" id="txtTestingCode" class="form-control" placeholder="Testing Code" required />
+					</div>
+					<div class="col-12 form-group">
+						<label>Testing Date<span class="red-required">*</span></label>
+						<input type="text" id="txtTestingDate" class="form-control" placeholder="Testing Date" required />
+					</div>
+					@* <div class="col-12 form-group">
+						<label>Testing Date</label>
+						<div class="input-group date" id="txtTestingDate" data-target-input="nearest">
+							<input type="text" class="form-control datetimepicker-input" data-target="#txtTestingDate" />
+							<div class="input-group-append" data-target="#txtTestingDate" data-toggle="datetimepicker">
+								<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+							</div>
+						</div>
+					</div> *@
+
+					<div class="col-12 form-group">
+						<label>Description<span class="red-required">*</span></label>
+						<input type="text" id="txtDescription" class="form-control" placeholder="Description" required />
+					</div>
+
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="SaveTesting();">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</form>
+
+</div>
+@* @section scripts
+{
+
+	<script>
+		$(function () {
+			   $('#txtTestingDate').datetimepicker({
+				   format: 'L'
+			   });
+		 });
+
+
+	</script>
+} *@

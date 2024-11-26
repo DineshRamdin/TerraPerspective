@@ -1,0 +1,240 @@
+﻿@{
+	ViewData["Title"] = "User";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">Testing</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+					<li class="breadcrumb-item active">Testing</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="TestingTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddTestingModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddTesting.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllTestingUrl = '@Url.Action("GetAll", "Testing")';
+		var getTestingDropDownUrl = '@Url.Action("GetAllDropdownValues", "Device")';
+		var TestingGetByIdUrl = '@Url.Action("GetById", "Testing")';
+		var CreateUpdateTestingUrl = '@Url.Action("CreateUpdate", "Testing")';
+		var TestingDeleteUrl = '@Url.Action("TestingDelete", "Testing")';
+
+		$(function () {
+
+			$('.nav-link').removeClass('active');
+			$('#liTestingmenu').addClass('active');
+
+			GetAllTesting();
+			//$('#txtTestingDate').datetimepicker({format: 'L'});
+
+		});
+
+		function GetAllTesting()
+		{
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'testingName', title: 'Testing Name' },
+				{ data: 'testingType', title: 'Testing Type' },
+				{ data: 'testingDate', title: 'Testing Date' },
+				{ data: 'testingCode', title: 'Testing Code' },
+				{ data: 'description', title: 'Description' },
+
+			];
+
+			initializeDataGrid('TestingTable', 'openTestingModal', GetAllTestingUrl, columnList, true,true,true,false,false,null,false,'TestingDelete');
+
+		}
+
+		 function openTestingModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: TestingGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearTestingModal();
+					GetDropdownData();
+				},
+				success: function (response) {
+					//console.log(response.data)
+					if (response.data) {
+						if (response.data.id > 0)
+							$("#h4TestingTitle").html("Modify Testing");
+						else
+							$("#h4TestingTitle").html("Add Testing");
+
+						$("#hdnId").val(response.data.id);
+						$("#txtTestingName").val(response.data.testingName);
+						$('#txtTestingCode').val(response.data.testingCode);
+						$("#ddlTestingType").val(response.data.testingType == 0 ? "" : response.data.testingType);
+						$('#txtTestingDate').val(response.data.testingDate);
+						$('#txtDescription').val(response.data.description);
+
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddTestingModal').modal('show');
+				$("#frnTestingCreate").validate({}).resetForm();
+			});
+		}
+
+		 function ClearTestingModal() {
+			$("#h4TestingTitle").html("Add Testing");
+			$("#hdnId").val("0");
+			$("#txtTestingName").val("");
+			$('#txtTestingCode').val("");
+			$("#ddlTestingType").val("");
+			$('#txtTestingDate').val("");
+			$('#txtDescription').val("");
+		}
+
+		function GetDropdownData() {
+			$.ajax({
+				url: getTestingDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlTestingType").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						$.each(response.data, function (key, value) {
+
+							if (value.title == "Testing") {
+								$("#ddlTestingType").append($("<option></option>").val('').html("Select Type"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlTestingType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
+
+			});
+		}
+
+		function SaveTesting() {
+
+			let valid = formValidation(["txtTestingName", "txtTestingCode", "ddlTestingType", "txtTestingDate","txtDescription"]);
+
+			if (valid) {
+				var dataObject = {};
+				dataObject.Id = $("#hdnId").val();
+				dataObject.TestingName = $("#txtTestingName").val();
+				dataObject.TestingCode = $('#txtTestingCode').val();
+				dataObject.TestingType = $('#ddlTestingType').val();
+				dataObject.TestingDate = $('#txtTestingDate').val();
+				dataObject.Description = $('#txtDescription').val();
+
+
+				$.ajax({
+					url: CreateUpdateTestingUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddTestingModal').modal('hide');
+							GetAllTesting();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("Please fill in required field(s)");
+			}
+
+		}
+
+		function TestingDelete(id){
+			var dataObject = {};
+			dataObject.id = id;
+			$.ajax({
+				url: TestingDeleteUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+
+				},
+				success: function (response) {
+					if (response.data) {
+						toastr.success(response.errorMessage);
+						GetAllTesting();
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+
+			});
+		}
+
+	</script>
+}
