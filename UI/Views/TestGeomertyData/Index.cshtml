@@ -153,7 +153,6 @@
                     var drawnItems = new L.FeatureGroup();
                     Createmap.addLayer(drawnItems);
                  }
-               
 
             var drawControl = new L.Control.Draw({
                 edit: {
@@ -191,6 +190,10 @@
                 var wkt = `POLYGON((${coordinates}))`;
                 $('#hdnMapdata').val(wkt);
             });
+
+                $('#AddGeomertyDataModal').on('shown.bs.modal', function () {
+                    Createmap.invalidateSize();
+                });
           }
 
           function SaveGeomertyData() {
