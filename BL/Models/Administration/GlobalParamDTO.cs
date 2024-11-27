@@ -11,8 +11,8 @@ namespace BL.Models.Administration
         public string Id { get; set; }
         public string Name { get; set; } = String.Empty;
         public string Value { get; set; } = String.Empty;
-        public string AdditionalValue { get; set; } = String.Empty;
-        public string Comment { get; set; } = String.Empty;
+        public string? AdditionalValue { get; set; }
+        public string? Comment { get; set; } 
         public bool AdminOnly { get; set; } = false;
         public bool Enable { get; set; } = false;
     }

@@ -109,14 +109,19 @@ namespace BL.Services.Administration
             BaseResponseDTO<string> BaseDtoS = new BaseResponseDTO<string>();
             try
             {
+
                 if (!context.SYS_GlobalParam.Any(x => x.Name.ToLower() == dataToSave.Name.ToLower() && x.DeleteStatus != true))
                 {
+                    Guid newid = Guid.NewGuid();
+
                     SYS_GlobalParam DSS = new SYS_GlobalParam()
                     {
+                        //Id = Guid.NewGuid().ToString(),
+                        Id = newid,
                         Name = dataToSave.Name,
                         Value = dataToSave.Value,
-                        AdditionalValue = dataToSave.AdditionalValue,
-                        Comment = dataToSave.Comment,
+                        AdditionalValue = dataToSave.AdditionalValue == null ? " " : dataToSave.AdditionalValue.ToString(),
+                        Comment = dataToSave.Comment == null ? " " : dataToSave.Comment.ToString(),
                         AdminOnly = dataToSave.AdminOnly,
                         Enable = dataToSave.Enable
                     };
@@ -155,8 +160,8 @@ namespace BL.Services.Administration
 
                     DSS.Name = dataToUpdate.Name;
                     DSS.Value = dataToUpdate.Value;
-                    DSS.AdditionalValue = dataToUpdate.AdditionalValue;
-                    DSS.Comment = dataToUpdate.Comment;
+                    DSS.AdditionalValue = dataToUpdate.AdditionalValue == null ? " " : dataToUpdate.AdditionalValue.ToString();
+                    DSS.Comment = dataToUpdate.Comment == null ? " " : dataToUpdate.Comment.ToString();
                     DSS.AdminOnly = dataToUpdate.AdminOnly;
                     DSS.Enable = dataToUpdate.Enable;
 

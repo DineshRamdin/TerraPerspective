@@ -1,0 +1,180 @@
+﻿@{
+	ViewData["Title"] = "User";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">Global Param</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+					<li class="breadcrumb-item active">Global Param</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="GlobalParamTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddGlobalParamModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddGlobalParam.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllGlobalParamUrl = '@Url.Action("GetAll", "GlobalParam")';
+		var GlobalParamGetByIdUrl = '@Url.Action("GetById", "GlobalParam")';
+		var CreateUpdateGlobalParamUrl = '@Url.Action("CreateUpdate", "GlobalParam")';
+
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liglobalParammenu').addClass('active');
+
+			GetAllGlobalParam();
+		});
+
+		function GetAllGlobalParam() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'name', title: 'Name' },
+				{ data: 'value', title: 'Value' },
+				{ data: 'additionalValue', title: 'Additional Value' },
+				{ data: 'comment', title: 'Comment' },
+			];
+
+				initializeDataGrid('GlobalParamTable', 'openGlobalParamModal', GetAllGlobalParamUrl, columnList, false,true,true,false);
+
+
+		}
+		 function openGlobalParamModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: GlobalParamGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearGlobalParamModal();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
+							$("#h4GlobalParamTitle").html("Modify Global Param");
+						else {
+							$("#h4GlobalParamTitle").html("Add Global Param");
+						}
+
+						$("#hdnGlobalParamId").val(response.data.id);
+						$("#txtName").val(response.data.name);
+						$("#txtValue").val(response.data.value);
+						$("#txtAdditionalValue").val(response.data.additionalValue);
+						$("#txtComment").val(response.data.comment);
+
+						$('#AdminOnly').prop('checked', response.data.adminOnly == null ? true : response.data.adminOnly);
+						$('#Enable').prop('checked', response.data.enable == null ? true : response.data.enable);
+
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddGlobalParamModal').modal('show');
+				$("#frnGlobalParamCreate").validate({}).resetForm();
+			});
+
+
+		}
+
+		function ClearGlobalParamModal() {
+			$("#h4GlobalParamTitle").html("Add Global Param");
+			$("#hdnGlobalParamId").val("0");
+			$("#hdnGlobalParamId").val("");
+			$("#txtName").val("");
+			$("#txtValue").val("");
+			$("#txtAdditionalValue").val("");
+			$("#txtComment").val("");
+		 }
+
+		 async function SaveGlobalParam() {
+
+
+			let valid = formValidation(["txtName", "txtValue"]);
+
+			if (valid) {
+				var dataObject = {};
+				dataObject.Id = $("#hdnGlobalParamId").val();
+				dataObject.Name = $("#txtName").val();
+				dataObject.Value = $('#txtValue').val();
+				dataObject.AdditionalValue = $('#txtAdditionalValue').val();
+				dataObject.Comment = $('#txtComment').val();
+				dataObject.AdminOnly   = $('#AdminOnly').prop('checked');
+				dataObject.Enable = $('#Enable').prop('checked');
+
+
+				$.ajax({
+					url: CreateUpdateGlobalParamUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddGlobalParamModal').modal('hide');
+							GetAllGlobalParam();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("Please fill in required field(s)");
+			}
+
+		}
+
+	</script>
+}
