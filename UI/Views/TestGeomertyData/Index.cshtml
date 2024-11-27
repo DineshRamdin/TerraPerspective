@@ -58,178 +58,38 @@
 
 @section scripts
 {
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 
-        <script>
+            <script>
 
-            var GetAllTestGeomertyDataUrl = '@Url.Action("GetAll", "TestGeomertyData")';
-            var CreateUpdateGeomertyDataUrl= '@Url.Action("CreateUpdate", "TestGeomertyData")';
+                var GetAllTestGeomertyDataUrl = '@Url.Action("GetAll", "TestGeomertyData")';
+                var CreateUpdateGeomertyDataUrl= '@Url.Action("CreateUpdate", "TestGeomertyData")';
 
-            $(function () {
-                $('.nav-link').removeClass('active');
-                $('#liTestGeomertyDatamenu').addClass('active');
+                $(function () {
+                    $('.nav-link').removeClass('active');
+                    $('#liTestGeomertyDatamenu').addClass('active');
 
 
-                initMap();
-            });
-
-            let map;
-
-            function initMap() {
-                var MapData = [];
-                $.ajax({
-                    url: GetAllTestGeomertyDataUrl,
-                    type: "POST",
-                    // data: dataObject,  // Send data if needed
-                    beforeSend: function () {
-                        MapData = [];
-                    },
-                    success: function (response) {
-                        console.log("response.data", response.data);
-                        if (response.data) {
-                            MapData = response.data;
-                        }
-                    },
-                    error: function (error) {
-                        console.log("Error:", error);
-                        toastr.error("Error:" + error);
-                    }
-                }).done(function () {
-
-                 if(map)     
-                 {
-                    map.eachLayer(function (layer) {
-                        if (!layer._url) {
-                            map.removeLayer(layer); // Remove all layers except the tile layer
-                        }
-                    });
-                 }
-                 else
-                 {
-
-                     map = L.map('map').setView([51.505, -0.09], 13);
-
-                    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    }).addTo(map);
-                 }
-                    // Loop through the data array and process each feature
-                    MapData.forEach(function (item) {
-                        // Parse the GeoJSON string
-                        var geoJsonData = JSON.parse(item.featureGeoJson);
-
-                        // Add the GeoJSON polygon to the map
-                        L.geoJSON(geoJsonData).addTo(map);
-                    });
+                    initMap();
                 });
 
-            }
+                let map;
 
-            let Createmap;
-            function openGeomertyDataModal(id) {
-                $('#txtZone').val("");
-                $('#hdnMapdata').val("");
-                
-                $("#h4GeomertyDataTitle").html("Add Geomerty Data");
-                $("#hdnId").val("0");
-
-
-                $('#AddGeomertyDataModal').modal('show');
-                $("#frnGeomertyDataCreate").validate({}).resetForm();
-
-                 if(Createmap )     
-                 {
-                    Createmap.eachLayer(function (layer) {
-                        if (!layer._url) {
-                            Createmap.removeLayer(layer); // Remove all layers except the tile layer
-                        }
-                    });
-                 }
-                 else
-                 {
-                    Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
-
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19
-                    }).addTo(Createmap);
-
-                     // Add drawing control
-                    var drawnItems = new L.FeatureGroup();
-                    Createmap.addLayer(drawnItems);
-                 }
-
-            var drawControl = new L.Control.Draw({
-                edit: {
-                    featureGroup: drawnItems,
-                    remove: true
-                },
-                draw: {
-                    polygon: true,
-                    polyline: false,
-                    rectangle: false,
-                    circle: false,
-                    marker: false,
-                    circlemarker: false
-                }
-            });
-            Createmap.addControl(drawControl);
-
-            // Handle the creation of polygons
-            Createmap.on(L.Draw.Event.CREATED, function (event) {
-                var layer = event.layer;
-                drawnItems.clearLayers(); // Clear any previously drawn shapes
-                drawnItems.addLayer(layer);
-
-                 var latLngs = layer.getLatLngs()[0];
-
-                  // Check if the first and last points are the same
-                if (latLngs[0] !== latLngs[latLngs.length - 1]) {
-                    latLngs.push(latLngs[0]); // Add the first point at the end to close the polygon
-                }
-
-                // Convert polygon to WKT format
-                var coordinates = latLngs.map(function (point) {
-                    return point.lng + " " + point.lat;
-                }).join(", ");
-                var wkt = `POLYGON((${coordinates}))`;
-                $('#hdnMapdata').val(wkt);
-            });
-
-                $('#AddGeomertyDataModal').on('shown.bs.modal', function () {
-                    Createmap.invalidateSize();
-                });
-          }
-
-          function SaveGeomertyData() {
-              // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
-                let valid = formValidation(["txtZone", "hdnMapdata"]);
-
-                  if (valid) {
-                    var dataObject = {};
-                    dataObject.Id = $("#hdnId").val();
-                    dataObject.Zone = $("#txtZone").val();
-                    dataObject.FeatureGeoJson = $('#hdnMapdata').val();
-
-
+                function initMap() {
+                    var MapData = [];
                     $.ajax({
-                        url: CreateUpdateGeomertyDataUrl,
+                        url: GetAllTestGeomertyDataUrl,
                         type: "POST",
-                        data: dataObject,  // Send data if needed
+                        // data: dataObject,  // Send data if needed
                         beforeSend: function () {
-
+                            MapData = [];
                         },
                         success: function (response) {
+                            console.log("response.data", response.data);
                             if (response.data) {
-                                toastr.success(response.errorMessage);
-                                $('#AddGeomertyDataModal').modal('hide');
-                                initMap();
+                                MapData = response.data;
                             }
-                            else {
-                                toastr.error(response.errorMessage);
-                            }
-                            // Handle success (e.g., update UI with response data)
                         },
                         error: function (error) {
                             console.log("Error:", error);
@@ -237,13 +97,153 @@
                         }
                     }).done(function () {
 
+                     if(map)     
+                     {
+                        map.eachLayer(function (layer) {
+                            if (!layer._url) {
+                                map.removeLayer(layer); // Remove all layers except the tile layer
+                            }
+                        });
+                     }
+                     else
+                     {
+
+                         map = L.map('map').setView([51.505, -0.09], 13);
+
+                        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        }).addTo(map);
+                     }
+                        // Loop through the data array and process each feature
+                        MapData.forEach(function (item) {
+                            // Parse the GeoJSON string
+                            var geoJsonData = JSON.parse(item.featureGeoJson);
+
+                            // Add the GeoJSON polygon to the map
+                            L.geoJSON(geoJsonData).addTo(map);
+                        });
                     });
-                }
-                else {
-                    toastr.warning("Please fill in required field(s)");
+
                 }
 
-          }
-        </script>
+                let Createmap;
+                function openGeomertyDataModal(id) {
+                    $('#txtZone').val("");
+                    $('#hdnMapdata').val("");
+
+                    $("#h4GeomertyDataTitle").html("Add Geomerty Data");
+                    $("#hdnId").val("0");
+
+
+                    $('#AddGeomertyDataModal').modal('show');
+                    $("#frnGeomertyDataCreate").validate({}).resetForm();
+
+                     if(Createmap )     
+                     {
+                        Createmap.eachLayer(function (layer) {
+                            if (!layer._url) {
+                                Createmap.removeLayer(layer); // Remove all layers except the tile layer
+                            }
+                        });
+                     }
+                     else
+                     {
+                        Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19
+                        }).addTo(Createmap);
+
+                         // Add drawing control
+                        var drawnItems = new L.FeatureGroup();
+                        Createmap.addLayer(drawnItems);
+                     }
+
+                var drawControl = new L.Control.Draw({
+                    edit: {
+                        featureGroup: drawnItems,
+                        remove: true
+                    },
+                    draw: {
+                        polygon: true,
+                        polyline: false,
+                        rectangle: false,
+                        circle: false,
+                        marker: false,
+                        circlemarker: false
+                    }
+                });
+                Createmap.addControl(drawControl);
+
+                // Handle the creation of polygons
+                Createmap.on(L.Draw.Event.CREATED, function (event) {
+                    var layer = event.layer;
+                    drawnItems.clearLayers(); // Clear any previously drawn shapes
+                    drawnItems.addLayer(layer);
+
+                     var latLngs = layer.getLatLngs()[0];
+
+                      // Check if the first and last points are the same
+                    if (latLngs[0] !== latLngs[latLngs.length - 1]) {
+                        latLngs.push(latLngs[0]); // Add the first point at the end to close the polygon
+                    }
+
+                    // Convert polygon to WKT format
+                    var coordinates = latLngs.map(function (point) {
+                        return point.lng + " " + point.lat;
+                    }).join(", ");
+                    var wkt = `POLYGON((${coordinates}))`;
+                    $('#hdnMapdata').val(wkt);
+                });
+
+                    $('#AddGeomertyDataModal').on('shown.bs.modal', function () {
+                        Createmap.invalidateSize();
+                    });
+              }
+
+              function SaveGeomertyData() {
+                  // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
+                    let valid = formValidation(["txtZone", "hdnMapdata"]);
+
+                      if (valid) {
+                        var dataObject = {};
+                        dataObject.Id = $("#hdnId").val();
+                        dataObject.Zone = $("#txtZone").val();
+                        dataObject.FeatureGeoJson = $('#hdnMapdata').val();
+
+
+                        $.ajax({
+                            url: CreateUpdateGeomertyDataUrl,
+                            type: "POST",
+                            data: dataObject,  // Send data if needed
+                            beforeSend: function () {
+
+                            },
+                            success: function (response) {
+                                if (response.data) {
+                                    toastr.success(response.errorMessage);
+                                    $('#AddGeomertyDataModal').modal('hide');
+                                    initMap();
+                                }
+                                else {
+                                    toastr.error(response.errorMessage);
+                                }
+                                // Handle success (e.g., update UI with response data)
+                            },
+                            error: function (error) {
+                                console.log("Error:", error);
+                                toastr.error("Error:" + error);
+                            }
+                        }).done(function () {
+
+                        });
+                    }
+                    else {
+                        toastr.warning("Please fill in required field(s)");
+                    }
+
+              }
+            </script>
 
 }
