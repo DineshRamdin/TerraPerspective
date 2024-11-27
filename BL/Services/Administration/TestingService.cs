@@ -46,7 +46,10 @@ namespace BL.Services.Administration
                                                TestingType = a.TestingType.ToString(),
                                                TestingDate = a.TestingDate.ToString(),
                                                TestingCode = a.TestingCode,
-                                               Description = a.Description
+                                               Description = a.Description,
+                                               IsTestCount = a.IsTestCount,
+                                               IsTesting = a.IsTesting,
+                                               IsTestYes = a.IsTestYes
                                            }).ToList();
 
                 dto.Data = result;
@@ -80,7 +83,11 @@ namespace BL.Services.Administration
                               TestingType = (int)a.TestingType,
                               TestingDate = a.TestingDate,
                               TestingCode = a.TestingCode,
-                              Description = a.Description
+                              Description = a.Description,
+                              IsTestCount = a.IsTestCount,
+                              IsTesting = a.IsTesting,
+                              IsTestYes = a.IsTestYes,
+                              TestingImagebase64 = a.TestingImagebase64
                           }).FirstOrDefault();
 
                 if (result == null)
@@ -117,6 +124,10 @@ namespace BL.Services.Administration
                         TestingType = (TestingType)dataToSave.TestingType,
                         TestingDate = dataToSave.TestingDate,
                         Description = dataToSave.Description,
+                        IsTestCount = dataToSave.IsTestCount,
+                        IsTesting = dataToSave.IsTesting,
+                        IsTestYes = dataToSave.IsTestYes,
+                        TestingImagebase64 = dataToSave.TestingImagebase64
                     };
                     context.SYS_Testing.Add(DSS);
                     context.SaveChanges();
@@ -156,6 +167,10 @@ namespace BL.Services.Administration
                     DSS.TestingType = (TestingType)dataToUpdate.TestingType;
                     DSS.TestingDate = dataToUpdate.TestingDate;
                     DSS.Description = dataToUpdate.Description;
+                    DSS.IsTestCount = dataToUpdate.IsTestCount;
+                    DSS.IsTesting = dataToUpdate.IsTesting;
+                    DSS.IsTestYes = dataToUpdate.IsTestYes;
+                    DSS.TestingImagebase64 = dataToUpdate.TestingImagebase64;
 
                     context.SYS_Testing.Update(DSS);
                     context.SaveChanges();
@@ -236,7 +251,7 @@ namespace BL.Services.Administration
 
                 Ddl.Add(Dd);
 
-               
+
 
                 dto.Data = Ddl;
                 dto.QryResult = queryResult.SUCEEDED;

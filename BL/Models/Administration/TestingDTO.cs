@@ -15,6 +15,10 @@ namespace BL.Models.Administration
         public string TestingDate { get; set; }
         public string? TestingCode { get; set; }
         public string? Description { get; set; }
+        public bool IsTesting { get; set; }
+        public bool IsTestYes { get; set; }
+        public bool IsTestCount { get; set; }
+        public string? TestingImagebase64 { get; set; }
 
     }
 
@@ -26,7 +30,11 @@ namespace BL.Models.Administration
         public string TestingDate { get; set; }
         public string? TestingCode { get; set; }
         public string? Description { get; set; }
+        public bool IsTesting { get; set; }
+        public bool IsTestYes { get; set; }
+        public bool IsTestCount { get; set; }
+        public string? TestingImagebase64 { get; set; }
 
-       
+
     }
 }
