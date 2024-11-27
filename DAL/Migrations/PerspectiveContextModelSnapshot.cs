@@ -557,12 +557,24 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsTestCount")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTestYes")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTesting")
+                        .HasColumnType("bit");
+
                     b.Property<string>("TestingCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TestingDate")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TestingImagebase64")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TestingName")

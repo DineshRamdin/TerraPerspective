@@ -29,19 +29,19 @@
 						<label>Testing Code<span class="red-required">*</span></label>
 						<input type="text" id="txtTestingCode" class="form-control" placeholder="Testing Code" required />
 					</div>
-					<div class="col-12 form-group">
+					@* <div class="col-12 form-group">
 						<label>Testing Date<span class="red-required">*</span></label>
 						<input type="text" id="txtTestingDate" class="form-control" placeholder="Testing Date" required />
-					</div>
-					@* <div class="col-12 form-group">
+					</div> *@
+					<div class="col-12 form-group">
 						<label>Testing Date</label>
 						<div class="input-group date" id="txtTestingDate" data-target-input="nearest">
 							<input type="text" class="form-control datetimepicker-input" data-target="#txtTestingDate" />
 							<div class="input-group-append" data-target="#txtTestingDate" data-toggle="datetimepicker">
-								<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+								<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
 							</div>
 						</div>
-					</div> *@
+					</div>
 
 					<div class="col-12 form-group">
 						<label>Description<span class="red-required">*</span></label>
@@ -50,6 +50,58 @@
 
 
 				</div>
+				<div class="row">
+					<div class="col-3 form-group">
+						<!-- checkbox -->
+						<div class="form-group clearfix">
+							<div class="icheck-primary d-inline">
+								<input type="checkbox" id="IsTestingChk">
+								<label for="IsTestingChk">
+									Is Testing
+								</label>
+							</div>
+
+						</div>
+					</div>
+					<div class="col-4 form-group">
+						<!-- radio -->
+						<div class="form-group clearfix">
+							<div class="icheck-primary d-inline">
+								<input type="radio" id="IsTestYesRD" name="r1" checked>
+								<label for="IsTestYesRD">
+									Yes
+								</label>
+							</div>
+							<div class="icheck-primary d-inline">
+								<input type="radio" id="IsTestNoRD" name="r1">
+								<label for="IsTestNoRD">
+									No
+								</label>
+							</div>
+
+						</div>
+					</div>
+					<div class="col-5 form-group">
+
+						<input type="checkbox" name="my-checkbox" id="IsTestCountchk" data-bootstrap-switch>
+						<label for="IsTestCountchk">
+							Test Count
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 row form-group">
+						<div class="col-6">
+							<label for="testingimagefile">Testing Image</label>
+							<input type="file" id="testingimagefile" name="testingimagefile" accept="image/*" onchange="UploadFileisValidImageFormarJPEGAndPNG('testingimagefile')">
+							<input type="hidden" id="oldtestingimage" value="" />
+						</div>
+						<div class="col-6">
+							<img id="viewTestingImage" style="height: 80%;width: 80%;" />
+						</div>
+					</div>
+				</div>
+
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" onclick="SaveTesting();">Save</button>
@@ -60,16 +112,3 @@
 	</form>
 
 </div>
-@* @section scripts
-{
-
-	<script>
-		$(function () {
-			   $('#txtTestingDate').datetimepicker({
-				   format: 'L'
-			   });
-		 });
-
-
-	</script>
-} *@
