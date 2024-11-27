@@ -90,12 +90,14 @@
                         else if(response.data.status == 5){
                             $('#ChangePasswordLT').modal('show');
                         }
-                        else {
+                        else if (response.data.status == 0) {
                             toastr.success('Login Successful');
                             setTimeout(
                                 function () {
                                     window.location.href = DashboardUrl;
                                 }, 500);
+                        } else if (response.data.qryResult == "failed") {
+                            toastr.error(data.additionalData);
                         }
                     }
                     else {
