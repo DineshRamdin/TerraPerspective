@@ -31,13 +31,13 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         /* dom: '<"top"Bf>rt<"bottom"ip>', */
                         dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl',
                         searching: true, //show search
-                        paging: false, //no paging
+                        paging: true, //no paging
                         processing: true, //processing
                         scrollY: 'auto', //fixed height
                         scrollCollapse: true,//scroll
                         order: [[0, 'desc']], //order
                         autoWidth: false,
-
+                        lengthChange: false,
                         language: { // search anf info bars
                             search: '',
                             emptyTable: 'No data available',
@@ -179,6 +179,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                     $('.custom-class').removeClass('btn-secondary');
                     $('.dt-scroll-headInner table thead').addClass('custom-table');
                     $('.dataTables_filter').css('float', 'inline-start');
+                    $('.dataTables_paginate').css('margin-top', '-30px');
 
 
                     if (showAdd) {
