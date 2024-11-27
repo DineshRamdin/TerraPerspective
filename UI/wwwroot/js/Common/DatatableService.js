@@ -125,7 +125,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         columns: columnList, //column list
                         buttons: [
                             {
-                                text: '<i class="fa fa-plus me-2"></i>Add New',
+                                text: '<i class="fa fa-plus me-2"></i> Add New',
                                 className: 'btn btn-sm btn-primary custom-class addbtn',
                                 action: function (e, dt, node, config) {
                                     // Replace this with your custom action
