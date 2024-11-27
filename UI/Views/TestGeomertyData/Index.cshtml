@@ -2,9 +2,8 @@
     ViewData["Title"] = "Test Geomerty Data";
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
-
+<link href="~/plugins/leaflet-1.7.1/leaflet.css" rel="stylesheet" />
+<link href="~/plugins/leaflet-draw-1.0.4/leaflet.draw.css" rel="stylesheet" />
 <style>
       #map {
             width: 100%;
@@ -43,6 +42,9 @@
                     </div>
                 </div>
                 <div class="row">
+                    @* <div class="col-2 mb-10">
+                        <div id="Zonejstree"></div>
+                    </div> *@
                     <div class="col-12  mb-10">
                         <div id="map" ></div>
                     </div>
@@ -58,9 +60,9 @@
 
 @section scripts
 {
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-
+            
+    <script src="~/plugins/leaflet-1.7.1/leaflet.js"></script>
+    <script src="~/plugins/leaflet-draw-1.0.4/leaflet.draw.js"></script>
             <script>
 
                 var GetAllTestGeomertyDataUrl = '@Url.Action("GetAll", "TestGeomertyData")';
@@ -70,9 +72,38 @@
                     $('.nav-link').removeClass('active');
                     $('#liTestGeomertyDatamenu').addClass('active');
 
-
+                    BindJsTreeData();
                     initMap();
                 });
+
+                function BindJsTreeData()
+                {
+                   //   $('#Zonejstree').jstree({
+                   //    'core': {
+                   //      'data': [
+                   //        { "text": "Root node", "children":   "children": [
+                   //                          { "text": "Child node 1", "Value": 1 },
+                   //                          { "text": "Child node 2", "Value": 1001 }
+                   //                        ]}
+                   //      ]
+                   //    },
+                   //     "plugins": ["checkbox"] // Enable the checkbox plugin
+                   //  });
+
+                   // $('#Zonejstree').on('changed.jstree', function (e, data) {
+                   //          // Filter out only the child nodes
+                   //          var childNodes = data.selected.filter(function(nodeId) {
+                   //            var node = $('#Zonejstree').jstree("get_node", nodeId);
+                   //            return node.parent !== "#";  // Parent is not root (i.e., is a child)
+                   //          });
+
+                   //          // Log the checked child nodes
+                   //          childNodes.forEach(function(nodeId) {
+                   //            var node = $('#Zonejstree').jstree("get_node", nodeId);
+                   //            console.log("Checked child node text:", node.text);
+                   //          });
+                   //   });
+                }
 
                 let map;
 
