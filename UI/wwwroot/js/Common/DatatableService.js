@@ -62,7 +62,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                     var edit = '<a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
                                     //delete button
                                     /*var del = ' | <a href="#" onclick="delete(\'' + full.id + '\')" title="Delete"><i class="fa fa-delete text-secondary "></i></a>';*/
-                                    var del = '<a href="#" onclick="' + onclickDelete + '(\'' + full.id + '\')" title="Edit"><i class="fa fa-trash text-secondary ms-1"></i></a> ';
+                                    var del = '| <a href="#" onclick="' + onclickDelete + '(\'' + full.id + '\')" title="Delete"><i class="fa fa-trash text-secondary ms-1"></i></a> ';
                                     //reset user 
                                     var reset = '| <a href="#" onclick="ResetUserPassword(\'' + full.id + '\')"  title="Reset Password To Default"><i class="fas fa-undo text-secondary ms-1"></i></a> ';
                                     //list of buttons
