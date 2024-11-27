@@ -16,5 +16,6 @@ namespace DAL.Models.Administration
         public string Zone { get; set; }
 
         public Geometry GeomColumn { get; set; }
+        public string Type { get; set; }
     }
 }
