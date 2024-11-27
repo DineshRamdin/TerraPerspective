@@ -16,6 +16,7 @@ using DAL.Models.Administration;
 using NetTopologySuite.Algorithm;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using DAL.Common;
 
 namespace BL.Services.Administration
 {
@@ -39,27 +40,17 @@ namespace BL.Services.Administration
 
             try
             {
-
-
-
-
                 string sQryResult = queryResult.FAILED;
 
                 List<GeomertyDataDTO> result = context.SYS_GeomertyData
-                                                    .Where(a => a.DeleteStatus == false)
-                                                   .Select(a => new GeomertyDataDTO
-                                                   {
-                                                       Id = a.Id,
-                                                       Zone = a.Zone,
-                                                       FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
-                                                   }).AsEnumerable() // Switch to client-side processing
-    .Select(a => new GeomertyDataDTO
-    {
-        Id = a.Id,
-        Zone = a.Zone,
-        FeatureGeoJson = ReverseCoordinates(a.FeatureGeoJson) // Reverse coordinates after data is loaded
-    }).ToList();
-
+                                         .Where(a => a.DeleteStatus == false)
+                                         .Select(a => new GeomertyDataDTO
+                                         {
+                                             Id = a.Id,
+                                             Zone = a.Zone,
+                                             FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
+                                         })
+                                         .ToList();
                 dto.Data = result;
                 dto.QryResult = queryResult.SUCEEDED;
 
@@ -74,46 +65,37 @@ namespace BL.Services.Administration
             return dto;
         }
 
-        public void AddGeometryData(string zone, string geoJson)
+        public async Task<BaseResponseDTO<bool>> SaveAsync(GeomertyDataDTO dataToSave)
         {
-            // Step 1: Deserialize GeoJSON to Geometry
-            var geoJsonReader = new GeoJsonReader();
-            Geometry geometry = geoJsonReader.Read<Geometry>(geoJson);  //
-
-            // Ensure polygon orientation (only for polygons or multi-polygons)
-            if (geometry is Polygon polygon)
+            BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
+            BaseResponseDTO<string> BaseDtoS = new BaseResponseDTO<string>();
+            try
             {
-                if (!Orientation.IsCCW(polygon.Coordinates))
+
+                SYS_GeomertyData DSS = new SYS_GeomertyData()
                 {
-                    polygon = (Polygon)polygon.Reverse(); // Reverse to make it counter-clockwise
-                }
-                geometry = polygon;
-            }
-            else if (geometry is MultiPolygon multiPolygon)
-            {
-                for (int i = 0; i < multiPolygon.NumGeometries; i++)
-                {
-                    Polygon part = (Polygon)multiPolygon.GetGeometryN(i);
-                    if (!Orientation.IsCCW(part.Coordinates))
-                    {
-                        part = (Polygon)part.Reverse();
-                        multiPolygon.Geometries[i] = part;
-                    }
-                }
-                geometry = multiPolygon;
-            }
+                    Zone = dataToSave.Zone,
+                    GeomColumn = dataToSave.geometry,
+                   
+                };
+                context.SYS_GeomertyData.Add(DSS);
+                context.SaveChanges();
 
-            // Step 2: Create a new GeomertyData entity
-            var newGeometryData = new SYS_GeomertyData
-            {
-                Zone = zone,
-                GeomColumn = geometry  // Set the geometry (SQL Server geometry type)
-            };
+                BaseDto.Data = true;
+                BaseDto.ErrorMessage = "Geomerty Data save Successfully";
+                BaseDto.QryResult = queryResult.SUCEEDED;
 
-            // Step 3: Add to context and save changes
-            context.SYS_GeomertyData.Add(newGeometryData);
-            context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                BaseDto.Data = false;
+                BaseDto.ErrorMessage = "Error Adding Record";
+                BaseDto.QryResult = queryResult.FAILED;
+            }
+            return BaseDto;
         }
+
+
 
         private string ReverseCoordinates(string geoJson)
         {
