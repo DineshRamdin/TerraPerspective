@@ -1,6 +1,7 @@
 ﻿using BL.Models.Administration;
 using BL.Models.Common;
 using BL.Services.Administration;
+using BL.Services.Common;
 using DAL.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +52,20 @@ namespace UI.Controllers
 
                 var reader = new WKTReader();
                 dto.geometry = reader.Read(dto.FeatureGeoJson);
+                
+
+                // Log geometry type for debugging
+                Console.WriteLine($"Geometry Type: {dto.geometry.GeometryType}");
+
+                // Ensure the geometry is a polygon and check orientation
+                if (dto.geometry is Polygon polygon)
+                {
+                    bool Resu = GeometryDataHelper.IsGeometryDataCounterClockwise(polygon);
+                    if (!GeometryDataHelper.IsGeometryDataCounterClockwise(polygon))
+                    {
+                        dto.geometry = GeometryDataHelper.GeometryDataReversePolygon(polygon); // Reverse to clockwise
+                    }
+                }
                 dto.geometry.SRID = 4326;
                 dt = await service.SaveAsync(dto);
 
@@ -60,8 +75,6 @@ namespace UI.Controllers
             {
                 return BadRequest();
             }
-
-
         }
 
     }

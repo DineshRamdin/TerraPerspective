@@ -104,10 +104,80 @@ namespace BL.Services.Common
 
         }
 
-        public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+		public static void SeedGlobalParam()
+		{
+			try
+			{
+				PerspectiveContext context = new PerspectiveContext();
+				
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPServer"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
+                    GP.Name = "SMTPServer";
+                    GP.Value = "https://api.turbo-smtp.com/api/v2/mail/send";
+					context.SYS_GlobalParam.Add(GP);
+					context.SaveChanges();
+				}
+
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPAuthentication"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
+					GP.Name = "SMTPAuthentication";
+					GP.Value = "Enabled";
+					context.SYS_GlobalParam.Add(GP);
+					context.SaveChanges();
+				}
+
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPUsername"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
+					GP.Name = "SMTPUsername";
+					GP.Value = "dinu22@gmail.com";
+					context.SYS_GlobalParam.Add(GP);
+					context.SaveChanges();
+				}
+
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPPassword"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
+					GP.Name = "SMTPPassword";
+					GP.Value = "Terra@Test12345.";
+					context.SYS_GlobalParam.Add(GP);
+					context.SaveChanges();
+				}
+				
+
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPPorts"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
+					GP.Name = "SMTPPorts";
+					GP.Value = "465";
+					context.SYS_GlobalParam.Add(GP);
+					context.SaveChanges();
+				}
+
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "APIKey"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
+					GP.Name = "APIKey";
+					GP.Value = "33d576a46b99e58fb454d4270e1b05b3";
+					context.SYS_GlobalParam.Add(GP);
+					context.SaveChanges();
+				}
+			}
+			catch (Exception e)
+			{
+
+			}
+
+		}
+
+		public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             SeedRoles(roleManager);
             SeedUsers(userManager);
-        }
+            SeedGlobalParam();
+
+		}
     }
 }
