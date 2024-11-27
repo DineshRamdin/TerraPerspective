@@ -31,13 +31,13 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         /* dom: '<"top"Bf>rt<"bottom"ip>', */
                         dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl',
                         searching: true, //show search
-                        paging: false, //no paging
+                        paging: true, //no paging
                         processing: true, //processing
                         scrollY: 'auto', //fixed height
                         scrollCollapse: true,//scroll
                         order: [[0, 'desc']], //order
                         autoWidth: false,
-
+                        lengthChange: false,
                         language: { // search anf info bars
                             search: '',
                             emptyTable: 'No data available',
@@ -62,7 +62,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                     var edit = '<a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
                                     //delete button
                                     /*var del = ' | <a href="#" onclick="delete(\'' + full.id + '\')" title="Delete"><i class="fa fa-delete text-secondary "></i></a>';*/
-                                    var del = '<a href="#" onclick="' + onclickDelete + '(\'' + full.id + '\')" title="Edit"><i class="fa fa-trash text-secondary ms-1"></i></a> ';
+                                    var del = '| <a href="#" onclick="' + onclickDelete + '(\'' + full.id + '\')" title="Delete"><i class="fa fa-trash text-secondary ms-1"></i></a> ';
                                     //reset user 
                                     var reset = '| <a href="#" onclick="ResetUserPassword(\'' + full.id + '\')"  title="Reset Password To Default"><i class="fas fa-undo text-secondary ms-1"></i></a> ';
                                     //list of buttons
@@ -125,7 +125,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         columns: columnList, //column list
                         buttons: [
                             {
-                                text: '<i class="fa fa-plus me-2"></i>Add New',
+                                text: '<i class="fa fa-plus me-2"></i> Add New',
                                 className: 'btn btn-sm btn-primary custom-class addbtn',
                                 action: function (e, dt, node, config) {
                                     // Replace this with your custom action
@@ -179,6 +179,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                     $('.custom-class').removeClass('btn-secondary');
                     $('.dt-scroll-headInner table thead').addClass('custom-table');
                     $('.dataTables_filter').css('float', 'inline-start');
+                    $('.dataTables_paginate').css('margin-top', '-30px');
 
 
                     if (showAdd) {
