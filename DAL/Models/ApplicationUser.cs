@@ -67,6 +67,7 @@ namespace DAL.Models
         Suspended,
         Terminated,
         PasswordExpired,
-        AccountLocked
+        AccountLocked,
+        ChangePassword
     }
 }
