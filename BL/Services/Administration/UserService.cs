@@ -391,6 +391,7 @@ namespace BL.Services.Administration
                     user.AccessFailedCount = 0;
                     user.LastPasswordChangedDate = DateTime.UtcNow;
                     user.FirstTimeLogin = true;
+                    user.Status = UserStatus.ChangePassword;
                     await userManager.UpdateAsync(user);
 					try
 					{
