@@ -47,12 +47,16 @@
     </p>
 </div>
 
+<div class="modal fade" id="ChangePasswordLT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <partial name="_ChangePassword.cshtml" />
+</div>
 
 @section scripts
 {
     <script>
         var LoginUrl = '@Url.Action("Index", "Login")';
         var DashboardUrl = '@Url.Action("Index", "Dashboard")';
+        var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';
 
         $(document).keyup(function (e) {
             if (e.keyCode == 13)
@@ -72,7 +76,7 @@
             dataObject.Email = $("#txtEmail").val();
             dataObject.Password = $("#txtPassword").val();
             dataObject.RememberMe = $("remember").is("checked");
-
+            
             $.ajax({
                 url: LoginUrl,
                 type: "POST",
@@ -83,7 +87,9 @@
                         if (response.data.status == 3) {
                             toastr.warning(response.errorMessage);
                         }
-                        // if (response.data.status == 0) {
+                        else if(response.data.status == 5){
+                            $('#ChangePasswordLT').modal('show');
+                        }
                         else {
                             toastr.success('Login Successful');
                             setTimeout(

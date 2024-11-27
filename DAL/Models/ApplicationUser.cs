@@ -18,7 +18,9 @@ namespace DAL.Models
 
         public DateTime? LastPasswordChangedDate { get; set; }
 
-        public virtual LoginLog? LoginDetail { get; set; }
+		public bool FirstTimeLogin { get; set; } = true;
+
+		public virtual LoginLog? LoginDetail { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 
@@ -43,12 +45,29 @@ namespace DAL.Models
         public string ProfileImage { get; set; }
     }
 
-    public enum UserStatus
+	public class TunnelApplicationUser
+	{
+
+		public string Title { get; set; }
+		public string Email { get; set; }
+		public string NormEmail { get; set; }
+		public string Username { get; set; }
+		public string NormUsername { get; set; }
+
+		public string FirstName { get; set; }
+
+		public string LastName { get; set; }
+
+		public string FkID { get; set; }
+
+	}
+	public enum UserStatus
     {
         Active,
         Suspended,
         Terminated,
         PasswordExpired,
-        AccountLocked
+        AccountLocked,
+        ChangePassword
     }
 }

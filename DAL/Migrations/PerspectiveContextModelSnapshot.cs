@@ -271,6 +271,56 @@ namespace DAL.Migrations
                     b.ToTable("SYS_GeomertyData");
                 });
 
+            modelBuilder.Entity("DAL.Models.Administration.SYS_GlobalParam", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AdditionalValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AdminOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DeleteStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Enable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SYS_GlobalParam");
+                });
+
             modelBuilder.Entity("DAL.Models.Administration.SYS_LookUpType", b =>
                 {
                     b.Property<long>("Id")
@@ -507,12 +557,24 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsTestCount")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTestYes")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTesting")
+                        .HasColumnType("bit");
+
                     b.Property<string>("TestingCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TestingDate")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TestingImagebase64")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TestingName")
@@ -675,6 +737,9 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FirstTimeLogin")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastPasswordChangedDate")

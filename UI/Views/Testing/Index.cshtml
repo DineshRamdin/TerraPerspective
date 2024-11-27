@@ -45,6 +45,7 @@
 <!-- /.modal -->
 @section scripts
 {
+
 	<script>
 		var GetAllTestingUrl = '@Url.Action("GetAll", "Testing")';
 		var getTestingDropDownUrl = '@Url.Action("GetAllDropdownValues", "Testing")';
@@ -53,12 +54,21 @@
 		var TestingDeleteUrl = '@Url.Action("TestingDelete", "Testing")';
 
 		$(function () {
+			//$('#txtTestingDate').datetimepicker({format: 'L'});
 
 			$('.nav-link').removeClass('active');
 			$('#liTestingmenu').addClass('active');
 
 			GetAllTesting();
-			//$('#txtTestingDate').datetimepicker({format: 'L'});
+			//$('#txtTestingDate').datetimepicker({format: 'DD/MMM/YYYY'});
+			$('#txtTestingDate').datetimepicker({
+				format: 'DD/MMM/YYYY' // Format as 'day/month/abbreviated month name/year'
+			});
+
+
+			$("input[data-bootstrap-switch]").each(function(){
+				 $(this).bootstrapSwitch('state', $(this).prop('checked'));
+			})
 
 		});
 
@@ -98,12 +108,41 @@
 						else
 							$("#h4TestingTitle").html("Add Testing");
 
+
 						$("#hdnId").val(response.data.id);
 						$("#txtTestingName").val(response.data.testingName);
 						$('#txtTestingCode').val(response.data.testingCode);
 						$("#ddlTestingType").val(response.data.testingType == 0 ? "" : response.data.testingType);
-						$('#txtTestingDate').val(response.data.testingDate);
+						//$('#txtTestingDate').val(response.data.testingDate);
 						$('#txtDescription').val(response.data.description);
+
+						$('#IsTestingChk').prop('checked', response.data.isTesting == null ? true : response.data.isTesting);
+
+						if(response.data.isTestYes == true){
+							$('#IsTestYesRD').prop('checked', true);
+							$('#IsTestNoRD').prop('checked', false);
+						}
+						else{
+							$('#IsTestYesRD').prop('checked', false);
+							$('#IsTestNoRD').prop('checked', true);
+						}
+
+						if (response.data.isTestCount == true) {
+							$('#IsTestCountchk').bootstrapSwitch('state', true);  // Use the bootstrap-switch method to set state
+						} else {
+							$('#IsTestCountchk').bootstrapSwitch('state', false);  // Use the bootstrap-switch method to set state
+						}
+
+						//$('#txtTestingDate').datetimepicker('date', '01/Dec/2024');
+						$('#txtTestingDate').datetimepicker('date',response.data.testingDate);
+
+						if (response.data.testingImagebase64 != null && response.data.testingImagebase64 != "") {
+							$("#oldtestingimage").val(response.data.testingImagebase64);
+
+							$("#viewTestingImage").attr("src", "data:image/png;base64," + response.data.testingImagebase64);
+							$("#viewTestingImage").css("display", "");
+
+						}
 
 					}
 					else {
@@ -118,6 +157,9 @@
 			}).done(function () {
 				$('#AddTestingModal').modal('show');
 				$("#frnTestingCreate").validate({}).resetForm();
+
+
+				// $('#txtTestingDate').datetimepicker({format: 'DD/MMM/YYYY'});
 			});
 		}
 
@@ -129,6 +171,10 @@
 			$("#ddlTestingType").val("");
 			$('#txtTestingDate').val("");
 			$('#txtDescription').val("");
+			$("#testingimagefile").val(null);
+			$("#oldtestingimage").val("");
+			$("#viewTestingImage").attr("src", "");
+			$("#viewTestingImage").css("display", "none");
 		}
 
 		function GetDropdownData() {
@@ -161,9 +207,12 @@
 			});
 		}
 
-		function SaveTesting() {
+		async function SaveTesting() {
 
-			let valid = formValidation(["txtTestingName", "txtTestingCode", "ddlTestingType", "txtTestingDate","txtDescription"]);
+			 let testingDate = $('#txtTestingDate').datetimepicker('date');
+			 var testingDa = moment(testingDate).format('DD/MMM/YYYY');
+
+			let valid = formValidation(["txtTestingName", "txtTestingCode", "ddlTestingType", "txtDescription"]);
 
 			if (valid) {
 				var dataObject = {};
@@ -171,9 +220,21 @@
 				dataObject.TestingName = $("#txtTestingName").val();
 				dataObject.TestingCode = $('#txtTestingCode').val();
 				dataObject.TestingType = $('#ddlTestingType').val();
-				dataObject.TestingDate = $('#txtTestingDate').val();
+				//dataObject.TestingDate = $('#txtTestingDate').val();
 				dataObject.Description = $('#txtDescription').val();
+				dataObject.IsTesting   = $('#IsTestingChk').prop('checked');
+				dataObject.IsTestCount = $('#IsTestCountchk').prop('checked');
+				dataObject.IsTestYes   = $('#IsTestYesRD').prop('checked');
 
+				dataObject.TestingDate = testingDa;
+
+				var FileData = await FiletoBase64string("testingimagefile");
+				
+				if (FileData == "") {
+					FileData = $('#oldtestingimage').val();
+				}
+
+				dataObject.TestingImagebase64 = FileData;
 
 				$.ajax({
 					url: CreateUpdateTestingUrl,
