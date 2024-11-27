@@ -172,8 +172,9 @@ namespace BL.Services.Administration
                     au.Status = UserStatus.Active;
                     au.CreatedDate = DateTime.Now;
 					au.FirstTimeLogin = true;
-					//au.CreatedBy = Guid.Parse(dataToSave.userToken);
-					IdentityResult result = userManager.CreateAsync(au).Result;
+                    au.Status = UserStatus.ChangePassword;
+                    //au.CreatedBy = Guid.Parse(dataToSave.userToken);
+                    IdentityResult result = userManager.CreateAsync(au).Result;
 
 
                     if (result.Succeeded)
@@ -456,8 +457,10 @@ namespace BL.Services.Administration
                     var token = userManager.GeneratePasswordResetTokenAsync(user).Result; //generate password reset token
                     IdentityResult resultResetPasword = userManager.ResetPasswordAsync(user, token, randPassword).Result; //reset password using token
                     user.LockoutEnd = null;
+                    user.FirstTimeLogin = false;
                     user.AccessFailedCount = 0;
                     user.LastPasswordChangedDate = DateTime.UtcNow;
+                    user.Status = UserStatus.Active;
                     await userManager.UpdateAsync(user);
                     dto.Data = true;
                     dto.ErrorMessage = "Change User Password Successfully";

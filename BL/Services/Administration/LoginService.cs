@@ -30,15 +30,28 @@ namespace BL.Services.Administration
                     user = await _userManager.FindByNameAsync(loginDto.Email);
                     if (result.Succeeded)
                     {
-                        user.LoginDetail = new LoginLog()
+                        if (user.FirstTimeLogin == false)
                         {
-                            LastKnownIPAddress = clientIp,
-                            LastKnownMACAddress = MacAddress,
-                            LastLoginDate = DateTime.Now,
-                            Description = "Success Login",
-                            userId = user.Id,
-                        };
-
+                            user.LoginDetail = new LoginLog()
+                            {
+                                LastKnownIPAddress = clientIp,
+                                LastKnownMACAddress = MacAddress,
+                                LastLoginDate = DateTime.Now,
+                                Description = "Success Login",
+                                userId = user.Id,
+                            };
+                        }
+                        else
+                        {
+							user.LoginDetail = new LoginLog()
+							{
+								LastKnownIPAddress = clientIp,
+								LastKnownMACAddress = MacAddress,
+								LastLoginDate = DateTime.Now,
+								Description = "Success First Time Login",
+								userId = user.Id,
+							};
+						}
 
                         try
                         {
@@ -53,7 +66,7 @@ namespace BL.Services.Administration
 
                                 }
                             }
-                        }
+						}
                         catch (Exception ex)
                         {
 
