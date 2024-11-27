@@ -25,13 +25,14 @@
 	<div class="container-fluid">
 		<div class="card card-solid">
 			<div class="card-body pb-0">
-				<div class="row">
+				@* <div class="row">
 					<div class="col-10">
 					</div>
-				</div>
+				</div> *@
 				<div class="row">
-					<div class="col-12  mb-10">
-						<table id="TestingTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+					<div class="col-12 mb-10">
+						<table id="TestingTable" class="table table-bordered table-striped"></table>
+						@* <table id="TestingTable" class="table table-bordered table-striped dataTable dtr-inline"></table> *@
 					</div>
 				</div>
 			</div>
@@ -212,6 +213,11 @@
 			 let testingDate = $('#txtTestingDate').datetimepicker('date');
 			 var testingDa = moment(testingDate).format('DD/MMM/YYYY');
 
+			 if(testingDa == "Invalid date")
+			 {
+				testingDa = " - ";
+			 }
+
 			let valid = formValidation(["txtTestingName", "txtTestingCode", "ddlTestingType", "txtDescription"]);
 
 			if (valid) {
@@ -229,12 +235,15 @@
 				dataObject.TestingDate = testingDa;
 
 				var FileData = await FiletoBase64string("testingimagefile");
-				
+
 				if (FileData == "") {
 					FileData = $('#oldtestingimage').val();
 				}
 
 				dataObject.TestingImagebase64 = FileData;
+
+
+
 
 				$.ajax({
 					url: CreateUpdateTestingUrl,

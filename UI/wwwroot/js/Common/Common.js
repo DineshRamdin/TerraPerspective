@@ -1,9 +1,7 @@
 ﻿
 
 function togglePasswordVisibility(inputId) {
-    console.log("Data : ",inputId);
     const input = document.getElementById(inputId);
-    console.log("input.type : ", input.type);
     // Check the current type and toggle
     if (input.type === 'password') {
         input.type = 'text';
@@ -69,6 +67,10 @@ function ChangeUserPassword() {
                 if (response.data) {
                     toastr.success(response.errorMessage);
                     $('#ChangePassword').modal('hide');
+                    setTimeout(
+                        function () {
+                            window.location.href = LogOutURLForCP;
+                        }, 500);
                 }
                 else {
                     toastr.error(response.errorMessage);
