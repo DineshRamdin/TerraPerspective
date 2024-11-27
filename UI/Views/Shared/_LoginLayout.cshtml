@@ -35,7 +35,9 @@
     <script src="~/js/adminlte.min.js"></script>
     <script src="~/plugins/toastr/toastr.min.js"></script>
     <script src="~/js/common/common.js"></script>
-
+    <script>
+        var LogOutURLForCP = '@Url.Action("Logout", "Base")';
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
