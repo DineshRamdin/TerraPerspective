@@ -29,7 +29,6 @@ namespace BL.Services.Administration
         public BaseResponseDTO<List<TestingDTO>> GetAll()
         {
             BaseResponseDTO<List<TestingDTO>> dto = new BaseResponseDTO<List<TestingDTO>>();
-            TestingDTO user = new TestingDTO();
             QueryResult queryResult = new QueryResult();
             string errorMsg = "No Data Found";
 
@@ -194,7 +193,7 @@ namespace BL.Services.Administration
             return BaseDto;
         }
 
-        public async Task<BaseResponseDTO<bool>> TestingDelete(long Id, UserManager<ApplicationUser> userManager)
+        public async Task<BaseResponseDTO<bool>> TestingDelete(long Id)
         {
             BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
 
