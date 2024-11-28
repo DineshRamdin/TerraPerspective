@@ -35,8 +35,36 @@
 	<link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
 	<!-- Include JS Tree CSS -->
-    <link href="~/plugins/jstree/3.3.12/jstree-theme.min.css" rel="stylesheet" />
-	
+	<link href="~/plugins/jstree/3.3.12/jstree-theme.min.css" rel="stylesheet" />
+	<style>
+		/* Apply the smaller button and dropdown styles */
+		.dataTables_filter input {
+			font-size: 14px;
+			padding: 5px 8px;
+			height: 30px;
+		}
+
+		.dataTables_filter label {
+			font-size: 14px;
+		}
+
+		#dropdownFilter {
+			/* font-size: 14px;
+							padding: 5px 8px; */
+			height: 32px;
+			width: auto;
+		}
+
+		.btn-sm {
+			font-size: 13px;
+			padding: 5px 10px;
+		}
+
+		.dt-button {
+			font-size: 14px;
+			/* padding: 5px 10px; */
+		}
+	</style>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -109,7 +137,7 @@
 	<script src="~/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
 	<!-- Include JS Tree JS -->
-    <script src="~/plugins/jstree/3.3.12/jstree.min.js"></script>
+	<script src="~/plugins/jstree/3.3.12/jstree.min.js"></script>
 
 	<script>
 		var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';

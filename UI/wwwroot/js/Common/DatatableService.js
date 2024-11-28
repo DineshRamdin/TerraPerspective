@@ -20,15 +20,14 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
             if (response.data) {
 
-                if (response.data != undefined || response.data != null) {
+                if (response.data != undefined || response.data != null || response.data != "") {
                     access = response.data
                 }
                 dataToShow = response.data;
 
                 if ($('#' + tableID).length > 0) { //check if table exists
-                    // $('#' + tableID).DataTable().destroy();
-                    $('#' + tableID).DataTable({ //init table
-                        /*dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl', // Search on the left, buttons on the right*/
+
+                    $('#' + tableID).DataTable({ //init table                       
                         /* dom: '<"top"Bf>rt<"bottom"ip>', */
                         dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl',
                         searching: true, //show search
@@ -86,38 +85,6 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                         btn += preview
                                     }
 
-                                    //if (access.length > 0) {
-                                    //    if (access.find(x => x.accessType == AccessOperationType.Read) != null) {
-                                    //        if (access.find(x => x.accessType == AccessOperationType.Read).hasAccess) {
-                                    //            btn += view
-                                    //        }
-                                    //    }
-                                    //    if (access.find(x => x.accessType == AccessOperationType.Update) != null) {
-                                    //        if (access.find(x => x.accessType == AccessOperationType.Update).hasAccess) {
-                                    //            btn += edit
-                                    //        }
-                                    //    }
-                                    //    if (access.find(x => x.accessType == AccessOperationType.Delete) != null) {
-                                    //        if (access.find(x => x.accessType == AccessOperationType.Delete).hasAccess) {
-                                    //            btn += del
-                                    //        }
-                                    //    }
-
-                                    //} else {
-                                    //    btn += view + edit;
-                                    //    if (showDelete) {
-                                    //        btn += del
-                                    //    }
-                                    //    //TO REMOVE!! NO HARDCODING!! Please pass custom btn as param!!
-                                    //    if (className == "User") {
-                                    //        btn =
-                                    //            '<div class="text-nowrap">' + view + edit + reset + del + '</div>';
-                                    //    }
-                                    //    if (className == "GlobalParam") {
-                                    //        btn =
-                                    //            '<div class="text-nowrap">' + view + edit + '</div>';
-                                    //    }
-                                    //}
                                     data = '<div class="text-nowrap">' + btn + '</div>';
                                     return data;
                                 }
@@ -145,37 +112,79 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
                                 }
                             },
+                            //PDF Export Button
+                            {
+                                extend: 'pdf',
+                                text: '<i class="fa fa-file-pdf me-2"></i>  Export PDF',
+                                className: 'btn-sm btn-c-secondary d-none printbtn',
+                                exportOptions: {
+                                    columns: ':visible:not(.sorting_disabled)'
 
+                                }
+                            },
+                            //CSV Export Button
+                            {
+                                extend: 'csv',
+                                text: '<i class="fa fa-file-excel me-2"></i>  Export CSV',
+                                className: 'btn-sm btn-c-secondary d-none printbtn',
+                                exportOptions: {
+                                    columns: ':visible:not(.sorting_disabled)'
+
+                                }
+                            },
 
                             //'<button class="btn btn-block btn-primary mb-3" onclick="' + onclickPartial + '()"><i class="fa fa-plus me-2"></i>Add New</button>',
 
                         ],
 
+                        initComplete: function () {
+                            // Append a dropdown filter to the DataTable filter area
+                            var dropdownHtml = '<select id="dropdownFilter" class="form-control btn-sm btn-info clsDownload btn btn-secondary buttons-collection dropdown-toggle" style="width: auto;">' +
+                                '<option value=""> Select to Download File </option>' +
+                                '<option value="1">PDF</option>' +
+                                '<option value="2">Excel</option>' +
+                                '<option value="3">CSV</option>' +
+                                '</select>';
 
-                        //buttons: [ //set buttons above table
-                        //    //Excel Export Button
-                        //    //{
-                        //    //    extend: 'excel',
-                        //    //    text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-                        //    //    className: 'form-control btn-c-secondary d-none',
-                        //    //    exportOptions: {
-                        //    //        columns: ':visible:not(.sorting_disabled)'
+                            // Append the dropdown to the filter area
+                            $('div.dataTables_filter').append(dropdownHtml);
 
-                        //    //    }
-                        //    //},
-                        //    //Open Add popup
+                            //if (tableID === 'AccessLogTable') {
+                            //    $('#dropdownFilter option[value="2"]').hide();  // Hide Excel option
+                            //}
 
-                        //    '<div class="row"><div class="col-12"><a href="#" ><button class="btn btn-block btn-primary mb-3" onclick="' + onclickPartial + '()"><i class="fa fa-plus me-2"></i>Add New</button></a></div></div>',
-                        //],
+                            // Custom filter logic when dropdown changes
+                            $('#dropdownFilter').on('change', function () {
+                                var value = $(this).val();
+                                var table = $('#' + tableID).DataTable();
+
+                                if (value === '1') { // PDF Export
+                                    $('.buttons-pdf').click();
+                                } else if (value === '2') { // PDF Export
+                                    $('.buttons-excel').click();
+                                }
+                                else if (value === '3') { // CSV Export
+                                    $('.buttons-csv').click();
+                                }
+
+                                //$('#dropdownFilter').val('');
+                            });
+
+                            $('div.dataTables_filter').css({
+                                'gap': '10px' // Adds space between elements (dropdown and buttons)
+                            });
+
+                            // Optionally add some margin to the 'Add New' button to provide space between the dropdown and the button
+                            $('.addbtn').css('margin-left', '10px'); // Adds margin between 'Add New' button and the dropdown
+                            // $('.excelbtn').css('margin-left', '10px'); // Adds margin between 'Add New' button and the dropdown
+                        },
                         drawCallback: function () {
 
-                            /*$('.dataTables_filter').css('margin-right', '33px');*/
-                            // BUTTON EVENT ON THE DATA TABLE
-                            // $('table.dataTable thead').addClass('custom-table');
                         },
 
                     })//.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
+                    $('div.dt-buttons').prepend($('.clsDownload'));
                     $('div.dt-buttons').css('float', 'inline-end');
                     $('.custom-class').removeClass('btn-secondary');
                     $('.dt-scroll-headInner table thead').addClass('custom-table');
@@ -196,10 +205,13 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                     }
 
                     if (showExcel) {
-                        $('.excelbtn').removeClass('d-none');
+                        /*$('.excelbtn').removeClass('d-none');*/
+                        $('.clsDownload').removeClass('d-none');
+
                     }
                     else {
-                        $('.excelbtn').addClass('d-none');
+                        /*$('.excelbtn').addClass('d-none');*/
+                        $('.clsDownload').addClass('d-none');
                     }
                 }
             }
