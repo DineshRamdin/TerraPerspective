@@ -140,7 +140,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         initComplete: function () {
                             // Append a dropdown filter to the DataTable filter area
                             var dropdownHtml = '<select id="dropdownFilter" class="form-control btn-sm btn-info clsDownload btn btn-secondary buttons-collection dropdown-toggle" style="width: auto;">' +
-                                '<option value=""> Select to Download File </option>' +
+                                '<option value=""> Export </option>' +
                                 '<option value="1">PDF</option>' +
                                 '<option value="2">Excel</option>' +
                                 '<option value="3">CSV</option>' +
@@ -186,6 +186,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
                     $('div.dt-buttons').prepend($('.clsDownload'));
                     $('div.dt-buttons').css('float', 'inline-end');
+                    $('.addbtn').css('border-radius', '.25rem');
                     $('.custom-class').removeClass('btn-secondary');
                     $('.dt-scroll-headInner table thead').addClass('custom-table');
                     $('.dataTables_filter').css('float', 'inline-start');
