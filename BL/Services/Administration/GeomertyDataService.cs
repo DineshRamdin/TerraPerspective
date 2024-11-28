@@ -48,6 +48,7 @@ namespace BL.Services.Administration
                                          {
                                              Id = a.Id,
                                              Zone = a.Zone,
+                                             Type=a.Type,
                                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
                                          })
                                          .ToList();
@@ -58,6 +59,40 @@ namespace BL.Services.Administration
             catch (Exception ex)
             {
                 dto.Data = new List<GeomertyDataDTO>();
+                dto.ErrorMessage = errorMsg;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+
+            return dto;
+        }
+
+        public BaseResponseDTO<List<ZoneDataDTO>> GetAllZone()
+        {
+            BaseResponseDTO<List<ZoneDataDTO>> dto = new BaseResponseDTO<List<ZoneDataDTO>>();
+
+            QueryResult queryResult = new QueryResult();
+            string errorMsg = "No Data Found";
+
+            try
+            {
+                string sQryResult = queryResult.FAILED;
+
+                List<ZoneDataDTO> result = context.SYS_GeomertyData
+                                         .Where(a => a.DeleteStatus == false)
+                                         .Select(a => new ZoneDataDTO
+                                         {
+                                             Id = a.Id,
+                                             Zone = a.Zone,
+                                             Type = a.Type,
+                                         })
+                                         .ToList();
+                dto.Data = result;
+                dto.QryResult = queryResult.SUCEEDED;
+
+            }
+            catch (Exception ex)
+            {
+                dto.Data = new List<ZoneDataDTO>();
                 dto.ErrorMessage = errorMsg;
                 dto.QryResult = queryResult.SUCEEDED;
             }
@@ -76,6 +111,7 @@ namespace BL.Services.Administration
                 {
                     Zone = dataToSave.Zone,
                     GeomColumn = dataToSave.geometry,
+                    Type = dataToSave.Type
                    
                 };
                 context.SYS_GeomertyData.Add(DSS);

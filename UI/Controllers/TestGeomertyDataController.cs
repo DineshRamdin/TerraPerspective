@@ -44,6 +44,23 @@ namespace UI.Controllers
         }
 
         [HttpPost]
+        public ActionResult<BaseResponseDTO<List<ZoneDataDTO>>> GetAllZone()
+        {
+            try
+            {
+                BaseResponseDTO<List<ZoneDataDTO>> dt = new BaseResponseDTO<List<ZoneDataDTO>>();
+
+                dt = service.GetAllZone();
+
+                return Ok(dt);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
         public async Task<ActionResult<BaseResponseDTO<bool>>> CreateUpdate(GeomertyDataDTO dto)
         {
             try

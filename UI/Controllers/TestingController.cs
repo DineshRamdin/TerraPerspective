@@ -72,7 +72,7 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
-               
+
                 if (dto.Id == 0)
                 {
                     dt = await service.SaveAsync(dto);
@@ -103,7 +103,7 @@ namespace UI.Controllers
                     BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
                     if (!string.IsNullOrEmpty(Id))
                     {
-                        dt = await service.TestingDelete(Convert.ToInt64(Id), _userManager);
+                        dt = await service.TestingDelete(Convert.ToInt64(Id));
                     }
 
                     return Ok(dt);

@@ -1,140 +1,149 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
 
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a asp-area="" asp-controller="Dashboard" asp-action="index" class="brand-link">
-        <img src="~/image/AdminLTELogo.png" alt="Perspective" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">Perspective</span>
-    </a>
+	<!-- Brand Logo -->
+	<a asp-area="" asp-controller="Dashboard" asp-action="index" class="brand-link">
+		<img src="~/image/AdminLTELogo.png" alt="Perspective" class="brand-image img-circle elevation-3" style="opacity: .8">
+		<span class="brand-text font-weight-light">Perspective</span>
+	</a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-       @*  <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-          
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<!-- Sidebar user panel (optional) -->
+		@*  <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
             <div class="info">
                 <a href="#" class="d-block">Alexander Pierce</a>
             </div>
         </div> *@
 
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                     with font-awesome or any other icon font library -->
+		<!-- Sidebar Menu -->
+		<nav class="mt-2">
+			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+				<!-- Add icons to the links using the .nav-icon class
+					 with font-awesome or any other icon font library -->
 
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="Dashboard" asp-action="index" class="nav-link" id="lidashboardmenu">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="User" asp-action="index" class="nav-link" id="liusermenu">
-                        <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            User
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="Poster" asp-action="index" class="nav-link" id="lipostermenu">
-                        <i class="nav-icon fas fa-images"></i>
-                        <p>
-                            Poster
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="Carousel" asp-action="index" class="nav-link" id="liCarouselmenu">
-                        <i class="nav-icon fas fa-image"></i>
-                        <p>
-                            Carousel
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="Device" asp-action="index" class="nav-link" id="liDevicemenu">
-                        <i class="nav-icon fas fa-desktop"></i>
-                        <p>
-                            Device
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="LookUpType" asp-action="index" class="nav-link" id="liLookUpTypemenu">
-                        <i class="nav-icon fas fa-cog"></i>
-                        <p>
-                            LookUp Type
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="LookUpValue" asp-action="index" class="nav-link" id="liLookUpValuemenu">
-                        <i class="nav-icon fas fa-cog"></i>
-                        <p>
-                            LookUp Value
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-history"></i>
-                        <p>
-                            Log
-                            <i class="fas fa-angle-right right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Room" asp-action="index" class="nav-link" id="liRoommenu" >
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Room</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Resource" asp-action="index" class="nav-link" id="liResourcemenu">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Resource</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="AccessLog" asp-action="CheckInOut" class="nav-link" id="liCheckInOutmenu">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Check In/Out</p>
-                            </a>
-                        </li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="Dashboard" asp-action="index" class="nav-link" id="lidashboardmenu">
+						<i class="nav-icon fas fa-th"></i>
+						<p>
+							Dashboard
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="User" asp-action="index" class="nav-link" id="liusermenu">
+						<i class="nav-icon fas fa-user"></i>
+						<p>
+							User
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="Poster" asp-action="index" class="nav-link" id="lipostermenu">
+						<i class="nav-icon fas fa-images"></i>
+						<p>
+							Poster
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="Carousel" asp-action="index" class="nav-link" id="liCarouselmenu">
+						<i class="nav-icon fas fa-image"></i>
+						<p>
+							Carousel
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="Device" asp-action="index" class="nav-link" id="liDevicemenu">
+						<i class="nav-icon fas fa-desktop"></i>
+						<p>
+							Device
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="LookUpType" asp-action="index" class="nav-link" id="liLookUpTypemenu">
+						<i class="nav-icon fas fa-cog"></i>
+						<p>
+							LookUp Type
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="LookUpValue" asp-action="index" class="nav-link" id="liLookUpValuemenu">
+						<i class="nav-icon fas fa-cog"></i>
+						<p>
+							LookUp Value
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-history"></i>
+						<p>
+							Log
+							<i class="fas fa-angle-right right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a asp-area="" asp-controller="Room" asp-action="index" class="nav-link" id="liRoommenu">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Room</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a asp-area="" asp-controller="Resource" asp-action="index" class="nav-link" id="liResourcemenu">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Resource</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a asp-area="" asp-controller="AccessLog" asp-action="CheckInOut" class="nav-link" id="liCheckInOutmenu">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Check In/Out</p>
+							</a>
+						</li>
 
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="AccessLog" asp-action="Index" class="nav-link" id="liAccessLogmenu">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Access Log</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="TestGeomertyData" asp-action="index" class="nav-link" id="liTestGeomertyDatamenu">
-                        <i class="nav-icon fas fa-cog"></i>
-                        <p>
-                            Test Geomerty Data
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="Testing" asp-action="index" class="nav-link" id="liTestingmenu">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>
-                            Testing
-                        </p>
-                    </a>
-                </li>
-            @*     <li class="nav-header">MULTI LEVEL EXAMPLE</li>
+						<li class="nav-item">
+							<a asp-area="" asp-controller="AccessLog" asp-action="Index" class="nav-link" id="liAccessLogmenu">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Access Log</p>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="TestGeomertyData" asp-action="index" class="nav-link" id="liTestGeomertyDatamenu">
+						<i class="nav-icon fas fa-cog"></i>
+						<p>
+							Test Geomerty Data
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="GlobalParam" asp-action="index" class="nav-link" id="liGlobalParammenu">
+						<i class="far fa-dot-circle nav-icon"></i>
+						<p>
+							Global Param
+						</p>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a asp-area="" asp-controller="Testing" asp-action="index" class="nav-link" id="liTestingmenu">
+						<i class="fas fa-circle nav-icon"></i>
+						<p>
+							Testing
+						</p>
+					</a>
+				</li>
+
+				@*     <li class="nav-header">MULTI LEVEL EXAMPLE</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
@@ -199,9 +208,9 @@
                         <p>Level 1</p>
                     </a>
                 </li> *@
-            </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
+			</ul>
+		</nav>
+		<!-- /.sidebar-menu -->
+	</div>
+	<!-- /.sidebar -->
 </aside>
