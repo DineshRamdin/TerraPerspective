@@ -19,6 +19,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
         success: function (response) {
 
             if (response.data) {
+
                 if (response.data != undefined || response.data != null) {
                     access = response.data
                 }
@@ -137,8 +138,8 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             //Excel Export Button
                             {
                                 extend: 'excel',
-                                text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-                                className: 'form-control btn-c-secondary d-none excelbtn',
+                                text: '<i class="fa fa-file-excel me-2"></i>  Export Excel',
+                                className: 'btn-sm btn-c-secondary d-none excelbtn',
                                 exportOptions: {
                                     columns: ':visible:not(.sorting_disabled)'
 
@@ -181,6 +182,11 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                     $('.dataTables_filter').css('float', 'inline-start');
                     $('.dataTables_paginate').css('margin-top', '-30px');
 
+                    if (response.data == "") {
+                        $('#' + tableID + '_previous').css('display', 'none');
+                        $('#' + tableID + '_next').css('display', 'none');
+                        $('.dataTables_paginate').css('margin-top', '0px');
+                    }
 
                     if (showAdd) {
                         $('.addbtn').removeClass('d-none');
