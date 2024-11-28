@@ -127,7 +127,7 @@ namespace UI.Controllers
 
                 return Ok(dt);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest();
             }

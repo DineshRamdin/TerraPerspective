@@ -347,11 +347,38 @@
                     $('#hdnMapdata').val(wkt);
                 });
 
+                // Handle edit event
+                Createmap.on(L.Draw.Event.EDITED, function (event) {
+                    var layers = event.layers;
+                    layers.eachLayer(function (layer) {
+
+                        var editedGeoJson = layer.toGeoJSON();
+                        
+                        // Convert edited GeoJSON to WKT
+                        var latLngs = layer.getLatLngs()[0];
+
+                        // Check if the first and last points are the same
+                        if (latLngs[0] !== latLngs[latLngs.length - 1]) {
+                            latLngs.push(latLngs[0]); // Add the first point at the end to close the polygon
+                        }
+
+                        var coordinates = latLngs.map(function (point) {
+                            return point.lng + " " + point.lat;
+                        }).join(", ");
+
+                        var wkt = `POLYGON((${coordinates}))`;
+                        
+                        $('#hdnMapdata').val(wkt);
+                    });
+                });
+
                 $('#AddGeomertyDataModal').on('shown.bs.modal', function () {
                     Createmap.invalidateSize();
                 });
             });
         }
+     
+
         function ConvertGeoJSONtoWKT(geoJsonString) {
 
             // Parse the GeoJSON string to a JavaScript object
