@@ -177,7 +177,7 @@
         function initMap() {
             var MapData = [];
             var selectedZone = GetSelectedZone();
-           
+
             var dataObject = {};
             dataObject.selectedZone = selectedZone == undefined ? "" : selectedZone;
 
@@ -226,32 +226,15 @@
                         attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
                     });
 
-                    // Custom control button to toggle layers
-                    var ToggleLayerControl = L.Control.extend({
-                        options: { position: 'topright' },
+                    // Define base maps for the dropdown
+                    var baseMaps = {
+                        "Map": osmLayer,
+                        "Satellite": satelliteLayer
+                    };
 
-                        onAdd: function (map) {
-                            var container = L.DomUtil.create('div', 'custom-button');
-                            container.innerHTML = 'Satellite View';
-
-                            L.DomEvent.on(container, 'click', function () {
-                                if (map.hasLayer(osmLayer)) {
-                                    map.removeLayer(osmLayer);
-                                    map.addLayer(satelliteLayer);
-                                    container.innerHTML = 'Street View';
-                                } else {
-                                    map.removeLayer(satelliteLayer);
-                                    map.addLayer(osmLayer);
-                                    container.innerHTML = 'Satellite View';
-                                }
-                            });
-
-                            return container;
-                        }
-                    });
-
+                    L.control.layers(baseMaps).addTo(map);
                     // Add the custom control to the map
-                    map.addControl(new ToggleLayerControl());
+                    
                 }
                 // Loop through the data array and process each feature
                 MapData.forEach(function (item) {
@@ -279,7 +262,8 @@
                 });
             }
             else {
-                Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
+                // Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
+                Createmap = L.map('Createmap').setView([-20.081670, 57.598266], 13);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19
