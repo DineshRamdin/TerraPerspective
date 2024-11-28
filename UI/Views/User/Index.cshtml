@@ -31,6 +31,7 @@
 					@*  <div class="col-2">
                         <button type="button" class="btn btn-block btn-primary mb-3" onclick="openUserModal()">Add</button>
                     </div> *@
+
 				</div>
 				<div class="row">
 					<div class="col-12  mb-10">
@@ -72,7 +73,7 @@
 				{ data: 'roleName', title: 'Role Name' },
 			];
 
-				initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false,true,true,true);
+				initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false,true,true,true,false,null,true,null);
 
 			// $.ajax({
 			//     url: GetAllUserUrl,
