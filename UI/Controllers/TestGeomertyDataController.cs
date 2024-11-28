@@ -78,6 +78,25 @@ namespace UI.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<GeomertyDataDTO>>> GetById(long Id)
+        {
+            try
+            {
+                BaseResponseDTO<GeomertyDataDTO> dt = new BaseResponseDTO<GeomertyDataDTO>();
+                dt.Data = new GeomertyDataDTO();
+                if (Id > 0)
+                {
+                    dt = service.GetById(Id);
+                }
+
+                return Ok(dt);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPost]
         public async Task<ActionResult<BaseResponseDTO<bool>>> CreateUpdate(GeomertyDataDTO dto)
         {
             try
@@ -86,10 +105,6 @@ namespace UI.Controllers
 
                 var reader = new WKTReader();
                 dto.geometry = reader.Read(dto.FeatureGeoJson);
-                
-
-                // Log geometry type for debugging
-                Console.WriteLine($"Geometry Type: {dto.geometry.GeometryType}");
 
                 // Ensure the geometry is a polygon and check orientation
                 if (dto.geometry is Polygon polygon)
@@ -101,7 +116,14 @@ namespace UI.Controllers
                     }
                 }
                 dto.geometry.SRID = 4326;
-                dt = await service.SaveAsync(dto);
+                if (dto.Id == 0)
+                {
+                    dt = await service.SaveAsync(dto);
+                }
+                else
+                {
+                    dt = await service.UpdateAsync(dto);
+                }
 
                 return Ok(dt);
             }
