@@ -39,4 +39,33 @@ namespace DAL.Common
         Testing3 = 3,
     }
 
+    public enum AccessOperationType
+    {
+        Create = 1,
+        Read = 2,
+        Update = 3,
+        Delete = 4,
+        Approve = 5,
+        Upload = 6,
+        Export = 7,
+        Report = 8
+
+    }
+
+	public enum RowStructType
+	{
+		Role = 1,
+		User = 2,
+	}
+
+	public enum ModuleName
+	{
+		ResearchCropPOW = 1,
+		ResearchLiveStockPOW = 2,
+		ResearchCropLR = 3,
+		ResearchLiveStockLR = 4,
+		ResearchCropTM = 5,
+		ResearchLiveStockTM = 6,
+	}
+
 }

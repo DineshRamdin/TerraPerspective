@@ -20,21 +20,28 @@ namespace BL.Services.Common
             try
             {
 
-                string[] roleNames = { "Administrator", "Statndard", "ReadOnly" };
+				if (!roleManager.RoleExistsAsync("Administrator").Result)
+				{
+					ApplicationRole role = new ApplicationRole();
+					role.Name = "Administrator";
+					role.NormalizedName = "ADMIN";
+					IdentityResult roleResult = roleManager.
+					CreateAsync(role).Result;
 
-                foreach (var roleName in roleNames)
-                {
-                    if (!roleManager.RoleExistsAsync(roleName).Result)
-                    {
-                        ApplicationRole role = new ApplicationRole();
-                        role.Name = roleName;
-                        role.NormalizedName = roleName;
-                        IdentityResult roleResult = roleManager.
-                        CreateAsync(role).Result;
-                    }
-                }
 
-            }
+				}
+				if (!roleManager.RoleExistsAsync("SuperAdministrator").Result)
+				{
+					ApplicationRole role = new ApplicationRole();
+					role.Name = "SuperAdministrator";
+					role.NormalizedName = "SUPERADMIN";
+					IdentityResult roleResult = roleManager.
+					CreateAsync(role).Result;
+
+
+				}
+
+			}
             catch (Exception e)
             {
 
@@ -172,12 +179,452 @@ namespace BL.Services.Common
 
 		}
 
+        public static void SeedAcessRights(RoleManager<ApplicationRole> roleManager)
+        {
+            try
+            {
+                PerspectiveContext context = new PerspectiveContext();
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@naveo.mu").Select(x => x.Id).FirstOrDefault());
+                if (!roleManager.RoleExistsAsync("Administrator").Result)
+                {
+                    ApplicationRole role = new ApplicationRole();
+                    role.Name = "Administrator";
+                    role.NormalizedName = "ADMIN";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
+
+
+                }
+                ApplicationRole AdmRole = context.Roles.Where(x => x.Name == "Administrator").FirstOrDefault();
+                context.Roles.Update(AdmRole);
+                List<SYS_Modules> mdl = context.SYS_Modules.Where(x => x.DeleteStatus == false).ToList();
+                if (mdl.Count > 0)
+                {
+                    foreach (SYS_Modules md in mdl)
+                    {
+                        if (!context.SYS_AccessRights.Any(x => x.Role.Id == AdmRole.Id && x.Module.Id == md.Id))
+                        {
+                            context.SYS_Modules.Update(md);
+                            SYS_AccessRights ar = new SYS_AccessRights()
+                            {
+                                hasRight = true,
+                                Role = AdmRole,
+                                Module = md,
+                                CreatedBy = createdBy,
+                                CreatedDate = DateTime.Now,
+                                DeleteStatus = false
+
+                            };
+                            context.SYS_AccessRights.Add(ar);
+                            context.SaveChanges();
+
+                        }
+
+                    }
+                }
+
+
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+        public static void SeedAcessRightsN(RoleManager<ApplicationRole> roleManager)
+        {
+            try
+            {
+                PerspectiveContext context = new PerspectiveContext();
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "superadmin@naveo.mu").Select(x => x.Id).FirstOrDefault());
+                if (!roleManager.RoleExistsAsync("SuperAdministrator").Result)
+                {
+                    ApplicationRole role = new ApplicationRole();
+                    role.Name = "SuperAdministrator";
+                    role.NormalizedName = "SUPERADMIN";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
+
+
+                }
+
+                ApplicationRole AdmRole = context.Roles.Where(x => x.Name == "SuperAdministrator").FirstOrDefault();
+                context.Roles.Update(AdmRole);
+                List<SYS_Modules> mdl = context.SYS_Modules.Where(x => x.DeleteStatus == false).ToList();
+                if (mdl.Count > 0)
+                {
+                    foreach (SYS_Modules md in mdl)
+                    {
+                        if (!context.SYS_AccessRights.Any(x => x.Role.Id == AdmRole.Id && x.Module.Id == md.Id))
+                        {
+                            try
+                            {
+                                context.SYS_Modules.Update(md);
+                                SYS_AccessRights ar = new SYS_AccessRights()
+                                {
+                                    hasRight = true,
+                                    Role = AdmRole,
+                                    Module = md,
+                                    CreatedBy = createdBy,
+                                    CreatedDate = DateTime.Now,
+                                    DeleteStatus = false
+
+                                };
+                                context.SYS_AccessRights.Add(ar);
+                                context.SaveChanges();
+
+                                foreach (AccessOperationType g in Enum.GetValues(typeof(AccessOperationType)))
+                                {
+                                    SYS_AccessRightsDetails ARD = new SYS_AccessRightsDetails()
+                                    {
+                                        AccessRights = ar,
+                                        AOT = g,
+                                        Permission = true
+                                    };
+                                    context.SYS_AccessRightsDetails.Add(ARD);
+                                    context.SaveChanges();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        }
+
+                    }
+                }
+                List<SYS_AccessRights> ACCL = context.SYS_AccessRights.Where(x => x.DeleteStatus == false).ToList();
+                if (ACCL.Count > 0)
+                {
+                    foreach (SYS_AccessRights ACC in ACCL)
+                    {
+                        if (!context.SYS_AccessRightsDetails.Any(x => x.AccessRights.id == ACC.id && x.DeleteStatus == false && x.AOT == AccessOperationType.Export))
+                        {
+                            SYS_AccessRightsDetails ARD = new SYS_AccessRightsDetails()
+                            {
+                                AccessRights = ACC,
+                                AOT = AccessOperationType.Export,
+                                Permission = false
+                            };
+                            context.SYS_AccessRightsDetails.Add(ARD);
+                            context.SaveChanges();
+                        }
+                        if (!context.SYS_AccessRightsDetails.Any(x => x.AccessRights.id == ACC.id && x.DeleteStatus == false && x.AOT == AccessOperationType.Report))
+                        {
+                            SYS_AccessRightsDetails ARD = new SYS_AccessRightsDetails()
+                            {
+                                AccessRights = ACC,
+                                AOT = AccessOperationType.Report,
+                                Permission = true
+                            };
+                            context.SYS_AccessRightsDetails.Add(ARD);
+                            context.SaveChanges();
+                        }
+                    }
+                }
+
+
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+
+        public static void SeedModules(UserManager<ApplicationUser> userManager)
+        {
+			PerspectiveContext context = new PerspectiveContext();
+			var user = userManager.FindByNameAsync("admin@gmail.com").Result;
+
+			#region Dashboard
+			if (!context.SYS_Modules.Any(x => x.Name == "Dashboard"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Dashboard",
+					Url = "Dashboard/Index",
+					Order = 0,
+					Icon = "fas fa-th",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region User
+			if (!context.SYS_Modules.Any(x => x.Name == "User"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "User",
+					Url = "User/Index",
+					Order = 0,
+					Icon = "fas fa-user",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region Poster
+			if (!context.SYS_Modules.Any(x => x.Name == "Poster"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Poster",
+					Url = "Poster/Index",
+					Order = 0,
+					Icon = "fas fa-images",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region Carousel
+			if (!context.SYS_Modules.Any(x => x.Name == "Carousel"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Carousel",
+					Url = "Carousel/Index",
+					Order = 0,
+					Icon = "fas fa-images",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region Device
+			if (!context.SYS_Modules.Any(x => x.Name == "Device"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Device",
+					Url = "Device/Index",
+					Order = 0,
+					Icon = "fas fa-desktop",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region LookUpType
+			if (!context.SYS_Modules.Any(x => x.Name == "LookUpType"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "LookUpType",
+					Url = "LookUpType/Index",
+					Order = 0,
+					Icon = "fas fa-cog",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region LookUpValue
+			if (!context.SYS_Modules.Any(x => x.Name == "LookUpValue"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "LookUpValue",
+					Url = "LookUpValue/Index",
+					Order = 0,
+					Icon = "fas fa-cog",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region Log and sub menus
+
+			if (!context.SYS_Modules.Any(x => x.Name == "Log"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Log",
+					Url = "",
+					Order = 2,
+					Icon = "fas fa-history",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+
+			if (!context.SYS_Modules.Any(x => x.Name == "Room"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Room",
+					Url = "Room/index",
+					Order = 3,
+					Icon = "far fa-circle",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now,
+					ParentId = context.SYS_Modules.Where(x => x.Name == "Log").Select(x => x.Id).FirstOrDefault()
+				});
+				context.SaveChanges();
+			}
+
+			if (!context.SYS_Modules.Any(x => x.Name == "Resource"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Resource",
+					Url = "Resource/index",
+					Order = 3,
+					Icon = "far fa-circle",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now,
+					ParentId = context.SYS_Modules.Where(x => x.Name == "Log").Select(x => x.Id).FirstOrDefault()
+				});
+				context.SaveChanges();
+			}
+
+
+			if (!context.SYS_Modules.Any(x => x.Name == "Check In/Out"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Check In/Out",
+					Url = "AccessLog/CheckInOut",
+					Order = 3,
+					Icon = "far fa-circle",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now,
+					ParentId = context.SYS_Modules.Where(x => x.Name == "Log").Select(x => x.Id).FirstOrDefault()
+				});
+				context.SaveChanges();
+			}
+
+			if (!context.SYS_Modules.Any(x => x.Name == "Access Log"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Access Log",
+					Url = "AccessLog/index",
+					Order = 3,
+					Icon = "far fa-circle",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now,
+					ParentId = context.SYS_Modules.Where(x => x.Name == "Log").Select(x => x.Id).FirstOrDefault()
+				});
+				context.SaveChanges();
+			}
+
+
+			#endregion
+
+			#region TestGeoMetreData
+			if (!context.SYS_Modules.Any(x => x.Name == "Test Geomerty Data"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Test Geomerty Data",
+					Url = "TestGeomertyData/index",
+					Order = 0,
+					Icon = "fas fa-cog",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region GlobalParam
+			if (!context.SYS_Modules.Any(x => x.Name == "Global Param"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Global Param",
+					Url = "GlobalParam/index",
+					Order = 0,
+					Icon = "far fa-dot-circle",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region Testing
+			if (!context.SYS_Modules.Any(x => x.Name == "Testing"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Testing",
+					Url = "Testing/index",
+					Order = 0,
+					Icon = "fas fa-circle",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region AccessRights
+			if (!context.SYS_Modules.Any(x => x.Name == "Access Rights"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{Name = "Access Rights",
+					Url = "AccessRights/index",
+					Order = 0,
+					Icon = "fas fa-circle-user",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+		}
+
 		public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             SeedRoles(roleManager);
             SeedUsers(userManager);
             SeedGlobalParam();
-
+			SeedAcessRights(roleManager);
+			SeedAcessRightsN(roleManager);
+			SeedModules(userManager);
 		}
     }
 }

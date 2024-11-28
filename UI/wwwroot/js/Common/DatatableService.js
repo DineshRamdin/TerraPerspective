@@ -211,3 +211,80 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
 }
 
+ function initializeDataGridNested(tableID, columnList, childColumns, dataToShow = null, search = false, exportExcel = false) {
+    var exportButtons = [];
+    if (exportExcel) {
+        exportButtons.push(this.exportExcelBtn)
+     }
+
+    if ($.fn.dataTable.isDataTable('#' + tableID)) {
+        $('#' + tableID).DataTable().clear().destroy();
+    }
+    if ($('#' + tableID).length > 0) { //check if table exists
+        var table = $('#' + tableID).DataTable({ //init table
+            dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl', //button Strip
+            searching: search, //show search
+            paging: false, //no paging
+            processing: true, //processing
+            scrollY: 'auto', //fixed height
+            scrollCollapse: true,//scroll
+            language: { // search anf info bars
+                search: '',
+                emptyTable: 'No data available',
+                searchPlaceholder: 'Search',
+                info: "Showing _TOTAL_ entries",
+                infoEmpty: "Showing 0 entries",
+                infoFiltered: "(filtered from _MAX_ entries)",
+            },
+            //scrollX: true,
+            data: dataToShow, // data to display
+            columns: columnList, //column list
+            buttons: exportButtons,
+            drawCallback: function () {
+                // BUTTON EVENT ON THE DATA TABLE
+            }
+        });
+
+        $('#' + tableID + ' tbody').on('click', 'td.dt-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child(format(row.data(), row.index())).show();
+                addDataToChild(row.data(), row.index(), childColumns);
+                tr.addClass('shown');
+            }
+
+        });
+
+
+        $('div.dt-buttons').css('float', 'inline-end');
+        $('.custom-class').removeClass('btn-secondary');
+        $('.dt-scroll-headInner table thead').addClass('custom-table');
+        $('.dataTables_filter').css('float', 'inline-start');
+        $('.dataTables_paginate').css('margin-top', '-30px');
+    }
+}
+
+function format(d, rowIndex) {
+    // `d` is the original data object for the row
+    return '<table border="0" id="child_' + rowIndex + '"></table>';
+
+}
+
+function addDataToChild(d, rowIndex, childColumns) {
+
+    $('#child_' + rowIndex + '').DataTable({
+        "data": d.accessRightDetailDTO,
+        "bLengthChange": false,
+        "bInfo": false,
+        "bFilter": false,
+        "bPaginate": false,
+        "columns": childColumns
+    });
+}

@@ -1,0 +1,275 @@
+﻿@{
+	ViewData["Title"] = "Access Rights";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">Access Rights</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+					<li class="breadcrumb-item active">Access Rights</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*  <div class="col-2">
+                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openUserModal()">Add</button>
+                    </div> *@
+				</div>
+				<div class="row">
+					<div class="col-12 mb-10">
+						<table id="AccessRightsTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddAccessRightsModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddAccessRights.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllAccessRightsUrl = '@Url.Action("GetAll", "AccessRights")';
+		var AccessRightsGetByIdUrl = '@Url.Action("GetById", "AccessRights")';
+		var GetARByRoleIdUrl = '@Url.Action("GetARByRoleId", "AccessRights")';
+		var GetModuleUrl = '@Url.Action("GetModules", "AccessRights")';
+		var createUpdateARURL = '@Url.Action("createUpdateAR", "AccessRights")';
+
+		// Mocked data for testing purposes
+		var GridData = {};
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liAccessRightsmenu').addClass('active');
+
+			GetAllAccessRights();
+		});
+
+		function GetAllAccessRights() {
+			var columnList = [
+				{ data: 'roleName', title: 'Role Name' }
+			];
+
+			initializeDataGrid('AccessRightsTable', 'openAccessRightsModal', GetAllAccessRightsUrl, columnList, false, true, true, false,true);
+
+		}
+
+		function valueChange(id) {
+			// Split the ID to extract relevant information
+			var retrive = id.split("_");
+			var parentId = retrive[1];
+			var operationTypeName = retrive[2];
+			var operationType = retrive[3];
+
+			// Update permission for the specific operation type
+			GridData.accessRightDTO[parentId].accessRightDetailDTO.find(x => x.operationType == operationType).permission = $("#" + id).prop('checked');
+
+			// Handle logic for "Read" and other operation types
+			if (operationTypeName.toLowerCase() != "read" && $("#" + id).prop('checked')) {
+				// Check all "Read" checkboxes for the current parent
+				$('input[id^="child_' + parentId + '_Read"]').each(function () {
+					$(this).prop('checked', true);
+				});
+
+				// Update "Read" permission in data model
+				GridData.accessRightDTO[parentId].accessRightDetailDTO.find(x => x.operationTypeName == "Read").permission = true;
+
+			} else if (operationTypeName.toLowerCase() == "read" && !$("#" + id).prop('checked')) {
+				// Uncheck all child checkboxes if "Read" is unchecked
+				$('input[id^="child_' + parentId + '"]').each(function () {
+					$(this).prop('checked', false);
+				});
+
+				// Set all permissions for the current parent to false
+				GridData.accessRightDTO[parentId].accessRightDetailDTO.forEach(function (dy) {
+					dy.permission = false;
+				});
+			}
+		}
+
+		
+
+		function openAccessRightsModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: AccessRightsGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					// ClearUserModal();
+					// GetDropdownData();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
+							$("#h4AccessRightsTitle").html("Modify Access Rights");
+						else {
+							$("#h4AccessRightsTitle").html("Add Access Rights");
+						}
+
+						$("#hdnAccessRoleId").val(response.data.id);
+						$("#txtRole").val(response.data.roleName);
+
+
+						var columns = [ //Module Column List
+							{
+								title: "Action",
+								className: 'dt-control fa fa-angle-down',
+								orderable: false,
+								data: null,
+								defaultContent: ''
+							},
+							{ data: 'level1', title: 'Main Menu' },
+							{ data: 'level2', title: 'Menu' },
+							{ data: 'level3', title: 'Sub Menu' }
+						];
+
+						var childColumns = [
+							{
+								title: "",
+								//remove sorting on action
+								orderable: false,
+								//set width of action column
+								width: "10%",
+								render: function (data, type, full, meta) {
+									var checked = "";
+									if (full.permission) {
+										checked = "checked";
+									}
+									var id = meta.settings.sTableId + "_" + full.operationTypeName + "_" + full.operationType + "_" + full.id;
+									// checkbox button
+									var datax = '<input type="checkbox" id="' + id + '" name="checkbox" ' + checked + ' onclick="valueChange(\'' + id + '\')"/>';
+									return datax;
+								}
+							},
+							{ data: 'operationTypeName', title: 'Operation' }
+						];
+
+						var urlFinal = "";
+						if (id == null || id == undefined) {
+							urlFinal = GetModuleUrl;
+						}else{
+							urlFinal = GetARByRoleIdUrl;
+						}
+						var dataObjectForChildTable = {};
+						dataObjectForChildTable.Id = id;
+
+						$.ajax({
+							type: "POST",
+							url: urlFinal,
+							data: dataObjectForChildTable,
+							success: function (response) {
+								if (response) {
+									GridData = response.data;
+									// Initialize the DataTable with the fetched data
+									initializeDataGridNested("AccesRightsDataTable", columns, childColumns, GridData.accessRightDTO);
+								}
+							},
+							error: function (xhr, status, error) {
+								toastr.error(response.errorMessage);
+							}
+						});
+
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddAccessRightsModal').modal('show');
+				$("#frnAccessRightsCreate").validate({}).resetForm();
+			});
+
+
+		}
+
+
+		function GetAllAccessRights() {
+			var columnList = [
+				{ data: 'roleName', title: 'Role Name' }
+			];
+
+			initializeDataGrid('AccessRightsTable', 'openAccessRightsModal', GetAllAccessRightsUrl, columnList, false, true, true, false);
+
+		}
+		
+		function ClearUserModal() {
+			$("#h4UserTitle").html("Add User");
+			$("#hdnuserId").val("");
+			$("#txtSurname").val("");
+			$("#txtOthername").val("");
+			$("#txtEmail").val("");
+			$("#txtMobile").val("");
+			$("#profileimagefile").val(null);
+			$("#oldprofileimage").val("");
+			$("#viewProfileImage").attr("src", "");
+			$("#viewProfileImage").css("display", "none");
+		}
+
+		
+		function SaveAccessRight(){
+			let valid = formValidation(["txtRole"]);
+			if (!valid) {
+				toastr.error("Please Fill In Mandatory Fields")
+			} else {
+				var rolename = $("#txtRole").val();
+				GridData.roleName = rolename;
+				GridData.roleId = $("#hdnAccessRoleId").val() == "" ? null : $("#hdnAccessRoleId").val();
+				
+				$.ajax({
+					url: createUpdateARURL,
+					type: "POST",
+					data: GridData,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$("#AddAccessRightsModal").modal('hide');
+							GetAllAccessRights();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+		}
+
+	</script>
+}

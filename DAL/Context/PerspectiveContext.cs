@@ -458,6 +458,13 @@ namespace DAL.Context
         public DbSet<SYS_GeomertyData> SYS_GeomertyData { get; set; }
         public DbSet<SYS_Testing> SYS_Testing { get; set; }
         public DbSet<SYS_GlobalParam> SYS_GlobalParam { get; set; }
+        public DbSet<SYS_Modules> SYS_Modules { get; set; }
+        public DbSet<SYS_AccessRights> SYS_AccessRights { get; set; }
+        public DbSet<SYS_AccessRightsDetails> SYS_AccessRightsDetails { get; set; }
+        public DbSet<SYS_GroupMatrix> SYS_GroupMatrix { get; set; }
+        public DbSet<SYS_GroupMatrixUser> SYS_GroupMatrixUser { get; set; }
+        public DbSet<SYS_RowAccess> SYS_RowAccess { get; set; }
+
 
 
 	}
