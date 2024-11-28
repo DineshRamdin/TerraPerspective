@@ -138,41 +138,74 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         ],
 
                         initComplete: function () {
-                            // Append a dropdown filter to the DataTable filter area
-                            var dropdownHtml = '<select id="dropdownFilter" class="form-control btn-sm btn-info clsDownload btn btn-secondary buttons-collection dropdown-toggle" style="width: auto;">' +
-                                '<option value=""> Export </option>' +
-                                '<option value="1">PDF</option>' +
-                                '<option value="2">Excel</option>' +
-                                '<option value="3">CSV</option>' +
-                                '</select>';
 
-                            // Append the dropdown to the filter area
+                            // Create custom dropdown HTML with icons and a non-blank "Export" option
+                            var clsDropdownmenu = "dropdown-menu-export";
+                            if (tableID === 'AccessLogTable') {
+                                clsDropdownmenu = "dropdown-menu-export-accesslog";  // Hide Excel option
+                            }
+
+                            var dropdownHtml = `
+                                    <div class="custom-dropdown">
+                                        <button id="dropdownButton" class="form-control btn-sm btn-info btn btn-secondary dropdown-toggle clsDownload" style="width: auto;">
+                                            Export
+                                        </button>
+                                        <div id="dropdownMenu" class="${clsDropdownmenu}" style="display: none;">
+                                            <div class="dropdown-item" data-value="1"><i class="fa fa-file-pdf me-2"></i> PDF</div>
+                                            <div class="dropdown-item" data-value="2"><i class="fa fa-file-excel me-2"></i> Excel</div>
+                                            <div class="dropdown-item" data-value="3"><i class="fa fa-file-csv me-2"></i> CSV</div>
+                                        </div>
+                                    </div>
+                                `;
+
+                            // Append the custom dropdown to the filter area
                             $('div.dataTables_filter').append(dropdownHtml);
 
-                            //if (tableID === 'AccessLogTable') {
-                            //    $('#dropdownFilter option[value="2"]').hide();  // Hide Excel option
-                            //}
+                            // Toggle the dropdown when the button is clicked
+                            $('#dropdownButton').on('click', function (e) {
+                                e.stopPropagation(); // Prevents event bubbling
+                                $('#dropdownMenu').toggle();
+                            });
 
-                            // Custom filter logic when dropdown changes
-                            $('#dropdownFilter').on('change', function () {
-                                var value = $(this).val();
+                            // Handle item selection when a dropdown item is clicked
+                            $('#dropdownMenu .dropdown-item').on('click', function () {
+                                var value = $(this).data('value');
                                 var table = $('#' + tableID).DataTable();
 
-                                if (value === '1') { // PDF Export
+                                if (value == '1') { // PDF Export
                                     $('.buttons-pdf').click();
-                                } else if (value === '2') { // PDF Export
+                                } else if (value == '2') { // Excel Export
                                     $('.buttons-excel').click();
-                                }
-                                else if (value === '3') { // CSV Export
+                                } else if (value == '3') { // CSV Export
                                     $('.buttons-csv').click();
                                 }
 
-                                //$('#dropdownFilter').val('');
+                                // Hide the dropdown after selection
+                                $('#dropdownMenu').hide();
                             });
+
+                            // Hover effect for dropdown items
+                            $('#dropdownMenu .dropdown-item').hover(
+                                function () {
+                                    $(this).css("background-color", "#f0f0f0");  // Hover color
+                                },
+                                function () {
+                                    $(this).css("background-color", "");  // Reset background color
+                                }
+                            );
+
+                            // Close the dropdown if the user clicks outside
+                            $(document).on('click', function (e) {
+                                if (!$(e.target).closest('.custom-dropdown').length) {
+                                    $('#dropdownMenu').hide();
+                                }
+                            });
+
 
                             $('div.dataTables_filter').css({
                                 'gap': '10px' // Adds space between elements (dropdown and buttons)
                             });
+
 
                             // Optionally add some margin to the 'Add New' button to provide space between the dropdown and the button
                             $('.addbtn').css('margin-left', '10px'); // Adds margin between 'Add New' button and the dropdown
