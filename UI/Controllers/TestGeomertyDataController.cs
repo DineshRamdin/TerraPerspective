@@ -44,6 +44,23 @@ namespace UI.Controllers
         }
 
         [HttpPost]
+        public ActionResult<BaseResponseDTO<List<GeomertyDataDTO>>> GetSelectedZoneGeomertyData(string selectedZone = "")
+        {
+            try
+            {
+                BaseResponseDTO<List<GeomertyDataDTO>> dt = new BaseResponseDTO<List<GeomertyDataDTO>>();
+
+                dt = service.GetSelectedZoneGeomertyData(selectedZone);
+
+                return Ok(dt);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
         public ActionResult<BaseResponseDTO<List<ZoneDataDTO>>> GetAllZone()
         {
             try

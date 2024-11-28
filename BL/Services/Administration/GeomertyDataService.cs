@@ -48,7 +48,55 @@ namespace BL.Services.Administration
                                          {
                                              Id = a.Id,
                                              Zone = a.Zone,
-                                             Type=a.Type,
+                                             Type = a.Type,
+                                             FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
+                                         })
+                                         .ToList();
+                dto.Data = result;
+                dto.QryResult = queryResult.SUCEEDED;
+
+            }
+            catch (Exception ex)
+            {
+                dto.Data = new List<GeomertyDataDTO>();
+                dto.ErrorMessage = errorMsg;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+
+            return dto;
+        }
+
+        public BaseResponseDTO<List<GeomertyDataDTO>> GetSelectedZoneGeomertyData(string selectedZone = "")
+        {
+            BaseResponseDTO<List<GeomertyDataDTO>> dto = new BaseResponseDTO<List<GeomertyDataDTO>>();
+            GeomertyDataDTO user = new GeomertyDataDTO();
+            QueryResult queryResult = new QueryResult();
+            string errorMsg = "No Data Found";
+
+            try
+            {
+                string sQryResult = queryResult.FAILED;
+
+                List<long> zones = string.IsNullOrWhiteSpace(selectedZone)
+                    ? new List<long>()
+                    : selectedZone.Split(',')
+                                .Select(z => z.Trim())
+                                .Where(z => long.TryParse(z, out _))
+                                .Select(long.Parse)
+                                .ToList();
+
+                List<GeomertyDataDTO> result = context.SYS_GeomertyData
+                                         .Where(a => a.DeleteStatus == false && zones.Contains(a.Id)
+                                         //       (
+                                         //           zones.Count == 0 ||  // No zones specified, fetch all
+                                         //           zones.Contains(a.Id)  // Match Zone if it exists in the list
+                                         //       )
+                                         )
+                                         .Select(a => new GeomertyDataDTO
+                                         {
+                                             Id = a.Id,
+                                             Zone = a.Zone,
+                                             Type = a.Type,
                                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
                                          })
                                          .ToList();
@@ -112,7 +160,7 @@ namespace BL.Services.Administration
                     Zone = dataToSave.Zone,
                     GeomColumn = dataToSave.geometry,
                     Type = dataToSave.Type
-                   
+
                 };
                 context.SYS_GeomertyData.Add(DSS);
                 context.SaveChanges();

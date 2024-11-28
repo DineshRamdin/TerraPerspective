@@ -78,6 +78,7 @@
     <script>
 
         var GetAllTestGeomertyDataUrl = '@Url.Action("GetAll", "TestGeomertyData")';
+        var GetSelectedZoneGeomertyDataUrl = '@Url.Action("GetSelectedZoneGeomertyData", "TestGeomertyData")';
         var GetAllZoneUrl = '@Url.Action("GetAllZone", "TestGeomertyData")';
         var CreateUpdateGeomertyDataUrl = '@Url.Action("CreateUpdate", "TestGeomertyData")';
 
@@ -86,7 +87,28 @@
             $('#liTestGeomertyDatamenu').addClass('active');
 
             BindJsTreeData();
-            initMap();
+            // initMap();
+
+            $('#Zonejstree').on('changed.jstree', function (e, data) {
+                if (data.action != 'ready') { // Ensures it was triggered by node selection Or deselection
+                    initMap();
+                }
+                // // Filter out only the child nodes
+                // var childNodes = data.selected.filter(function (nodeId) {
+                //     var node = $('#Zonejstree').jstree("get_node", nodeId);
+                //     return node.parent !== "#";  // Parent is not root (i.e., is a child)
+                // });
+
+                // var values = [];
+                // // Log the checked child nodes
+                // childNodes.forEach(function (nodeId) {
+                //     var node = $('#Zonejstree').jstree("get_node", nodeId);
+                //     if (node.original.Value !== undefined) { // Check if Value exists
+                //         values.push(node.original.Value); // Push the Value to the array
+                //     }
+                // });
+                // initMap(values.join(","));
+            });
         });
 
         function BindJsTreeData() {
@@ -94,6 +116,7 @@
             $.ajax({
                 url: GetAllZoneUrl,
                 type: "POST",
+                async: false,
                 // data: dataObject,  // Send data if needed
                 beforeSend: function () {
                     ZoneData = [];
@@ -108,7 +131,6 @@
                     toastr.error("Error:" + error);
                 }
             }).done(function () {
-
                 const groupedData = ZoneData.reduce((acc, item) => {
                     const Type = item.type;
                     if (!acc[Type]) {
@@ -120,7 +142,13 @@
 
                 const selectArray = Object.values(groupedData);
 
-                $('#Zonejstree').jstree({
+                if ($.jstree.reference('#Zonejstree')) {
+                    $('#Zonejstree').jstree("destroy").empty(); // Destroy and clear DOM content
+                }
+
+                $('#Zonejstree').on('loaded.jstree', function (e, data) {
+                    $('#Zonejstree').jstree('select_all'); // Select all nodes once the tree is fully loaded
+                }).jstree({
                     'core': {
                         'data': selectArray
                     },
@@ -129,47 +157,38 @@
             });
 
 
-            // $('#Zonejstree').on('changed.jstree', function (e, data) {
-            //     // Filter out only the child nodes
-            //     var childNodes = data.selected.filter(function (nodeId) {
-            //         var node = $('#Zonejstree').jstree("get_node", nodeId);
-            //         return node.parent !== "#";  // Parent is not root (i.e., is a child)
-            //     });
-
-            //     // Log the checked child nodes
-            //     childNodes.forEach(function (nodeId) {
-            //         var node = $('#Zonejstree').jstree("get_node", nodeId);
-            //         console.log("Checked child node text:", node.text, node.original.Value);
-            //     });
-            // });
         }
 
-        // function GetSeletd() {
-        //     var selectedNodes = $('#Zonejstree').jstree("get_selected", true); // Get selected nodes with full data
-        //     var values = [];
+        function GetSelectedZone() {
+            var selectedNodes = $('#Zonejstree').jstree("get_selected", true); // Get selected nodes with full data
+            var values = [];
 
-        //     selectedNodes.forEach(function (node) {
-        //         if (node.original.Value !== undefined) { // Check if Value exists
-        //             values.push(node.original.Value); // Push the Value to the array
-        //         }
-        //     });
-
-        //     console.log("values", values)
-        // }
+            selectedNodes.forEach(function (node) {
+                if (node.original.Value !== undefined) { // Check if Value exists
+                    values.push(node.original.Value); // Push the Value to the array
+                }
+            });
+            return values.join(",");
+            // console.log("values", values)
+        }
 
         let map;
 
         function initMap() {
             var MapData = [];
+            var selectedZone = GetSelectedZone();
+           
+            var dataObject = {};
+            dataObject.selectedZone = selectedZone == undefined ? "" : selectedZone;
+
             $.ajax({
-                url: GetAllTestGeomertyDataUrl,
+                url: GetSelectedZoneGeomertyDataUrl,
                 type: "POST",
-                // data: dataObject,  // Send data if needed
+                data: dataObject,  // Send data if needed
                 beforeSend: function () {
                     MapData = [];
                 },
                 success: function (response) {
-                    console.log("response.data", response.data);
                     if (response.data) {
                         MapData = response.data;
                     }
@@ -344,6 +363,8 @@
                         if (response.data) {
                             toastr.success(response.errorMessage);
                             $('#AddGeomertyDataModal').modal('hide');
+                            // initMap();
+                            BindJsTreeData();
                             initMap();
                         }
                         else {
