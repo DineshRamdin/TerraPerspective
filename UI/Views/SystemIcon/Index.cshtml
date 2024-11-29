@@ -1,0 +1,269 @@
+﻿@{
+	ViewData["Title"] = "System Icon";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">System Icon</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+					<li class="breadcrumb-item active">System Icon</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="SystemIconTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddSystemIconModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddSystemIcon.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllSystemIconUrl = '@Url.Action("GetAll", "SystemIcon")';
+		var SystemIconGetByIdUrl = '@Url.Action("GetById", "SystemIcon")';
+		var CreateUpdateSystemIconUrl = '@Url.Action("CreateUpdate", "SystemIcon")';
+		var SystemIconDeleteUrl = '@Url.Action("SystemIconDelete", "SystemIcon")';
+		var SystemIconPreviewUrl = '@Url.Action("Preview", "SystemIcon")';
+
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liSystemIconmenu').addClass('active');
+
+			GetAllSystemIcon();
+		});
+
+		function GetAllSystemIcon() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'name', title: 'Name' },
+				// { data: 'systemIconImagebase64', title: 'System Icon' },
+				{
+					data: 'systemIconImagebase64',
+					title: 'System Icon',
+					render: function (data, type, row, meta) {
+						// Check if the data (base64 string) is valid
+						if (data && data.trim() !== "") {
+							// Render the base64 image in an <img> tag
+							return '<img src="data:image/png;base64,' + data + '" alt="System Icon" style="width: 50px; height: 50px;" />';
+						} else {
+							// If no valid base64 string, return a placeholder or empty image
+							return '<img src="~/image/default-profile.png" alt="No Icon" style="width: 50px; height: 50px;" />';
+						}
+					}
+				},
+
+			];
+
+			initializeDataGrid('SystemIconTable', 'openSystemIconModal', GetAllSystemIconUrl, columnList, true,true,true,false,true,'PreviewSystemIconModal',true,'SystemIconDelete');
+		}
+
+		 function PreviewSystemIconModal(id) {
+			window.open(SystemIconPreviewUrl + "?id=" + id, '_blank');
+		}
+
+		function openSystemIconModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: SystemIconGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearSystemIconModal();
+				},
+				success: function (response) {
+					if (response.data) {
+						$("#deleteImageBtn").hide();
+						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
+							$("#h4SystemIconTitle").html("Modify System Icon");
+						else {
+							$("#h4SystemIconTitle").html("Add System Icon");
+						}
+
+						$("#hdnSystemIconId").val(response.data.id);
+						$("#txtName").val(response.data.name);
+
+						if (response.data.systemIconImagebase64 != null && response.data.systemIconImagebase64 != "") {
+							$("#oldsystemIconimage").val(response.data.systemIconImagebase64);
+
+							$("#viewSystemIconImage").attr("src", "data:image/png;base64," + response.data.systemIconImagebase64);
+							$("#viewSystemIconImage").css("display", "");
+							$("#deleteImageBtn").show();
+						}
+
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddSystemIconModal').modal('show');
+				$("#frnSystemIconCreate").validate({}).resetForm();
+			});
+		}
+
+		function deleteImage() {
+			// Reset the file input and the hidden field
+			$('#systemIconimagefile').val("");
+			$('#viewSystemIconImage').attr('src', "");
+			$('#oldsystemIconimage').val("");
+			$('#deleteImageBtn').hide();
+		}
+
+		function ClearSystemIconModal() {
+			$("#h4SystemIconTitle").html("Add System Icon");
+			$("#hdnSystemIconId").val("");
+			$("#txtName").val("");
+			$("#systemIconimagefile").val(null);
+			$("#oldsystemIconimage").val("");
+			$("#viewSystemIconImage").attr("src", "");
+			$("#viewSystemIconImage").css("display", "none");
+
+		}
+
+		async function SaveSystemIcon() {
+
+			let valid = formValidation(["txtName"]);
+
+			var oldfile =  $('#oldsystemIconimage').val();
+
+			if (valid) {
+				var dataObject = {};
+				dataObject.Id = $("#hdnSystemIconId").val();
+				dataObject.Name = $("#txtName").val();
+
+				  // Validate the file input field
+				var fileInput = $('#systemIconimagefile')[0];
+				var file = fileInput.files[0];
+
+				// File validation
+				if (file) {
+					// Check if file is of valid type (JPEG or PNG)
+					const allowedTypes = ['image/jpeg', 'image/png'];
+					if (!allowedTypes.includes(file.type)) {
+						toastr.warning("Please upload a valid file in one of the following formats: JPEG, or PNG.");
+						return; // Stop the process if invalid type
+					}
+
+					// Check file size (max 5MB)
+					const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+					if (file.size > maxFileSize) {
+						toastr.warning("The file size exceeds the allowed limit of 5MB.");
+						return; // Stop the process if file is too large
+					}
+				}
+				else
+				{
+					if(oldfile){
+					}else{
+					toastr.warning("Please Select the Icon");
+					return; // Stop the process if invalid type
+					}
+				}
+
+				var FileData = await FiletoBase64string("systemIconimagefile");
+
+				if (FileData == "") {
+					FileData = $('#oldsystemIconimage').val();
+				}
+
+				dataObject.SystemIconImagebase64 = FileData;
+
+				$.ajax({
+					url: CreateUpdateSystemIconUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddSystemIconModal').modal('hide');
+							GetAllSystemIcon();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("Please fill in required field(s)");
+			}
+
+		}
+
+		function SystemIconDelete(id){
+			var dataObject = {};
+			dataObject.id = id;
+			$.ajax({
+				url: SystemIconDeleteUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+
+				},
+				success: function (response) {
+					if (response.data) {
+						toastr.success(response.errorMessage);
+						GetAllSystemIcon();
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+
+			});
+		}
+
+
+	</script>
+}

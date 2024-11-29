@@ -707,13 +707,32 @@ namespace BL.Services.Common
 				context.SaveChanges();
 			}
             #endregion
-            #region Reports
+          
+			#region Reports
             if (!context.SYS_Modules.Any(x => x.Name == "Report"))
             {
                 context.SYS_Modules.Add(new SYS_Modules()
                 {
                     Name = "Report",
                     Url = "Reports/index",
+                    Order = 0,
+                    Icon = "fas fa-chart-pie",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now
+
+
+                });
+                context.SaveChanges();
+            }
+            #endregion
+
+            #region System Icon
+            if (!context.SYS_Modules.Any(x => x.Name == "System Icon"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "System Icon",
+                    Url = "SystemIcon/index",
                     Order = 0,
                     Icon = "fas fa-chart-pie",
                     CreatedBy = Guid.Parse(user.Id),

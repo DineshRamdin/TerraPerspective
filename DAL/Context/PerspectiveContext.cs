@@ -465,6 +465,7 @@ namespace DAL.Context
         public DbSet<SYS_GroupMatrixUser> SYS_GroupMatrixUser { get; set; }
         public DbSet<SYS_RowAccess> SYS_RowAccess { get; set; }
         public DbSet<SYS_Reports> SYS_Reports { get; set; }
+        public DbSet<SYS_SystemIcon> SYS_SystemIcon { get; set; }
 
     }
 }
