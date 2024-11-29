@@ -50,6 +50,8 @@
 		var GetAllReportsUrl = '@Url.Action("GetAll", "Reports")';
 		var ReportsGetByIdUrl = '@Url.Action("GetById", "Reports")';
 		var CreateUpdateReportsUrl = '@Url.Action("CreateUpdate", "Reports")';
+		var ReportsDeleteUrl = '@Url.Action("ReportsDelete", "Reports")';
+		 var ReportsPreviewUrl = '@Url.Action("Preview", "Reports")';
 
 
 		$(function () {
@@ -67,9 +69,12 @@
 
 			];
 
-			initializeDataGrid('ReportsTable', 'openReportsModal', GetAllReportsUrl, columnList, false,true,true,false,false,null,true,null);
+			initializeDataGrid('ReportsTable', 'openReportsModal', GetAllReportsUrl, columnList, true,true,true,false,true,'PreviewReportsModal',true,'ReportsDelete');
 		}
 
+		 function PreviewReportsModal(id) {
+			window.open(ReportsPreviewUrl + "?id=" + id, '_blank');
+		}
 
 		function openReportsModal(id) {
 			var dataObject = {};
@@ -93,6 +98,15 @@
 						$("#hdnReportsId").val(response.data.id);
 						$("#txtName").val(response.data.name);
 						$("#txtType").val(response.data.type);
+
+						if (response.data.reportImagebase64 != null && response.data.reportImagebase64 != "") {
+							$("#oldreportimage").val(response.data.reportImagebase64);
+
+							$("#viewReportImage").attr("src", "data:image/png;base64," + response.data.reportImagebase64);
+							$("#viewReportImage").css("display", "");
+
+						}
+
 					}
 					else {
 						toastr.error(response.errorMessage);
@@ -114,6 +128,10 @@
 			$("#hdnReportsId").val("");
 			$("#txtName").val("");
 			$("#txtType").val("");
+			$("#reportimagefile").val(null);
+			$("#oldreportgimage").val("");
+			$("#viewReportImage").attr("src", "");
+			$("#viewReportImage").css("display", "none");
 
 		}
 
@@ -126,6 +144,14 @@
 				dataObject.Id = $("#hdnReportsId").val();
 				dataObject.Name = $("#txtName").val();
 				dataObject.Type = $('#txtType').val();
+
+				var FileData = await FiletoBase64string("reportimagefile");
+
+				if (FileData == "") {
+					FileData = $('#oldreportimage').val();
+				}
+
+				dataObject.ReportImagebase64 = FileData;
 
 				$.ajax({
 					url: CreateUpdateReportsUrl,
@@ -158,6 +184,36 @@
 			}
 
 		}
+
+		function ReportsDelete(id){
+			var dataObject = {};
+			dataObject.id = id;
+			$.ajax({
+				url: ReportsDeleteUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+
+				},
+				success: function (response) {
+					if (response.data) {
+						toastr.success(response.errorMessage);
+						GetAllReports();
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+
+			});
+		}
+
 
 	</script>
 }

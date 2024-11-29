@@ -13,6 +13,8 @@ namespace DAL.Models.Administration
 		public long Id { get; set; }		
 		public string Name { get; set; }
 		public string Type { get; set; }
-		
-	}
+        public string? ReportImagebase64 { get; set; }
+
+
+    }
 }

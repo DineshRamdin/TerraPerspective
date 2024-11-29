@@ -40,6 +40,18 @@ namespace UI.Controllers
             }
         }
 
+
+        public IActionResult Preview(long Id)
+        {
+            BaseResponseDTO<List<ReportsDTO>> dt = new BaseResponseDTO<List<ReportsDTO>>();
+            dt.Data = new List<ReportsDTO>();
+            if (Id > 0)
+            {
+                dt = service.GetPreviewById(Id);
+            }
+            return View(dt.Data);
+        }
+
         [HttpPost]
         public async Task<ActionResult<BaseResponseDTO<ReportsDTO>>> GetById(string Id)
         {
@@ -83,5 +95,33 @@ namespace UI.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<bool>>> ReportsDelete(string Id)
+        {
+            try
+            {
+
+                try
+                {
+                    BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+                    if (!string.IsNullOrEmpty(Id))
+                    {
+                        dt = await service.ReportsDelete(Convert.ToInt64(Id));
+                    }
+
+                    return Ok(dt);
+                }
+                catch (Exception)
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+
+        }
     }
 }

@@ -44,6 +44,8 @@ namespace BL.Services.Administration
                                                Id = a.Id.ToString(),
                                                Name = a.Name,
                                                Type = a.Type,
+                                               ReportImagebase64 = a.ReportImagebase64,
+                                               IsImage = a.ReportImagebase64 == "" ? false : true,
 
                                            }).ToList();
 
@@ -74,7 +76,9 @@ namespace BL.Services.Administration
                           {
                               Id = a.Id.ToString(),
                               Name = a.Name,
-                              Type = a.Type
+                              Type = a.Type,
+                              ReportImagebase64 = a.ReportImagebase64,
+                              IsImage = a.ReportImagebase64 == "" ? false : true,
                           }).FirstOrDefault();
 
                 if (result == null)
@@ -109,6 +113,7 @@ namespace BL.Services.Administration
                     {
                         Name = dataToSave.Name,
                         Type = dataToSave.Type,
+                        ReportImagebase64 = dataToSave.ReportImagebase64
 
                     };
                     context.SYS_Reports.Add(DSS);
@@ -146,6 +151,7 @@ namespace BL.Services.Administration
 
                     DSS.Name = dataToUpdate.Name;
                     DSS.Type = dataToUpdate.Type;
+                    DSS.ReportImagebase64 = dataToUpdate.ReportImagebase64;
 
 
                     context.SYS_Reports.Update(DSS);
@@ -170,5 +176,70 @@ namespace BL.Services.Administration
             return BaseDto;
         }
 
+        public async Task<BaseResponseDTO<bool>> ReportsDelete(long Id)
+        {
+            BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
+
+            try
+            {
+                if (context.SYS_Reports.Any(x => x.Id == Id))
+                {
+                    SYS_Reports DSS = context.SYS_Reports.Where(x => x.Id == Id).FirstOrDefault();
+
+                    DSS.DeleteStatus = true;
+                    context.SYS_Reports.Update(DSS);
+                    context.SaveChanges();
+                    BaseDto.Data = true;
+                    BaseDto.ErrorMessage = "Report Delete Successfully";
+                    BaseDto.QryResult = queryResult.SUCEEDED;
+                }
+                else
+                {
+                    BaseDto.Data = false;
+                    BaseDto.ErrorMessage = "Fail";
+                    BaseDto.QryResult = queryResult.FAILED;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                BaseDto.Data = false;
+                BaseDto.ErrorMessage = "Fail";
+                BaseDto.QryResult = new QueryResult().FAILED;
+            }
+
+            return BaseDto;
+        }
+
+        public BaseResponseDTO<List<ReportsDTO>> GetPreviewById(long? id)
+        {
+            BaseResponseDTO<List<ReportsDTO>> dto = new BaseResponseDTO<List<ReportsDTO>>();
+            List<ReportsDTO> result = new List<ReportsDTO>();
+            string errorMsg = "No Data Found";
+            try
+            {
+                result = (from a in context.SYS_Reports
+                          where a.Id == id && a.DeleteStatus == false
+                          select new ReportsDTO()
+                          {
+                              Id = a.Id.ToString(),
+                              Type = a.Type,
+                              Name = a.Name,
+                              ReportImagebase64 = a.ReportImagebase64,
+                              IsImage = a.ReportImagebase64 == "" ? false : true,
+
+                          }).ToList();
+                dto.Data = result;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                dto.Data = result;
+                dto.ErrorMessage = errorMsg;
+                dto.QryResult = queryResult.FAILED;
+            }
+
+            return dto;
+        }
     }
 }
