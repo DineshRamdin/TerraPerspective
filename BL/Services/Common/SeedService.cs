@@ -40,8 +40,28 @@ namespace BL.Services.Common
 
 
 				}
+                if (!roleManager.RoleExistsAsync("Statndard").Result)
+                {
+                    ApplicationRole role = new ApplicationRole();
+                    role.Name = "Statndard";
+                    role.NormalizedName = "STATNDARD";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
 
-			}
+
+                }
+                if (!roleManager.RoleExistsAsync("ReadOnly").Result)
+                {
+                    ApplicationRole role = new ApplicationRole();
+                    role.Name = "ReadOnly";
+                    role.NormalizedName = "READONLY";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
+
+
+                }
+
+            }
             catch (Exception e)
             {
 
@@ -599,17 +619,89 @@ namespace BL.Services.Common
 			}
 			#endregion
 
-			#region AccessRights
-			if (!context.SYS_Modules.Any(x => x.Name == "Access Rights"))
+			#region Administration And Submenu
+
+			if (!context.SYS_Modules.Any(x => x.Name == "Administration"))
 			{
 				context.SYS_Modules.Add(new SYS_Modules()
-				{Name = "Access Rights",
-					Url = "AccessRights/index",
-					Order = 0,
-					Icon = "fa fa-user-circle",
+				{
+					Name = "Administration",
+					Url = "",
+					Order = 2,
+					Icon = "fas fa-user-cog",
 					CreatedBy = Guid.Parse(user.Id),
 					CreatedDate = DateTime.Now
 
+
+				});
+				context.SaveChanges();
+			}
+
+
+			#region Access and Submenu
+			if (!context.SYS_Modules.Any(x => x.Name == "Access"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Access",
+					Url = "",
+					Order = 3,
+					Icon = "fas fa-user-cog",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now,
+					ParentId = context.SYS_Modules.Where(x => x.Name == "Administration").Select(x => x.Id).FirstOrDefault()
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region Access Rights
+			if (!context.SYS_Modules.Any(x => x.Name == "Access Rights"))
+			{
+
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Access Rights",
+					Url = "AccessRights/index",
+					Order = 4,
+					Icon = "fa fa-circle-user",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now,
+					ParentId = context.SYS_Modules.Where(x => x.Name == "Access").Select(x => x.Id).FirstOrDefault()
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			if (!context.SYS_Modules.Any(x => x.Name == "Matrix"))
+			{
+
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Matrix",
+					Url = "Matrix/Matrix",
+					Order = 24,
+					Icon = "fa fa-folder-tree",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now,
+					ParentId = context.SYS_Modules.Where(x => x.Name == "Access").Select(x => x.Id).FirstOrDefault()
+
+				});
+				context.SaveChanges();
+			}
+			if (!context.SYS_Modules.Any(x => x.Name == "Menu"))
+			{
+
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Menu",
+					Url = "Menu/index",
+					Order = 24,
+					Icon = "fa-regular fa-square-caret-down",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now,
+					ParentId = context.SYS_Modules.Where(x => x.Name == "Access").Select(x => x.Id).FirstOrDefault()
 
 				});
 				context.SaveChanges();
@@ -717,6 +809,8 @@ namespace BL.Services.Common
 			SeedAcessRights(roleManager);
 			SeedAcessRightsN(roleManager);
 			SeedModules(userManager);
-		}
+			SeedGroupMatrix(userManager);
+
+        }
     }
 }
