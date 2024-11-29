@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="modal-dialog">
+    <form id="frnMenuCreate">
+        <input type="hidden" id="hdnMenuId" value="" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="h4MenuTitle">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 form-group">
+                        <label>Diplay Name<span class="red-required">*</span></label>
+                        <input type="text" id="txtDisplayName" class="form-control" placeholder="Display Name" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>Icon<span class="red-required">*</span></label>
+                        <input type="text" id="txtIcon" class="form-control" placeholder="Icon" required />
+                        <a href="https://fontawesome.com/v6/search?o=r&m=free" target="_blank" class="small"> Click To Access Icon Library. </a>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>Order<span class="red-required">*</span></label>
+                        <input type="number" id="txtOrder" class="form-control" placeholder="Order" required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="savebtn" class="btn btn-primary" onclick="UpdateMenu();">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </form>
+</div>

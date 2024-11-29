@@ -1,0 +1,175 @@
+﻿@{
+	ViewData["Title"] = "Menu";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">Menu</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+					<li class="breadcrumb-item active">Menu</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*  <div class="col-2">
+                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openUserModal()">Add</button>
+                    </div> *@
+
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="MenuTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddMenuModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddMenu.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllMenuUrl = '@Url.Action("GetAll", "Menu")';
+		var MenuGetByIdUrl = '@Url.Action("GetById", "Menu")';
+		var UpdateMenuUrl = '@Url.Action("Update", "Menu")';
+
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#limenumenu').addClass('active');
+
+			GetAllMenu();
+		});
+
+		function GetAllMenu() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'displayName', title: 'Display Name' },
+				{ data: 'icon', title: 'Icon' },
+				{ data: 'order', title: 'Order' },
+			];
+
+				initializeDataGrid('MenuTable', 'openMenuModal', GetAllMenuUrl, columnList, false,false,true,false,true,null,false,null);
+
+		}
+		function openMenuModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: MenuGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
+							$("#h4MenuTitle").html("Menu");
+						else {
+							$("#h4MenuTitle").html("Menu");
+						}
+
+						$("#hdnmenuId").val(response.data.id);
+						$("#txtDisplayName").val(response.data.displayName);
+						$("#txtIcon").val(response.data.icon);
+						$("#txtOrder").val(response.data.order);
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddMenuModal').modal('show');
+				$("#frnMenuCreate").validate({}).resetForm();
+			});
+
+
+		}
+
+
+		// function ClearUserModal() {
+		// 	$("#h4UserTitle").html("Add User");
+		// 	$("#hdnuserId").val("");
+		// 	$("#txtSurname").val("");
+		// 	$("#txtOthername").val("");
+		// 	$("#txtEmail").val("");
+		// 	$("#txtMobile").val("");
+		// 	$("#profileimagefile").val(null);
+		// 	$("#oldprofileimage").val("");
+		// 	$("#viewProfileImage").attr("src", "");
+		// 	$("#viewProfileImage").css("display", "none");
+		// }
+
+
+		function UpdateMenu() {
+
+			let valid = formValidation(["txtDisplayName", "txtIcon", "txtOrder"]);
+
+			if (valid) {
+				var dataObject = {};
+				dataObject.id = $("#hdnMenuId").val();
+				dataObject.DisplayName = $("#txtDisplayName").val();
+				dataObject.Icon = $("#txtIcon").val();
+				dataObject.Order = $("#txtOrder").val();
+
+				$.ajax({
+					url: UpdateMenuUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddMenuModal').modal('hide');
+							GetAllMenu();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("Please fill in required field(s)");
+			}
+		}
+
+	</script>
+}
