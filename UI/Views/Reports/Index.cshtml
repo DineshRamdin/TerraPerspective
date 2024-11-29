@@ -67,11 +67,11 @@
 
 			];
 
-				initializeDataGrid('ReportsTable', 'openReportsModal', GetAllReportsUrl, columnList, false,true,true,false,false,null,true,null);
-
-
+			initializeDataGrid('ReportsTable', 'openReportsModal', GetAllReportsUrl, columnList, false,true,true,false,false,null,true,null);
 		}
-		 function openReportsModal(id) {
+
+
+		function openReportsModal(id) {
 			var dataObject = {};
 			dataObject.id = id;
 
@@ -115,9 +115,9 @@
 			$("#txtName").val("");
 			$("#txtType").val("");
 
-		 }
+		}
 
-		 async function SaveReports() {
+		async function SaveReports() {
 
 			let valid = formValidation(["txtName", "txtType"]);
 
