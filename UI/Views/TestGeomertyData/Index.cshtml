@@ -4,6 +4,7 @@
 
 <link href="~/plugins/leaflet-1.7.1/leaflet.css" rel="stylesheet" />
 <link href="~/plugins/leaflet-draw-1.0.4/leaflet.draw.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
 <style>
     #map {
         width: 100%;
@@ -25,6 +26,20 @@
     #GeomertyDataTable > tbody > .selected-row {
         background: #cce5ff;
         border-color: #cce5ff;
+    }
+
+    .leaflet-bar input {
+        width: 200px;
+        padding: 5px;
+        position: relative;
+        z-index: 1000; /* Ensure it's above the map */
+    }
+
+    /* Ensure that autocomplete suggestions don't overflow and stay within the map bounds */
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 9999 !important;
     }
 </style>
 
@@ -84,6 +99,7 @@
 
     <script src="~/plugins/leaflet-1.7.1/leaflet.js"></script>
     <script src="~/plugins/leaflet-draw-1.0.4/leaflet.draw.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
 
         var GetAllTestGeomertyDataUrl = '@Url.Action("GetAll", "TestGeomertyData")';
@@ -91,6 +107,7 @@
         var GetAllZoneUrl = '@Url.Action("GetAllZone", "TestGeomertyData")';
         var CreateUpdateGeomertyDataUrl = '@Url.Action("CreateUpdate", "TestGeomertyData")';
         var GeomertyDataGetByIdUrl = '@Url.Action("GetById", "TestGeomertyData")';
+        var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "TestGeomertyData")';
 
         $(function () {
             $('.nav-link').removeClass('active');
@@ -243,9 +260,65 @@
                     L.control.layers(baseMaps).addTo(map);
                     // Add the custom control to the map
 
+                    var searchControl = L.Control.extend({
+                        onAdd: function () {
+                            var container = L.DomUtil.create('div', 'leaflet-bar');
+                            var inputBox = L.DomUtil.create('input', '', container);
+                            inputBox.type = 'text';
+                            inputBox.placeholder = 'Search for a Zone...';
+
+                            // jQuery UI Autocomplete
+                            $(inputBox).autocomplete({
+                                source: function (request, response) {
+                                    // Make an AJAX call to the Nominatim API for location search
+                                    $.ajax({
+                                        url: GetZoneAutocompleteDataUrl,
+                                        data: { term: request.term },
+                                        success: function (data) {
+                                            response(data.data.map(function (item) {
+                                                return {
+                                                    label: item.zone,  // Displayed in autocomplete
+                                                    value: item.zone,  // Selected value
+                                                    featureGeoJson: item.featureGeoJson,
+                                                };
+                                            }));
+                                        }
+                                    });
+                                },
+                                select: function (event, ui) {
+
+                                    var geoJsonData = JSON.parse(ui.item.featureGeoJson);
+
+                                    // Add the GeoJSON polygon to the map
+                                    var layer = L.geoJSON(geoJsonData).addTo(map);
+
+                                    map.flyToBounds(layer.getBounds(), {
+                                        padding: [50, 50],  // Adds padding around the bounds
+                                        // maxZoom: 12,        // Sets a maximum zoom level
+                                        animate: true,       // Animates the zoom transition
+                                        duration: 3 // Duration in seconds
+                                    });
+                                }
+                            });
+
+                            // Ensure the autocomplete dropdown appears correctly
+                            $(inputBox).on("focus", function () {
+                                setTimeout(() => {
+                                    $(".ui-autocomplete").css("position", "absolute");
+                                    $(".ui-autocomplete").css("z-index", "9999");
+                                }, 100);
+                            });
+
+                            return container;
+                        }
+                    });
+
+                    // Add the custom search control to the map
+                    map.addControl(new searchControl({ position: 'topright' }));
+
                 }
 
-                var bounds = L.latLngBounds(); 
+                var bounds = L.latLngBounds();
 
                 // Loop through the data array and process each feature
                 MapData.forEach(function (item) {
@@ -267,19 +340,7 @@
                         duration: 3 // Duration in seconds
                     });
 
-                    // setTimeout(() => {
-                    //     animateToBounds(bounds);
-                    // }, 3000); // Wait for 5 seconds before triggering the animation
                 }
-
-                // function animateToBounds(bounds) {
-                //     map.flyToBounds(bounds, {
-                //         padding: [50, 50],
-                //         // maxZoom: 14,
-                //         animate: true,
-                //         duration: 1 // Duration in seconds
-                //     });
-                // }
             });
 
         }

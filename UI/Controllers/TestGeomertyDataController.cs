@@ -133,5 +133,16 @@ namespace UI.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult<BaseResponseDTO<List<GeomertyDataDTO>>> GetZoneAutocompleteData(string term)
+        {
+            BaseResponseDTO<List<GeomertyDataDTO>> dt = new BaseResponseDTO<List<GeomertyDataDTO>>();
+
+            dt = service.GetZoneAutocompleteData(term);
+
+            return Ok(dt);
+
+        }
+
     }
 }
