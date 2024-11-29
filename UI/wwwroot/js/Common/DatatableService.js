@@ -141,12 +141,16 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         },
                         initComplete: function () {
 
-                            // Create custom dropdown HTML with icons and a non-blank "Export" option
+
                             var clsDropdownmenu = "dropdown-menu-export";
                             if (tableID === 'AccessLogTable') {
-                                clsDropdownmenu = "dropdown-menu-export-accesslog";  // Hide Excel option
+                                clsDropdownmenu = "dropdown-menu-export-accesslog";
+                            }
+                            else if (tableID === 'GeomertyDataTable') {
+                                clsDropdownmenu = "dropdown-menu-export-accesslog";
                             }
 
+                            // Create custom dropdown HTML with icons and a non-blank "Export" option
                             var dropdownHtml = `
                                     <div class="custom-dropdown">
                                         <button id="dropdownButton" class="form-control btn-sm btn-info btn btn-secondary dropdown-toggle clsDownload" style="width: auto;">
