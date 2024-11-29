@@ -773,6 +773,8 @@ namespace BL.Services.Common
 			SeedAcessRights(roleManager);
 			SeedAcessRightsN(roleManager);
 			SeedModules(userManager);
-		}
+			SeedGroupMatrix(userManager);
+
+        }
     }
 }
