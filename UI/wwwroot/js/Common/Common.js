@@ -118,7 +118,7 @@ function renderDynamicMenu(data) {
         // Build grandparent menu item
         let grandParentHtml = `
                     <li class="nav-item">
-                        <a href="${grandParent.url || '#'}" class="nav-link">
+                        <a href="${ grandParent.url ? '/' + grandParent.url : '#'}" class="nav-link">
                             <i class="nav-icon ${grandParent.icon}"></i>
                             <p>
                                 ${grandParent.name}
@@ -134,7 +134,7 @@ function renderDynamicMenu(data) {
             grandParent.subMenu.forEach(parent => {
                 parentHtml += `
                             <li class="nav-item">
-                                <a href="${parent.url || '#'}" class="nav-link">
+                                <a href="${parent.url ? '/' + parent.url : '#'}" class="nav-link">
                                     <i class="${parent.icon || 'far fa-circle nav-icon'}"></i>
                                     <p>${parent.name}</p>
                                 </a>
@@ -147,7 +147,7 @@ function renderDynamicMenu(data) {
                     parent.child.forEach(child => {
                         parentHtml += `
                                     <li class="nav-item">
-                                        <a href="${child.url || '#'}" class="nav-link">
+                                        <a href="${child.url ? '/' + child.url : '#'}" class="nav-link">
                                             <i class="${child.icon || 'far fa-dot-circle nav-icon'}"></i>
                                             <p>${child.name}</p>
                                         </a>
