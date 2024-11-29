@@ -244,14 +244,28 @@
                     // Add the custom control to the map
 
                 }
+
+                var bounds = L.latLngBounds(); 
+
                 // Loop through the data array and process each feature
                 MapData.forEach(function (item) {
                     // Parse the GeoJSON string
                     var geoJsonData = JSON.parse(item.featureGeoJson);
 
                     // Add the GeoJSON polygon to the map
-                    L.geoJSON(geoJsonData).addTo(map);
+                    var layer = L.geoJSON(geoJsonData).addTo(map);
+
+                    bounds.extend(layer.getBounds());
                 });
+
+                // Fit the map to the accumulated bounds
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds, {
+                        padding: [50, 50],  // Adds padding around the bounds
+                        maxZoom: 12,        // Sets a maximum zoom level
+                        animate: true       // Animates the zoom transition
+                    });
+                }
             });
 
         }
