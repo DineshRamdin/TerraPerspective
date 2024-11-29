@@ -1,7 +1,7 @@
 ﻿
 
 function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
-    showExcel = false, onclickDelete = null) {
+    showExcel = true, onclickDelete = null) {
 
     var dataToShow = null; //init data variable
     var access = null; // init access variable
@@ -196,12 +196,12 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                 }
                             );
 
-                            // Close the dropdown if the user clicks outside
-                            $(document).on('click', function (e) {
-                                if (!$(e.target).closest('.custom-dropdown').length) {
-                                    $('#dropdownMenu').hide();
-                                }
-                            });
+                            //// Close the dropdown if the user clicks outside
+                            //$(document).on('click', function (e) {
+                            //    if (!$(e.target).closest('.custom-dropdown').length) {
+                            //        $('#dropdownMenu').hide();
+                            //    }
+                            //});
 
 
                             $('div.dataTables_filter').css({
@@ -265,11 +265,11 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
 }
 
- function initializeDataGridNested(tableID, columnList, childColumns, dataToShow = null, search = false, exportExcel = false) {
+function initializeDataGridNested(tableID, columnList, childColumns, dataToShow = null, search = false, exportExcel = false) {
     var exportButtons = [];
     if (exportExcel) {
         exportButtons.push(this.exportExcelBtn)
-     }
+    }
 
     if ($.fn.dataTable.isDataTable('#' + tableID)) {
         $('#' + tableID).DataTable().clear().destroy();
