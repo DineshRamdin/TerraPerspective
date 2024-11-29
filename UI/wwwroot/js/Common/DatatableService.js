@@ -68,7 +68,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                     var reset = '| <a href="#" onclick="ResetUserPassword(\'' + full.id + '\')"  title="Reset Password To Default"><i class="fas fa-undo text-secondary ms-1"></i></a> ';
                                     //list of buttons
 
-                                    var preview = '| <a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="Preview"><i class="fa fa-eye text-secondary ms-1"></i></a> ';
+                                    var preview = '| <a href="#" onclick="' + onclickPreview + '(\'' + full.id + '\')" title="Preview"><i class="fa fa-eye text-secondary ms-1"></i></a> ';
 
                                     var btn = '';
 
@@ -87,6 +87,13 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                             if (full.isImage == true) {
                                                 btn += preview
                                             }
+                                            //else if (=="PosterTable")
+                                        }
+                                        else if (tableID == "PosterTable") {
+                                            if (full.isImage == true) {
+                                                btn += preview
+                                            }
+                                            //else if (=="PosterTable")
                                         }
                                         else {
                                             btn += preview

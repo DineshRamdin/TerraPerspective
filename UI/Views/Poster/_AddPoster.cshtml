@@ -1,57 +1,61 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
 
 <div class="modal-dialog">
-    <form id="frnPosterCreate">
-        <input type="hidden" id="hdnId" value="" />
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="h4PosterTitle">
-                </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 form-group">
-                        <label>Poster Name<span class="red-required">*</span></label>
-                        <input type="text" id="txtPosterName" class="form-control" placeholder="Poster Name" required />
-                    </div>
-                    <div class="col-12 form-group">
-                        <label>Type<span class="red-required">*</span></label>
-                        <select class="form-control" id="ddlType" required min=0></select>
-                    </div>
-                    <div class="col-12 form-group">
-                        <label>Status<span class="red-required">*</span></label>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                <input type="checkbox" class="custom-control-input" id="chkStatus">
-                                <label class="custom-control-label" for="chkStatus"></label>
-                            </div>
-                        </div>
-                    </div>
+	<form id="frnPosterCreate">
+		<input type="hidden" id="hdnId" value="" />
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="h4PosterTitle">
+				</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12 form-group">
+						<label>Poster Name<span class="red-required">*</span></label>
+						<input type="text" id="txtPosterName" class="form-control" placeholder="Poster Name" required />
+					</div>
+					<div class="col-12 form-group">
+						<label>Type<span class="red-required">*</span></label>
+						<select class="form-control" id="ddlType" required min=0></select>
+					</div>
+					<div class="col-12 form-group">
+						<label>Status<span class="red-required">*</span></label>
+						<div class="form-group">
+							<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+								<input type="checkbox" class="custom-control-input" id="chkStatus">
+								<label class="custom-control-label" for="chkStatus"></label>
+							</div>
+						</div>
+					</div>
 
-                    <div class="col-12 row form-group">
-                        <div class="col-6">
-                            <label for="imagefile">Image</label>
-                            <input type="file" id="imagefile" name="imagefile" accept="image/*" onchange="UploadFileisValidImage('imagefile')">
-                            <input type="hidden" id="oldimage" value="" />
-                        </div>
-                        <div class="col-6">
-                            <img id="viewImage" style="height: 80%;width: 80%;" />
-                        </div>
+					<div class="col-12 row form-group">
+						<div class="col-6">
+							<label for="imagefile">Image</label>
+							<input type="file" id="imagefile" name="imagefile" accept="image/*" onchange="UploadFileisValidImage('imagefile')">
+							<input type="hidden" id="oldimage" value="" />
+						</div>
+						<div class="col-6">
+							<img id="viewImage" style="height: 80%;width: 80%;" />
+							<button type="button" title="Delete Image" class="btn btn-block btn-info btn-sm" id="deleteImageBtn"
+									style="display: none; margin-top: 13px; width: 50%;" onclick="deleteImage()">
+								Delete Image
+							</button>
+						</div>
 
-                    </div>
+					</div>
 
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SavePoster();">Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </form>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="SavePoster();">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</form>
 </div>

@@ -53,6 +53,7 @@
 		var PosterGetByIdUrl = '@Url.Action("GetById", "Poster")';
 		var getPosterDropDownUrl = '@Url.Action("GetAllDropdownValues", "Poster")';
 		var CreateUpdatePosterUrl = '@Url.Action("CreateUpdate", "Poster")';
+		var PosterPreviewUrl = '@Url.Action("Preview", "Poster")';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
@@ -68,7 +69,7 @@
 				{ data: 'typeName', title: 'Type' },
 			];
 
-				initializeDataGrid('PosterTable', 'openPosterModal', GetAllPosterUrl, columnList, false,true,true,false,false, null,true,null);
+				initializeDataGrid('PosterTable', 'openPosterModal', GetAllPosterUrl, columnList, false,true,true,false,true, 'PreviewPosterModal',true,null);
 
 			// $.ajax({
 			//     url: GetAllPosterUrl,
@@ -153,6 +154,10 @@
 			// });
 		}
 
+		 function PreviewPosterModal(id) {
+			window.open(PosterPreviewUrl + "?id=" + id, '_blank');
+		}
+
 		function openPosterModal(id) {
 			var dataObject = {};
 			dataObject.id = id;
@@ -167,6 +172,7 @@
 				},
 				success: function (response) {
 					if (response.data) {
+						$("#deleteImageBtn").hide();
 						if (response.data.id > 0)
 							$("#h4PosterTitle").html("Modify Poster");
 						else
@@ -182,6 +188,7 @@
 
 							$("#viewImage").attr("src", "data:image/png;base64," + response.data.posterImageBase64);
 							$("#viewImage").css("display", "");
+							$("#deleteImageBtn").show();
 
 						}
 					}
@@ -200,6 +207,16 @@
 			});
 
 
+		}
+
+		function deleteImage() {
+			// Reset the file input and the hidden field
+			$('#imagefile').val("");
+			$("#imagefile").val(null);
+			$('#viewImage').attr('src', "");
+			$('#oldreportimage').val("");
+			$("#oldimage").val("");
+			$('#deleteImageBtn').hide();
 		}
 
 		function ClearPosterModal() {
@@ -256,6 +273,7 @@
 				dataObject.Status = $('#chkStatus').prop('checked');
 
 				var FileData = await FiletoBase64string("imagefile");
+				
 
 				if (FileData == "") {
 					FileData = $('#oldimage').val();

@@ -44,7 +44,8 @@ namespace BL.Services.Administration
                                               PosterImageBase64 = a.PosterImageBase64,
                                               Type = (long)a.Type,
                                               TypeName = a.Type.ToString(),
-                                              Status = a.Status
+                                              Status = a.Status,
+                                              IsImage = a.PosterImageBase64 == null ? false : true,
                                           }).ToList();
                 //List<ApplicationUser> result = context.Users.Where(x => !exEmail.Contains(x.Email) && x.DeleteStatus == false).ToList();
 
@@ -77,7 +78,8 @@ namespace BL.Services.Administration
                               PosterImageBase64 = a.PosterImageBase64,
                               Type = (long)a.Type,
                               TypeName = a.Type.ToString(),
-                              Status = a.Status
+                              Status = a.Status,
+                              IsImage = a.PosterImageBase64 == null ? false : true,
                           }).FirstOrDefault();
 
                 if (result == null)
@@ -206,6 +208,39 @@ namespace BL.Services.Administration
                 BaseDto.QryResult = queryResult.FAILED;
             }
             return BaseDto;
+        }
+
+        public BaseResponseDTO<List<PosterDTO>> GetPreviewById(long? id)
+        {
+            BaseResponseDTO<List<PosterDTO>> dto = new BaseResponseDTO<List<PosterDTO>>();
+            List<PosterDTO> result = new List<PosterDTO>();
+            string errorMsg = "No Data Found";
+            try
+            {
+                result = (from a in context.SYS_Poster
+                          where a.Id == id && a.DeleteStatus == false
+                          select new PosterDTO()
+                          {
+                              Id = a.Id,
+                              Name = a.Name,
+                              PosterImageBase64 = a.PosterImageBase64,
+                              Type = (long)a.Type,
+                              TypeName = a.Type.ToString(),
+                              Status = a.Status,
+                              IsImage = a.PosterImageBase64 == null ? false : true,
+
+                          }).ToList();
+                dto.Data = result;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                dto.Data = result;
+                dto.ErrorMessage = errorMsg;
+                dto.QryResult = queryResult.FAILED;
+            }
+
+            return dto;
         }
     }
 }

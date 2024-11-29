@@ -23,6 +23,17 @@ namespace UI.Controllers
         }
 
 
+        public IActionResult Preview(long Id)
+        {
+            BaseResponseDTO<List<PosterDTO>> dt = new BaseResponseDTO<List<PosterDTO>>();
+            dt.Data = new List<PosterDTO>();
+            if (Id > 0)
+            {
+                dt = service.GetPreviewById(Id);
+            }
+            return View(dt.Data);
+        }
+
         [HttpPost]
         public ActionResult<BaseResponseDTO<List<PosterDTO>>> GetAll()
         {

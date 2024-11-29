@@ -15,5 +15,6 @@ namespace BL.Models.Administration
         public long Type { get; set; }
         public string TypeName { get; set; }
         public bool Status { get; set; }
+        public bool? IsImage { get; set; }
     }
 }
