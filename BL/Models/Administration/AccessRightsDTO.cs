@@ -59,4 +59,49 @@ namespace BL.Models.Administration
 		public bool Permission { get; set; } = false;
 
 	}
+
+	public class MainMenuDTO
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
+
+		public string Icon { get; set; }
+
+		public int Order { get; set; }
+
+		public Guid? ParentId { get; set; } = Guid.Empty;
+
+		public string? Url { get; set; }
+		public List<SubMenuDTO> SubMenu { get; set; } = new List<SubMenuDTO>();
+
+	}
+	public class SubMenuDTO
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
+
+		public string Icon { get; set; }
+
+		public int Order { get; set; }
+
+		public Guid? ParentId { get; set; } = Guid.Empty;
+
+		public string? Url { get; set; }
+		public List<ChildDTO> Child { get; set; } = new List<ChildDTO>();
+
+	}
+	public class ChildDTO
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
+
+		public string Icon { get; set; }
+
+		public int Order { get; set; }
+
+		public Guid? ParentId { get; set; } = Guid.Empty;
+
+		public string? Url { get; set; }
+
+	}
 }
