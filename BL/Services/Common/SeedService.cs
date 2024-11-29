@@ -100,7 +100,7 @@ namespace BL.Services.Common
                         context.SYS_UserDetails.Add(nusr);
                         context.SaveChanges();
 
-                        userManager.AddToRoleAsync(user, "Administrator").Wait();
+                        userManager.AddToRoleAsync(user, "SuperAdministrator").Wait();
                     }
                 }
             }
@@ -184,7 +184,7 @@ namespace BL.Services.Common
             try
             {
                 PerspectiveContext context = new PerspectiveContext();
-                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@naveo.mu").Select(x => x.Id).FirstOrDefault());
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
                 if (!roleManager.RoleExistsAsync("Administrator").Result)
                 {
                     ApplicationRole role = new ApplicationRole();
@@ -236,7 +236,7 @@ namespace BL.Services.Common
             try
             {
                 PerspectiveContext context = new PerspectiveContext();
-                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "superadmin@naveo.mu").Select(x => x.Id).FirstOrDefault());
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
                 if (!roleManager.RoleExistsAsync("SuperAdministrator").Result)
                 {
                     ApplicationRole role = new ApplicationRole();
@@ -606,7 +606,7 @@ namespace BL.Services.Common
 				{Name = "Access Rights",
 					Url = "AccessRights/index",
 					Order = 0,
-					Icon = "fas fa-circle-user",
+					Icon = "fa fa-user-circle",
 					CreatedBy = Guid.Parse(user.Id),
 					CreatedDate = DateTime.Now
 
@@ -614,7 +614,99 @@ namespace BL.Services.Common
 				});
 				context.SaveChanges();
 			}
-			#endregion
+            #endregion
+            #region Reports
+            if (!context.SYS_Modules.Any(x => x.Name == "Report"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "Report",
+                    Url = "Reports/index",
+                    Order = 0,
+                    Icon = "fas fa-chart-pie",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now
+
+
+                });
+                context.SaveChanges();
+            }
+            #endregion
+
+            List<SYS_Modules> dtl = context.SYS_Modules.Where(x => x.DisplayName == null).ToList();
+			if (dtl.Count > 0)
+			{
+				foreach (SYS_Modules dt in dtl)
+				{
+					dt.DisplayName = dt.Name;
+					context.SYS_Modules.Update(dt);
+					context.SaveChanges();
+				}
+
+			}
+		}
+
+		public static void SeedGroupMatrix(UserManager<ApplicationUser> userManager)
+		{
+			try
+			{
+				PerspectiveContext context = new PerspectiveContext();
+				SYS_GroupMatrix RGM = new SYS_GroupMatrix();
+				var Usr = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").FirstOrDefault();
+				var SysUsr = context.SYS_User.Where(x => x.AId == Usr.Id).FirstOrDefault();
+				if (!context.SYS_GroupMatrix.Any(x => x.GMDescription == "ROOT"))
+				{
+					RGM = new SYS_GroupMatrix();
+					RGM.ParentGMID = null;
+					RGM.GMDescription = "ROOT";
+					RGM.Remarks = "ROOT";
+					RGM.CompanyCode = "COMP1";
+					RGM.IsCompany = false;
+					RGM.LegalName = "ROOT";
+					RGM.CreatedBy = Guid.Parse(Usr.Id);
+					RGM.CreatedDate = DateTime.Now;
+					context.SYS_GroupMatrix.Add(RGM);
+					context.SaveChanges();
+				}
+				List<SYS_GroupMatrix> mlt = context.SYS_GroupMatrix.Where(x => x.ParentGMID == null && x.GMID != RGM.GMID).ToList();
+				foreach (SYS_GroupMatrix m in mlt)
+				{
+					m.ParentGMID = RGM.GMID;
+					context.SYS_GroupMatrix.Update(m);
+					context.SaveChanges();
+				}
+				if (!context.SYS_GroupMatrix.Any(x => x.GMDescription == "FAREI"))
+				{
+					SYS_GroupMatrix GM = new SYS_GroupMatrix();
+					GM.ParentGMID = RGM.GMID;
+					GM.GMDescription = "FAREI";
+					GM.Remarks = "FAREI";
+					GM.CompanyCode = "COMP1";
+					GM.IsCompany = false;
+					GM.LegalName = "FAREI";
+					GM.CreatedBy = Guid.Parse(Usr.Id);
+					GM.CreatedDate = DateTime.Now;
+					context.SYS_GroupMatrix.Add(GM);
+					context.SaveChanges();
+				}
+
+				if (!context.SYS_GroupMatrixUser.Any(x => x.IID == SysUsr.Id))
+				{
+					SYS_GroupMatrixUser GMU = new SYS_GroupMatrixUser();
+					GMU.IID = SysUsr.Id;
+					GMU.GMID = RGM.GMID;
+					GMU.CreatedBy = Guid.Parse(Usr.Id);
+					GMU.CreatedDate = DateTime.Now;
+					context.SYS_GroupMatrixUser.Add(GMU);
+					context.SaveChanges();
+				}
+
+			}
+			catch (Exception e)
+			{
+
+			}
+
 		}
 
 		public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
