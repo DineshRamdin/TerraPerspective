@@ -1,0 +1,163 @@
+﻿@{
+	ViewData["Title"] = "Report";
+}
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">Report</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
+					<li class="breadcrumb-item active">Report</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="ReportsTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddReportsModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddReports.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllReportsUrl = '@Url.Action("GetAll", "Reports")';
+		var ReportsGetByIdUrl = '@Url.Action("GetById", "Reports")';
+		var CreateUpdateReportsUrl = '@Url.Action("CreateUpdate", "Reports")';
+
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liReportsmenu').addClass('active');
+
+			GetAllReports();
+		});
+
+		function GetAllReports() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'name', title: 'Name' },
+				{ data: 'type', title: 'Type' },
+
+			];
+
+				initializeDataGrid('ReportsTable', 'openReportsModal', GetAllReportsUrl, columnList, false,true,true,false,false,null,true,null);
+
+
+		}
+		 function openReportsModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: ReportsGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearReportsModal();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
+							$("#h4ReportsTitle").html("Modify Report");
+						else {
+							$("#h4ReportsTitle").html("Add Report");
+						}
+
+						$("#hdnReportsId").val(response.data.id);
+						$("#txtName").val(response.data.name);
+						$("#txtType").val(response.data.type);
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddReportsModal').modal('show');
+				$("#frnReportsCreate").validate({}).resetForm();
+			});
+		}
+
+		function ClearReportsModal() {
+			$("#h4ReportsTitle").html("Add Report");
+			$("#hdnReportsId").val("");
+			$("#txtName").val("");
+			$("#txtType").val("");
+
+		 }
+
+		 async function SaveReports() {
+
+			let valid = formValidation(["txtName", "txtType"]);
+
+			if (valid) {
+				var dataObject = {};
+				dataObject.Id = $("#hdnReportsId").val();
+				dataObject.Name = $("#txtName").val();
+				dataObject.Type = $('#txtType').val();
+
+				$.ajax({
+					url: CreateUpdateReportsUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddReportsModal').modal('hide');
+							GetAllReports();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("Please fill in required field(s)");
+			}
+
+		}
+
+	</script>
+}
