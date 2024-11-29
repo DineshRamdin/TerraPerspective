@@ -40,8 +40,28 @@ namespace BL.Services.Common
 
 
 				}
+                if (!roleManager.RoleExistsAsync("Statndard").Result)
+                {
+                    ApplicationRole role = new ApplicationRole();
+                    role.Name = "Statndard";
+                    role.NormalizedName = "STATNDARD";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
 
-			}
+
+                }
+                if (!roleManager.RoleExistsAsync("ReadOnly").Result)
+                {
+                    ApplicationRole role = new ApplicationRole();
+                    role.Name = "ReadOnly";
+                    role.NormalizedName = "READONLY";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
+
+
+                }
+
+            }
             catch (Exception e)
             {
 
