@@ -21,6 +21,11 @@
         .custom-button:hover {
             background: #eee;
         }
+
+    #GeomertyDataTable > tbody > .selected-row {
+        background: #cce5ff;
+        border-color: #cce5ff;
+    }
 </style>
 
 <!-- Content Header (Page header) -->
@@ -99,6 +104,14 @@
             //         initMap();
             //     }
             // });
+
+            $("#GeomertyDataTable").on('click', 'tr', function () {
+                $("#GeomertyDataTable").find(".selected-row").removeClass("selected-row");
+                var Id = $(this).attr("data-id")
+                $(this).addClass("selected-row")
+                initMap(Id);
+            });
+
         });
         function GetAllGeomertyData() {
             var columnList = [
@@ -108,6 +121,7 @@
             ];
 
             initializeDataGrid('GeomertyDataTable', 'openGeomertyDataModal', GetAllZoneUrl, columnList, false, false, true, false);
+
         }
         function BindJsTreeData() {
             var ZoneData = [];
@@ -168,17 +182,17 @@
 
         let map;
 
-        function initMap() {
+        function initMap(selectedZone) {
             var MapData = [];
             // var selectedZone = GetSelectedZone();
 
-            // var dataObject = {};
-            // dataObject.selectedZone = selectedZone == undefined ? "" : selectedZone;
+            var dataObject = {};
+            dataObject.selectedZone = selectedZone == undefined ? "" : selectedZone;
 
             $.ajax({
-                url: GetAllTestGeomertyDataUrl,
+                url: selectedZone == undefined ? GetAllTestGeomertyDataUrl : GetSelectedZoneGeomertyDataUrl,
                 type: "POST",
-                // data: dataObject,  // Send data if needed
+                data: dataObject,  // Send data if needed
                 beforeSend: function () {
                     MapData = [];
                 },
@@ -230,14 +244,42 @@
                     // Add the custom control to the map
 
                 }
+
+                var bounds = L.latLngBounds(); 
+
                 // Loop through the data array and process each feature
                 MapData.forEach(function (item) {
                     // Parse the GeoJSON string
                     var geoJsonData = JSON.parse(item.featureGeoJson);
 
                     // Add the GeoJSON polygon to the map
-                    L.geoJSON(geoJsonData).addTo(map);
+                    var layer = L.geoJSON(geoJsonData).addTo(map);
+
+                    bounds.extend(layer.getBounds());
                 });
+
+                // Fit the map to the accumulated bounds
+                if (bounds.isValid()) {
+                    map.flyToBounds(bounds, {
+                        padding: [50, 50],  // Adds padding around the bounds
+                        // maxZoom: 12,        // Sets a maximum zoom level
+                        animate: true,       // Animates the zoom transition
+                        duration: 1 // Duration in seconds
+                    });
+
+                    // setTimeout(() => {
+                    //     animateToBounds(bounds);
+                    // }, 3000); // Wait for 5 seconds before triggering the animation
+                }
+
+                // function animateToBounds(bounds) {
+                //     map.flyToBounds(bounds, {
+                //         padding: [50, 50],
+                //         // maxZoom: 14,
+                //         animate: true,
+                //         duration: 1 // Duration in seconds
+                //     });
+                // }
             });
 
         }
@@ -353,7 +395,7 @@
                     layers.eachLayer(function (layer) {
 
                         var editedGeoJson = layer.toGeoJSON();
-                        
+
                         // Convert edited GeoJSON to WKT
                         var latLngs = layer.getLatLngs()[0];
 
@@ -367,7 +409,7 @@
                         }).join(", ");
 
                         var wkt = `POLYGON((${coordinates}))`;
-                        
+
                         $('#hdnMapdata').val(wkt);
                     });
                 });
@@ -377,7 +419,7 @@
                 });
             });
         }
-     
+
 
         function ConvertGeoJSONtoWKT(geoJsonString) {
 
