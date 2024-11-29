@@ -136,7 +136,9 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             //'<button class="btn btn-block btn-primary mb-3" onclick="' + onclickPartial + '()"><i class="fa fa-plus me-2"></i>Add New</button>',
 
                         ],
-
+                        createdRow: function (row, data, dataIndex) {
+                            $(row).attr('data-id', data.id);
+                        },
                         initComplete: function () {
 
                             // Create custom dropdown HTML with icons and a non-blank "Export" option
