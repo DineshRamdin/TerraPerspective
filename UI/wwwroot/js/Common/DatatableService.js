@@ -56,6 +56,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                 //set width of action column
                                 width: "10%",
                                 render: function (data, type, full, meta) {
+
                                     //view button
                                     var view = '<a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="View"><i class="fa fa-eye text-secondary ms-1"></i></a> |';
                                     //edit button
@@ -84,7 +85,14 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                         btn += reset
                                     }
                                     if (showPreview == true) {
-                                        btn += preview
+                                        if (tableID == "ReportsTable") {
+                                            if (full.isImage == true) {
+                                                btn += preview
+                                            }
+                                        }
+                                        else {
+                                            btn += preview
+                                        }
                                     }
 
                                     data = '<div class="text-nowrap">' + btn + '</div>';

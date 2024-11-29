@@ -7,21 +7,29 @@
 
 <div class="outer_main">
 	<main class="">
-
 		<div class="report">
-
-			@for (int i = 0; i < Model.Count; i++)
+			@if (Model.Count > 0)
 			{
-				@if (Model[i].ReportImagebase64 == "")
+
+				@if (@Model[0].ReportImagebase64 == null)
 				{
-					<label>Image Not found</label>
+					@* <div style="text-align:center; padding-top: 60px; margin-right: 140px;">
+						<label>Image Not found</label>
+					</div> *@
+					<div>
+						<img src="~/image/default-profile.png" />
+					</div>
 				}
 				else
 				{
-					<div class="item @(i==0 ? "active":string.Empty)">
-						<img src="data:image/png;base64,@Model[i].ReportImagebase64" />
+					<div>
+						<img src="data:image/png;base64,@Model[0].ReportImagebase64" />
 					</div>
 				}
+			}
+			else
+			{
+				<label>Image Not found</label>
 			}
 
 		</div>

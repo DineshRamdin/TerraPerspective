@@ -45,7 +45,7 @@ namespace BL.Services.Administration
                                                Name = a.Name,
                                                Type = a.Type,
                                                ReportImagebase64 = a.ReportImagebase64,
-                                               IsImage = a.ReportImagebase64 == "" ? false : true,
+                                               IsImage = a.ReportImagebase64 == null ? false : true,
 
                                            }).ToList();
 
@@ -78,7 +78,7 @@ namespace BL.Services.Administration
                               Name = a.Name,
                               Type = a.Type,
                               ReportImagebase64 = a.ReportImagebase64,
-                              IsImage = a.ReportImagebase64 == "" ? false : true,
+                              IsImage = a.ReportImagebase64 == null ? false : true,
                           }).FirstOrDefault();
 
                 if (result == null)
@@ -226,7 +226,7 @@ namespace BL.Services.Administration
                               Type = a.Type,
                               Name = a.Name,
                               ReportImagebase64 = a.ReportImagebase64,
-                              IsImage = a.ReportImagebase64 == "" ? false : true,
+                              IsImage = a.ReportImagebase64 == null ? false : true,
 
                           }).ToList();
                 dto.Data = result;
