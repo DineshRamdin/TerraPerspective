@@ -152,5 +152,89 @@ namespace UI.Controllers
 			}
 		}
 
+
+		public ActionResult<BaseResponseDTO<List<MainMenuDTO>>> GetMenu()
+		{
+			try
+			{
+				ISession session = HttpContext.Session;
+				string RoleId = HttpContext.Session.GetString("RoleId");
+				string UserId = HttpContext.Session.GetString("UserId");
+				return Ok(_AccessRightsService.getAccessRightByUserRoleId(RoleId, UserId));
+
+			}
+			catch (Exception ex)
+			{
+
+				return BadRequest();
+
+			}
+		}
+		//public ActionResult<BaseResponseDTO<bool>> Delete([FromBody] string del)
+		//{
+		//	try
+		//	{
+		//		return Ok(_AccessRightsService.Delete(del));
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		return BadRequest();
+		//	}
+		//}
+
+		//public ActionResult<BaseResponseDTO<bool>> createUpdateMenu(MenuDTO dataToSave)
+		//{
+		//	try
+		//	{
+		//		return Ok(_AccessRightsService.createUpdateMenu(dataToSave));
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		return BadRequest();
+		//	}
+		//}
+		//public ActionResult<BaseResponseDTO<List<MenuDTO>>> GetMenuList()
+		//{
+		//	try
+		//	{
+		//		BaseResponseDTO<List<MenuDTO>> UserList = new BaseResponseDTO<List<MenuDTO>>();
+		//		UserList = _AccessRightsService.GetMenuList();
+		//		return Ok(UserList);
+
+
+		//	}
+		//	catch (Exception ex)
+		//	{
+
+		//		return BadRequest();
+
+		//	}
+		//}
+		//[HttpPost]
+		//public ActionResult GetMenuById(string dto)
+		//{
+		//	try
+		//	{
+		//		if (string.IsNullOrEmpty(dto))
+		//		{
+		//			MenuDTO dt = new MenuDTO();
+		//			return PartialView("~/Views/Modules/Access/Menu/MenuAddEdit.cshtml", dt);
+		//		}
+		//		else
+		//		{
+		//			BaseResponseDTO<MenuDTO> dt = new BaseResponseDTO<MenuDTO>();
+		//			dt = new AccessRightService().GetMenuById(dto.Data);
+		//			return PartialView("~/Views/Modules/Access/Menu/MenuAddEdit.cshtml", dt.Data);
+		//		}
+
+		//	}
+		//	catch (Exception ex)
+		//	{
+
+		//		return BadRequest();
+
+		//	}
+		//}
+
 	}
 }

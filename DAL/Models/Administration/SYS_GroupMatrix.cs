@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Models.Administration
 {
-	public class SYS_GroupMatrix
+	public class SYS_GroupMatrix : BaseAuditModel, IAuditable
 	{
 		[Key]
 		public long GMID { get; set; }

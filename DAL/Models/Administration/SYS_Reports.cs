@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace DAL.Models.Administration
 {
-	public class SYS_GroupMatrixUser : BaseAuditModel, IAuditable
+	public class SYS_Reports : BaseAuditModel, IAuditable
 	{
 		[Key]
-		public long MID { get; set; }
-		public long IID { get; set; } //USER Id
-		public long GMID { get; set; }//MATRIX Id
+		public long Id { get; set; }		
+		public string Name { get; set; }
+		public string Type { get; set; }
+		
 	}
 }

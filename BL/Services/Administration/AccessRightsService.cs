@@ -704,5 +704,98 @@ namespace BL.Services.Administration
 			return BaseDtoAccessRights;
 		}
 
+		public BaseResponseDTO<List<MainMenuDTO>> getAccessRightByUserRoleId(string RoleId, string userId)
+		{
+			BaseResponseDTO<List<MainMenuDTO>> dto = new BaseResponseDTO<List<MainMenuDTO>>();
+
+			try
+			{
+				//    DateTime time = DateTime.Now;
+				List<MainMenuDTO> GARDL = (from a in context.SYS_AccessRights
+											   // join b in context.NPF_SYS_AccessRightsDetails on a.id equals b.AccessRights.id
+										   where a.Role.Id == RoleId && a.Module.ParentId == null && a.DeleteStatus == false && a.hasRight == true
+										   select new MainMenuDTO
+										   {
+											   Id = a.Module.Id,
+											   Name = a.Module.DisplayName,
+											   Icon = a.Module.Icon,
+											   Order = a.Module.Order,
+											   ParentId = a.Module.ParentId,
+											   Url = a.Module.Url,
+											   SubMenu = (from c in context.SYS_AccessRights
+															  //  join d in context.NPF_SYS_AccessRightsDetails on c.id equals d.AccessRights.id
+														  where c.Role.Id == RoleId && c.Module.ParentId == a.Module.Id && c.DeleteStatus == false && c.hasRight == true
+														  select new SubMenuDTO
+														  {
+															  Id = c.Module.Id,
+															  Name = c.Module.DisplayName,
+															  Icon = c.Module.Icon,
+															  Order = c.Module.Order,
+															  ParentId = c.Module.ParentId,
+															  Url = c.Module.Url,
+															  Child = (from e in context.SYS_AccessRights
+																		   //   join f in context.NPF_SYS_AccessRightsDetails on e.id equals f.AccessRights.id
+																	   where e.Role.Id == RoleId && e.Module.ParentId == c.Module.Id && e.DeleteStatus == false && e.hasRight == true
+																	   select new ChildDTO
+																	   {
+																		   Id = e.Module.Id,
+																		   Name = e.Module.DisplayName,
+																		   Icon = e.Module.Icon,
+																		   Order = e.Module.Order,
+																		   ParentId = e.Module.ParentId,
+																		   Url = e.Module.Url
+																	   })/*.GroupBy(p1 => p1.Id).Select(g1 => g1.First())*/.OrderBy(x => x.Order).ToList().ToList()
+														  })/*.GroupBy(p2 => p2.Id).Select(g2 => g2.First())*/.OrderBy(x => x.Order).ToList().ToList()
+										   }).GroupBy(p3 => p3.Id).Select(g3 => g3.First()).ToList();
+				
+				dto.Data = GARDL.OrderBy(x => x.Order).ToList();
+				dto.TotalItems = GARDL.Count();
+				dto.QryResult = new QueryResult().SUCEEDED;
+
+			}
+			catch (Exception ex)
+			{
+				//  dto.Data = new List<AccessRightsDTO>();
+				dto.TotalItems = 0;
+				dto.ErrorMessage = ex.ToString();
+				dto.QryResult = new QueryResult().FAILED;
+			}
+
+			return dto;
+		}
+
+		public BaseResponseDTO<bool> Delete(string dataToDelId,string Token)
+		{
+			BaseResponseDTO<bool> dto = new BaseResponseDTO<bool>();
+			try
+			{
+				if (context.UserRoles.Any(x => x.RoleId == dataToDelId))
+				{
+					dto.Data = false;
+					dto.ErrorMessage = "Role is currently assigned. Cannot be deleted";
+					dto.QryResult = new QueryResult().FAILED;
+					return dto;
+				}
+				DAL.Models.ApplicationRole AR = context.Roles.Where(x => x.Id == dataToDelId).FirstOrDefault();
+				AR.DeleteStatus = true;
+				AR.Name = AR.Name + "_Deleted" + DateTime.Now.ToString();
+				AR.NormalizedName = AR.NormalizedName + "_DELETED" + DateTime.Now.ToString();
+				AR.UpdatedDate = DateTime.Now;
+				AR.UpdatedBy = Guid.Parse(Token);
+				context.Update(AR);
+				context.SaveChanges();
+
+				dto.Data = true;
+				dto.QryResult = new QueryResult().SUCEEDED;
+
+			}
+			catch (Exception ex)
+			{
+				dto.Data = false;
+				dto.QryResult = new QueryResult().FAILED;
+			}
+
+			return dto;
+		}
 	}
 }

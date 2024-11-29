@@ -26,12 +26,12 @@ namespace BL.Services.Common
 					claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
 					if (claimsPrincipal == null)
 					{
-						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@naveo.mu").Select(x => x.Id).FirstOrDefault();
+						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
 					}
 				}
 				else
 				{
-					claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@naveo.mu").Select(x => x.Id).FirstOrDefault();
+					claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
 				}
 				string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
 				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
@@ -40,8 +40,7 @@ namespace BL.Services.Common
 				//      where a.IID == UsrId select a.GMID).ToList();
 				List<MatrixListDTO> MLL = (from a in context.SYS_GroupMatrixUser
 										   join b in context.SYS_GroupMatrix on a.GMID equals b.GMID
-										   where a.IID == UsrId 
-										   //&& a.DeleteStatus == false && b.DeleteStatus == false
+										   where a.IID == UsrId && a.DeleteStatus == false && b.DeleteStatus == false
 										   select new MatrixListDTO()
 										   {
 											   GMID = a.GMID,
@@ -74,8 +73,7 @@ namespace BL.Services.Common
 			try
 			{
 				ml = (from a in context.SYS_GroupMatrix
-					  where a.ParentGMID == GMID 
-					  //&& a.DeleteStatus == false
+					  where a.ParentGMID == GMID && a.DeleteStatus == false
 					  select new MatrixListDTO()
 					  {
 						  GMID = a.GMID,

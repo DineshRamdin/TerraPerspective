@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Models.Administration
 {
-	public class SYS_RowAccess
+	public class SYS_RowAccess : BaseAuditModel, IAuditable
 	{
 		public long Id { get; set; }
 		public long ModuleId { get; set; }
