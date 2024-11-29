@@ -100,7 +100,7 @@ namespace BL.Services.Common
                         context.SYS_UserDetails.Add(nusr);
                         context.SaveChanges();
 
-                        userManager.AddToRoleAsync(user, "Administrator").Wait();
+                        userManager.AddToRoleAsync(user, "SuperAdministrator").Wait();
                     }
                 }
             }
