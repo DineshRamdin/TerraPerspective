@@ -260,9 +260,9 @@
 
                 // Fit the map to the accumulated bounds
                 if (bounds.isValid()) {
-                    map.fitBounds(bounds, {
+                    map.flyToBounds(bounds, {
                         padding: [50, 50],  // Adds padding around the bounds
-                         // maxZoom: 12,        // Sets a maximum zoom level
+                        // maxZoom: 12,        // Sets a maximum zoom level
                         animate: true,       // Animates the zoom transition
                         duration: 1 // Duration in seconds
                     });
