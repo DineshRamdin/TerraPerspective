@@ -1,0 +1,38 @@
+﻿@{
+	Layout = "_BlankLayout";
+	ViewData["Title"] = "Preview";
+}
+@model List<BL.Models.Administration.ReportsDTO>
+
+
+<div class="outer_main">
+	<main class="">
+		<div class="report">
+			@if (Model.Count > 0)
+			{
+
+				@if (@Model[0].ReportImagebase64 == null)
+				{
+					@* <div style="text-align:center; padding-top: 60px; margin-right: 140px;">
+						<label>Image Not found</label>
+					</div> *@
+					<div>
+						<img src="~/image/default-profile.png" />
+					</div>
+				}
+				else
+				{
+					<div>
+						<img src="data:image/png;base64,@Model[0].ReportImagebase64" />
+					</div>
+				}
+			}
+			else
+			{
+				<label>Image Not found</label>
+			}
+
+		</div>
+
+	</main>
+</div>

@@ -242,5 +242,40 @@ namespace BL.Services.Administration
             return BaseDto;
         }
 
+        public BaseResponseDTO<List<GeomertyDataDTO>> GetZoneAutocompleteData(string term)
+        {
+            BaseResponseDTO<List<GeomertyDataDTO>> dto = new BaseResponseDTO<List<GeomertyDataDTO>>();
+            GeomertyDataDTO user = new GeomertyDataDTO();
+            QueryResult queryResult = new QueryResult();
+            string errorMsg = "No Data Found";
+
+            try
+            {
+                string sQryResult = queryResult.FAILED;
+
+                List<GeomertyDataDTO> result = context.SYS_GeomertyData
+                                         .Where(a => a.DeleteStatus == false && a.Zone.Contains(term))
+                                         .Select(a => new GeomertyDataDTO
+                                         {
+                                             Id = a.Id,
+                                             Zone = a.Zone,
+                                             Type = a.Type,
+                                             FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
+                                         })
+                                         .ToList();
+                dto.Data = result;
+                dto.QryResult = queryResult.SUCEEDED;
+
+            }
+            catch (Exception ex)
+            {
+                dto.Data = new List<GeomertyDataDTO>();
+                dto.ErrorMessage = errorMsg;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+
+            return dto;
+        }
+
     }
 }

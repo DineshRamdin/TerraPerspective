@@ -686,10 +686,26 @@ namespace BL.Services.Common
 				});
 				context.SaveChanges();
 			}
+            #endregion
+            #region Reports
+            if (!context.SYS_Modules.Any(x => x.Name == "Report"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "Report",
+                    Url = "Reports/index",
+                    Order = 0,
+                    Icon = "fas fa-chart-pie",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now
 
-			#endregion
 
-			List<SYS_Modules> dtl = context.SYS_Modules.Where(x => x.DisplayName == null).ToList();
+                });
+                context.SaveChanges();
+            }
+            #endregion
+
+            List<SYS_Modules> dtl = context.SYS_Modules.Where(x => x.DisplayName == null).ToList();
 			if (dtl.Count > 0)
 			{
 				foreach (SYS_Modules dt in dtl)
