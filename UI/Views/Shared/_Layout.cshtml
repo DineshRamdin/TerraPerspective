@@ -143,6 +143,7 @@
 	<script>
 		var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';
 		var LogOutURLForCP = '@Url.Action("Logout", "Base")';
+		var GetMenuUrl = '@Url.Action("GetMenu", "AccessRights")';
 
 		$(document).ready(function () {
 			$.validator.setDefaults({
@@ -159,6 +160,9 @@
 					$(element).removeClass('is-invalid'); // Remove invalid class when the input is valid
 				}
 			});
+
+			// Load the menu on page load
+			loadMenu();
 		});
 
 		// $(document).on('click', '.nav-link', function (e) {

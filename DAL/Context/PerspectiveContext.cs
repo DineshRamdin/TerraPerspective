@@ -159,7 +159,7 @@ namespace DAL.Context
             }
             else
             {
-                claimsPrincipal = this.Users.Where(x => x.Email.ToLower() == "admin@naveo.mu").Select(x => x.Id).FirstOrDefault();
+                claimsPrincipal = this.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
             }
             Guid gidc = Guid.Empty;
             DateTime dtc = DateTime.MinValue;
