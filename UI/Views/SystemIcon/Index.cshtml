@@ -72,10 +72,10 @@
 						// Check if the data (base64 string) is valid
 						if (data && data.trim() !== "") {
 							// Render the base64 image in an <img> tag
-							return '<img src="data:image/png;base64,' + data + '" alt="System Icon" style="width: 50px; height: 50px;" />';
+							return '<img src="data:image/png;base64,' + data + '" alt="System Icon" style="width: 35px; height: 35px;" />';
 						} else {
 							// If no valid base64 string, return a placeholder or empty image
-							return '<img src="~/image/default-profile.png" alt="No Icon" style="width: 50px; height: 50px;" />';
+							return '<img src="~/image/default-profile.png" alt="No Icon" style="width: 35px; height: 35px;" />';
 						}
 					}
 				},
