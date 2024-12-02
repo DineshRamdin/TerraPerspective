@@ -18,5 +18,6 @@ namespace BL.Models.Administration
         public string? Role { get; set; }
         public string? RoleName { get; set; }
         public string? ProfileImagebase64 { get; set; }
+        public bool? IsImage { get; set; }
     }
 }

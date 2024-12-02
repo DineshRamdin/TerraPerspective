@@ -25,6 +25,22 @@ namespace UI.Controllers
             return View();
         }
 
+        public IActionResult AllSystemIcon()
+        {
+            try
+            {
+                BaseResponseDTO<List<SystemIconDTO>> dt = new BaseResponseDTO<List<SystemIconDTO>>();
+                dt = service.GetAll();
+                return View(dt.Data);
+            }
+            catch (Exception)
+            {
+                //return BadRequest();
+                return View();
+            }
+            //return View();
+        }
+
         [HttpPost]
         public ActionResult<BaseResponseDTO<List<SystemIconDTO>>> GetAll()
         {

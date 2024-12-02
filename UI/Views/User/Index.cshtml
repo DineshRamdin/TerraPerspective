@@ -55,6 +55,7 @@
 		var getUserDropDownUrl = '@Url.Action("getUserDropDown", "User")';
 		var CreateUpdateUserUrl = '@Url.Action("CreateUpdate", "User")';
 		var ResetUserPasswordUrl = '@Url.Action("ResetUserPassword", "User")';
+		var UserPreviewUrl = '@Url.Action("Preview", "User")';
 
 
 		$(function () {
@@ -71,9 +72,23 @@
 				{ data: 'othername', title: 'Othername' },
 				{ data: 'email', title: 'Email' },
 				{ data: 'roleName', title: 'Role Name' },
+				{
+					data: 'profileImagebase64',
+					title: 'Profile Image',
+					render: function (data, type, row, meta) {
+						// Check if the data (base64 string) is valid
+						if (data && data.trim() !== "") {
+							// Render the base64 image in an <img> tag
+							return '<img src="data:image/png;base64,' + data + '" alt="System Icon" style="width: 35px; height: 35px;" />';
+						} else {
+							// If no valid base64 string, return a placeholder or empty image
+							return '<img src="" />';
+						}
+					}
+				},
 			];
 
-				initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false,true,true,true,false,null,true,null);
+				initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false,true,true,true,true,'PreviewUserModal',true,null);
 
 			// $.ajax({
 			//     url: GetAllUserUrl,
@@ -159,6 +174,11 @@
 			// }).done(function () {
 			// });
 		}
+
+		 function PreviewUserModal(id) {
+			window.open(UserPreviewUrl + "?id=" + id, '_blank');
+		}
+
 		function openUserModal(id) {
 			var dataObject = {};
 			dataObject.id = id;

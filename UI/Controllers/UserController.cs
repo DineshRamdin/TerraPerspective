@@ -25,6 +25,16 @@ namespace UI.Controllers
             return View();
         }
 
+        public IActionResult Preview(string Id)
+        {
+            BaseResponseDTO<List<UserDTO>> dt = new BaseResponseDTO<List<UserDTO>>();
+            dt.Data = new List<UserDTO>();
+            if (!string.IsNullOrEmpty(Id))
+            {
+                dt = service.GetPreviewById(Id);
+            }
+            return View(dt.Data);
+        }
 
         [HttpPost]
         public ActionResult<BaseResponseDTO<List<UserDTO>>> GetAll()
@@ -151,7 +161,7 @@ namespace UI.Controllers
                     ISession session = HttpContext.Session;
                     string Id = HttpContext.Session.GetString("UserId");
                     BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
-                    if (dto!=null)
+                    if (dto != null)
                     {
                         dt = await service.ChangeUserPassword(dto, Id, _userManager);
                     }
