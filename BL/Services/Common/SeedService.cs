@@ -563,21 +563,19 @@ namespace BL.Services.Common
 			}
 
 
-			#endregion
+            #endregion
 
-			#region TestGeoMetreData
-			if (!context.SYS_Modules.Any(x => x.Name == "Test Geomerty Data"))
+            #region Zone Management
+            if (!context.SYS_Modules.Any(x => x.Name == "Zone Management"))
 			{
 				context.SYS_Modules.Add(new SYS_Modules()
 				{
-					Name = "Test Geomerty Data",
-					Url = "TestGeomertyData/index",
+					Name = "Zone Management",
+					Url = "ZoneManagement/index",
 					Order = 0,
 					Icon = "fas fa-cog",
 					CreatedBy = Guid.Parse(user.Id),
 					CreatedDate = DateTime.Now
-
-
 				});
 				context.SaveChanges();
 			}

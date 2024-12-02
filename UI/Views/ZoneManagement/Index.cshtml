@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Test Geomerty Data";
+    ViewData["Title"] = "Zone Management";
 }
 
 <link href="~/plugins/leaflet-1.7.1/leaflet.css" rel="stylesheet" />
@@ -23,7 +23,7 @@
             background: #eee;
         }
 
-    #GeomertyDataTable > tbody > .selected-row {
+    #ZoneManagementTable > tbody > .selected-row {
         background: #cce5ff;
         border-color: #cce5ff;
     }
@@ -48,12 +48,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Test Geomerty Data</h1>
+                <h1 class="m-0">Zone Management</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-                    <li class="breadcrumb-item active">Test Geomerty Data</li>
+                    <li class="breadcrumb-item active">Zone Management</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -70,18 +70,23 @@
                     <div class="col-10">
                     </div>
                     <div class="col-2">
-                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openGeomertyDataModal(0)">Add</button>
+                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openZoneManagementModal(0)">Add</button>
                     </div>
                 </div>
                 <div class="row">
-                    @*  <div class="col-2 mb-10">
+                    @*  <div class="col-2 mb-3">
                     <div id="Zonejstree"></div>
                     </div> *@
-                    <div class="col-6  mb-10">
-                        <table id="GeomertyDataTable" class="table table-bordered table-striped"></table>
+                    <div class="col-6  mb-3">
+                        <div class="col-12">
+                            <table id="ZoneManagementTable" class="table table-bordered table-striped"></table>
+                        </div>
+                        <div class="col-12" style="display:none" id="AddEditZone">
+                            <partial name="_AddZone.cshtml" />
+                        </div>
                     </div>
 
-                    <div class="col-6  mb-10">
+                    <div class="col-6  mb-3">
                         <div id="map"></div>
                     </div>
                 </div>
@@ -90,9 +95,9 @@
     </div>
 </section>
 
-<div class="modal fade" id="AddGeomertyDataModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <partial name="_AddGeomertyData.cshtml" />
-</div>
+@* <div class="modal fade" id="AddZoneManagementModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddZoneManagement.cshtml" />
+</div> *@
 
 @section scripts
 {
@@ -102,42 +107,48 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
 
-        var GetAllTestGeomertyDataUrl = '@Url.Action("GetAll", "TestGeomertyData")';
-        var GetSelectedZoneGeomertyDataUrl = '@Url.Action("GetSelectedZoneGeomertyData", "TestGeomertyData")';
-        var GetAllZoneUrl = '@Url.Action("GetAllZone", "TestGeomertyData")';
-        var CreateUpdateGeomertyDataUrl = '@Url.Action("CreateUpdate", "TestGeomertyData")';
-        var GeomertyDataGetByIdUrl = '@Url.Action("GetById", "TestGeomertyData")';
-        var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "TestGeomertyData")';
+        var GetAllZoneManagementUrl = '@Url.Action("GetAll", "ZoneManagement")';
+        var GetSelectedZoneDataUrl = '@Url.Action("GetSelectedZoneData", "ZoneManagement")';
+        var GetAllZoneUrl = '@Url.Action("GetAllZone", "ZoneManagement")';
+        var CreateUpdateZoneManagementUrl = '@Url.Action("CreateUpdate", "ZoneManagement")';
+        var ZoneManagementGetByIdUrl = '@Url.Action("GetById", "ZoneManagement")';
+        var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "ZoneManagement")';
 
         $(function () {
             $('.nav-link').removeClass('active');
-            $('#liTestGeomertyDatamenu').addClass('active');
+            $('#liZoneManagementmenu').addClass('active');
 
             // BindJsTreeData();
             initMap();
-            GetAllGeomertyData();
+            GetAllZoneManagement();
             // $('#Zonejstree').on('changed.jstree', function (e, data) {
             //     if (data.action != 'ready') { // Ensures it was triggered by node selection Or deselection
             //         initMap();
             //     }
             // });
 
-            $("#GeomertyDataTable").on('click', 'tr', function () {
-                $("#GeomertyDataTable").find(".selected-row").removeClass("selected-row");
+            $("#ZoneManagementTable").on('click', 'tr', function (event) {
+                 var target = $(event.target); // Get the clicked element
+                 console.log("targe",target.is("td"));
+    if(target.is("td"))
+    {
+
+                $("#ZoneManagementTable").find(".selected-row").removeClass("selected-row");
                 var Id = $(this).attr("data-id")
                 $(this).addClass("selected-row")
                 initMap(Id);
+    }
             });
 
         });
-        function GetAllGeomertyData() {
+        function GetAllZoneManagement() {
             var columnList = [
                 { data: 'id', title: 'Id', visible: false },
                 { data: 'zone', title: 'Zone' },
                 { data: 'type', title: 'Type' },
             ];
 
-            initializeDataGrid('GeomertyDataTable', 'openGeomertyDataModal', GetAllZoneUrl, columnList, false, false, true, false);
+            initializeDataGrid('ZoneManagementTable', 'openZoneManagementModal', GetAllZoneUrl, columnList, false, false, true, false);
 
         }
         function BindJsTreeData() {
@@ -207,7 +218,7 @@
             dataObject.selectedZone = selectedZone == undefined ? "" : selectedZone;
 
             $.ajax({
-                url: selectedZone == undefined ? GetAllTestGeomertyDataUrl : GetSelectedZoneGeomertyDataUrl,
+                url: selectedZone == undefined ? GetAllZoneManagementUrl : GetSelectedZoneDataUrl,
                 type: "POST",
                 data: dataObject,  // Send data if needed
                 beforeSend: function () {
@@ -224,15 +235,10 @@
                 }
             }).done(function () {
 
-                if (map) {
-                    map.eachLayer(function (layer) {
-                        if (!layer._url) {
-                            map.removeLayer(layer); // Remove all layers except the tile layer
-                        }
-                    });
+               if (map) {
+                    map.remove(); // Destroy the existing map instance if it exists
+                    map = null;    // Set it to null to ensure a clean start
                 }
-                else {
-
                     map = L.map('map').setView([-20.081670, 57.598266], 10);
 
                     const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -311,12 +317,11 @@
 
                             return container;
                         }
-                    });
+                       });
 
                     // Add the custom search control to the map
                     map.addControl(new searchControl({ position: 'topright' }));
 
-                }
 
                 var bounds = L.latLngBounds();
 
@@ -345,25 +350,24 @@
 
         }
 
-        let Createmap;
-        function openGeomertyDataModal(id) {
+        function openZoneManagementModal(id) {
             var dataObject = {};
             dataObject.id = id;
             var existingGeoJson = "";
             $.ajax({
-                url: GeomertyDataGetByIdUrl,
+                url: ZoneManagementGetByIdUrl,
                 type: "POST",
                 data: dataObject,  // Send data if needed
                 beforeSend: function () {
-                    ClearGeomertyDataModal();
+                    ClearZoneManagementModal();
                 },
                 success: function (response) {
                     if (response.data) {
                         console.log("response.data", response.data);
                         if (response.data.id > 0)
-                            $("#h4GeomertyDataTitle").html("Modify Geomerty Data");
+                            $("#h4ZoneManagementTitle").html("Modify Geomerty Data");
                         else {
-                            $("#h4GeomertyDataTitle").html("Add Geomerty Data");
+                            $("#h4ZoneManagementTitle").html("Add Geomerty Data");
                         }
 
                         $("#hdnId").val(response.data.id);
@@ -387,25 +391,26 @@
                 }
             }).done(function () {
 
-                $('#AddGeomertyDataModal').modal('show');
-                $("#frnGeomertyDataCreate").validate({}).resetForm();
+                // $('#AddZoneManagementModal').modal('show');
+                $("#AddEditZone").css('display','');
+                $("#frnZoneManagementCreate").validate({}).resetForm();
 
-                if (Createmap) {
-                    Createmap.remove(); // Destroy the existing map instance if it exists
-                    Createmap = null;    // Set it to null to ensure a clean start
+                if (map) {
+                    map.remove(); // Destroy the existing map instance if it exists
+                    map = null;    // Set it to null to ensure a clean start
                 }
 
                 // Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
-                Createmap = L.map('Createmap').setView([-20.081670, 57.598266], 12);
+                map = L.map('map').setView([-20.081670, 57.598266], 12);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19
-                }).addTo(Createmap);
+                }).addTo(map);
 
 
                 // Add drawing control
                 var drawnItems = new L.FeatureGroup();
-                Createmap.addLayer(drawnItems);
+                map.addLayer(drawnItems);
 
                 var drawControl = new L.Control.Draw({
                     edit: {
@@ -421,7 +426,7 @@
                         circlemarker: false
                     }
                 });
-                Createmap.addControl(drawControl);
+                map.addControl(drawControl);
 
                 if (existingGeoJson) {
                     L.geoJSON(existingGeoJson).eachLayer(function (layer) {
@@ -430,7 +435,7 @@
                 }
 
                 // Handle the creation of polygons
-                Createmap.on(L.Draw.Event.CREATED, function (event) {
+                map.on(L.Draw.Event.CREATED, function (event) {
                     var layer = event.layer;
                     drawnItems.clearLayers(); // Clear any previously drawn shapes
                     drawnItems.addLayer(layer);
@@ -451,7 +456,7 @@
                 });
 
                 // Handle edit event
-                Createmap.on(L.Draw.Event.EDITED, function (event) {
+                map.on(L.Draw.Event.EDITED, function (event) {
                     var layers = event.layers;
                     layers.eachLayer(function (layer) {
 
@@ -475,9 +480,9 @@
                     });
                 });
 
-                $('#AddGeomertyDataModal').on('shown.bs.modal', function () {
-                    Createmap.invalidateSize();
-                });
+                // $('#AddZoneManagementModal').on('shown.bs.modal', function () {
+                //     Createmap.invalidateSize();
+                // });
             });
         }
 
@@ -504,19 +509,29 @@
             var wkt = `POLYGON((${wktCoordinates.join(", ")}))`;
             return wkt;
         }
-        function ClearGeomertyDataModal() {
+        function ClearZoneManagementModal() {
             $('#txtZone').val("");
             $('#hdnMapdata').val("");
 
-            $("#h4GeomertyDataTitle").html("Add Geomerty Data");
+            $("#h4ZoneManagementTitle").html("Add Geomerty Data");
             $("#hdnId").val("0");
             $('#txtType').val("");
         }
-        function SaveGeomertyData() {
-            // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
-            let valid = formValidation(["txtZone", "hdnMapdata"]);
 
-            if (valid) {
+        function CloseZoneManagement()
+        {
+            ClearZoneManagementModal();
+            $("#AddEditZone").css('display','none');
+            // $('#AddZoneManagementModal').modal('hide');
+            // initMap();
+            GetAllZoneManagement();
+            initMap();
+        }
+        function SaveZoneManagement() {
+            // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
+            let valid = formValidation(["txtType","txtZone"]);
+            
+            if (valid && $("#hdnMapdata").val() !="") {
                 var dataObject = {};
                 dataObject.Id = $("#hdnId").val();
                 dataObject.Zone = $("#txtZone").val();
@@ -526,7 +541,7 @@
 
 
                 $.ajax({
-                    url: CreateUpdateGeomertyDataUrl,
+                    url: CreateUpdateZoneManagementUrl,
                     type: "POST",
                     data: dataObject,  // Send data if needed
                     beforeSend: function () {
@@ -535,9 +550,10 @@
                     success: function (response) {
                         if (response.data) {
                             toastr.success(response.errorMessage);
-                            $('#AddGeomertyDataModal').modal('hide');
+                            $("#AddEditZone").css('display','none');
+                            // $('#AddZoneManagementModal').modal('hide');
                             // initMap();
-                            GetAllGeomertyData();
+                            GetAllZoneManagement();
                             initMap();
                         }
                         else {
@@ -554,7 +570,14 @@
                 });
             }
             else {
+                if(!valid)
+                {
                 toastr.warning("Please fill in required field(s)");
+                }
+                else
+                {
+                    toastr.warning("Please select Map");
+                }
             }
 
         }

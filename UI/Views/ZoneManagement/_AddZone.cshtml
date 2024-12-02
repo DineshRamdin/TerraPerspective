@@ -1,0 +1,22 @@
+﻿<form id="frnZoneManagementCreate">
+    <input type="hidden" id="hdnId" value="" />
+    <div class="row">
+        <div class="col-12 form-group">
+            <label>Type<span class="red-required">*</span></label>
+            <input type="text" id="txtType" class="form-control" placeholder="Type" required />
+        </div>
+        <div class="col-12 form-group">
+            <label>Zone<span class="red-required">*</span></label>
+            <input type="text" id="txtZone" class="form-control" placeholder="Zone" required />
+        </div>
+
+        <div class="col-12">
+            <input type="hidden" id="hdnMapdata" required />
+        </div>
+
+        <div class="col-12 mb-3">
+            <button type="button" class="btn btn-primary" onclick="SaveZoneManagement();">Save</button>
+            <button type="button" class="btn btn-default" onclick="CloseZoneManagement();">Close</button>
+        </div>
+    </div>
+</form>

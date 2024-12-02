@@ -13,12 +13,12 @@ using UI.Controllers.Common;
 
 namespace UI.Controllers
 {
-    public class TestGeomertyDataController : BaseController
+    public class ZoneManagementController : BaseController
     {
-        public GeomertyDataService service;
-        public TestGeomertyDataController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext) : base(userManager, signInManager, rolemanager, Dbcontext)
+        public ZoneManagementService service;
+        public ZoneManagementController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext) : base(userManager, signInManager, rolemanager, Dbcontext)
         {
-            service = new GeomertyDataService();
+            service = new ZoneManagementService();
         }
 
         public IActionResult Index()
@@ -27,11 +27,11 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<BaseResponseDTO<List<GeomertyDataDTO>>> GetAll()
+        public ActionResult<BaseResponseDTO<List<ZoneManagementDTO>>> GetAll()
         {
             try
             {
-                BaseResponseDTO<List<GeomertyDataDTO>> dt = new BaseResponseDTO<List<GeomertyDataDTO>>();
+                BaseResponseDTO<List<ZoneManagementDTO>> dt = new BaseResponseDTO<List<ZoneManagementDTO>>();
 
                 dt = service.GetAll();
 
@@ -44,13 +44,13 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<BaseResponseDTO<List<GeomertyDataDTO>>> GetSelectedZoneGeomertyData(string selectedZone = "")
+        public ActionResult<BaseResponseDTO<List<ZoneManagementDTO>>> GetSelectedZoneData(string selectedZone = "")
         {
             try
             {
-                BaseResponseDTO<List<GeomertyDataDTO>> dt = new BaseResponseDTO<List<GeomertyDataDTO>>();
+                BaseResponseDTO<List<ZoneManagementDTO>> dt = new BaseResponseDTO<List<ZoneManagementDTO>>();
 
-                dt = service.GetSelectedZoneGeomertyData(selectedZone);
+                dt = service.GetSelectedZoneData(selectedZone);
 
                 return Ok(dt);
             }
@@ -78,12 +78,12 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponseDTO<GeomertyDataDTO>>> GetById(long Id)
+        public async Task<ActionResult<BaseResponseDTO<ZoneManagementDTO>>> GetById(long Id)
         {
             try
             {
-                BaseResponseDTO<GeomertyDataDTO> dt = new BaseResponseDTO<GeomertyDataDTO>();
-                dt.Data = new GeomertyDataDTO();
+                BaseResponseDTO<ZoneManagementDTO> dt = new BaseResponseDTO<ZoneManagementDTO>();
+                dt.Data = new ZoneManagementDTO();
                 if (Id > 0)
                 {
                     dt = service.GetById(Id);
@@ -97,7 +97,7 @@ namespace UI.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult<BaseResponseDTO<bool>>> CreateUpdate(GeomertyDataDTO dto)
+        public async Task<ActionResult<BaseResponseDTO<bool>>> CreateUpdate(ZoneManagementDTO dto)
         {
             try
             {
@@ -134,9 +134,9 @@ namespace UI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<BaseResponseDTO<List<GeomertyDataDTO>>> GetZoneAutocompleteData(string term)
+        public ActionResult<BaseResponseDTO<List<ZoneManagementDTO>>> GetZoneAutocompleteData(string term)
         {
-            BaseResponseDTO<List<GeomertyDataDTO>> dt = new BaseResponseDTO<List<GeomertyDataDTO>>();
+            BaseResponseDTO<List<ZoneManagementDTO>> dt = new BaseResponseDTO<List<ZoneManagementDTO>>();
 
             dt = service.GetZoneAutocompleteData(term);
 

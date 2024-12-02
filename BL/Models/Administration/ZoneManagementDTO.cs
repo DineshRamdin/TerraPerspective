@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BL.Models.Administration
 {
-    public class GeomertyDataDTO
+    public class ZoneManagementDTO
     {
         public long Id { get; set; }
         public string Zone { get; set; }
