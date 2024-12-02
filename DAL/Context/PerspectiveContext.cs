@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using DAL.Common;
 using DAL.Models.Administration;
+using System.Data;
 
 
 namespace DAL.Context
@@ -439,6 +440,28 @@ namespace DAL.Context
 
             fc.AuditEntries.AddRange(auditEntries);
             fc.SaveChangesAsync();
+        }
+        #endregion
+
+        #region Exec View
+        public DataTable ExecuteViewQuery(string query)
+        {
+            var dataTable = new DataTable();
+
+            using (var connection = Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+                    using (var reader = command.ExecuteReader())
+                    {
+                        dataTable.Load(reader);
+                    }
+                }
+            }
+
+            return dataTable;
         }
         #endregion
 

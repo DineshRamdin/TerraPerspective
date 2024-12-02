@@ -84,8 +84,9 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                     }
                                     if (showPreview == true) {
                                         if (tableID == "ReportsTable") {
-                                            if (full.isImage == true) {
-                                                btn += preview
+                                            // if (full.isImage == true) {
+                                            if (full.viewName !== "") {
+                                                btn += '| <a href="#" onclick="' + onclickPreview + '(\'' + full.viewName + '\')" title="Preview"><i class="fa fa-eye text-secondary ms-1"></i></a> ';//preview
                                             }
                                             //else if (=="PosterTable")
                                         }
@@ -95,7 +96,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                             }
                                             //else if (=="PosterTable")
                                         }
-                                        else if (tableID == "UserTable") {                                          
+                                        else if (tableID == "UserTable") {
                                             if (full.isImage == true) {
                                                 btn += preview
                                             }
@@ -372,4 +373,166 @@ function addDataToChild(d, rowIndex, childColumns) {
         "bPaginate": false,
         "columns": childColumns
     });
+}
+
+function initializeDataGridForViews(tableID, showExcel = true) {
+
+    if ($('#' + tableID).length > 0) { //check if table exists
+
+        var errorMessageColumnIndex = -1;
+        $('#' + tableID + ' th').each(function (index) {
+            var headerText = $(this).text().trim();
+            if (headerText === 'ErrorMessage') {
+                errorMessageColumnIndex = index;
+            }
+        });
+
+
+        $('#' + tableID).DataTable({ //init table                       
+            /* dom: '<"top"Bf>rt<"bottom"ip>', */
+            dom: '<"row"<"col-md-10"B><"col-md-2"f>>rtipl',
+            searching: true, //show search
+            paging: true, //no paging
+            processing: true, //processing
+            scrollY: 'auto', //fixed height
+            scrollCollapse: true,//scroll
+            order: [[0, 'desc']], //order
+            autoWidth: false,
+            lengthChange: false,
+            language: { // search anf info bars
+                search: '',
+                emptyTable: 'No data available',
+                searchPlaceholder: 'Search',
+                info: "Showing _TOTAL_ entries",
+                infoEmpty: "Showing 0 entries",
+                infoFiltered: "(filtered from _MAX_ entries)",
+            },
+            buttons: [
+                //Excel Export Button
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-file-excel me-2"></i>  Export Excel',
+                    className: 'btn-sm btn-c-secondary d-none excelbtn',
+                    exportOptions: {
+                        columns: ':visible:not(.sorting_disabled)'
+
+                    }
+                },
+                //PDF Export Button
+                {
+                    extend: 'pdf',
+                    text: '<i class="fa fa-file-pdf me-2"></i>  Export PDF',
+                    className: 'btn-sm btn-c-secondary d-none printbtn',
+                    exportOptions: {
+                        columns: ':visible:not(.sorting_disabled)'
+
+                    }
+                },
+                //CSV Export Button
+                {
+                    extend: 'csv',
+                    text: '<i class="fa fa-file-excel me-2"></i>  Export CSV',
+                    className: 'btn-sm btn-c-secondary d-none csvbtn',
+                    exportOptions: {
+                        columns: ':visible:not(.sorting_disabled)'
+
+                    }
+                },
+
+                //'<button class="btn btn-block btn-primary mb-3" onclick="' + onclickPartial + '()"><i class="fa fa-plus me-2"></i>Add New</button>',
+
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).attr('data-id', data.id);
+            },
+            initComplete: function () {
+
+                // Create custom dropdown HTML with icons and a non-blank "Export" option
+                var dropdownHtml = `
+                                    <div class="custom-dropdown">
+                                        <button id="dropdownButton" class="form-control btn-sm btn-info btn btn-secondary dropdown-toggle clsDownload" style="width: auto;">
+                                            Export
+                                        </button>
+                                        <div id="dropdownMenu" class="dropdown-menu-export-accesslog" style="display: none;">
+                                            <div class="dropdown-item" data-value="1"><i class="fa fa-file-pdf me-2"></i> PDF</div>
+                                            <div class="dropdown-item" data-value="2"><i class="fa fa-file-excel me-2"></i> Excel</div>
+                                            <div class="dropdown-item" data-value="3"><i class="fa fa-file-csv me-2"></i> CSV</div>
+                                        </div>
+                                    </div>
+                                `;
+
+                // Append the custom dropdown to the filter area
+                $('div.dataTables_filter').append(dropdownHtml);
+
+                // Toggle the dropdown when the button is clicked
+                $('#dropdownButton').on('click', function (e) {
+                    e.stopPropagation(); // Prevents event bubbling
+                    $('#dropdownMenu').toggle();
+                });
+
+                // Handle item selection when a dropdown item is clicked
+                $('#dropdownMenu .dropdown-item').on('click', function () {
+                    var value = $(this).data('value');
+
+                    if (value == '1') { // PDF Export
+                        $('.buttons-pdf').click();
+                    } else if (value == '2') { // Excel Export
+                        $('.buttons-excel').click();
+                    } else if (value == '3') { // CSV Export
+                        $('.buttons-csv').click();
+                    }
+
+                    // Hide the dropdown after selection
+                    $('#dropdownMenu').hide();
+                });
+
+                // Hover effect for dropdown items
+                $('#dropdownMenu .dropdown-item').hover(
+                    function () {
+                        $(this).css("background-color", "#f0f0f0");  // Hover color
+                    },
+                    function () {
+                        $(this).css("background-color", "");  // Reset background color
+                    }
+                );
+
+                $('div.dataTables_filter').css({
+                    'gap': '10px' // Adds space between elements (dropdown and buttons)
+                });
+            },
+
+
+        })//.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('div.dt-buttons').prepend($('.clsDownload'));
+        $('div.dt-buttons').css('float', 'inline-end');
+        $('.addbtn').css('border-radius', '.25rem');
+        $('.custom-class').removeClass('btn-secondary');
+        $('.dt-scroll-headInner table thead').addClass('custom-table');
+        $('.dataTables_filter').css('float', 'inline-start');
+        $('.dataTables_paginate').css('margin-top', '-30px');
+
+        if (showExcel) {
+            /*$('.excelbtn').removeClass('d-none');*/
+            $('.clsDownload').removeClass('d-none');
+
+        }
+        else {
+            /*$('.excelbtn').addClass('d-none');*/
+            $('.clsDownload').addClass('d-none');
+        }
+
+        if (errorMessageColumnIndex == 0) {
+            $('.clsDownload').addClass('d-none');
+            $('#' + tableID + '_previous').css('display', 'none');
+            $('#' + tableID + '_next').css('display', 'none');
+            $('.dataTables_paginate').css('display', 'none');
+            $('.dataTables_filter').css('display', 'none');
+            $('.dataTables_info').css('display', 'none');
+
+
+        }
+    }
+
+
 }

@@ -65,14 +65,15 @@
 				{ data: 'id', title: 'Id', visible: false },
 				{ data: 'name', title: 'Name' },
 				{ data: 'type', title: 'Type' },
+				{ data: 'viewName', title: 'View Name' },
 
 			];
 
 			initializeDataGrid('ReportsTable', 'openReportsModal', GetAllReportsUrl, columnList, true,true,true,false,true,'PreviewReportsModal',true,'ReportsDelete');
 		}
 
-		 function PreviewReportsModal(id) {
-			window.open(ReportsPreviewUrl + "?id=" + id, '_blank');
+		 function PreviewReportsModal(viewName) {
+			window.open(ReportsPreviewUrl + "?viewName=" + viewName, '_blank');
 		}
 
 		function openReportsModal(id) {
@@ -98,6 +99,7 @@
 						$("#hdnReportsId").val(response.data.id);
 						$("#txtName").val(response.data.name);
 						$("#txtType").val(response.data.type);
+						$("#txtViewName").val(response.data.viewName);
 
 						if (response.data.reportImagebase64 != null && response.data.reportImagebase64 != "") {
 							$("#oldreportimage").val(response.data.reportImagebase64);
@@ -127,7 +129,7 @@
 			// Reset the file input and the hidden field
 			$('#reportimagefile').val("");
 			$('#viewReportImage').attr('src', "");
-			$('#oldreportimage').val("");			
+			$('#oldreportimage').val("");
 			$('#deleteImageBtn').hide();
 		}
 
@@ -145,13 +147,14 @@
 
 		async function SaveReports() {
 
-			let valid = formValidation(["txtName", "txtType"]);
+			let valid = formValidation(["txtName", "txtType","txtViewName"]);
 
 			if (valid) {
 				var dataObject = {};
 				dataObject.Id = $("#hdnReportsId").val();
 				dataObject.Name = $("#txtName").val();
 				dataObject.Type = $('#txtType').val();
+				dataObject.ViewName = $('#txtViewName').val();
 
 				var FileData = await FiletoBase64string("reportimagefile");
 

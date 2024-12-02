@@ -14,6 +14,7 @@ namespace DAL.Models.Administration
 		public string Name { get; set; }
 		public string Type { get; set; }
         public string? ReportImagebase64 { get; set; }
+        public string ViewName { get; set; }
 
 
     }
