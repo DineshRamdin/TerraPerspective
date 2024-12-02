@@ -50,7 +50,13 @@ namespace BL.Services.Administration
                                             Othername = a.Othername,
                                             Email = a.Email,
                                             Role = d.Id,
-                                            RoleName = d.Name
+                                            RoleName = d.Name,
+                                            ProfileImagebase64 = (from u in context.SYS_UserDetails
+                                                                  where c.Id == u.User.Id
+                                                                  select u.ProfileImagebase64).FirstOrDefault(),
+                                            IsImage = (from u in context.SYS_UserDetails
+                                                       where c.Id == u.User.Id
+                                                       select u.ProfileImagebase64).FirstOrDefault() == null ? false : true,
                                         }).ToList();
 
                 dto.Data = result;
@@ -171,7 +177,7 @@ namespace BL.Services.Administration
                     au.NormalizedEmail = dataToSave.Email.ToUpper();
                     au.Status = UserStatus.Active;
                     au.CreatedDate = DateTime.Now;
-					au.FirstTimeLogin = true;
+                    au.FirstTimeLogin = true;
                     au.Status = UserStatus.ChangePassword;
                     //au.CreatedBy = Guid.Parse(dataToSave.userToken);
                     IdentityResult result = userManager.CreateAsync(au).Result;
@@ -217,33 +223,33 @@ namespace BL.Services.Administration
                             dto.ErrorMessage = "User save Successfully";
                             dto.QryResult = new QueryResult().SUCEEDED;
 
-							try
-							{
-								
-								SYS_GlobalParam Gp = context.SYS_GlobalParam.Where(x => x.Name == "APIKey").FirstOrDefault();
-								SYS_GlobalParam GpFromEail = context.SYS_GlobalParam.Where(x => x.Name == "SMTPUsername").FirstOrDefault();
-								SYS_GlobalParam GpSMPTServer = context.SYS_GlobalParam.Where(x => x.Name == "SMTPServer").FirstOrDefault();
-								SYS_GlobalParam GpSMPTPassword = context.SYS_GlobalParam.Where(x => x.Name == "SMTPPassword").FirstOrDefault();
-								string APIKey = Gp.Value;
-								string fromEmail = GpFromEail.Value;
-								string url = GpSMPTServer.Value;
+                            try
+                            {
+
+                                SYS_GlobalParam Gp = context.SYS_GlobalParam.Where(x => x.Name == "APIKey").FirstOrDefault();
+                                SYS_GlobalParam GpFromEail = context.SYS_GlobalParam.Where(x => x.Name == "SMTPUsername").FirstOrDefault();
+                                SYS_GlobalParam GpSMPTServer = context.SYS_GlobalParam.Where(x => x.Name == "SMTPServer").FirstOrDefault();
+                                SYS_GlobalParam GpSMPTPassword = context.SYS_GlobalParam.Where(x => x.Name == "SMTPPassword").FirstOrDefault();
+                                string APIKey = Gp.Value;
+                                string fromEmail = GpFromEail.Value;
+                                string url = GpSMPTServer.Value;
                                 string pas = GpSMPTPassword.Value;
-								string contents = "Successfully create the Account.";
-								string emailBody = $"<!DOCTYPE html><html><head><style>body {{font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0;}} .email-container {{max-width: 600px; margin: 20px auto; background: #ffffff; padding: 20px; border: 1px solid #ddd; border-radius: 5px;}} .email-header {{font-size: 18px; font-weight: bold; color: #333333; margin-bottom: 10px;}} .email-body {{font-size: 14px; line-height: 1.6; color: #555555;}} .email-footer {{margin-top: 20px; font-size: 12px; color: #999999;}}</style></head><body><div class='email-container'><div class='email-header'>Dear Valued Customer,</div><div class='email-body'><p>Please note that you have been added to the Terra Perspective Application.</p><p>This is your login credentials:</p><p><strong>Email:</strong> {user.Email}</p><p><strong>Password:</strong> {randPassword}</p></div><div class='email-footer'><p>Thank you for using the Terra Perspective Application.</p><p>-- The Terra Perspective Team</p></div></div></body></html>";
+                                string contents = "Successfully create the Account.";
+                                string emailBody = $"<!DOCTYPE html><html><head><style>body {{font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0;}} .email-container {{max-width: 600px; margin: 20px auto; background: #ffffff; padding: 20px; border: 1px solid #ddd; border-radius: 5px;}} .email-header {{font-size: 18px; font-weight: bold; color: #333333; margin-bottom: 10px;}} .email-body {{font-size: 14px; line-height: 1.6; color: #555555;}} .email-footer {{margin-top: 20px; font-size: 12px; color: #999999;}}</style></head><body><div class='email-container'><div class='email-header'>Dear Valued Customer,</div><div class='email-body'><p>Please note that you have been added to the Terra Perspective Application.</p><p>This is your login credentials:</p><p><strong>Email:</strong> {user.Email}</p><p><strong>Password:</strong> {randPassword}</p></div><div class='email-footer'><p>Thank you for using the Terra Perspective Application.</p><p>-- The Terra Perspective Team</p></div></div></body></html>";
                                 BaseResponseDTO<bool> Emailbto = new BaseResponseDTO<bool>();
-								Emailbto = SendEmailService.SendEmailAsync(APIKey, fromEmail, user.Email, "Reset Password", emailBody, contents,pas, url);
-                                
-							}
-							catch (Exception ex)
-							{
-								dto.Data = false;
-								dto.ErrorMessage = "User save Sucessfully but couldn't mail user its password";
-								dto.QryResult = new QueryResult().FAILED;
-							}
+                                Emailbto = SendEmailService.SendEmailAsync(APIKey, fromEmail, user.Email, "Reset Password", emailBody, contents, pas, url);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                dto.Data = false;
+                                dto.ErrorMessage = "User save Sucessfully but couldn't mail user its password";
+                                dto.QryResult = new QueryResult().FAILED;
+                            }
 
 
-						}
-						catch (Exception ex)
+                        }
+                        catch (Exception ex)
                         {
                             dto.Data = false;
                             dto.ErrorMessage = "User save Sucessfully but couldn't mail user its password";
@@ -369,7 +375,7 @@ namespace BL.Services.Administration
             return dto;
         }
 
-        public async Task<BaseResponseDTO<bool>> ResetUserPassword(string Id,UserManager<ApplicationUser> userManager)
+        public async Task<BaseResponseDTO<bool>> ResetUserPassword(string Id, UserManager<ApplicationUser> userManager)
         {
             BaseResponseDTO<bool> dto = new BaseResponseDTO<bool>();
             string message = "";
@@ -393,36 +399,36 @@ namespace BL.Services.Administration
                     user.FirstTimeLogin = true;
                     user.Status = UserStatus.ChangePassword;
                     await userManager.UpdateAsync(user);
-					try
-					{
-						
-						SYS_GlobalParam Gp = context.SYS_GlobalParam.Where(x => x.Name == "APIKey").FirstOrDefault();
-						SYS_GlobalParam GpFromEail = context.SYS_GlobalParam.Where(x => x.Name == "SMTPUsername").FirstOrDefault();
-						SYS_GlobalParam GpSMPTServer = context.SYS_GlobalParam.Where(x => x.Name == "SMTPServer").FirstOrDefault();
-						SYS_GlobalParam GpSMPTPassword = context.SYS_GlobalParam.Where(x => x.Name == "SMTPPassword").FirstOrDefault();
-						string APIKey = Gp.Value;
-						string fromEmail = GpFromEail.Value;
-						string url = GpSMPTServer.Value;
+                    try
+                    {
+
+                        SYS_GlobalParam Gp = context.SYS_GlobalParam.Where(x => x.Name == "APIKey").FirstOrDefault();
+                        SYS_GlobalParam GpFromEail = context.SYS_GlobalParam.Where(x => x.Name == "SMTPUsername").FirstOrDefault();
+                        SYS_GlobalParam GpSMPTServer = context.SYS_GlobalParam.Where(x => x.Name == "SMTPServer").FirstOrDefault();
+                        SYS_GlobalParam GpSMPTPassword = context.SYS_GlobalParam.Where(x => x.Name == "SMTPPassword").FirstOrDefault();
+                        string APIKey = Gp.Value;
+                        string fromEmail = GpFromEail.Value;
+                        string url = GpSMPTServer.Value;
                         string pass = GpSMPTPassword.Value;
                         string contents = "Reset Password";
-						string emailBody = $"<!DOCTYPE html><html><head><style>body {{font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0;}} .email-container {{max-width: 600px; margin: 20px auto; background: #ffffff; padding: 20px; border: 1px solid #ddd; border-radius: 5px;}} .email-header {{font-size: 18px; font-weight: bold; color: #333333; margin-bottom: 10px;}} .email-body {{font-size: 14px; line-height: 1.6; color: #555555;}} .email-footer {{margin-top: 20px; font-size: 12px; color: #999999;}}</style></head><body><div class='email-container'><div class='email-header'>Dear Valued Customer,</div><div class='email-body'><p>Please note that we have reset your password for the Terra Perspective Application.</p><p>This is your login credentials after resetting the password:</p><p><strong>Email:</strong> {user.Email}</p><p><strong>Password:</strong> {randPassword}</p></div><div class='email-footer'><p>Thank you for using the Terra Perspective Application.</p><p>-- The Terra Perspective Team</p></div></div></body></html>";
+                        string emailBody = $"<!DOCTYPE html><html><head><style>body {{font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0;}} .email-container {{max-width: 600px; margin: 20px auto; background: #ffffff; padding: 20px; border: 1px solid #ddd; border-radius: 5px;}} .email-header {{font-size: 18px; font-weight: bold; color: #333333; margin-bottom: 10px;}} .email-body {{font-size: 14px; line-height: 1.6; color: #555555;}} .email-footer {{margin-top: 20px; font-size: 12px; color: #999999;}}</style></head><body><div class='email-container'><div class='email-header'>Dear Valued Customer,</div><div class='email-body'><p>Please note that we have reset your password for the Terra Perspective Application.</p><p>This is your login credentials after resetting the password:</p><p><strong>Email:</strong> {user.Email}</p><p><strong>Password:</strong> {randPassword}</p></div><div class='email-footer'><p>Thank you for using the Terra Perspective Application.</p><p>-- The Terra Perspective Team</p></div></div></body></html>";
                         BaseResponseDTO<bool> Emailbto = new BaseResponseDTO<bool>();
-						Emailbto = SendEmailService.SendEmailAsync(APIKey, fromEmail, user.Email, "Reset Password", emailBody, contents, pass, url);
+                        Emailbto = SendEmailService.SendEmailAsync(APIKey, fromEmail, user.Email, "Reset Password", emailBody, contents, pass, url);
 
-					}
-					catch (Exception ex)
-					{
-						dto.Data = false;
-						dto.ErrorMessage = "Reset User Password Sucessfully but couldn't mail user its password";
-						dto.QryResult = new QueryResult().FAILED;
-					}
+                    }
+                    catch (Exception ex)
+                    {
+                        dto.Data = false;
+                        dto.ErrorMessage = "Reset User Password Sucessfully but couldn't mail user its password";
+                        dto.QryResult = new QueryResult().FAILED;
+                    }
 
-					dto.Data = true;
+                    dto.Data = true;
                     dto.ErrorMessage = "Reset User Password Successfully";
                     dto.QryResult = new QueryResult().SUCEEDED;
 
-				}
-				else
+                }
+                else
                 {
                     dto.Data = false;
                     dto.ErrorMessage = "Reset User Password Fail";
@@ -440,14 +446,14 @@ namespace BL.Services.Administration
             return dto;
         }
 
-        public async Task<BaseResponseDTO<bool>> ChangeUserPassword(ChangePasswordDTO changePasswordDTO,string Id, UserManager<ApplicationUser> userManager)
+        public async Task<BaseResponseDTO<bool>> ChangeUserPassword(ChangePasswordDTO changePasswordDTO, string Id, UserManager<ApplicationUser> userManager)
         {
             BaseResponseDTO<bool> dto = new BaseResponseDTO<bool>();
             string message = "";
 
             try
             {
-                
+
                 ApplicationUser au = context.Users.Where(x => x.Id == Id).FirstOrDefault();
 
                 if (au != null)
@@ -493,6 +499,58 @@ namespace BL.Services.Administration
                               where ur.AId == Id
                               select u.ProfileImagebase64).FirstOrDefault();
             return Profile;
+        }
+
+        public BaseResponseDTO<List<UserDTO>> GetPreviewById(string id)
+        {
+            BaseResponseDTO<List<UserDTO>> dto = new BaseResponseDTO<List<UserDTO>>();
+            List<UserDTO> result = new List<UserDTO>();
+            string errorMsg = "No Data Found";
+            try
+            {
+
+                result = (from a in context.Users
+                          where a.Id == id && a.DeleteStatus == false
+                          select new UserDTO()
+                          {
+                              Id = a.Id.ToString(),
+                              Surname = a.Surname,
+                              Othername = a.Othername,
+                              Email = a.Email,
+                              PhoneNumber = a.PhoneNumber,
+                              Role = context.UserRoles.Where(x => x.UserId == id).FirstOrDefault().RoleId,
+                              ProfileImagebase64 = (from ur in context.SYS_User
+                                                    join u in context.SYS_UserDetails on ur.Id equals u.User.Id
+                                                    where ur.AId == id
+                                                    select u.ProfileImagebase64).FirstOrDefault(),
+                              IsImage = (from ur in context.SYS_User
+                                         join u in context.SYS_UserDetails on ur.Id equals u.User.Id
+                                         where ur.AId == id
+                                         select u.ProfileImagebase64).FirstOrDefault() == null ? false : true,
+
+                          }).ToList();
+                dto.Data = result;
+                dto.QryResult = queryResult.SUCEEDED;
+
+                if (result == null)
+                {
+                    dto.Data = result;
+                    dto.QryResult = queryResult.FAILED;
+                }
+                else
+                {
+                    dto.Data = result;
+                    dto.QryResult = queryResult.SUCEEDED;
+                }
+            }
+            catch (Exception ex)
+            {
+                dto.Data = result;
+                dto.ErrorMessage = errorMsg;
+                dto.QryResult = queryResult.FAILED;
+            }
+
+            return dto;
         }
     }
 }

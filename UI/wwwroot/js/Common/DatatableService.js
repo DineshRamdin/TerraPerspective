@@ -95,6 +95,12 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                             }
                                             //else if (=="PosterTable")
                                         }
+                                        else if (tableID == "UserTable") {                                          
+                                            if (full.isImage == true) {
+                                                btn += preview
+                                            }
+                                            //else if (=="PosterTable")
+                                        }
                                         else {
                                             btn += preview
                                         }
