@@ -482,8 +482,15 @@
                 map.addControl(drawControl);
 
                 if (existingGeoJson) {
-                    L.geoJSON(existingGeoJson).eachLayer(function (layer) {
+                    var layer = L.geoJSON(existingGeoJson).eachLayer(function (layer) {
                         drawnItems.addLayer(layer); // Ensure drawnItems exists here
+                    });
+
+                     map.flyToBounds(layer.getBounds(), {
+                        padding: [50, 50],  // Adds padding around the bounds
+                        // maxZoom: 12,        // Sets a maximum zoom level
+                        animate: true,       // Animates the zoom transition
+                        duration: 3 // Duration in seconds
                     });
                 }
 
