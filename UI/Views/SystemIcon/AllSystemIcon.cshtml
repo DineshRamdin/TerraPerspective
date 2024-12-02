@@ -32,20 +32,34 @@
 					</div>
 				</div>
 				<div class="row">
-					@for (int i = 0; i < Model.Count; i++)
+					@if (Model.Count > 0)
 					{
-						<div class="col-12 col-sm-4 col-md-2 d-flex align-items-stretch flex-column">
-							<div class="card bg-light d-flex flex-fill" title="@Model[i].Name">
-								<div class="card-header text-muted border-bottom-0">
-									@Model[i].Name
-								</div>
-								<div class="card-body pt-0">
-									<div class="row">
-										<div class="col-5 text-center">
-											<img src="data:image/png;base64,@Model[i].SystemIconImagebase64" alt="@Model[i].Name"  style="width: 75px; height: 75px;" />
+						@for (int i = 0; i < Model.Count; i++)
+						{
+							<div class="col-12 col-sm-4 col-md-2 d-flex align-items-stretch flex-column">
+								<div class="card bg-light d-flex flex-fill" title="@Model[i].Name">
+									<div class="card-header text-muted border-bottom-0">
+										@Model[i].Name
+									</div>
+									<div class="card-body pt-0">
+										<div class="row">
+											<div class="col-5 text-center">
+												<img src="data:image/png;base64,@Model[i].SystemIconImagebase64" alt="@Model[i].Name" style="width: 75px; height: 75px;" />
+											</div>
 										</div>
 									</div>
 								</div>
+							</div>
+						}
+					}
+					else
+					{
+						<div class="col-12 d-flex align-items-stretch flex-column">
+							<div class="card bg-light d-flex flex-fill">
+								<div class="text-center">
+									<label>Data not found.</label>
+								</div>
+
 							</div>
 						</div>
 					}
