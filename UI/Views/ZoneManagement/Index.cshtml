@@ -11,18 +11,6 @@
         height: 85vh; /* Full viewport height */
     }
 
-    .custom-button {
-        background: white;
-        padding: 5px 10px;
-        border: 2px solid #ccc;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-        .custom-button:hover {
-            background: #eee;
-        }
-
     #ZoneManagementTable > tbody > .selected-row {
         background: #cce5ff;
         border-color: #cce5ff;
@@ -41,6 +29,53 @@
         overflow-y: auto;
         z-index: 9999 !important;
     }
+
+     /* Base container styling */
+        .search-control {
+            position: relative;
+            width: 40px; /* Show only the icon initially */
+            height: 40px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: width 0.3s ease; /* Smooth expansion */
+        }
+
+        /* Input box styling */
+        .search-input {
+            width: 0;
+            height: 100%;
+            border: none;
+            padding: 0 10px;
+            outline: none;
+            opacity: 0;
+            transition: width 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* Search icon styling */
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Show the input box on hover */
+        .search-control:hover {
+            width: 200px; /* Expanded width */
+        }
+
+        .search-control:hover .search-input {
+            width: 100%;
+            opacity: 1;
+        }
+
+        .search-control:hover .search-icon {
+            display: none; /* Hide the icon when expanded */
+        }
 </style>
 
 <!-- Content Header (Page header) -->
@@ -129,15 +164,14 @@
 
             $("#ZoneManagementTable").on('click', 'tr', function (event) {
                  var target = $(event.target); // Get the clicked element
-                 console.log("targe",target.is("td"));
-    if(target.is("td"))
-    {
+                    if(target.is("td"))
+                    {
 
-                $("#ZoneManagementTable").find(".selected-row").removeClass("selected-row");
-                var Id = $(this).attr("data-id")
-                $(this).addClass("selected-row")
-                initMap(Id);
-    }
+                        $("#ZoneManagementTable").find(".selected-row").removeClass("selected-row");
+                        var Id = $(this).attr("data-id")
+                        $(this).addClass("selected-row")
+                        initMap(Id);
+                    }
             });
 
         });
@@ -263,15 +297,32 @@
                         "Satellite": satelliteLayer
                     };
 
-                    L.control.layers(baseMaps).addTo(map);
                     // Add the custom control to the map
 
                     var searchControl = L.Control.extend({
                         onAdd: function () {
-                            var container = L.DomUtil.create('div', 'leaflet-bar');
-                            var inputBox = L.DomUtil.create('input', '', container);
-                            inputBox.type = 'text';
-                            inputBox.placeholder = 'Search for a Zone...';
+                            // var container = L.DomUtil.create('div', 'leaflet-bar');
+                            // var inputBox = L.DomUtil.create('input', '', container);
+                            // inputBox.type = 'text';
+                            // inputBox.placeholder = 'Search for a Zone...';
+                            // L.DomUtil.addClass(inputBox, 'form-control');
+
+                              // Create the main container
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control search-control');
+
+            // Create the input box (hidden by default)
+            var inputBox = L.DomUtil.create('input', 'search-input', container);
+            inputBox.type = 'text';
+            inputBox.placeholder = 'Search for a Zone...';
+            L.DomUtil.addClass(inputBox, 'form-control');
+
+            // Create the search icon
+            var icon = L.DomUtil.create('span', 'search-icon', container);
+            icon.innerHTML = '<i class="fa fa-search"></i>'; // Unicode search icon, can replace with FontAwesome
+
+            // Prevent map interactions when clicking inside the control
+            L.DomEvent.disableClickPropagation(container);
+
 
                             // jQuery UI Autocomplete
                             $(inputBox).autocomplete({
@@ -322,6 +373,8 @@
                     // Add the custom search control to the map
                     map.addControl(new searchControl({ position: 'topright' }));
 
+                    
+                    L.control.layers(baseMaps).addTo(map);
 
                 var bounds = L.latLngBounds();
 
@@ -429,8 +482,15 @@
                 map.addControl(drawControl);
 
                 if (existingGeoJson) {
-                    L.geoJSON(existingGeoJson).eachLayer(function (layer) {
+                    var layer = L.geoJSON(existingGeoJson).eachLayer(function (layer) {
                         drawnItems.addLayer(layer); // Ensure drawnItems exists here
+                    });
+
+                     map.flyToBounds(layer.getBounds(), {
+                        padding: [50, 50],  // Adds padding around the bounds
+                        // maxZoom: 12,        // Sets a maximum zoom level
+                        animate: true,       // Animates the zoom transition
+                        duration: 3 // Duration in seconds
                     });
                 }
 

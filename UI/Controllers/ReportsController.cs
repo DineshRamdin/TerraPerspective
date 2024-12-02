@@ -1,4 +1,5 @@
-﻿using BL.Constants;
+﻿using System.Data;
+using BL.Constants;
 using BL.Models.Administration;
 using BL.Models.Common;
 using BL.Services.Administration;
@@ -41,15 +42,50 @@ namespace UI.Controllers
         }
 
 
-        public IActionResult Preview(long Id)
+        public async Task<IActionResult> Preview(string viewName)
         {
-            BaseResponseDTO<List<ReportsDTO>> dt = new BaseResponseDTO<List<ReportsDTO>>();
-            dt.Data = new List<ReportsDTO>();
-            if (Id > 0)
+            //BaseResponseDTO<List<ReportsDTO>> dt = new BaseResponseDTO<List<ReportsDTO>>();
+            //dt.Data = new List<ReportsDTO>();
+            try
             {
-                dt = service.GetPreviewById(Id);
+                DataTable dt = new DataTable();
+                if (!string.IsNullOrEmpty(viewName))
+                {
+                    dt = await service.GetPreviewById(viewName);
+
+                    if (dt.Rows.Count > 0 && dt.Columns.Contains("ErrorMessage") && dt.Rows[0]["ErrorMessage"] != DBNull.Value)
+                    {
+
+                        // Extract the error message from the DataTable
+                        string errorMessage = dt.Rows[0]["ErrorMessage"].ToString();
+
+                        // Return a view showing the error message
+                        //return View("Error", new { message = errorMessage });
+                    }
+                }
+
+                // Convert DataTable to List of Dictionaries
+                var data = dt.AsEnumerable()
+                          .Select(row => dt.Columns.Cast<DataColumn>().ToDictionary(col => col.ColumnName, col => row[col]))
+                          .ToList();
+
+                // Check if data is populated
+                if (data.Any())
+                {
+                    // Log or inspect the data before returning
+                }
+
+
+                return View(data); // Pass data to the view
+                //return Ok(dt);
             }
-            return View(dt.Data);
+            catch (Exception ex)
+            {
+                return View("Error", new { message = "An unexpected error occurred: " + ex.Message });
+            }
+            //return BadRequest();
+
+            //return View(dt);
         }
 
         [HttpPost]

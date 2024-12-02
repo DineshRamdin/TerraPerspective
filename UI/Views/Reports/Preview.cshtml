@@ -2,36 +2,66 @@
 	Layout = "_BlankLayout";
 	ViewData["Title"] = "Preview";
 }
-@model List<BL.Models.Administration.ReportsDTO>
 
 
-<div class="outer_main">
-	<main class="">
-		<div class="report">
-			@if (Model.Count > 0)
-			{
-				@if (@Model[0].ReportImagebase64 == null)
-				{
-					@* <div style="text-align:center; padding-top: 60px; margin-right: 140px;">
-						<label>Image Not found</label>
-					</div> *@
-					<div>
-						<img src="~/image/default-profile.png" />
+@model List<Dictionary<string, object>>
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
 					</div>
-				}
-				else
-				{
-					<div>
-						<img src="data:image/png;base64,@Model[0].ReportImagebase64" />
+				</div>
+				<div class="row">
+					<div class="col-12 mb-10">
+						<table id="ReportsViewTable" class="table table-bordered table-striped dataTable dtr-inline">
+							<thead>
+								<tr>
+									@if (Model != null && Model.Any())  @* Ensure there is data *@
+									{
+										var firstRow = Model.First();  @* Get the first row to extract column headers *@
+										foreach (var column in firstRow.Keys)
+										{
+											<th>@column</th>
+										}
+									}
+								</tr>
+							</thead>
+							<tbody>
+								@if (Model != null && Model.Any()) @* Ensure data is available for rendering *@
+								{
+									@foreach (var row in Model)
+									{
+										<tr>
+											@foreach (var cell in row.Values)
+											{
+												<td>@cell</td>
+											}
+										</tr>
+									}
+								}
+								else
+								{
+									<tr><td colspan="100%" style="text-align:center">No data available</td></tr> @* If no data, show a message *@
+								}
+							</tbody>
+						</table>
 					</div>
-				}
-			}
-			else
-			{
-				<label>Image Not found</label>
-			}
-
+					&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<div class="row"><p>@ViewBag.Message</p></div>
+			</div>
 		</div>
+	</div>
+</section>
 
-	</main>
-</div>
+@section scripts
+{
+	<script>
+		$(function () {
+			initializeDataGridForViews('ReportsViewTable', true);
+		});
+	</script>
+
+}
