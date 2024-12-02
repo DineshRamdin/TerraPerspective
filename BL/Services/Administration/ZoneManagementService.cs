@@ -20,21 +20,21 @@ using DAL.Common;
 
 namespace BL.Services.Administration
 {
-    public class GeomertyDataService
+    public class ZoneManagementService
     {
         private PerspectiveContext context;
         private QueryResult queryResult;
 
-        public GeomertyDataService()
+        public ZoneManagementService()
         {
             context = new PerspectiveContext();
             queryResult = new QueryResult();
         }
 
-        public BaseResponseDTO<List<GeomertyDataDTO>> GetAll()
+        public BaseResponseDTO<List<ZoneManagementDTO>> GetAll()
         {
-            BaseResponseDTO<List<GeomertyDataDTO>> dto = new BaseResponseDTO<List<GeomertyDataDTO>>();
-            GeomertyDataDTO user = new GeomertyDataDTO();
+            BaseResponseDTO<List<ZoneManagementDTO>> dto = new BaseResponseDTO<List<ZoneManagementDTO>>();
+            ZoneManagementDTO user = new ZoneManagementDTO();
             QueryResult queryResult = new QueryResult();
             string errorMsg = "No Data Found";
 
@@ -42,9 +42,9 @@ namespace BL.Services.Administration
             {
                 string sQryResult = queryResult.FAILED;
 
-                List<GeomertyDataDTO> result = context.SYS_GeomertyData
+                List<ZoneManagementDTO> result = context.SYS_ZoneManagement
                                          .Where(a => a.DeleteStatus == false)
-                                         .Select(a => new GeomertyDataDTO
+                                         .Select(a => new ZoneManagementDTO
                                          {
                                              Id = a.Id,
                                              Zone = a.Zone,
@@ -58,7 +58,7 @@ namespace BL.Services.Administration
             }
             catch (Exception ex)
             {
-                dto.Data = new List<GeomertyDataDTO>();
+                dto.Data = new List<ZoneManagementDTO>();
                 dto.ErrorMessage = errorMsg;
                 dto.QryResult = queryResult.SUCEEDED;
             }
@@ -66,10 +66,10 @@ namespace BL.Services.Administration
             return dto;
         }
 
-        public BaseResponseDTO<List<GeomertyDataDTO>> GetSelectedZoneGeomertyData(string selectedZone = "")
+        public BaseResponseDTO<List<ZoneManagementDTO>> GetSelectedZoneData(string selectedZone = "")
         {
-            BaseResponseDTO<List<GeomertyDataDTO>> dto = new BaseResponseDTO<List<GeomertyDataDTO>>();
-            GeomertyDataDTO user = new GeomertyDataDTO();
+            BaseResponseDTO<List<ZoneManagementDTO>> dto = new BaseResponseDTO<List<ZoneManagementDTO>>();
+            ZoneManagementDTO user = new ZoneManagementDTO();
             QueryResult queryResult = new QueryResult();
             string errorMsg = "No Data Found";
 
@@ -85,14 +85,14 @@ namespace BL.Services.Administration
                                 .Select(long.Parse)
                                 .ToList();
 
-                List<GeomertyDataDTO> result = context.SYS_GeomertyData
+                List<ZoneManagementDTO> result = context.SYS_ZoneManagement
                                          .Where(a => a.DeleteStatus == false && zones.Contains(a.Id)
                                          //       (
                                          //           zones.Count == 0 ||  // No zones specified, fetch all
                                          //           zones.Contains(a.Id)  // Match Zone if it exists in the list
                                          //       )
                                          )
-                                         .Select(a => new GeomertyDataDTO
+                                         .Select(a => new ZoneManagementDTO
                                          {
                                              Id = a.Id,
                                              Zone = a.Zone,
@@ -106,7 +106,7 @@ namespace BL.Services.Administration
             }
             catch (Exception ex)
             {
-                dto.Data = new List<GeomertyDataDTO>();
+                dto.Data = new List<ZoneManagementDTO>();
                 dto.ErrorMessage = errorMsg;
                 dto.QryResult = queryResult.SUCEEDED;
             }
@@ -125,7 +125,7 @@ namespace BL.Services.Administration
             {
                 string sQryResult = queryResult.FAILED;
 
-                List<ZoneDataDTO> result = context.SYS_GeomertyData
+                List<ZoneDataDTO> result = context.SYS_ZoneManagement
                                          .Where(a => a.DeleteStatus == false)
                                          .Select(a => new ZoneDataDTO
                                          {
@@ -148,15 +148,15 @@ namespace BL.Services.Administration
             return dto;
         }
 
-        public BaseResponseDTO<GeomertyDataDTO> GetById(long Id)
+        public BaseResponseDTO<ZoneManagementDTO> GetById(long Id)
         {
-            BaseResponseDTO<GeomertyDataDTO> dto = new BaseResponseDTO<GeomertyDataDTO>();
-            GeomertyDataDTO result = new GeomertyDataDTO();
+            BaseResponseDTO<ZoneManagementDTO> dto = new BaseResponseDTO<ZoneManagementDTO>();
+            ZoneManagementDTO result = new ZoneManagementDTO();
             try
             {
-                result = (from a in context.SYS_GeomertyData
+                result = (from a in context.SYS_ZoneManagement
                           where a.DeleteStatus == false && a.Id == Id
-                          select new GeomertyDataDTO()
+                          select new ZoneManagementDTO()
                           {
                               Id = a.Id,
                               Zone = a.Zone,
@@ -177,31 +177,31 @@ namespace BL.Services.Administration
             }
             catch (Exception ex)
             {
-                dto.Data = new GeomertyDataDTO();
+                dto.Data = new ZoneManagementDTO();
                 dto.QryResult = new QueryResult().FAILED;
             }
             return dto;
         }
 
-        public async Task<BaseResponseDTO<bool>> SaveAsync(GeomertyDataDTO dataToSave)
+        public async Task<BaseResponseDTO<bool>> SaveAsync(ZoneManagementDTO dataToSave)
         {
             BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
             BaseResponseDTO<string> BaseDtoS = new BaseResponseDTO<string>();
             try
             {
 
-                SYS_GeomertyData DSS = new SYS_GeomertyData()
+                SYS_ZoneManagement DSS = new SYS_ZoneManagement()
                 {
                     Zone = dataToSave.Zone,
                     GeomColumn = dataToSave.geometry,
                     Type = dataToSave.Type
 
                 };
-                context.SYS_GeomertyData.Add(DSS);
+                context.SYS_ZoneManagement.Add(DSS);
                 context.SaveChanges();
 
                 BaseDto.Data = true;
-                BaseDto.ErrorMessage = "Geomerty Data save Successfully";
+                BaseDto.ErrorMessage = "Zone Management Data save Successfully";
                 BaseDto.QryResult = queryResult.SUCEEDED;
 
             }
@@ -214,22 +214,22 @@ namespace BL.Services.Administration
             return BaseDto;
         }
 
-        public async Task<BaseResponseDTO<bool>> UpdateAsync(GeomertyDataDTO dataToUpdate)
+        public async Task<BaseResponseDTO<bool>> UpdateAsync(ZoneManagementDTO dataToUpdate)
         {
             BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
             try
             {
 
-                SYS_GeomertyData DSS = context.SYS_GeomertyData.Where(x => x.Id == dataToUpdate.Id).FirstOrDefault();
+                SYS_ZoneManagement DSS = context.SYS_ZoneManagement.Where(x => x.Id == dataToUpdate.Id).FirstOrDefault();
 
                 DSS.Zone = dataToUpdate.Zone;
                 DSS.Type = dataToUpdate.Type;
                 DSS.GeomColumn = dataToUpdate.geometry;
 
-                context.SYS_GeomertyData.Update(DSS);
+                context.SYS_ZoneManagement.Update(DSS);
                 context.SaveChanges();
                 BaseDto.Data = true;
-                BaseDto.ErrorMessage = "Geomerty Data update Successfully";
+                BaseDto.ErrorMessage = "Zone Management Data update Successfully";
                 BaseDto.QryResult = queryResult.SUCEEDED;
 
             }
@@ -242,10 +242,10 @@ namespace BL.Services.Administration
             return BaseDto;
         }
 
-        public BaseResponseDTO<List<GeomertyDataDTO>> GetZoneAutocompleteData(string term)
+        public BaseResponseDTO<List<ZoneManagementDTO>> GetZoneAutocompleteData(string term)
         {
-            BaseResponseDTO<List<GeomertyDataDTO>> dto = new BaseResponseDTO<List<GeomertyDataDTO>>();
-            GeomertyDataDTO user = new GeomertyDataDTO();
+            BaseResponseDTO<List<ZoneManagementDTO>> dto = new BaseResponseDTO<List<ZoneManagementDTO>>();
+            ZoneManagementDTO user = new ZoneManagementDTO();
             QueryResult queryResult = new QueryResult();
             string errorMsg = "No Data Found";
 
@@ -253,9 +253,9 @@ namespace BL.Services.Administration
             {
                 string sQryResult = queryResult.FAILED;
 
-                List<GeomertyDataDTO> result = context.SYS_GeomertyData
+                List<ZoneManagementDTO> result = context.SYS_ZoneManagement
                                          .Where(a => a.DeleteStatus == false && a.Zone.Contains(term))
-                                         .Select(a => new GeomertyDataDTO
+                                         .Select(a => new ZoneManagementDTO
                                          {
                                              Id = a.Id,
                                              Zone = a.Zone,
@@ -269,7 +269,7 @@ namespace BL.Services.Administration
             }
             catch (Exception ex)
             {
-                dto.Data = new List<GeomertyDataDTO>();
+                dto.Data = new List<ZoneManagementDTO>();
                 dto.ErrorMessage = errorMsg;
                 dto.QryResult = queryResult.SUCEEDED;
             }

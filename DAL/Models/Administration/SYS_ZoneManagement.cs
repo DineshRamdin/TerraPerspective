@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Models.Administration
 {
-    public class SYS_GeomertyData : BaseAuditModel, IAuditable
+    public class SYS_ZoneManagement : BaseAuditModel, IAuditable
     {
         [Key]
         public long Id { get; set; }
