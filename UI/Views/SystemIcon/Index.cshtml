@@ -180,7 +180,7 @@
 					}
 
 					// Check file size (max 5MB)
-					const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+					const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
 					if (file.size > maxFileSize) {
 						toastr.warning("The file size exceeds the allowed limit of 5MB.");
 						return; // Stop the process if file is too large
@@ -188,10 +188,10 @@
 				}
 				else
 				{
-					if(oldfile){
-					}else{
-					toastr.warning("Please Select the Icon");
-					return; // Stop the process if invalid type
+					if(!oldfile)
+					{
+						toastr.warning("Please Select the Icon");
+						return; // Stop the process if invalid type
 					}
 				}
 
