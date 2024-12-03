@@ -21,13 +21,14 @@ namespace BL.Services.Administration
             QueryResult queryResult = new QueryResult();
             string errorMsg = "";
             string sQryResult = queryResult.SUCEEDED;
+            string GlobalParamValue = "";
             try
             {
                 var emailexists = await _userManager.FindByEmailAsync(loginDto.Email);
                 if (emailexists != null)
                 {
                     var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, loginDto.RememberMe, true);
-                    user = await _userManager.FindByNameAsync(loginDto.Email);
+                    user = await _userManager.FindByNameAsync(loginDto.Email);                    
                     if (result.Succeeded)
                     {
                         if (user.FirstTimeLogin == false)

@@ -27,7 +27,7 @@ namespace UI.Controllers
         #endregion
         public IActionResult Index()
         {
-           
+
             //var MacAddress = NetworkHelper.GetServerMacAddress();
 
             //var DeviceData = _Deviceservice.GetByMACAddress(MacAddress);
@@ -46,7 +46,7 @@ namespace UI.Controllers
             //}
             //else
             //{
-                return View();
+            return View();
             //}
         }
 
@@ -63,10 +63,12 @@ namespace UI.Controllers
                 var clientIp = Request.Host;
                 var MacAddress = NetworkHelper.GetServerMacAddress();
 
-                
+
                 BaseResponseDTO<ApplicationUser> ncb = await LoginService.Login(model, _signInManager, _userManager, _roleManager, clientIp.Value, MacAddress);
                 string image = _UserService.UserProfileImage(ncb.Data.Id);
+                string GlobalParamValue = _UserService.GlobalParamValue();
                 ncb.Data.ProfileImage = image;
+                ncb.Data.GlobalParamValue = GlobalParamValue;
                 if (ncb.QryResult != new QueryResult().FAILED)
                 {
                     var key = "b14ca5898a4e4133bbce2ea2315a1916";
