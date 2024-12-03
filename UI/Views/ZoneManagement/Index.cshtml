@@ -148,6 +148,7 @@
         var CreateUpdateZoneManagementUrl = '@Url.Action("CreateUpdate", "ZoneManagement")';
         var ZoneManagementGetByIdUrl = '@Url.Action("GetById", "ZoneManagement")';
         var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "ZoneManagement")';
+        var ZoneFilePreviewUrl = '@Url.Action("Fileview", "ZoneManagement")';
         var GetZoneMatrixTree = '@Url.Action("GetTree", "ZoneManagement")';
 
         $(function () {
@@ -241,10 +242,17 @@
                 { data: 'id', title: 'Id', visible: false },
                 { data: 'zone', title: 'Zone' },
                 { data: 'type', title: 'Type' },
+                { data: 'folder', title: 'Folder' },
+                { data: 'externalReference', title: 'External Reference' },
             ];
 
-            initializeDataGrid('ZoneManagementTable', 'openZoneManagementModal', GetAllZoneUrl, columnList, false, false, true, false);
+            initializeDataGrid('ZoneManagementTable', 'openZoneManagementModal', GetAllZoneUrl, columnList, false, false, true, false, true, "PreviewZoneManagementFolder");
 
+        }
+        function PreviewZoneManagementFolder(folder) {
+            if (folder != null && folder != "") {
+                window.open(ZoneFilePreviewUrl + "?folder=" + folder, '_blank');
+            }
         }
         function BindJsTreeData() {
             var ZoneData = [];
@@ -441,9 +449,35 @@
                     var geoJsonData = JSON.parse(item.featureGeoJson);
 
                     // Add the GeoJSON polygon to the map
-                    var layer = L.geoJSON(geoJsonData).addTo(map);
+                    var layer = L.geoJSON(geoJsonData, {
+                        onEachFeature: function (feature, layer) {
+                            layer.on('click', function (e) {
+                                // Customize the label content as needed
+                                var labelContent = `Polygon selected!<br>Zone: ${item.zone || 'N/A'}`;
+
+                                // Show popup at clicked location
+                                L.popup()
+                                    .setLatLng(e.latlng) // Get the clicked location
+                                    .setContent(labelContent)
+                                    .openOn(map);
+                            });
+                        }
+                    }).addTo(map);
 
                     bounds.extend(layer.getBounds());
+
+                     var center = layer.getBounds().getCenter();
+
+                    var marker = L.marker(center).addTo(map);
+
+                    marker.on('click', function () {
+                        var markerInfo = `Marker clicked!<br>Zone: ${item.zone || 'N/A'}`;
+                        L.popup()
+                            .setLatLng(center) // Popup at the marker location
+                            .setContent(markerInfo)
+                            .openOn(map);
+                    });
+
                 });
 
                 // Fit the map to the accumulated bounds

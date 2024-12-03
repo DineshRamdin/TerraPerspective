@@ -1,0 +1,56 @@
+﻿@using System.Data
+@model DataTable
+
+@{
+    ViewData["Title"] = "File View";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-10">
+                        <table id="FileViewTable" class="table table-bordered table-striped dataTable dtr-inline">
+                            <thead>
+                                <tr>
+                                    @foreach (DataColumn column in Model.Columns)
+                                    {
+                                        <th>@column.ColumnName</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (DataRow row in Model.Rows)
+                                {
+                                    <tr>
+                                        @foreach (DataColumn column in Model.Columns)
+                                        {
+                                            <td>  @row[column]</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section scripts
+{
+    <script>
+        $(function () {
+            initializeDataGridForViews('FileViewTable', true);
+        });
+    </script>
+
+}

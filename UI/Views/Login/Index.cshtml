@@ -1,116 +1,121 @@
 ﻿@{
-    Layout = "_LoginLayout";
-    ViewData["Title"] = "Login";
+	Layout = "_LoginLayout";
+	ViewData["Title"] = "Login";
 }
 
 
 <div class="card-body login-card-body">
-    <p class="login-box-msg">Sign in to start your session</p>
+	<p class="login-box-msg">Sign in to start your session</p>
 
-    <div class="input-group mb-3">
-        <input type="email" id="txtEmail" class="form-control" placeholder="Email">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
-            </div>
-        </div>
-    </div>
-    <div class="input-group mb-3">
-        <input type="password" id="txtPassword" class="form-control" placeholder="Password">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-8">
-            <div class="icheck-primary">
-                <input type="checkbox" id="remember">
-                <label for="remember">
-                    Remember Me
-                </label>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 mb-3">
-            <button type="button" id="btnSubmit" class="btn btn-primary btn-block">Sign In</button>
-        </div>
-    </div>
+	<div class="input-group mb-3">
+		<input type="email" id="txtEmail" class="form-control" placeholder="Email">
+		<div class="input-group-append">
+			<div class="input-group-text">
+				<span class="fas fa-envelope"></span>
+			</div>
+		</div>
+	</div>
+	<div class="input-group mb-3">
+		<input type="password" id="txtPassword" class="form-control" placeholder="Password">
+		<div class="input-group-append">
+			<div class="input-group-text">
+				<span class="fas fa-lock"></span>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-8">
+			<div class="icheck-primary">
+				<input type="checkbox" id="remember">
+				<label for="remember">
+					Remember Me
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 mb-3">
+			<button type="button" id="btnSubmit" class="btn btn-primary btn-block">Sign In</button>
+		</div>
+	</div>
 
-    <p class="mb-1">
-        <a href="#">I forgot my password</a>
-    </p>
-    <p class="mb-0">
-        <a href="#" class="text-center">Register a new membership</a>
-    </p>
+	<p class="mb-1">
+		<a href="#">I forgot my password</a>
+	</p>
+	<p class="mb-0">
+		<a href="#" class="text-center">Register a new membership</a>
+	</p>
 </div>
 
 <div class="modal fade" id="ChangePasswordLT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <partial name="_ChangePassword.cshtml" />
+	<partial name="_ChangePassword.cshtml" />
 </div>
 
 @section scripts
 {
-    <script>
-        var LoginUrl = '@Url.Action("Index", "Login")';
-        var DashboardUrl = '@Url.Action("Index", "Dashboard")';
-        var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';
+	<script>
+		var LoginUrl = '@Url.Action("Index", "Login")';
+		var DashboardUrl = '@Url.Action("Index", "Dashboard")';
+		var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';
 
-        $(document).keyup(function (e) {
-            if (e.keyCode == 13)
-                $("#btnSubmit").trigger("click");
-        });
+		$(document).keyup(function (e) {
+			if (e.keyCode == 13)
+				$("#btnSubmit").trigger("click");
+		});
 
-        $('#btnSubmit').click(function () {
-            // $("#btnSubmit").html('Login <i class="icon-spinner2 spinner position-right"></i>');
-            $(this).prop("disabled", true);
-            if ($('#txtEmail').val() == "" || $('#txtPassword').val() == "") {
-                // swal("Warning", "Please enter Email/Password ", "warning");
-                toastr.warning("Please enter Email/Password");
-                $(this).prop("disabled", false);
-                return false;
-            }
-            var dataObject = {};
-            dataObject.Email = $("#txtEmail").val();
-            dataObject.Password = $("#txtPassword").val();
-            dataObject.RememberMe = $("remember").is("checked");
-            
-            $.ajax({
-                url: LoginUrl,
-                type: "POST",
-                data: dataObject,  // Send data if needed
-                success: function (response) {
-                    if (response.qryResult == "success") {
+		$('#btnSubmit').click(function () {
+			// $("#btnSubmit").html('Login <i class="icon-spinner2 spinner position-right"></i>');
+			$(this).prop("disabled", true);
+			if ($('#txtEmail').val() == "" || $('#txtPassword').val() == "") {
+				// swal("Warning", "Please enter Email/Password ", "warning");
+				toastr.warning("Please enter Email/Password");
+				$(this).prop("disabled", false);
+				return false;
+			}
+			var dataObject = {};
+			dataObject.Email = $("#txtEmail").val();
+			dataObject.Password = $("#txtPassword").val();
+			dataObject.RememberMe = $("remember").is("checked");
 
-                        if (response.data.status == 3) {
-                            toastr.warning(response.errorMessage);
-                        }
-                        else if(response.data.status == 5){
-                            $('#ChangePasswordLT').modal('show');
-                        }
-                        else if (response.data.status == 0) {
-                            toastr.success('Login Successful');
-                            setTimeout(
-                                function () {
-                                    window.location.href = DashboardUrl;
-                                }, 500);
-                        } else if (response.data.qryResult == "failed") {
-                            toastr.error(data.additionalData);
-                        }
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    console.log("Data received:", response);
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            });
-        });
-    </script>
+			$.ajax({
+				url: LoginUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				success: function (response) {
+					if (response.qryResult == "success") {
+
+						if (response.data.status == 3) {
+							toastr.warning(response.errorMessage);
+						}
+						else if(response.data.status == 5){
+							$('#ChangePasswordLT').modal('show');
+						}
+						else if (response.data.status == 0) {
+
+							localStorage.setItem('UserName', response.data.userName); // Store it in localStorage
+							localStorage.setItem('GlobalParamValue', response.data.globalParamValue); // Store it in localStorage
+
+							toastr.success('Login Successful');
+
+							setTimeout(
+								function () {
+									window.location.href = DashboardUrl;
+								}, 500);
+						} else if (response.data.qryResult == "failed") {
+							toastr.error(data.additionalData);
+						}
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					console.log("Data received:", response);
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			});
+		});
+	</script>
 }

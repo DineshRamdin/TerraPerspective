@@ -137,6 +137,8 @@ namespace BL.Services.Administration
                                              Id = a.Id,
                                              Zone = a.Zone,
                                              Type = a.Type,
+                                             Folder = a.Folder,
+                                             ExternalReference = a.ExternalReference,
                                          })
                                          .ToList();
                 dto.Data = result;

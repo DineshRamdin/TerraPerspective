@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using NetTopologySuite.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -43,6 +44,11 @@ namespace DAL.Models
 
         [NotMapped]
         public string ProfileImage { get; set; }
+       
+        [NotMapped]
+        public string GlobalParamValue { get; set; }
+
+        
     }
 
 	public class TunnelApplicationUser
