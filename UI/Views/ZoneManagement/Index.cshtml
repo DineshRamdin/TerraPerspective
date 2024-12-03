@@ -30,43 +30,43 @@
         z-index: 9999 !important;
     }
 
-     /* Base container styling */
-        .search-control {
-            position: relative;
-            width: 40px; /* Show only the icon initially */
-            height: 40px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
-            transition: width 0.3s ease; /* Smooth expansion */
-        }
+    /* Base container styling */
+    .search-control {
+        position: relative;
+        width: 40px; /* Show only the icon initially */
+        height: 40px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        transition: width 0.3s ease; /* Smooth expansion */
+    }
 
-        /* Input box styling */
-        .search-input {
-            width: 0;
-            height: 100%;
-            border: none;
-            padding: 0 10px;
-            outline: none;
-            opacity: 0;
-            transition: width 0.3s ease, opacity 0.3s ease;
-        }
+    /* Input box styling */
+    .search-input {
+        width: 0;
+        height: 100%;
+        border: none;
+        padding: 0 10px;
+        outline: none;
+        opacity: 0;
+        transition: width 0.3s ease, opacity 0.3s ease;
+    }
 
-        /* Search icon styling */
-        .search-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 20px;
-            cursor: pointer;
-        }
+    /* Search icon styling */
+    .search-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+        cursor: pointer;
+    }
 
-        /* Show the input box on hover */
-        .search-control:hover {
-            width: 200px; /* Expanded width */
-        }
+    /* Show the input box on hover */
+    .search-control:hover {
+        width: 200px; /* Expanded width */
+    }
 
         .search-control:hover .search-input {
             width: 100%;
@@ -163,15 +163,24 @@
             // });
 
             $("#ZoneManagementTable").on('click', 'tr', function (event) {
-                 var target = $(event.target); // Get the clicked element
-                    if(target.is("td"))
-                    {
+                var target = $(event.target); // Get the clicked element
+                if (target.is("td")) {
 
-                        $("#ZoneManagementTable").find(".selected-row").removeClass("selected-row");
-                        var Id = $(this).attr("data-id")
-                        $(this).addClass("selected-row")
-                        initMap(Id);
+                    $("#ZoneManagementTable").find(".selected-row").removeClass("selected-row");
+                    var Id = $(this).attr("data-id")
+                    $(this).addClass("selected-row")
+
+                    if (map) {
+                        map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
+                            animate: true,
+                            duration: 3  // Duration for zoom out animation
+                        });
                     }
+                    setTimeout(function () {
+                        initMap(Id);
+                    }, 3000);  // Match this to the duration of the zoom-out animation (1.5s here)
+
+                }
             });
 
         });
@@ -257,6 +266,7 @@
                 data: dataObject,  // Send data if needed
                 beforeSend: function () {
                     MapData = [];
+
                 },
                 success: function (response) {
                     if (response.data) {
@@ -269,112 +279,107 @@
                 }
             }).done(function () {
 
-               if (map) {
+                if (map) {
                     map.remove(); // Destroy the existing map instance if it exists
                     map = null;    // Set it to null to ensure a clean start
                 }
-                    map = L.map('map').setView([-20.081670, 57.598266], 10);
+                map = L.map('map').setView([-20.081670, 57.598266], 10);
 
-                    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    }).addTo(map);
+                const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
 
-                    // Base layer: OpenStreetMap
-                    var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '© OpenStreetMap'
-                    }).addTo(map);
+                // Base layer: OpenStreetMap
+                var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
 
-                    // Satellite layer (ESRI Satellite)
-                    var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                        attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
-                    });
+                // Satellite layer (ESRI Satellite)
+                var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+                });
 
-                    // Define base maps for the dropdown
-                    var baseMaps = {
-                        "Map": osmLayer,
-                        "Satellite": satelliteLayer
-                    };
+                // Define base maps for the dropdown
+                var baseMaps = {
+                    "Map": osmLayer,
+                    "Satellite": satelliteLayer
+                };
 
-                    // Add the custom control to the map
+                // Add the custom control to the map
 
-                    var searchControl = L.Control.extend({
-                        onAdd: function () {
-                            // var container = L.DomUtil.create('div', 'leaflet-bar');
-                            // var inputBox = L.DomUtil.create('input', '', container);
-                            // inputBox.type = 'text';
-                            // inputBox.placeholder = 'Search for a Zone...';
-                            // L.DomUtil.addClass(inputBox, 'form-control');
+                var searchControl = L.Control.extend({
+                    onAdd: function () {
 
-                              // Create the main container
-            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control search-control');
+                        // Create the main container
+                        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control search-control');
 
-            // Create the input box (hidden by default)
-            var inputBox = L.DomUtil.create('input', 'search-input', container);
-            inputBox.type = 'text';
-            inputBox.placeholder = 'Search for a Zone...';
-            L.DomUtil.addClass(inputBox, 'form-control');
+                        // Create the input box (hidden by default)
+                        var inputBox = L.DomUtil.create('input', 'search-input', container);
+                        inputBox.type = 'text';
+                        inputBox.placeholder = 'Search for a Zone...';
+                        L.DomUtil.addClass(inputBox, 'form-control');
 
-            // Create the search icon
-            var icon = L.DomUtil.create('span', 'search-icon', container);
-            icon.innerHTML = '<i class="fa fa-search"></i>'; // Unicode search icon, can replace with FontAwesome
+                        // Create the search icon
+                        var icon = L.DomUtil.create('span', 'search-icon', container);
+                        icon.innerHTML = '<i class="fa fa-search"></i>'; // Unicode search icon, can replace with FontAwesome
 
-            // Prevent map interactions when clicking inside the control
-            L.DomEvent.disableClickPropagation(container);
+                        // Prevent map interactions when clicking inside the control
+                        L.DomEvent.disableClickPropagation(container);
 
 
-                            // jQuery UI Autocomplete
-                            $(inputBox).autocomplete({
-                                source: function (request, response) {
-                                    // Make an AJAX call to the Nominatim API for location search
-                                    $.ajax({
-                                        url: GetZoneAutocompleteDataUrl,
-                                        data: { term: request.term },
-                                        success: function (data) {
-                                            response(data.data.map(function (item) {
-                                                return {
-                                                    label: item.zone,  // Displayed in autocomplete
-                                                    value: item.zone,  // Selected value
-                                                    featureGeoJson: item.featureGeoJson,
-                                                };
-                                            }));
-                                        }
-                                    });
-                                },
-                                select: function (event, ui) {
+                        // jQuery UI Autocomplete
+                        $(inputBox).autocomplete({
+                            source: function (request, response) {
+                                // Make an AJAX call to the Nominatim API for location search
+                                $.ajax({
+                                    url: GetZoneAutocompleteDataUrl,
+                                    data: { term: request.term },
+                                    success: function (data) {
+                                        response(data.data.map(function (item) {
+                                            return {
+                                                label: item.zone,  // Displayed in autocomplete
+                                                value: item.zone,  // Selected value
+                                                featureGeoJson: item.featureGeoJson,
+                                            };
+                                        }));
+                                    }
+                                });
+                            },
+                            select: function (event, ui) {
 
-                                    var geoJsonData = JSON.parse(ui.item.featureGeoJson);
+                                var geoJsonData = JSON.parse(ui.item.featureGeoJson);
 
-                                    // Add the GeoJSON polygon to the map
-                                    var layer = L.geoJSON(geoJsonData).addTo(map);
+                                // Add the GeoJSON polygon to the map
+                                var layer = L.geoJSON(geoJsonData).addTo(map);
 
-                                    map.flyToBounds(layer.getBounds(), {
-                                        padding: [50, 50],  // Adds padding around the bounds
-                                        // maxZoom: 12,        // Sets a maximum zoom level
-                                        animate: true,       // Animates the zoom transition
-                                        duration: 3 // Duration in seconds
-                                    });
-                                }
-                            });
+                                map.flyToBounds(layer.getBounds(), {
+                                    padding: [50, 50],  // Adds padding around the bounds
+                                    // maxZoom: 12,        // Sets a maximum zoom level
+                                    animate: true,       // Animates the zoom transition
+                                    duration: 3 // Duration in seconds
+                                });
+                            }
+                        });
 
-                            // Ensure the autocomplete dropdown appears correctly
-                            $(inputBox).on("focus", function () {
-                                setTimeout(() => {
-                                    $(".ui-autocomplete").css("position", "absolute");
-                                    $(".ui-autocomplete").css("z-index", "9999");
-                                }, 100);
-                            });
+                        // Ensure the autocomplete dropdown appears correctly
+                        $(inputBox).on("focus", function () {
+                            setTimeout(() => {
+                                $(".ui-autocomplete").css("position", "absolute");
+                                $(".ui-autocomplete").css("z-index", "9999");
+                            }, 100);
+                        });
 
-                            return container;
-                        }
-                       });
+                        return container;
+                    }
+                });
 
-                    // Add the custom search control to the map
-                    map.addControl(new searchControl({ position: 'topright' }));
+                // Add the custom search control to the map
+                map.addControl(new searchControl({ position: 'topright' }));
 
-                    
-                    L.control.layers(baseMaps).addTo(map);
+
+                L.control.layers(baseMaps).addTo(map);
 
                 var bounds = L.latLngBounds();
 
@@ -402,8 +407,19 @@
             });
 
         }
+        function timeout(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        async function openZoneManagementModal(id) {
 
-        function openZoneManagementModal(id) {
+            if (map) {
+                map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
+                    animate: true,
+                    duration: 3  // Duration for zoom out animation
+                });
+            }
+            await timeout(3000); // Wait for 3 seconds (adjust as needed)
+
             var dataObject = {};
             dataObject.id = id;
             var existingGeoJson = "";
@@ -416,7 +432,6 @@
                 },
                 success: function (response) {
                     if (response.data) {
-                        console.log("response.data", response.data);
                         if (response.data.id > 0)
                             $("#h4ZoneManagementTitle").html("Modify Geomerty Data");
                         else {
@@ -426,6 +441,8 @@
                         $("#hdnId").val(response.data.id);
                         $("#txtZone").val(response.data.zone);
                         $("#txtType").val(response.data.type);
+                        $("#txtFolder").val(response.data.folder);
+                        $("#txtExternalReference").val(response.data.externalReference);
 
 
                         if (response.data.featureGeoJson != null) {
@@ -445,7 +462,7 @@
             }).done(function () {
 
                 // $('#AddZoneManagementModal').modal('show');
-                $("#AddEditZone").css('display','');
+                $("#AddEditZone").css('display', '');
                 $("#frnZoneManagementCreate").validate({}).resetForm();
 
                 if (map) {
@@ -486,7 +503,7 @@
                         drawnItems.addLayer(layer); // Ensure drawnItems exists here
                     });
 
-                     map.flyToBounds(layer.getBounds(), {
+                    map.flyToBounds(layer.getBounds(), {
                         padding: [50, 50],  // Adds padding around the bounds
                         // maxZoom: 12,        // Sets a maximum zoom level
                         animate: true,       // Animates the zoom transition
@@ -576,12 +593,13 @@
             $("#h4ZoneManagementTitle").html("Add Geomerty Data");
             $("#hdnId").val("0");
             $('#txtType').val("");
+            $("#txtFolder").val("");
+            $("#txtExternalReference").val("");
         }
 
-        function CloseZoneManagement()
-        {
+        function CloseZoneManagement() {
             ClearZoneManagementModal();
-            $("#AddEditZone").css('display','none');
+            $("#AddEditZone").css('display', 'none');
             // $('#AddZoneManagementModal').modal('hide');
             // initMap();
             GetAllZoneManagement();
@@ -589,15 +607,16 @@
         }
         function SaveZoneManagement() {
             // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
-            let valid = formValidation(["txtType","txtZone"]);
-            
-            if (valid && $("#hdnMapdata").val() !="") {
+            let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
+
+            if (valid && $("#hdnMapdata").val() != "") {
                 var dataObject = {};
                 dataObject.Id = $("#hdnId").val();
                 dataObject.Zone = $("#txtZone").val();
                 dataObject.FeatureGeoJson = $('#hdnMapdata').val();
                 dataObject.Type = $('#txtType').val();
-
+                dataObject.Folder = $("#txtFolder").val();
+                dataObject.ExternalReference = $("#txtExternalReference").val();
 
 
                 $.ajax({
@@ -610,7 +629,7 @@
                     success: function (response) {
                         if (response.data) {
                             toastr.success(response.errorMessage);
-                            $("#AddEditZone").css('display','none');
+                            $("#AddEditZone").css('display', 'none');
                             // $('#AddZoneManagementModal').modal('hide');
                             // initMap();
                             GetAllZoneManagement();
@@ -630,12 +649,10 @@
                 });
             }
             else {
-                if(!valid)
-                {
-                toastr.warning("Please fill in required field(s)");
+                if (!valid) {
+                    toastr.warning("Please fill in required field(s)");
                 }
-                else
-                {
+                else {
                     toastr.warning("Please select Map");
                 }
             }

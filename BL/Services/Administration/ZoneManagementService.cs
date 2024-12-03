@@ -49,6 +49,8 @@ namespace BL.Services.Administration
                                              Id = a.Id,
                                              Zone = a.Zone,
                                              Type = a.Type,
+                                             Folder = a.Folder,
+                                             ExternalReference = a.ExternalReference,
                                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
                                          })
                                          .ToList();
@@ -97,6 +99,8 @@ namespace BL.Services.Administration
                                              Id = a.Id,
                                              Zone = a.Zone,
                                              Type = a.Type,
+                                             Folder = a.Folder,
+                                             ExternalReference = a.ExternalReference,
                                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
                                          })
                                          .ToList();
@@ -161,6 +165,8 @@ namespace BL.Services.Administration
                               Id = a.Id,
                               Zone = a.Zone,
                               Type = a.Type,
+                              Folder = a.Folder,
+                              ExternalReference = a.ExternalReference,
                               FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
                           }).FirstOrDefault();
 
@@ -194,7 +200,9 @@ namespace BL.Services.Administration
                 {
                     Zone = dataToSave.Zone,
                     GeomColumn = dataToSave.geometry,
-                    Type = dataToSave.Type
+                    Type = dataToSave.Type,
+                    Folder = dataToSave.Folder,
+                    ExternalReference = dataToSave.ExternalReference,
 
                 };
                 context.SYS_ZoneManagement.Add(DSS);
@@ -225,6 +233,8 @@ namespace BL.Services.Administration
                 DSS.Zone = dataToUpdate.Zone;
                 DSS.Type = dataToUpdate.Type;
                 DSS.GeomColumn = dataToUpdate.geometry;
+                DSS.Folder = dataToUpdate.Folder;
+                DSS.ExternalReference = dataToUpdate.ExternalReference;
 
                 context.SYS_ZoneManagement.Update(DSS);
                 context.SaveChanges();
