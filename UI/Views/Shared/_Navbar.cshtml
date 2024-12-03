@@ -8,7 +8,7 @@
     // Get the Base64 string from session
     var base64Image = HttpContextAccessor.HttpContext.Session.GetString("ProfileImage");
     var profileImage = string.IsNullOrEmpty(base64Image)
-        ? "/images/default-profile.png" // Use default image if no Base64 image is stored
+        ? "/image/default-profile.png" // Use default image if no Base64 image is stored
         : $"data:image/png;base64,{base64Image}"; // Prepend the Base64 string with the data type
 
 }
