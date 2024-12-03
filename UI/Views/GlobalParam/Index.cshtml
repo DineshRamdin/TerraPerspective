@@ -2,7 +2,6 @@
 	ViewData["Title"] = "Global Param";
 }
 
-
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
@@ -68,11 +67,12 @@
 				{ data: 'comment', title: 'Comment' },
 			];
 
-				initializeDataGrid('GlobalParamTable', 'openGlobalParamModal', GetAllGlobalParamUrl, columnList, false,true,true,false,false,null,true,null);
-
+			initializeDataGrid('GlobalParamTable', 'openGlobalParamModal', GetAllGlobalParamUrl, columnList, false,true,true,false,false,null,true,null);
 
 		}
-		 function openGlobalParamModal(id) {
+
+		function openGlobalParamModal(id)
+		{
 			var dataObject = {};
 			dataObject.id = id;
 
@@ -115,7 +115,6 @@
 				$("#frnGlobalParamCreate").validate({}).resetForm();
 			});
 
-
 		}
 
 		function ClearGlobalParamModal() {
@@ -129,7 +128,6 @@
 		 }
 
 		 async function SaveGlobalParam() {
-
 
 			let valid = formValidation(["txtName", "txtValue"]);
 
@@ -155,6 +153,11 @@
 						if (response.data) {
 							toastr.success(response.errorMessage);
 							$('#AddGlobalParamModal').modal('hide');
+
+							if (dataObject.Name === 'ExportID') {
+								localStorage.setItem('GlobalParamValue', dataObject.Value);
+							}
+
 							GetAllGlobalParam();
 						}
 						else {

@@ -7,6 +7,9 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
     var access = null; // init access variable
     var addBtn = '';
 
+    var UserNamelocal = localStorage.getItem('UserName');
+    var GlobalParamValuelocal = localStorage.getItem('GlobalParamValue');
+
     $.ajax({
         url: url,
         type: "POST",
@@ -138,6 +141,58 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                 exportOptions: {
                                     columns: ':visible:not(.sorting_disabled)'
 
+                                },
+                                customize: function (xlsx) {
+
+                                    if (GlobalParamValuelocal.toLowerCase() == "yes") {
+                                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                        //var currentDate = new Date().toLocaleDateString();
+
+                                        var date = new Date();
+                                        // Define the options for the date format
+                                        var options = {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric'
+                                        };
+
+                                        // Format the date as '03/Dec/2024'
+                                        var formattedDate = date.toLocaleDateString('en-GB', options);
+
+                                        // Replace the default date format with slashes between parts
+                                        var currentDate = formattedDate.replace(/ /g, '/');
+
+                                        // Define the options for the time format (12-hour format with AM/PM)
+                                        var timeOptions = {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true
+                                        };
+
+                                        // Format the time as '02:20 PM'
+                                        var formattedTime = date.toLocaleTimeString('en-GB', timeOptions);
+
+                                        // Combine the date and time
+                                        currentDate = currentDate + ' ' + formattedTime;
+
+                                        var username = UserNamelocal;
+
+                                        // Find the last row of the sheet
+                                        var rowCount = $(sheet).find('sheetData row').length;
+
+                                        // Add 4 to the rowCount to place the footer 4 rows after the last data row
+                                        var footerRowPosition = rowCount + 4; // The footer row is placed 4 rows after the last row of data
+
+                                        // Create the footer row with valid XML structure
+                                        var footerRow = `
+                                        <row r="${footerRowPosition}">
+                                            <c t="s" r="A${footerRowPosition}"><v>UserName : ${username}</v></c>
+                                            <c t="s" r="B${footerRowPosition}"><v>Date : ${currentDate}</v></c>
+                                        </row>`;
+
+                                        // Append the footer row to the sheet data, ensuring proper structure
+                                        $(sheet).find('sheetData').append(footerRow);
+                                    }
                                 }
                             },
                             //PDF Export Button
@@ -148,6 +203,79 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                 exportOptions: {
                                     columns: ':visible:not(.sorting_disabled)'
 
+                                },
+                                customize: function (doc) {
+                                    if (GlobalParamValuelocal.toLowerCase() == "yes") {
+                                        /* var currentDate = new Date().toLocaleDateString();*/
+                                        var date = new Date();
+
+                                        // Define the options for the date format
+                                        var options = {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric'
+                                        };
+
+                                        // Format the date as '03/Dec/2024'
+                                        var formattedDate = date.toLocaleDateString('en-GB', options);
+
+                                        // Replace the default date format with slashes between parts
+                                        var currentDate = formattedDate.replace(/ /g, '/');
+
+
+                                        // Define the options for the time format (12-hour format with AM/PM)
+                                        var timeOptions = {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true
+                                        };
+
+                                        // Format the time as '02:20 PM'
+                                        var formattedTime = date.toLocaleTimeString('en-GB', timeOptions);
+
+                                        // Combine the date and time
+                                        currentDate = currentDate + ' ' + formattedTime;
+
+
+                                        var username = UserNamelocal; // Replace with dynamic username
+
+                                        // Define the styles for header and footer if not already defined
+                                        doc.styles = doc.styles || {};  // Ensure styles object exists
+                                        doc.styles.header = doc.styles.header || {}; // Ensure header style exists
+                                        doc.styles.footer = doc.styles.footer || {}; // Ensure footer style exists
+
+                                        // Adjust the font size for header and footer styles
+                                        doc.styles.header.fontSize = 12;
+                                        doc.styles.footer.fontSize = 10;
+
+                                        // Add custom footer content with username and date after all data
+                                        doc.content.push({  // Push to the end of the content array
+                                            text: `UserName : ${username} | Date : ${currentDate}`,
+                                            style: 'footer',  // Use the defined footer style
+                                            alignment: 'left',
+                                            margin: [0, 30, 10, 0] // Add some space before the footer text
+                                        });
+
+                                        // Optionally add the content to the footer (if needed)
+                                        doc.footer = function (currentPage, pageCount) {
+                                            return {
+                                                columns: [
+                                                    {
+                                                        text: `Page ${currentPage} of ${pageCount}`,
+                                                        alignment: 'center'
+                                                    },
+                                                    {
+                                                        text: `Generated on ${currentDate}`,
+                                                        alignment: 'right'
+                                                    }
+                                                ],
+                                                margin: [20, 0]
+                                            };
+                                        };
+
+                                        // Optionally, adjust document settings like font size for the entire document
+                                        doc.defaultStyle.fontSize = 10;
+                                    }
                                 }
                             },
                             //CSV Export Button
@@ -158,6 +286,53 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                 exportOptions: {
                                     columns: ':visible:not(.sorting_disabled)'
 
+                                },
+                                customize: function (csv) {
+                                    if (GlobalParamValuelocal.toLowerCase() == "yes") {
+                                        // Current date and username
+                                        var date = new Date();
+
+                                        // Define the options for the date format
+                                        var options = {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric'
+                                        };
+
+                                        // Format the date as '03/Dec/2024'
+                                        var formattedDate = date.toLocaleDateString('en-GB', options);
+
+                                        // Replace the default date format with slashes between parts
+                                        var currentDate = formattedDate.replace(/ /g, '/');
+
+                                        // Define the options for the time format (12-hour format with AM/PM)
+                                        var timeOptions = {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true
+                                        };
+
+                                        // Format the time as '02:20 PM'
+                                        var formattedTime = date.toLocaleTimeString('en-GB', timeOptions);
+
+                                        // Combine the date and time
+                                        currentDate = currentDate + ' ' + formattedTime;
+
+                                        var username = UserNamelocal; // Replace with dynamic username from your system
+
+                                        // Split the CSV content into rows
+                                        var rows = csv.split('\n');
+
+                                        // If rows are empty, just add at the end
+                                        rows.push(`,`);
+                                        rows.push(`, `);
+                                        rows.push(`, `);
+                                        rows.push(`UserName : ${username}, Date : ${currentDate}`);
+
+                                        // Join the rows back into a single CSV string and return
+                                        return rows.join('\n');
+                                    }
+                                    return csv; // Return the original CSV if the condition isn't met
                                 }
                             },
 
@@ -383,6 +558,9 @@ function addDataToChild(d, rowIndex, childColumns) {
 
 function initializeDataGridForViews(tableID, showExcel = true) {
 
+    var UserNamelocal = localStorage.getItem('UserName');
+    var GlobalParamValuelocal = localStorage.getItem('GlobalParamValue');
+
     if ($('#' + tableID).length > 0) { //check if table exists
 
         var errorMessageColumnIndex = -1;
@@ -421,7 +599,59 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                     className: 'btn-sm btn-c-secondary d-none excelbtn',
                     exportOptions: {
                         columns: ':visible:not(.sorting_disabled)'
+                    },
+                    customize: function (xlsx) {
 
+                        if (GlobalParamValuelocal.toLowerCase() == "yes") {
+                            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                            //var currentDate = new Date().toLocaleDateString();
+                            var date = new Date();
+
+                            // Define the options for the date format
+                            var options = {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric'
+                            };
+
+                            // Format the date as '03/Dec/2024'
+                            var formattedDate = date.toLocaleDateString('en-GB', options);
+
+                            // Replace the default date format with slashes between parts
+                            var currentDate = formattedDate.replace(/ /g, '/');
+
+
+                            // Define the options for the time format (12-hour format with AM/PM)
+                            var timeOptions = {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            };
+
+                            // Format the time as '02:20 PM'
+                            var formattedTime = date.toLocaleTimeString('en-GB', timeOptions);
+
+                            // Combine the date and time
+                            currentDate = currentDate + ' ' + formattedTime;
+
+                            var username = UserNamelocal;
+
+                            // Find the last row of the sheet
+                            var rowCount = $(sheet).find('sheetData row').length;
+
+                            // Add 4 to the rowCount to place the footer 4 rows after the last data row
+                            var footerRowPosition = rowCount + 4; // The footer row is placed 4 rows after the last row of data
+
+                            // Create the footer row with valid XML structure
+                            var footerRow = `
+                                        <row r="${footerRowPosition}">
+                                            <c t="s" r="A${footerRowPosition}"><v>UserName : ${username}</v></c>
+                                            <c t="s" r="B${footerRowPosition}"><v>Date : ${currentDate}</v></c>
+                                        </row>`;
+
+                            // Append the footer row to the sheet data, ensuring proper structure
+                            $(sheet).find('sheetData').append(footerRow);
+                        }
                     }
                 },
                 //PDF Export Button
@@ -431,7 +661,78 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                     className: 'btn-sm btn-c-secondary d-none printbtn',
                     exportOptions: {
                         columns: ':visible:not(.sorting_disabled)'
+                    },
+                    customize: function (doc) {
+                        if (GlobalParamValuelocal.toLowerCase() == "yes") {
+                            /* var currentDate = new Date().toLocaleDateString();*/
+                            var date = new Date();
 
+                            // Define the options for the date format
+                            var options = {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric'
+                            };
+
+                            // Format the date as '03/Dec/2024'
+                            var formattedDate = date.toLocaleDateString('en-GB', options);
+
+                            // Replace the default date format with slashes between parts
+                            var currentDate = formattedDate.replace(/ /g, '/');
+
+
+                            // Define the options for the time format (12-hour format with AM/PM)
+                            var timeOptions = {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            };
+
+                            // Format the time as '02:20 PM'
+                            var formattedTime = date.toLocaleTimeString('en-GB', timeOptions);
+
+                            // Combine the date and time
+                            currentDate = currentDate + ' ' + formattedTime;
+
+                            var username = UserNamelocal; // Replace with dynamic username
+
+                            // Define the styles for header and footer if not already defined
+                            doc.styles = doc.styles || {};  // Ensure styles object exists
+                            doc.styles.header = doc.styles.header || {}; // Ensure header style exists
+                            doc.styles.footer = doc.styles.footer || {}; // Ensure footer style exists
+
+                            // Adjust the font size for header and footer styles
+                            doc.styles.header.fontSize = 12;
+                            doc.styles.footer.fontSize = 10;
+
+                            // Add custom footer content with username and date after all data
+                            doc.content.push({  // Push to the end of the content array
+                                text: `UserName : ${username} | Date : ${currentDate}`,
+                                style: 'footer',  // Use the defined footer style
+                                alignment: 'left',
+                                margin: [0, 30, 10, 0] // Add some space before the footer text
+                            });
+
+                            // Optionally add the content to the footer (if needed)
+                            doc.footer = function (currentPage, pageCount) {
+                                return {
+                                    columns: [
+                                        {
+                                            text: `Page ${currentPage} of ${pageCount}`,
+                                            alignment: 'center'
+                                        },
+                                        {
+                                            text: `Generated on ${currentDate}`,
+                                            alignment: 'right'
+                                        }
+                                    ],
+                                    margin: [20, 0]
+                                };
+                            };
+
+                            // Optionally, adjust document settings like font size for the entire document
+                            doc.defaultStyle.fontSize = 10;
+                        }
                     }
                 },
                 //CSV Export Button
@@ -441,7 +742,53 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                     className: 'btn-sm btn-c-secondary d-none csvbtn',
                     exportOptions: {
                         columns: ':visible:not(.sorting_disabled)'
+                    },
+                    customize: function (csv) {
+                        if (GlobalParamValuelocal.toLowerCase() == "yes") {
+                            // Current date and username
+                            var date = new Date();
 
+                            // Define the options for the date format
+                            var options = {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric'
+                            };
+
+                            // Format the date as '03/Dec/2024'
+                            var formattedDate = date.toLocaleDateString('en-GB', options);
+
+                            // Replace the default date format with slashes between parts
+                            var currentDate = formattedDate.replace(/ /g, '/');
+
+                            // Define the options for the time format (12-hour format with AM/PM)
+                            var timeOptions = {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            };
+
+                            // Format the time as '02:20 PM'
+                            var formattedTime = date.toLocaleTimeString('en-GB', timeOptions);
+
+                            // Combine the date and time
+                            currentDate = currentDate + ' ' + formattedTime;
+
+                            var username = UserNamelocal; // Replace with dynamic username from your system
+
+                            // Split the CSV content into rows
+                            var rows = csv.split('\n');
+
+                            // If rows are empty, just add at the end
+                            rows.push(`,`);
+                            rows.push(`, `);
+                            rows.push(`, `);
+                            rows.push(`UserName : ${username}, Date : ${currentDate}`);
+
+                            // Join the rows back into a single CSV string and return
+                            return rows.join('\n');
+                        }
+                        return csv; // Return the original CSV if the condition isn't met
                     }
                 },
             ],

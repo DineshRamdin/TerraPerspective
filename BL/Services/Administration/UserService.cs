@@ -552,5 +552,13 @@ namespace BL.Services.Administration
 
             return dto;
         }
+
+        public string GlobalParamValue()
+        {
+            string ParamValue = (from ur in context.SYS_GlobalParam                              
+                              where ur.Name == "ExportID"
+                              select ur.Value).FirstOrDefault();
+            return ParamValue;
+        }
     }
 }
