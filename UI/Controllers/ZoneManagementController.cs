@@ -1,4 +1,5 @@
-﻿using BL.Models.Administration;
+﻿using BL.Constants;
+using BL.Models.Administration;
 using BL.Models.Common;
 using BL.Services.Administration;
 using BL.Services.Common;
@@ -10,15 +11,18 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System.Data.SqlTypes;
 using UI.Controllers.Common;
+using static BL.Models.Administration.MatrixDTO;
 
 namespace UI.Controllers
 {
     public class ZoneManagementController : BaseController
     {
         public ZoneManagementService service;
+        public MatrixService _MatrixService;
         public ZoneManagementController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext) : base(userManager, signInManager, rolemanager, Dbcontext)
         {
             service = new ZoneManagementService();
+            _MatrixService = new MatrixService();
         }
 
         public IActionResult Index()
@@ -156,6 +160,25 @@ namespace UI.Controllers
 
             return Ok(dt);
 
+        }
+
+        [HttpPost]
+        public ActionResult<List<CRUDMatrix>> GetTree(long Id)
+        {
+            try
+            {
+                BaseResponseDTO<List<CRUDMatrix>> tree = new BaseResponseDTO<List<CRUDMatrix>>();
+                tree = _MatrixService.GetTreeForZone(Id);
+                return Ok(tree);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+
+            }
         }
 
     }

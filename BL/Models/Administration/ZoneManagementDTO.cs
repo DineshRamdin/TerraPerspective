@@ -20,6 +20,8 @@ namespace BL.Models.Administration
         public string Folder { get; set; }
         public string ExternalReference { get; set; }
 
+        public List<CRUDMatrix> TreeData { get; set; } = new List<CRUDMatrix>();
+
     }
 
     public class ZoneDataDTO
