@@ -841,9 +841,9 @@ namespace BL.Services.Common
             SeedRoles(roleManager);
             SeedUsers(userManager);
             SeedGlobalParam();
-			SeedAcessRights(roleManager);
+            SeedModules(userManager);
+            SeedAcessRights(roleManager);
 			SeedAcessRightsN(roleManager);
-			SeedModules(userManager);
 			SeedGroupMatrix(userManager);
 
         }

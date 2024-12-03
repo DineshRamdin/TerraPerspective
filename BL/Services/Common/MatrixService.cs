@@ -1,4 +1,6 @@
-﻿using BL.Models.Administration;
+﻿using BL.Constants;
+using BL.Models.Administration;
+using BL.Models.Common;
 using DAL.Context;
 using DAL.Models.Administration;
 using Microsoft.AspNetCore.Http;
@@ -96,5 +98,292 @@ namespace BL.Services.Common
 			return MLL;
 		}
 
-	}
+        public BaseResponseDTO<List<CRUDMatrix>> GetTree()
+        {
+            BaseResponseDTO<List<CRUDMatrix>> BaseDto = new BaseResponseDTO<List<CRUDMatrix>>();
+            List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
+            List<CRUDMatrix> ml = new List<CRUDMatrix>();
+            PerspectiveContext context = new PerspectiveContext();
+            try
+            {
+                UserMatrixDTO UM = sGetMatrixUserByUserID();
+
+                mlRoot = (from a in context.SYS_GroupMatrix
+                          where UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+                          select new CRUDMatrix()
+                          {
+                              id = a.GMID.ToString(),
+                              text = a.GMDescription,
+                              parent = "#",
+                          }).ToList();
+                ml = (from a in context.SYS_GroupMatrix
+                      where UM.IDS.Contains(a.GMID) && !UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+                      select new CRUDMatrix()
+                      {
+                          id = a.GMID.ToString(),
+                          text = a.GMDescription,
+                          parent = a.ParentGMID.ToString(),
+                      }).ToList();
+                ml.AddRange(mlRoot);
+                BaseDto.Data = ml;
+                BaseDto.QryResult = new QueryResult().SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                BaseDto.Data = ml;
+                BaseDto.ErrorMessage = "An Error Occured";
+                BaseDto.QryResult = new QueryResult().FAILED;
+            }
+            return BaseDto;
+        }
+
+        public BaseResponseDTO<bool> CRUDM(List<CRUDMatrix> dt)
+        {
+            BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
+            try
+            {
+                UserMatrixDTO UM = sGetMatrixUserByUserID();
+                bool Incoming =  HandleIncoming(dt);
+                bool Update = HandleUpdate(dt);
+                bool Removed = HandleRemoved(UM, dt);
+                BaseDto.Data = true;
+                BaseDto.QryResult = new QueryResult().SUCEEDED;
+                if (!Incoming && !Removed)
+                {
+                    BaseDto.Data = false;
+                    BaseDto.ErrorMessage = "An Error Occured";
+                    BaseDto.QryResult = new QueryResult().FAILED;
+                }
+
+            }
+            catch (Exception)
+            {
+                BaseDto.Data = false;
+                BaseDto.ErrorMessage = "An Error Occured";
+                BaseDto.QryResult = new QueryResult().FAILED;
+            }
+            return BaseDto;
+        }
+
+        public bool HandleIncoming(List<CRUDMatrix> dt)
+        {
+            List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
+            List<CRUDMatrix> Incoming = new List<CRUDMatrix>();
+            bool status = false;
+            try
+            {
+                Incoming = dt.Where(x => x.id.Contains("j1_")).ToList();
+                mlRoot = Incoming.Where(x => !x.parent.Contains("j1_")).ToList();
+                foreach (var matrix in mlRoot)
+                {
+                    long result = CreateMatrix(Convert.ToInt64(matrix.parent), matrix.text);
+                    if (result > 0)
+                    {
+                        Incoming.Where(x => x.parent == matrix.id).Select(c => { c.parent = result.ToString(); return c; }).ToList();
+                        Incoming.Where(x => x.id == matrix.id).Select(c => { c.id = result.ToString(); return c; }).ToList();
+                    }
+                }
+                if (Incoming.Where(x => x.id.Contains("j1_")).ToList().Count > 0)
+                {
+                    status = HandleIncoming(Incoming);
+                    if (!status)
+                    {
+                        return status;
+                    }
+                }
+                status = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return status;
+        }
+        public bool HandleUpdate(List<CRUDMatrix> dt)
+        {
+            List<CRUDMatrix> update = new List<CRUDMatrix>();
+            PerspectiveContext context = new PerspectiveContext();
+            bool status = false;
+            try
+            {
+                update = dt.Where(x => !x.id.Contains("j1_")).ToList();
+                foreach (CRUDMatrix u in update)
+                {
+                    SYS_GroupMatrix gm = context.SYS_GroupMatrix.Where(x => x.GMID == Convert.ToInt64(u.id)).FirstOrDefault();
+                    if (gm.GMDescription != u.text)
+                    {
+                        gm.GMDescription = u.text;
+                        context.SYS_GroupMatrix.Update(gm);
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return status;
+        }
+        public bool HandleRemoved(UserMatrixDTO UM, List<CRUDMatrix> dt)
+        {
+            List<long> Removed = new List<long>();
+            bool status = false;
+            try
+            {
+                List<long> Existing = GetExisting(dt);
+                Removed = UM.IDS;
+                Removed.RemoveAll(x => Existing.Contains(x));
+                status = true;
+                status = DeleteMatrix(Removed);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return status;
+        }
+
+        public List<long> GetExisting(List<CRUDMatrix> dt)
+        {
+            List<long> Existing = new List<long>();
+            try
+            {
+                foreach (string e in dt.Where(x => !x.id.Contains("j1_")).Select(y => y.id).ToList())
+                {
+                    Existing.Add(Convert.ToInt64(e));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Existing;
+        }
+        public long CreateMatrix(long pgmid, string gmdes)
+        {
+            PerspectiveContext context = new PerspectiveContext();
+            long id = 0;
+            try
+            {
+                SYS_GroupMatrix gm = new SYS_GroupMatrix()
+                {
+                    ParentGMID = pgmid,
+                    GMDescription = gmdes,
+                    Remarks = string.Empty,
+                    IsCompany = true,
+                    CompanyCode = string.Empty,
+                    LegalName = string.Empty,
+                };
+                context.SYS_GroupMatrix.Add(gm);
+                context.SaveChanges();
+                id = gm.GMID;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return id;
+        }
+        public bool DeleteMatrix(List<long> Removed)
+        {
+            PerspectiveContext context = new PerspectiveContext();
+            bool status = false;
+            try
+            {
+                foreach (long Id in Removed)
+                {
+                    SYS_GroupMatrix gm = context.SYS_GroupMatrix.Where(x => x.GMID == Id).FirstOrDefault();
+                    gm.DeleteStatus = true;
+                    context.SYS_GroupMatrix.Update(gm);
+                    context.SaveChanges();
+                }
+                status = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return status;
+        }
+
+        public BaseResponseDTO<bool> SaveUserM(List<long> Ids, string AUID)
+        {
+            PerspectiveContext context = new PerspectiveContext();
+            BaseResponseDTO<bool> BaseResponseDTO = new BaseResponseDTO<bool>();
+            BaseResponseDTO.Data = false;
+            try
+            {
+                long SysUId = context.SYS_User.Where(x => x.AId == AUID).FirstOrDefault().Id;
+                foreach (long Id in Ids)
+                {
+                    SYS_GroupMatrixUser gm = new SYS_GroupMatrixUser()
+                    {
+                        IID = SysUId,
+                        GMID = Id
+                    };
+                    context.SYS_GroupMatrixUser.Add(gm);
+                    context.SaveChanges();
+                }
+                BaseResponseDTO.Data = true;
+                BaseResponseDTO.QryResult = new QueryResult().SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                BaseResponseDTO.Data = false;
+                BaseResponseDTO.ErrorMessage = "Error Saving Matrix";
+                BaseResponseDTO.QryResult = new QueryResult().FAILED;
+            }
+            return BaseResponseDTO;
+        }
+        public BaseResponseDTO<bool> UpdateUserM(List<long> Ids, string AUID)
+        {
+            PerspectiveContext context = new PerspectiveContext();
+            BaseResponseDTO<bool> BaseResponseDTO = new BaseResponseDTO<bool>();
+            BaseResponseDTO.Data = false;
+            try
+            {
+                long SysUId = context.SYS_User.Where(x => x.AId == AUID).FirstOrDefault().Id;
+                List<long> GmUL = context.SYS_GroupMatrixUser.Where(x => x.IID == SysUId && x.DeleteStatus == false).Select(y => y.GMID).ToList();
+                foreach (long Id in Ids)
+                {
+                    if (!GmUL.Contains(Id))
+                    {
+                        SYS_GroupMatrixUser gm = new SYS_GroupMatrixUser()
+                        {
+                            IID = SysUId,
+                            GMID = Id
+                        };
+                        context.SYS_GroupMatrixUser.Add(gm);
+                        context.SaveChanges();
+
+                    }
+                    else
+                    {
+                        GmUL.RemoveAll(x => x == Id);
+                    }
+
+                }
+                foreach (long Id in GmUL)
+                {
+                    SYS_GroupMatrixUser gm = context.SYS_GroupMatrixUser.Where(x => x.GMID == Id && x.IID == SysUId && x.DeleteStatus == false).FirstOrDefault();
+                    if (gm != null)
+                    {
+                        gm.DeleteStatus = true;
+                        context.SYS_GroupMatrixUser.Update(gm);
+                        context.SaveChanges();
+                    }
+
+                }
+                BaseResponseDTO.Data = true;
+                BaseResponseDTO.QryResult = new QueryResult().SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                BaseResponseDTO.Data = false;
+                BaseResponseDTO.ErrorMessage = "Error Saving Matrix";
+                BaseResponseDTO.QryResult = new QueryResult().FAILED;
+            }
+            return BaseResponseDTO;
+        }
+    }
 }

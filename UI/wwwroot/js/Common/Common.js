@@ -113,8 +113,8 @@ function loadMenu() {
 function renderDynamicMenu(data) {
     const menuContainer = $(".sidebar nav ul");
     menuContainer.empty(); // Clear the existing menu
-
     data.forEach(grandParent => {
+
         // Build grandparent menu item
         let grandParentHtml = `
                     <li class="nav-item">
@@ -179,6 +179,19 @@ function initMenuToggle() {
         if (submenu.length) {
             e.preventDefault();
             submenu.slideToggle();
+            $(this).find(".right").toggleClass("fa-angle-right fa-angle-down");
+        }
+    });
+
+    initChildMenuToggle();
+}
+
+function initChildMenuToggle() {
+    $(".nav-item > a").click(function (e) {
+        const child = $(this).next(".nav-treeview");
+        if (child.length) {
+            e.preventDefault();
+            child.slideToggle();
             $(this).find(".right").toggleClass("fa-angle-right fa-angle-down");
         }
     });
