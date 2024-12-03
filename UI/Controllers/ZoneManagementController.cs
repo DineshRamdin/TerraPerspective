@@ -116,6 +116,20 @@ namespace UI.Controllers
                     }
                 }
                 dto.geometry.SRID = 4326;
+
+
+                if (!string.IsNullOrEmpty(dto.Folder) )
+                {
+                    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Assets", dto.Folder);
+
+                    // Check if the folder exists, and create it if not
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
+                }
+                
+
                 if (dto.Id == 0)
                 {
                     dt = await service.SaveAsync(dto);
