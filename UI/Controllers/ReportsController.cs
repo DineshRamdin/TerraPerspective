@@ -44,8 +44,6 @@ namespace UI.Controllers
 
         public async Task<IActionResult> Preview(string viewName)
         {
-            //BaseResponseDTO<List<ReportsDTO>> dt = new BaseResponseDTO<List<ReportsDTO>>();
-            //dt.Data = new List<ReportsDTO>();
             try
             {
                 DataTable dt = new DataTable();
@@ -55,12 +53,8 @@ namespace UI.Controllers
 
                     if (dt.Rows.Count > 0 && dt.Columns.Contains("ErrorMessage") && dt.Rows[0]["ErrorMessage"] != DBNull.Value)
                     {
-
                         // Extract the error message from the DataTable
                         string errorMessage = dt.Rows[0]["ErrorMessage"].ToString();
-
-                        // Return a view showing the error message
-                        //return View("Error", new { message = errorMessage });
                     }
                 }
 
@@ -69,13 +63,6 @@ namespace UI.Controllers
                           .Select(row => dt.Columns.Cast<DataColumn>().ToDictionary(col => col.ColumnName, col => row[col]))
                           .ToList();
 
-                // Check if data is populated
-                if (data.Any())
-                {
-                    // Log or inspect the data before returning
-                }
-
-
                 return View(data); // Pass data to the view
                 //return Ok(dt);
             }
@@ -83,9 +70,6 @@ namespace UI.Controllers
             {
                 return View("Error", new { message = "An unexpected error occurred: " + ex.Message });
             }
-            //return BadRequest();
-
-            //return View(dt);
         }
 
         [HttpPost]
@@ -136,28 +120,18 @@ namespace UI.Controllers
         {
             try
             {
-
-                try
+                BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+                if (!string.IsNullOrEmpty(Id))
                 {
-                    BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
-                    if (!string.IsNullOrEmpty(Id))
-                    {
-                        dt = await service.ReportsDelete(Convert.ToInt64(Id));
-                    }
+                    dt = await service.ReportsDelete(Convert.ToInt64(Id));
+                }
 
-                    return Ok(dt);
-                }
-                catch (Exception)
-                {
-                    return BadRequest();
-                }
+                return Ok(dt);
             }
             catch (Exception)
             {
                 return BadRequest();
             }
-
-
         }
     }
 }

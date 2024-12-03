@@ -438,9 +438,6 @@ function initializeDataGridForViews(tableID, showExcel = true) {
 
                     }
                 },
-
-                //'<button class="btn btn-block btn-primary mb-3" onclick="' + onclickPartial + '()"><i class="fa fa-plus me-2"></i>Add New</button>',
-
             ],
             createdRow: function (row, data, dataIndex) {
                 $(row).attr('data-id', data.id);
@@ -500,9 +497,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                     'gap': '10px' // Adds space between elements (dropdown and buttons)
                 });
             },
-
-
-        })//.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        })
 
         $('div.dt-buttons').prepend($('.clsDownload'));
         $('div.dt-buttons').css('float', 'inline-end');
@@ -513,12 +508,9 @@ function initializeDataGridForViews(tableID, showExcel = true) {
         $('.dataTables_paginate').css('margin-top', '-30px');
 
         if (showExcel) {
-            /*$('.excelbtn').removeClass('d-none');*/
             $('.clsDownload').removeClass('d-none');
-
         }
         else {
-            /*$('.excelbtn').addClass('d-none');*/
             $('.clsDownload').addClass('d-none');
         }
 
@@ -529,8 +521,6 @@ function initializeDataGridForViews(tableID, showExcel = true) {
             $('.dataTables_paginate').css('display', 'none');
             $('.dataTables_filter').css('display', 'none');
             $('.dataTables_info').css('display', 'none');
-
-
         }
     }
 
