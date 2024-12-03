@@ -138,7 +138,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                 },
                                 customize: function (xlsx) {
 
-                                    if (GlobalParamValuelocal == "Yes") {
+                                    if (GlobalParamValuelocal.toLowerCase() == "yes") {
                                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
                                         //var currentDate = new Date().toLocaleDateString();
 
@@ -199,7 +199,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
                                 },
                                 customize: function (doc) {
-                                    if (GlobalParamValuelocal == "Yes") {
+                                    if (GlobalParamValuelocal.toLowerCase() == "yes") {
                                         /* var currentDate = new Date().toLocaleDateString();*/
                                         var date = new Date();
 
@@ -282,7 +282,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
                                 },
                                 customize: function (csv) {
-                                    if (GlobalParamValuelocal == "Yes") {
+                                    if (GlobalParamValuelocal.toLowerCase() == "yes") {
                                         // Current date and username
                                         var date = new Date();
 
@@ -596,7 +596,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                     },
                     customize: function (xlsx) {
 
-                        if (GlobalParamValuelocal == "Yes") {
+                        if (GlobalParamValuelocal.toLowerCase() == "yes") {
                             var sheet = xlsx.xl.worksheets['sheet1.xml'];
                             //var currentDate = new Date().toLocaleDateString();
                             var date = new Date();
@@ -657,7 +657,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                         columns: ':visible:not(.sorting_disabled)'
                     },
                     customize: function (doc) {
-                        if (GlobalParamValuelocal == "Yes") {
+                        if (GlobalParamValuelocal.toLowerCase() == "yes") {
                             /* var currentDate = new Date().toLocaleDateString();*/
                             var date = new Date();
 
@@ -738,7 +738,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                         columns: ':visible:not(.sorting_disabled)'
                     },
                     customize: function (csv) {
-                        if (GlobalParamValuelocal == "Yes") {
+                        if (GlobalParamValuelocal.toLowerCase() == "yes") {
                             // Current date and username
                             var date = new Date();
 
