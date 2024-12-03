@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
+using System.Data;
 using System.Data.SqlTypes;
 using UI.Controllers.Common;
 
@@ -118,7 +119,7 @@ namespace UI.Controllers
                 dto.geometry.SRID = 4326;
 
 
-                if (!string.IsNullOrEmpty(dto.Folder) )
+                if (!string.IsNullOrEmpty(dto.Folder))
                 {
                     string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Assets", dto.Folder);
 
@@ -128,7 +129,7 @@ namespace UI.Controllers
                         Directory.CreateDirectory(folderPath);
                     }
                 }
-                
+
 
                 if (dto.Id == 0)
                 {
@@ -158,5 +159,32 @@ namespace UI.Controllers
 
         }
 
+        public async Task<IActionResult> Fileview(string folder)
+        {
+
+            // Define the folder path where the files are stored
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Assets", folder);
+
+            // Create a new DataTable
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("File Name", typeof(string));
+
+            // Get all file names in the folder
+            string[] fileNames = Directory.GetFiles(folderPath)
+                                          .Select(filePath => Path.GetFileName(filePath))
+                                          .ToArray();
+
+            // Populate the DataTable with file names
+            foreach (var fileName in fileNames)
+            {
+                DataRow row = dataTable.NewRow();
+                row["File Name"] = fileName;
+                dataTable.Rows.Add(row);
+            }
+
+            // Optionally: Return the DataTable as JSON for use in the client-side or for further processing
+            return View(dataTable);
+
+        }
     }
 }
