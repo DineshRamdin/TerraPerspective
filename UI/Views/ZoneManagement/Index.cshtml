@@ -441,6 +441,8 @@
                         $("#hdnId").val(response.data.id);
                         $("#txtZone").val(response.data.zone);
                         $("#txtType").val(response.data.type);
+                        $("#txtFolder").val(response.data.folder);
+                        $("#txtExternalReference").val(response.data.externalReference);
 
 
                         if (response.data.featureGeoJson != null) {
@@ -591,6 +593,8 @@
             $("#h4ZoneManagementTitle").html("Add Geomerty Data");
             $("#hdnId").val("0");
             $('#txtType').val("");
+            $("#txtFolder").val("");
+            $("#txtExternalReference").val("");
         }
 
         function CloseZoneManagement() {
@@ -603,7 +607,7 @@
         }
         function SaveZoneManagement() {
             // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
-            let valid = formValidation(["txtType", "txtZone"]);
+            let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
 
             if (valid && $("#hdnMapdata").val() != "") {
                 var dataObject = {};
@@ -611,7 +615,8 @@
                 dataObject.Zone = $("#txtZone").val();
                 dataObject.FeatureGeoJson = $('#hdnMapdata').val();
                 dataObject.Type = $('#txtType').val();
-
+                dataObject.Folder = $("#txtFolder").val();
+                dataObject.ExternalReference = $("#txtExternalReference").val();
 
 
                 $.ajax({

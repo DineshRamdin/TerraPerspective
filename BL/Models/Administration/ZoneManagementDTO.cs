@@ -17,6 +17,9 @@ namespace BL.Models.Administration
 
         public Geometry geometry { get; set; }
 
+        public string Folder { get; set; }
+        public string ExternalReference { get; set; }
+
     }
 
     public class ZoneDataDTO
@@ -24,5 +27,7 @@ namespace BL.Models.Administration
         public long Id { get; set; }
         public string Zone { get; set; }
         public string Type { get; set; }
+        public string Folder { get; set; }
+        public string ExternalReference { get; set; }
     }
 }

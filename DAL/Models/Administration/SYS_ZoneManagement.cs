@@ -17,5 +17,7 @@ namespace DAL.Models.Administration
 
         public Geometry GeomColumn { get; set; }
         public string Type { get; set; }
+        public string Folder { get; set; }
+        public string ExternalReference { get; set; }
     }
 }
