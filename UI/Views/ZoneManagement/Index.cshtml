@@ -185,56 +185,7 @@
                 }
             });
 
-            function initializeTreeView(treeData) {
-                $('#tree').jstree({
-                    "core": {
-                        "animation": 0,
-                        "check_callback": true,
-                        "themes": { "icons": true },
-                        'data': treeData
-                    },
-                    "types": {
-                        "#": {
-                            "icon": "fa-solid fa-circle-notch",
-                            "valid_children": ["root"]
-                        },
-                        "root": {
-                            "icon": "fa-solid fa-circle-notch",
-                            "valid_children": ["default"]
-                        },
-                        "default": {
-                            "icon": "fa-regular fa-circle-dot",
-                            "valid_children": ["default", "file"]
-                        },
-                        "file": {
-                            "icon": "fa-regular fa-circle-dot",
-                            "valid_children": []
-                        }
-                    },
-                    "plugins": [
-                        "contextmenu", "search",
-                        "state", "types"
-                    ]
-                });
-            }
-
-            // Fetch data from the server and initialize the tree
-            $.ajax({
-                url: GetZoneMatrixTree, // API endpoint to fetch the matrix data
-                type: "POST",
-                success: function (response) {
-                    if (response && response.data) {
-                        data = response.data;
-                        initializeTreeView(data);
-                    } else {
-                        console.error("Failed to fetch tree data.");
-                    }
-                },
-                error: function () {
-                    console.error("An error occurred while fetching tree data.");
-                }
-            });
-
+            
 
         });
         function GetAllZoneManagement() {
@@ -535,6 +486,25 @@
                             existingGeoJson = JSON.parse(response.data.featureGeoJson)
                             $('#hdnMapdata').val(ConvertGeoJSONtoWKT(response.data.featureGeoJson));
                         }
+
+                        // Fetch data from the server and initialize the tree
+                        $.ajax({
+                            url: GetZoneMatrixTree, // API endpoint to fetch the matrix data
+                            type: "POST",
+                            data: dataObject,
+                            success: function (response) {
+                                if (response && response.data) {
+                                    data = response.data;
+                                    initializeTreeView(data);
+                                } else {
+                                    console.error("Failed to fetch tree data.");
+                                }
+                            },
+                            error: function () {
+                                console.error("An error occurred while fetching tree data.");
+                            }
+                        });
+
                     }
                     else {
                         toastr.error(response.errorMessage);
@@ -681,6 +651,8 @@
             $('#txtType').val("");
             $("#txtFolder").val("");
             $("#txtExternalReference").val("");
+            $('#tree').jstree("destroy").empty(); 
+
         }
 
         function CloseZoneManagement() {
@@ -693,8 +665,16 @@
         }
         function SaveZoneManagement() {
             // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
-            let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
-            var treeData = $("#tree").jstree(true).get_json("#", { flat: true });
+            let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference",""]);
+            //get tree selected data
+            var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+            //get tree selected ids
+            var selectedIds = []
+            if (treeData.length > 0) {
+                selectedIds = treeData.map(function (datum) {
+                    return parseInt(datum['id']);
+                });
+            }
           
             if (valid && $("#hdnMapdata").val() != "") {
                 var dataObject = {};
@@ -704,7 +684,7 @@
                 dataObject.Type = $('#txtType').val();
                 dataObject.Folder = $("#txtFolder").val();
                 dataObject.ExternalReference = $("#txtExternalReference").val();
-                dataObject.TreeData = treeData;
+                dataObject.ZoneMatrix = selectedIds;
 
 
                 $.ajax({
@@ -746,6 +726,40 @@
             }
 
         }
+
+        function initializeTreeView(treeData) {
+            $('#tree').jstree({
+                "core": {
+                    "animation": 0,
+                    "check_callback": true,
+                    "themes": { "icons": false },
+                    'data': treeData
+                },
+                "types": {
+                    "#": {
+                        "valid_children": ["root"]
+                    },
+                    "root": {
+                        "valid_children": ["default"]
+                    },
+                    "default": {
+                        "valid_children": ["default", "file"]
+                    },
+                    "file": {
+                        "valid_children": []
+                    }
+                },
+                "checkbox": {
+                    "tie_selection": false,
+                    "three_state": false,
+                },
+                "plugins": [
+                    "checkbox"
+                ]
+            });
+        }
+
+
     </script>
 
 }

@@ -19,5 +19,7 @@ namespace BL.Models.Administration
         public string? RoleName { get; set; }
         public string? ProfileImagebase64 { get; set; }
         public bool? IsImage { get; set; }
-    }
+		public List<long> UserMatrix { get; set; } = new List<long>();
+
+	}
 }

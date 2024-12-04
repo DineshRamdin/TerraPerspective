@@ -110,7 +110,7 @@ namespace UI.Controllers
 
                 var reader = new WKTReader();
                 dto.geometry = reader.Read(dto.FeatureGeoJson);
-
+                
                 // Ensure the geometry is a polygon and check orientation
                 if (dto.geometry is Polygon polygon)
                 {
@@ -138,11 +138,19 @@ namespace UI.Controllers
                 if (dto.Id == 0)
                 {
                     dt = await service.SaveAsync(dto);
-                }
+					if (dt.Data == true)
+					{
+						dt = _MatrixService.SaveZoneM(dto.ZoneMatrix,Convert.ToInt64(dt.ExtData));
+					}
+				}
                 else
                 {
                     dt = await service.UpdateAsync(dto);
-                }
+					if (dt.Data == true)
+					{
+						dt = _MatrixService.UpdateZoneM(dto.ZoneMatrix, Convert.ToInt64(dt.ExtData));
+					}
+				}
 
                 return Ok(dt);
             }
@@ -192,12 +200,20 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<List<CRUDMatrix>> GetTree(long Id)
+        public ActionResult<BaseResponseDTO<List<CRUDMatrix>>> GetTree(long Id)
         {
             try
             {
                 BaseResponseDTO<List<CRUDMatrix>> tree = new BaseResponseDTO<List<CRUDMatrix>>();
-                tree = _MatrixService.GetTreeForZone(Id);
+                if(Id== 0)
+                {
+                    tree = _MatrixService.GetTree();
+                }
+                else
+                {
+
+                    tree = service.GetTreeZone(Id);
+                }
                 return Ok(tree);
 
 

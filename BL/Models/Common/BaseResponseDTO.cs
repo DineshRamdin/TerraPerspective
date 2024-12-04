@@ -17,7 +17,7 @@ namespace BL.Models.Common
         public string? ErrorMessage { get; set; }
         public int TotalItems { get; set; }
         public string? QryResult { get; set; }
-
+		public string ExtData { get; set; }
 		public List<MAccessDTO> Access { get; set; } = new List<MAccessDTO>();
 	}
 

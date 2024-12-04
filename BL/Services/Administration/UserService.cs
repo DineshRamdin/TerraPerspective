@@ -221,7 +221,8 @@ namespace BL.Services.Administration
 
                             dto.Data = true;
                             dto.ErrorMessage = "User save Successfully";
-                            dto.QryResult = new QueryResult().SUCEEDED;
+							dto.ExtData = usr.AId;
+							dto.QryResult = new QueryResult().SUCEEDED;
 
                             try
                             {
@@ -354,7 +355,8 @@ namespace BL.Services.Administration
 
                     dto.Data = true;
                     dto.ErrorMessage = "User Update Successfully";
-                    dto.QryResult = new QueryResult().SUCEEDED;
+					dto.ExtData = usr.AId;
+					dto.QryResult = new QueryResult().SUCEEDED;
 
                 }
                 else

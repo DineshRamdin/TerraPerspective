@@ -56,7 +56,7 @@
 		var CreateUpdateUserUrl = '@Url.Action("CreateUpdate", "User")';
 		var ResetUserPasswordUrl = '@Url.Action("ResetUserPassword", "User")';
 		var UserPreviewUrl = '@Url.Action("Preview", "User")';
-
+		var UserMatrix = '@Url.Action("GetTree", "User")';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
@@ -212,6 +212,23 @@
 							$("#viewProfileImage").css("display", "");
 
 						}
+						// Fetch data from the server and initialize the tree
+						$.ajax({
+							url: UserMatrix, // API endpoint to fetch the matrix data
+							type: "POST",
+							success: function (response) {
+								if (response && response.data) {
+									data = response.data;
+									initializeTreeView(data);
+								} else {
+									console.error("Failed to fetch tree data.");
+								}
+							},
+							error: function () {
+								console.error("An error occurred while fetching tree data.");
+							}
+						});
+
 					}
 					else {
 						toastr.error(response.errorMessage);
@@ -270,6 +287,7 @@
 			$("#oldprofileimage").val("");
 			$("#viewProfileImage").attr("src", "");
 			$("#viewProfileImage").css("display", "none");
+			$('#tree').jstree("destroy").empty();
 		}
 
 		function GetDropdownData() {
@@ -304,7 +322,15 @@
 		async function SaveUser() {
 
 			let valid = formValidation(["txtSurname", "txtOthername", "txtEmail", "ddlRole", "txtMobile"]);
-
+			//get tree selected data
+			var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+			//get tree selected ids
+			var selectedIds = []
+			if (treeData.length > 0) {
+				selectedIds = treeData.map(function (datum) {
+					return parseInt(datum['id']);
+				});
+			}
 			if (valid) {
 				var dataObject = {};
 				dataObject.id = $("#hdnuserId").val();
@@ -313,6 +339,7 @@
 				dataObject.Email = $("#txtEmail").val();
 				dataObject.PhoneNumber = $("#txtMobile").val();
 				dataObject.Role = $("#ddlRole").val();
+				dataObject.UserMatrix = selectedIds;
 
 				var FileData = await FiletoBase64string("profileimagefile");
 
@@ -352,6 +379,40 @@
 				toastr.warning("Please fill in required field(s)");
 			}
 		}
+
+		function initializeTreeView(treeData) {
+			$('#tree').jstree({
+				"core": {
+					"animation": 0,
+					"check_callback": true,
+					"themes": { "icons": false },
+					'data': treeData
+				},
+				"types": {
+					"#": {
+						"valid_children": ["root"]
+					},
+					"root": {
+						"valid_children": ["default"]
+					},
+					"default": {
+						"valid_children": ["default", "file"]
+					},
+					"file": {
+						"valid_children": []
+					}
+				},
+				"checkbox": {
+					"tie_selection": false,
+					"three_state": false,
+				},
+				"plugins": [
+					"checkbox"
+				]
+			});
+		}
+
+
 
 	</script>
 }
