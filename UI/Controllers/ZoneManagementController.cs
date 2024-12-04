@@ -190,8 +190,7 @@ namespace UI.Controllers
             return View(dataTable);
 
         }
-    }
-}
+
         [HttpPost]
         public ActionResult<List<CRUDMatrix>> GetTree(long Id)
         {
