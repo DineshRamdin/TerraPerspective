@@ -148,6 +148,8 @@
         var CreateUpdateZoneManagementUrl = '@Url.Action("CreateUpdate", "ZoneManagement")';
         var ZoneManagementGetByIdUrl = '@Url.Action("GetById", "ZoneManagement")';
         var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "ZoneManagement")';
+        var ZoneFilePreviewUrl = '@Url.Action("Fileview", "ZoneManagement")';
+        var GetZoneMatrixTree = '@Url.Action("GetTree", "ZoneManagement")';
 
         $(function () {
             $('.nav-link').removeClass('active');
@@ -183,16 +185,74 @@
                 }
             });
 
+            function initializeTreeView(treeData) {
+                $('#tree').jstree({
+                    "core": {
+                        "animation": 0,
+                        "check_callback": true,
+                        "themes": { "icons": true },
+                        'data': treeData
+                    },
+                    "types": {
+                        "#": {
+                            "icon": "fa-solid fa-circle-notch",
+                            "valid_children": ["root"]
+                        },
+                        "root": {
+                            "icon": "fa-solid fa-circle-notch",
+                            "valid_children": ["default"]
+                        },
+                        "default": {
+                            "icon": "fa-regular fa-circle-dot",
+                            "valid_children": ["default", "file"]
+                        },
+                        "file": {
+                            "icon": "fa-regular fa-circle-dot",
+                            "valid_children": []
+                        }
+                    },
+                    "plugins": [
+                        "contextmenu", "search",
+                        "state", "types"
+                    ]
+                });
+            }
+
+            // Fetch data from the server and initialize the tree
+            $.ajax({
+                url: GetZoneMatrixTree, // API endpoint to fetch the matrix data
+                type: "POST",
+                success: function (response) {
+                    if (response && response.data) {
+                        data = response.data;
+                        initializeTreeView(data);
+                    } else {
+                        console.error("Failed to fetch tree data.");
+                    }
+                },
+                error: function () {
+                    console.error("An error occurred while fetching tree data.");
+                }
+            });
+
+
         });
         function GetAllZoneManagement() {
             var columnList = [
                 { data: 'id', title: 'Id', visible: false },
                 { data: 'zone', title: 'Zone' },
                 { data: 'type', title: 'Type' },
+                { data: 'folder', title: 'Folder' },
+                { data: 'externalReference', title: 'External Reference' },
             ];
 
-            initializeDataGrid('ZoneManagementTable', 'openZoneManagementModal', GetAllZoneUrl, columnList, false, false, true, false);
+            initializeDataGrid('ZoneManagementTable', 'openZoneManagementModal', GetAllZoneUrl, columnList, false, false, true, false, true, "PreviewZoneManagementFolder");
 
+        }
+        function PreviewZoneManagementFolder(folder) {
+            if (folder != null && folder != "") {
+                window.open(ZoneFilePreviewUrl + "?folder=" + folder, '_blank');
+            }
         }
         function BindJsTreeData() {
             var ZoneData = [];
@@ -389,9 +449,35 @@
                     var geoJsonData = JSON.parse(item.featureGeoJson);
 
                     // Add the GeoJSON polygon to the map
-                    var layer = L.geoJSON(geoJsonData).addTo(map);
+                    var layer = L.geoJSON(geoJsonData, {
+                        onEachFeature: function (feature, layer) {
+                            layer.on('click', function (e) {
+                                // Customize the label content as needed
+                                var labelContent = `Polygon selected!<br>Zone: ${item.zone || 'N/A'}`;
+
+                                // Show popup at clicked location
+                                L.popup()
+                                    .setLatLng(e.latlng) // Get the clicked location
+                                    .setContent(labelContent)
+                                    .openOn(map);
+                            });
+                        }
+                    }).addTo(map);
 
                     bounds.extend(layer.getBounds());
+
+                     var center = layer.getBounds().getCenter();
+
+                    var marker = L.marker(center).addTo(map);
+
+                    marker.on('click', function () {
+                        var markerInfo = `Marker clicked!<br>Zone: ${item.zone || 'N/A'}`;
+                        L.popup()
+                            .setLatLng(center) // Popup at the marker location
+                            .setContent(markerInfo)
+                            .openOn(map);
+                    });
+
                 });
 
                 // Fit the map to the accumulated bounds
@@ -608,7 +694,8 @@
         function SaveZoneManagement() {
             // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
             let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
-
+            var treeData = $("#tree").jstree(true).get_json("#", { flat: true });
+          
             if (valid && $("#hdnMapdata").val() != "") {
                 var dataObject = {};
                 dataObject.Id = $("#hdnId").val();
@@ -617,6 +704,7 @@
                 dataObject.Type = $('#txtType').val();
                 dataObject.Folder = $("#txtFolder").val();
                 dataObject.ExternalReference = $("#txtExternalReference").val();
+                dataObject.TreeData = treeData;
 
 
                 $.ajax({

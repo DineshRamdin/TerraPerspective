@@ -16,6 +16,14 @@ namespace BL.Models.Administration
 			public List<long> ParentIDS { get; set; } = new List<long>();
 
 		}
+
+		public class ZoneMatrixDTO
+		{
+            public long ZID { get; set; }
+            public string ZAUID { get; set; }
+            public List<long> IDS { get; set; } = new List<long>();
+            public List<long> ParentIDS { get; set; } = new List<long>();
+        }
 	}
 
 	public class MatrixListDTO

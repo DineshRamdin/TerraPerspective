@@ -17,11 +17,13 @@
             <label>External Reference<span class="red-required">*</span></label>
             <input type="text" id="txtExternalReference" class="form-control" placeholder="External Reference" required />
         </div>
-
         <div class="col-12">
             <input type="hidden" id="hdnMapdata" required />
         </div>
-
+        <div class="col-12 form-group">
+            <label for="tree" class="mb-2 label-required">Zone Matrix </label>
+            <div id="tree"></div>
+        </div>
         <div class="col-12 mb-3">
             <button type="button" class="btn btn-primary" onclick="SaveZoneManagement();">Save</button>
             <button type="button" class="btn btn-default" onclick="CloseZoneManagement();">Close</button>

@@ -105,6 +105,12 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                             }
                                             //else if (=="PosterTable")
                                         }
+                                        else if (tableID == "ZoneManagementTable") {
+                                            if (full.folder != null && full.folder != "") {
+                                                btn += '| <a href="#" onclick="' + onclickPreview + '(\'' + full.folder + '\')" title="Preview"><i class="fa fa-folder-open text-secondary ms-1"></i></a> ';//preview
+                                            }
+                                            //else if (=="PosterTable")
+                                        }
                                         else {
                                             btn += preview
                                         }
