@@ -7,6 +7,7 @@ using DAL.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System.Data;
@@ -20,10 +21,18 @@ namespace UI.Controllers
     {
         public ZoneManagementService service;
         public MatrixService _MatrixService;
-        public ZoneManagementController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext) : base(userManager, signInManager, rolemanager, Dbcontext)
+        private QueryResult _queryResult;
+
+        private readonly IWebHostEnvironment _IWebHostEnvironment;
+        public ZoneManagementController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext,
+            IWebHostEnvironment _webHostEnvironment)
+            : base(userManager, signInManager, rolemanager, Dbcontext)
         {
             service = new ZoneManagementService();
             _MatrixService = new MatrixService();
+
+            _IWebHostEnvironment = _webHostEnvironment;
+            _queryResult = new QueryResult();
         }
 
         public IActionResult Index()
@@ -209,6 +218,86 @@ namespace UI.Controllers
 
             }
         }
+
+        [HttpGet]
+        public IActionResult DownloadZoneSampleExcel()
+        {
+            var filePath = Path.Combine(_IWebHostEnvironment.WebRootPath, "SampleFile", "ImportZoneSampleFile.xlsx");
+            var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var fileName = "ImportZoneSampleFile.xlsx";
+
+            return PhysicalFile(filePath, fileType, fileName);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<bool>>> ImportExcel(IFormFile excelFile)
+        {
+            BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+
+            if (excelFile == null || excelFile.Length == 0)
+            {
+                dt.Data = false;
+                dt.ErrorMessage = "Please Upload Valid Excel..!";
+                dt.QryResult = _queryResult.FAILED;
+                return Ok(dt);
+            }
+            try
+            {
+               
+                var dtSourceData = ExcelToDataTableService.GetDataTableFromExcel_data(excelFile); // First worksheet
+
+                if (dtSourceData != null && dtSourceData.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dtSourceData.Rows)
+                    {
+                        var Type = Convert.ToString(row["Type"]);
+                        var Zone = Convert.ToString(row["Zone"]);
+                        var ExternalReference = Convert.ToString(row["ExternalReference"]);
+                        string FeatureGeoJson = Convert.ToString(row["Map"]);
+                        var reader = new WKTReader();
+                        var geometry = reader.Read(FeatureGeoJson);
+
+                        // Ensure the geometry is a polygon and check orientation
+                        if (geometry is Polygon polygon)
+                        {
+                            //bool Resu = GeometryDataHelper.IsGeometryDataCounterClockwise(polygon);
+                            if (!GeometryDataHelper.IsGeometryDataCounterClockwise(polygon))
+                            {
+                                geometry = GeometryDataHelper.GeometryDataReversePolygon(polygon); // Reverse to clockwise
+                            }
+                        }
+                        geometry.SRID = 4326;
+
+                        var ZoneManagementDTO = new ZoneManagementDTO
+                        {
+                            Zone = Zone ?? string.Empty,
+                            Type = Type ?? string.Empty,
+                            ExternalReference = ExternalReference ?? string.Empty,
+                            Folder = string.Empty,
+                            geometry = geometry,
+                        };
+                        await service.SaveAsync(ZoneManagementDTO);
+                    }
+
+                    dt.Data = true;
+                    dt.ErrorMessage = "Data successfully imported.";
+                    dt.QryResult = _queryResult.SUCEEDED;
+                    return Ok(dt);
+                }
+                else
+                {
+                    dt.Data = false;
+                    dt.ErrorMessage = "No Data Found in Excel.";
+                    dt.QryResult = _queryResult.FAILED;
+                    return Ok(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
 
     }
 }

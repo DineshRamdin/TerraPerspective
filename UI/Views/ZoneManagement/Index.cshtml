@@ -104,8 +104,9 @@
                 <div class="row">
                     <div class="col-10">
                     </div>
-                    <div class="col-2">
-                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openZoneManagementModal(0)">Add</button>
+                    <div class="col-2 text-right">
+                        <button type="button" class="btn btn-primary mb-3" onclick="openZoneManagementModal(0)">Add</button>
+                        <button type="button" class="btn btn-info mb-3" onclick="openImportZoneModal()">Import</button>
                     </div>
                 </div>
                 <div class="row">
@@ -134,6 +135,12 @@
     <partial name="_AddZoneManagement.cshtml" />
 </div> *@
 
+<div class="modal fade" id="ImportZoneModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_ImportZone.cshtml" />
+</div>
+
+
+
 @section scripts
 {
 
@@ -150,6 +157,8 @@
         var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "ZoneManagement")';
         var ZoneFilePreviewUrl = '@Url.Action("Fileview", "ZoneManagement")';
         var GetZoneMatrixTree = '@Url.Action("GetTree", "ZoneManagement")';
+        var DownloadZoneSampleExcelUrl = '@Url.Action("DownloadZoneSampleExcel", "ZoneManagement")';
+        var ImportZoneDataUrl = '@Url.Action("ImportExcel", "ZoneManagement")';
 
         $(function () {
             $('.nav-link').removeClass('active');
@@ -410,7 +419,7 @@
                             select: function (event, ui) {
 
                                 var geoJsonData = JSON.parse(ui.item.featureGeoJson);
-
+                                
                                 // Add the GeoJSON polygon to the map
                                 var layer = L.geoJSON(geoJsonData).addTo(map);
 
@@ -466,7 +475,7 @@
 
                     bounds.extend(layer.getBounds());
 
-                     var center = layer.getBounds().getCenter();
+                    var center = layer.getBounds().getCenter();
 
                     var marker = L.marker(center).addTo(map);
 
@@ -695,7 +704,7 @@
             // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
             let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
             var treeData = $("#tree").jstree(true).get_json("#", { flat: true });
-          
+
             if (valid && $("#hdnMapdata").val() != "") {
                 var dataObject = {};
                 dataObject.Id = $("#hdnId").val();
@@ -745,6 +754,57 @@
                 }
             }
 
+        }
+
+        function openImportZoneModal() {
+            ClearImportZoneModal();
+            $('#ImportZoneModal').modal('show');
+        }
+
+        function ClearImportZoneModal() {
+            $('#importzonefile').val(null);
+        }
+
+        function DownloadSampleZoneFile() {
+            window.open(DownloadZoneSampleExcelUrl, '_blank');
+        }
+
+        function ImportZoneData()
+        {
+            // Validate the file input field
+            var fileInput = $('#importzonefile')[0];
+            var file = fileInput.files[0];
+
+            if (file) {
+                var formData = new FormData();
+                formData.append('excelFile', file);
+
+                $.ajax({
+                    url: ImportZoneDataUrl,
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // Prevent jQuery from processing the data
+                    contentType: false, // Prevent jQuery from setting the content type
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#ImportZoneModal').modal('hide');
+                            GetAllZoneManagement();
+                            initMap();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while uploading the file.');
+                    }
+                });
+            } 
+            else {
+                toastr.warning("Please Select File");
+            }
         }
     </script>
 
