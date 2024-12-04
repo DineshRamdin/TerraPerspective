@@ -32,6 +32,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\SampleFile\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="Tes" /></VisualStudio></ProjectExtensions>
 
 </Project>

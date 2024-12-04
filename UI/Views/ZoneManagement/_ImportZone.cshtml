@@ -1,0 +1,29 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="h4ImportZoneTitle">
+            </h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 form-group">
+                    <label>Upload File<span class="red-required">*</span></label>
+                    <input type="file" id="importzonefile" name="importzonefile" accept=".xls,.xlsx,.csv" onchange="UploadFileisValidExcel('importzonefile')">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="ImportZoneData();">Save</button>
+            <button type="button" class="btn btn-secondary" onclick="DownloadSampleZoneFile();">Download sample</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+</div>

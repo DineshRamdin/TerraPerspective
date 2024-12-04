@@ -48,3 +48,33 @@ function UploadFileisValidImageFormarJPEGAndPNG(id) {
         }
     }
 }
+
+function UploadFileisValidImageFormarJPEGAndPNG(id) {
+    var fileInput = $('#' + id)[0];
+    var file = fileInput.files[0];
+
+    if (file) {
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        if (!allowedTypes.includes(file.type)) {
+            toastr.warning("Please upload a valid file in one of the following formats: JPEG,or PNG.");
+            $('#' + id).val(null); // Clear the file input
+        }
+    }
+}
+
+function UploadFileisValidExcel(id) {
+    var fileInput = $('#' + id)[0];
+    var file = fileInput.files[0];
+
+    if (file) {
+        const allowedTypes = [
+            'application/vnd.ms-excel',           // .xls
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+            'text/csv'                            // .csv
+        ];
+        if (!allowedTypes.includes(file.type)) {
+            toastr.warning("Please upload a valid Excel file: XLS, XLSX, or CSV.");
+            $('#' + id).val(null); // Clear the file input
+        }
+    }
+}
