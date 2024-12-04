@@ -841,7 +841,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                 );
 
                 $('div.dataTables_filter').css({
-                    'gap': '10px' // Adds space between elements (dropdown and buttons)
+                    'gap': '10px' 
                 });
             },
         })
