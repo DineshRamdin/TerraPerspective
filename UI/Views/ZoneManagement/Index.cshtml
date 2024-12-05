@@ -538,12 +538,24 @@
                 // Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
                 map = L.map('map').setView([-20.081670, 57.598266], 12);
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19
                 }).addTo(map);
 
+                // Satellite layer (ESRI Satellite)
+                var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+                });
 
-                // Add drawing control
+                // Define base maps for the dropdown
+                var baseMaps = {
+                    "Map": osmLayer,
+                    "Satellite": satelliteLayer
+                };
+
+                 L.control.layers(baseMaps).addTo(map);
+                
+                 // Add drawing control
                 var drawnItems = new L.FeatureGroup();
                 map.addLayer(drawnItems);
 

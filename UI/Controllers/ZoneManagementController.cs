@@ -249,6 +249,8 @@ namespace UI.Controllers
         public async Task<ActionResult<BaseResponseDTO<bool>>> ImportExcel(IFormFile excelFile)
         {
             BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+            BaseResponseDTO<bool> SaveZonedt = new BaseResponseDTO<bool>();
+            BaseResponseDTO<List<CRUDMatrix>> LoginUserMatrix = new BaseResponseDTO<List<CRUDMatrix>>();
 
             if (excelFile == null || excelFile.Length == 0)
             {
@@ -259,7 +261,7 @@ namespace UI.Controllers
             }
             try
             {
-               
+                LoginUserMatrix = _MatrixService.GetTree();
                 var dtSourceData = ExcelToDataTableService.GetDataTableFromExcel_data(excelFile); // First worksheet
 
                 if (dtSourceData != null && dtSourceData.Rows.Count > 0)
@@ -292,7 +294,22 @@ namespace UI.Controllers
                             Folder = string.Empty,
                             geometry = geometry,
                         };
-                        await service.SaveAsync(ZoneManagementDTO);
+                        SaveZonedt= await service.SaveAsync(ZoneManagementDTO);
+                        if (SaveZonedt.Data == true)
+                        {
+                            if (LoginUserMatrix.QryResult == _queryResult.SUCEEDED)
+                            {
+                                List<long> ZoneMatrix = new List<long>();
+
+                                foreach (var item in LoginUserMatrix.Data)
+                                {
+                                    long MId = Convert.ToInt64(item.id);
+                                    ZoneMatrix.Add(MId);
+                                }
+                                long ZoneId = Convert.ToInt64(SaveZonedt.ExtData);
+                                _MatrixService.SaveZoneM(ZoneMatrix, ZoneId);
+                            }
+                        }
                     }
 
                     dt.Data = true;
