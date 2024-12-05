@@ -64,46 +64,42 @@ namespace BL.Services.Administration
 				if (claimsPrincipal != "admin@gmail.com")
 				{
 					List<ZoneManagementDTO> result = (from zm in context.SYS_ZoneMatrix
-												join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
-												join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
-												where zmn.DeleteStatus == false
-													  && gu.IID == UsrId
-													  && zmn.CreatedBy.ToString().ToLower() == UserGuidId
-												select new
-												{
-													zmn.Id,
-													zmn.Zone,
-													zmn.Type,
-													zmn.Folder,
-													zmn.ExternalReference,
-                                                    zmn.GeomColumn
-												}
-									)
-									.Union(
-										context.SYS_ZoneManagement
-											.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
-											.Select(a => new
-											{
-												a.Id,
-												a.Zone,
-												a.Type,
-												a.Folder,
-												a.ExternalReference,
-                                                a.GeomColumn
-											})
-									)
-									.AsEnumerable() // Move to client-side processing after Union
-									.Select(x => new ZoneManagementDTO
-									{
-										Id = x.Id,
-										Zone = x.Zone,
-										Type = x.Type,
-										Folder = x.Folder,
-										ExternalReference = x.ExternalReference,
-										FeatureGeoJson = new GeoJsonWriter().Write(x.GeomColumn) // Convert geometry to GeoJSON
+													  join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
+													  join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
+													  where zmn.DeleteStatus == false
+															&& gu.IID == UsrId
+													  select new
+													  {
+														  zmn.Id,
+														  zmn.Zone,
+														  zmn.Type,
+														  zmn.Folder,
+														  zmn.ExternalReference,
+													  })
+								.Union(
+									context.SYS_ZoneManagement
+										.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
+										.Select(a => new
+										{
+											a.Id,
+											a.Zone,
+											a.Type,
+											a.Folder,
+											a.ExternalReference
+										})
+								)
+								.AsEnumerable() // Move to client-side processing
+								.Select(x => new ZoneManagementDTO
+								{
+									Id = x.Id,
+									Zone = x.Zone,
+									Type = x.Type,
+									Folder = x.Folder,
+									ExternalReference = x.ExternalReference,
+									FeatureGeoJson = new GeoJsonWriter().Write(context.SYS_ZoneManagement.Where(a=>a.Id==x.Id).Select(a=>a.GeomColumn)) // Convert geometry to GeoJSON here
+								})
+								.ToList();
 
-									})
-									.ToList();
 
 					dto.Data = result;
 				}
@@ -227,7 +223,7 @@ namespace BL.Services.Administration
                                     	join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
                                     	where zmn.DeleteStatus == false
                                     		  && gu.IID == UsrId
-                                    		  && zmn.CreatedBy.ToString().ToLower() == UserGuidId
+                                    		  //&& zmn.CreatedBy.ToString().ToLower() == UserGuidId
                                     	select new
                                     	{
                                     		zmn.Id,
