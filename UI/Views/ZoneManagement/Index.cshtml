@@ -674,7 +674,7 @@
         }
         function SaveZoneManagement() {
             // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
-            let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference",""]);
+            let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
             //get tree selected data
             var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
             //get tree selected ids
