@@ -43,20 +43,87 @@ namespace BL.Services.Administration
             try
             {
                 string sQryResult = queryResult.FAILED;
+				IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+				string claimsPrincipal = null;
+                string UserGuidId = "";
+				if (httpContextAccessor.HttpContext != null)
+				{
+					claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+					UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
+					if (claimsPrincipal == null)
+					{
+						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+					}
+				}
+				else
+				{
+					claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+				}
+				string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
+				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+				if (claimsPrincipal != "admin@gmail.com")
+				{
+					List<ZoneManagementDTO> result = (from zm in context.SYS_ZoneMatrix
+												join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
+												join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
+												where zmn.DeleteStatus == false
+													  && gu.IID == UsrId
+													  && zmn.CreatedBy.ToString().ToLower() == UserGuidId
+												select new
+												{
+													zmn.Id,
+													zmn.Zone,
+													zmn.Type,
+													zmn.Folder,
+													zmn.ExternalReference,
+                                                    zmn.GeomColumn
+												}
+									)
+									.Union(
+										context.SYS_ZoneManagement
+											.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
+											.Select(a => new
+											{
+												a.Id,
+												a.Zone,
+												a.Type,
+												a.Folder,
+												a.ExternalReference,
+                                                a.GeomColumn
+											})
+									)
+									.AsEnumerable() // Move to client-side processing after Union
+									.Select(x => new ZoneManagementDTO
+									{
+										Id = x.Id,
+										Zone = x.Zone,
+										Type = x.Type,
+										Folder = x.Folder,
+										ExternalReference = x.ExternalReference,
+										FeatureGeoJson = new GeoJsonWriter().Write(x.GeomColumn) // Convert geometry to GeoJSON
 
-                List<ZoneManagementDTO> result = context.SYS_ZoneManagement
-                                         .Where(a => a.DeleteStatus == false)
-                                         .Select(a => new ZoneManagementDTO
-                                         {
-                                             Id = a.Id,
-                                             Zone = a.Zone,
-                                             Type = a.Type,
-                                             Folder = a.Folder,
-                                             ExternalReference = a.ExternalReference,
-                                             FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
-                                         })
-                                         .ToList();
-                dto.Data = result;
+									})
+									.ToList();
+
+					dto.Data = result;
+				}
+				else
+				{
+					List<ZoneManagementDTO> result = context.SYS_ZoneManagement
+										 .Where(a => a.DeleteStatus == false)
+										 .Select(a => new ZoneManagementDTO
+										 {
+											 Id = a.Id,
+											 Zone = a.Zone,
+											 Type = a.Type,
+											 Folder = a.Folder,
+											 ExternalReference = a.ExternalReference,
+											 FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
+										 })
+										 .ToList();
+					dto.Data = result;
+				}
+				
                 dto.QryResult = queryResult.SUCEEDED;
 
             }
@@ -131,19 +198,87 @@ namespace BL.Services.Administration
             {
                 string sQryResult = queryResult.FAILED;
 
-                List<ZoneDataDTO> result = context.SYS_ZoneManagement
-                                         .Where(a => a.DeleteStatus == false)
-                                         .Select(a => new ZoneDataDTO
-                                         {
-                                             Id = a.Id,
-                                             Zone = a.Zone,
-                                             Type = a.Type,
-                                             Folder = a.Folder,
-                                             ExternalReference = a.ExternalReference,
-                                         })
-                                         .ToList();
-                dto.Data = result;
-                dto.QryResult = queryResult.SUCEEDED;
+               
+
+
+				IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+				string claimsPrincipal = null;
+                string UserGuidId = null;
+				if (httpContextAccessor.HttpContext != null)
+				{
+					claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+					UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
+					if (claimsPrincipal == null)
+					{
+						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+					}
+				}
+				else
+				{
+					claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+				}
+				string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
+				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+                if(claimsPrincipal != "admin@gmail.com")
+                {
+
+					List<ZoneDataDTO> result = (from zm in context.SYS_ZoneMatrix
+                                    	join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
+                                    	join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
+                                    	where zmn.DeleteStatus == false
+                                    		  && gu.IID == UsrId
+                                    		  && zmn.CreatedBy.ToString().ToLower() == UserGuidId
+                                    	select new
+                                    	{
+                                    		zmn.Id,
+                                    		zmn.Zone,
+                                    		zmn.Type,
+                                    		zmn.Folder,
+                                    		zmn.ExternalReference,
+                                    	}
+                                    )
+                                    .Union(
+                                    	context.SYS_ZoneManagement
+                                    		.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
+                                    		.Select(a => new
+                                    		{
+                                    			a.Id,
+                                    			a.Zone,
+                                    			a.Type,
+                                    			a.Folder,
+                                    			a.ExternalReference,
+                                    		})
+                                    )
+                                    .AsEnumerable() // Move to client-side processing after Union
+                                    .Select(x => new ZoneDataDTO
+                                    {
+                                    	Id = x.Id,
+                                    	Zone = x.Zone,
+                                    	Type = x.Type,
+                                    	Folder = x.Folder,
+                                    	ExternalReference = x.ExternalReference,
+                                    })
+                                    .ToList();
+
+					dto.Data = result;
+                }
+                else
+                {
+                    List<ZoneDataDTO> result = context.SYS_ZoneManagement
+                                             .Where(a => a.DeleteStatus == false)
+                                             .Select(a => new ZoneDataDTO
+                                             {
+                                                 Id = a.Id,
+                                                 Zone = a.Zone,
+                                                 Type = a.Type,
+                                                 Folder = a.Folder,
+                                                 ExternalReference = a.ExternalReference,
+                                             })
+                                             .ToList();
+					dto.Data = result;
+				}
+
+				dto.QryResult = queryResult.SUCEEDED;
 
             }
             catch (Exception ex)
@@ -383,12 +518,12 @@ namespace BL.Services.Administration
                     claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
                     if (claimsPrincipal == null)
                     {
-                        claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@naveo.mu").Select(x => x.Id).FirstOrDefault();
+                        claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
                     }
                 }
                 else
                 {
-                    claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@naveo.mu").Select(x => x.Id).FirstOrDefault();
+                    claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
                 }
                 string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
                 long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
