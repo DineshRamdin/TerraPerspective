@@ -370,6 +370,10 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             // Append the custom dropdown to the filter area
                             $('div.dataTables_filter').append(dropdownHtml);
 
+                            if (tableID === 'ZoneManagementTable') {
+                                var ShowallZonebtn = `<button type="button" class="btn btn-success mb-3 mr-3 clsShowAllZone" onclick="ShowAllZonebtnClick();">Show All Zone</button>`;
+                                $('div.dataTables_filter').append(ShowallZonebtn);
+                            }
                             // Toggle the dropdown when the button is clicked
                             $('#dropdownButton').on('click', function (e) {
                                 e.stopPropagation(); // Prevents event bubbling
@@ -427,8 +431,13 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                     })//.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
                     $('div.dt-buttons').prepend($('.clsDownload'));
+                    $('div.dt-buttons').prepend($('.clsShowAllZone'));
+                    
                     $('div.dt-buttons').css('float', 'inline-end');
                     $('.addbtn').css('border-radius', '.25rem');
+                    $('.clsDownload').css('border-radius', '.25rem');
+                    $('.clsShowAllZone').css('border-radius', '.25rem');
+
                     $('.custom-class').removeClass('btn-secondary');
                     $('.dt-scroll-headInner table thead').addClass('custom-table');
                     $('.dataTables_filter').css('float', 'inline-start');
@@ -847,7 +856,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                 );
 
                 $('div.dataTables_filter').css({
-                    'gap': '10px' 
+                    'gap': '10px'
                 });
             },
         })

@@ -193,10 +193,21 @@
 
                 }
             });
-
-            
-
         });
+
+        function ShowAllZonebtnClick()
+        {
+            if (map) {
+                map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
+                    animate: true,
+                    duration: 3  // Duration for zoom out animation
+                });
+            }
+            setTimeout(function () {
+                initMap();
+            }, 3000);  // Match this to the duration of the zoom-out animation (1.5s here)
+        }
+
         function GetAllZoneManagement() {
             var columnList = [
                 { data: 'id', title: 'Id', visible: false },
