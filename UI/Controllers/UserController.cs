@@ -7,17 +7,21 @@ using DAL.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using UI.Controllers.Common;
+using static BL.Models.Administration.MatrixDTO;
 
 namespace UI.Controllers
 {
     public class UserController : BaseController
     {
         public UserService service;
+        public MatrixService matrixService;
         public UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext)
                 : base(userManager, signInManager, rolemanager, Dbcontext)
         {
             service = new UserService();
+            matrixService = new MatrixService();
         }
 
         public IActionResult Index()
@@ -107,11 +111,19 @@ namespace UI.Controllers
                 if (string.IsNullOrEmpty(dto.Id))
                 {
                     dt = await service.SaveUser(dto, _userManager, _roleManager);
-                }
+					if (dt.Data == true)
+					{
+						dt = matrixService.SaveUserM(dto.UserMatrix, dt.ExtData);
+					}
+				}
                 else
                 {
                     dt = await service.UpdateUser(dto, _userManager, _roleManager);
-                }
+					if (dt.Data == true)
+					{
+						dt = matrixService.UpdateUserM(dto.UserMatrix, dt.ExtData);
+					}
+				}
 
                 return Ok(dt);
             }
@@ -180,5 +192,33 @@ namespace UI.Controllers
 
 
         }
+
+
+        [HttpPost]
+        public ActionResult <BaseResponseDTO<List<CRUDMatrix>>> GetTree(string Id)
+        {
+            try
+            {
+                BaseResponseDTO<List<CRUDMatrix>> tree = new BaseResponseDTO<List<CRUDMatrix>>();
+                if (Id == string.Empty)
+                {
+                    tree = matrixService.GetTree();
+                }
+                else
+                {
+                    tree = matrixService.GetTreeUser(Id);
+                }
+                return Ok(tree);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+
+            }
+        }
+
     }
 }

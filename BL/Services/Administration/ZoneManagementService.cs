@@ -18,6 +18,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using DAL.Common;
 using static BL.Models.Administration.MatrixDTO;
+using Microsoft.AspNetCore.Http;
 
 namespace BL.Services.Administration
 {
@@ -42,20 +43,83 @@ namespace BL.Services.Administration
             try
             {
                 string sQryResult = queryResult.FAILED;
+				IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+				string claimsPrincipal = null;
+                string UserGuidId = "";
+				if (httpContextAccessor.HttpContext != null)
+				{
+					claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+					UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
+					if (claimsPrincipal == null)
+					{
+						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+					}
+				}
+				else
+				{
+					claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+				}
+				string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
+				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+				if (claimsPrincipal != "admin@gmail.com")
+				{
+					List<ZoneManagementDTO> result = (from zm in context.SYS_ZoneMatrix
+													  join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
+													  join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
+													  where zmn.DeleteStatus == false
+															&& gu.IID == UsrId
+													  select new
+													  {
+														  zmn.Id,
+														  zmn.Zone,
+														  zmn.Type,
+														  zmn.Folder,
+														  zmn.ExternalReference,
+													  })
+								.Union(
+									context.SYS_ZoneManagement
+										.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
+										.Select(a => new
+										{
+											a.Id,
+											a.Zone,
+											a.Type,
+											a.Folder,
+											a.ExternalReference
+										})
+								)
+								.AsEnumerable() // Move to client-side processing
+								.Select(x => new ZoneManagementDTO
+								{
+									Id = x.Id,
+									Zone = x.Zone,
+									Type = x.Type,
+									Folder = x.Folder,
+									ExternalReference = x.ExternalReference,
+									FeatureGeoJson = new GeoJsonWriter().Write(context.SYS_ZoneManagement.Where(a=>a.Id==x.Id).Select(a=>a.GeomColumn)) // Convert geometry to GeoJSON here
+								})
+								.ToList();
 
-                List<ZoneManagementDTO> result = context.SYS_ZoneManagement
-                                         .Where(a => a.DeleteStatus == false)
-                                         .Select(a => new ZoneManagementDTO
-                                         {
-                                             Id = a.Id,
-                                             Zone = a.Zone,
-                                             Type = a.Type,
-                                             Folder = a.Folder,
-                                             ExternalReference = a.ExternalReference,
-                                             FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
-                                         })
-                                         .ToList();
-                dto.Data = result;
+
+					dto.Data = result;
+				}
+				else
+				{
+					List<ZoneManagementDTO> result = context.SYS_ZoneManagement
+										 .Where(a => a.DeleteStatus == false)
+										 .Select(a => new ZoneManagementDTO
+										 {
+											 Id = a.Id,
+											 Zone = a.Zone,
+											 Type = a.Type,
+											 Folder = a.Folder,
+											 ExternalReference = a.ExternalReference,
+											 FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
+										 })
+										 .ToList();
+					dto.Data = result;
+				}
+				
                 dto.QryResult = queryResult.SUCEEDED;
 
             }
@@ -130,19 +194,87 @@ namespace BL.Services.Administration
             {
                 string sQryResult = queryResult.FAILED;
 
-                List<ZoneDataDTO> result = context.SYS_ZoneManagement
-                                         .Where(a => a.DeleteStatus == false)
-                                         .Select(a => new ZoneDataDTO
-                                         {
-                                             Id = a.Id,
-                                             Zone = a.Zone,
-                                             Type = a.Type,
-                                             Folder = a.Folder,
-                                             ExternalReference = a.ExternalReference,
-                                         })
-                                         .ToList();
-                dto.Data = result;
-                dto.QryResult = queryResult.SUCEEDED;
+               
+
+
+				IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+				string claimsPrincipal = null;
+                string UserGuidId = null;
+				if (httpContextAccessor.HttpContext != null)
+				{
+					claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+					UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
+					if (claimsPrincipal == null)
+					{
+						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+					}
+				}
+				else
+				{
+					claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+				}
+				string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
+				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+                if(claimsPrincipal != "admin@gmail.com")
+                {
+
+					List<ZoneDataDTO> result = (from zm in context.SYS_ZoneMatrix
+                                    	join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
+                                    	join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
+                                    	where zmn.DeleteStatus == false
+                                    		  && gu.IID == UsrId
+                                    		  //&& zmn.CreatedBy.ToString().ToLower() == UserGuidId
+                                    	select new
+                                    	{
+                                    		zmn.Id,
+                                    		zmn.Zone,
+                                    		zmn.Type,
+                                    		zmn.Folder,
+                                    		zmn.ExternalReference,
+                                    	}
+                                    )
+                                    .Union(
+                                    	context.SYS_ZoneManagement
+                                    		.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
+                                    		.Select(a => new
+                                    		{
+                                    			a.Id,
+                                    			a.Zone,
+                                    			a.Type,
+                                    			a.Folder,
+                                    			a.ExternalReference,
+                                    		})
+                                    )
+                                    .AsEnumerable() // Move to client-side processing after Union
+                                    .Select(x => new ZoneDataDTO
+                                    {
+                                    	Id = x.Id,
+                                    	Zone = x.Zone,
+                                    	Type = x.Type,
+                                    	Folder = x.Folder,
+                                    	ExternalReference = x.ExternalReference,
+                                    })
+                                    .ToList();
+
+					dto.Data = result;
+                }
+                else
+                {
+                    List<ZoneDataDTO> result = context.SYS_ZoneManagement
+                                             .Where(a => a.DeleteStatus == false)
+                                             .Select(a => new ZoneDataDTO
+                                             {
+                                                 Id = a.Id,
+                                                 Zone = a.Zone,
+                                                 Type = a.Type,
+                                                 Folder = a.Folder,
+                                                 ExternalReference = a.ExternalReference,
+                                             })
+                                             .ToList();
+					dto.Data = result;
+				}
+
+				dto.QryResult = queryResult.SUCEEDED;
 
             }
             catch (Exception ex)
@@ -210,9 +342,9 @@ namespace BL.Services.Administration
                 };
                 context.SYS_ZoneManagement.Add(DSS);
                 context.SaveChanges();
-                CRUDZM(dataToSave.TreeData, DSS.Id);
                 BaseDto.Data = true;
                 BaseDto.ErrorMessage = "Zone Management Data save Successfully";
+                BaseDto.ExtData = Convert.ToString(DSS.Id);
                 BaseDto.QryResult = queryResult.SUCEEDED;
 
             }
@@ -242,10 +374,10 @@ namespace BL.Services.Administration
                 context.SYS_ZoneManagement.Update(DSS);
                 context.SaveChanges();
 
-                CRUDZM(dataToUpdate.TreeData, dataToUpdate.Id);
                 BaseDto.Data = true;
                 BaseDto.ErrorMessage = "Zone Management Data update Successfully";
-                BaseDto.QryResult = queryResult.SUCEEDED;
+				BaseDto.ExtData = Convert.ToString(dataToUpdate.Id);
+				BaseDto.QryResult = queryResult.SUCEEDED;
 
             }
             catch (Exception)
@@ -354,11 +486,6 @@ namespace BL.Services.Administration
                     ML.AddRange(GetMatrixChild(m.GMID));
                 }
 
-                if (Id == 0 && dt.IDS.Count == 0)
-                {
-                    ML.AddRange(GetMatrixChild(3));
-                }
-
                 dt.ParentIDS = MLL.Select(y => y.GMID).ToList();
                 dt.ZID = Id;
                 dt.ZAUID = new GeoJsonWriter().Write(context.SYS_ZoneManagement.Where(x => x.Id == Id).Select(x => x.GeomColumn).FirstOrDefault());
@@ -372,6 +499,107 @@ namespace BL.Services.Administration
 
             }
             return dt;
+        }
+
+        public static UserMatrixDTO sGetMatrixUserByUserID()
+        {
+            UserMatrixDTO dt = new UserMatrixDTO();
+            PerspectiveContext context = new PerspectiveContext();
+            try
+            {
+                IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+                string claimsPrincipal = null;
+                if (httpContextAccessor.HttpContext != null)
+                {
+                    claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+                    if (claimsPrincipal == null)
+                    {
+                        claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+                    }
+                }
+                else
+                {
+                    claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+                }
+                string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
+                long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+                //ml = (from a in context.NPF_SYS_GroupMatrixUser
+                //      join b in context.NPF_SYS_GroupMatrix on a.GMID equals b.GMID
+                //      where a.IID == UsrId select a.GMID).ToList();
+                List<MatrixListDTO> MLL = (from a in context.SYS_GroupMatrixUser
+                                           join b in context.SYS_GroupMatrix on a.GMID equals b.GMID
+                                           where a.IID == UsrId && a.DeleteStatus == false && b.DeleteStatus == false
+                                           select new MatrixListDTO()
+                                           {
+                                               GMID = a.GMID,
+                                               GMDescription = b.GMDescription
+                                           }).ToList();
+                List<MatrixListDTO> ML = new List<MatrixListDTO>();
+                ML.AddRange(MLL);
+                foreach (MatrixListDTO m in MLL)
+                {
+                    ML.AddRange(GetMatrixChild(m.GMID));
+                }
+                dt.ParentIDS = MLL.Select(y => y.GMID).ToList();
+                dt.UID = UsrId;
+                dt.AUID = AID;
+                dt.IDS = ML.Select(y => y.GMID).ToList();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return dt;
+        }
+
+        public BaseResponseDTO<List<CRUDMatrix>> GetTreeZone(long Id)
+        {
+            BaseResponseDTO<List<CRUDMatrix>> BaseDto = new BaseResponseDTO<List<CRUDMatrix>>();
+            List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
+            List<CRUDMatrix> ml = new List<CRUDMatrix>();
+            PerspectiveContext context = new PerspectiveContext();
+            try
+            {
+                UserMatrixDTO UM = sGetMatrixUserByUserID();
+                ZoneMatrixDTO UMId = sGetMatrixZoneByZoneID(Id);
+
+                mlRoot = (from a in context.SYS_GroupMatrix
+                          where UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+                          select new CRUDMatrix()
+                          {
+                              id = a.GMID.ToString(),
+                              text = a.GMDescription,
+                              parent = "#",
+                              state = new state()
+                              {
+                                  Checked = false,
+                                  Opened = true
+                              }
+                          }).ToList();
+                ml = (from a in context.SYS_GroupMatrix
+                      where UM.IDS.Contains(a.GMID) && !UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+                      select new CRUDMatrix()
+                      {
+                          id = a.GMID.ToString(),
+                          text = a.GMDescription,
+                          parent = a.ParentGMID.ToString(),
+                      }).ToList();
+                ml.AddRange(mlRoot);
+                foreach (long gmid in UMId.ParentIDS)
+                {
+                    ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
+                }
+                BaseDto.Data = ml;
+                BaseDto.QryResult = new QueryResult().SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                BaseDto.Data = ml;
+                BaseDto.ErrorMessage = "An Error Occured";
+                BaseDto.QryResult = new QueryResult().FAILED;
+            }
+            return BaseDto;
         }
 
         public static List<MatrixListDTO> GetMatrixChild(long GMID)
@@ -405,175 +633,6 @@ namespace BL.Services.Administration
             return MLL;
         }
 
-        public BaseResponseDTO<bool> CRUDZM(List<CRUDMatrix> dt, long Id)
-        {
-            BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
-            try
-            {
-                ZoneMatrixDTO ZM = sGetMatrixZoneByZoneID(Id);
-                bool Incoming = HandleIncoming(dt);
-                bool Update = HandleUpdate(dt);
-                bool Removed = HandleRemovedForZone(ZM, dt);
-                BaseDto.Data = true;
-                BaseDto.QryResult = new QueryResult().SUCEEDED;
-                if (!Incoming && !Removed)
-                {
-                    BaseDto.Data = false;
-                    BaseDto.ErrorMessage = "An Error Occured";
-                    BaseDto.QryResult = new QueryResult().FAILED;
-                }
-
-            }
-            catch (Exception)
-            {
-                BaseDto.Data = false;
-                BaseDto.ErrorMessage = "An Error Occured";
-                BaseDto.QryResult = new QueryResult().FAILED;
-            }
-            return BaseDto;
-        }
-
-        public bool HandleRemovedForZone(ZoneMatrixDTO ZM, List<CRUDMatrix> dt)
-        {
-            List<long> Removed = new List<long>();
-            bool status = false;
-            try
-            {
-                List<long> Existing = GetExisting(dt);
-                Removed = ZM.IDS;
-                Removed.RemoveAll(x => Existing.Contains(x));
-                status = true;
-                status = DeleteMatrix(Removed);
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return status;
-        }
-
-        public bool HandleIncoming(List<CRUDMatrix> dt)
-        {
-            List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
-            List<CRUDMatrix> Incoming = new List<CRUDMatrix>();
-            bool status = false;
-            try
-            {
-                Incoming = dt.Where(x => x.id.Contains("j1_")).ToList();
-                mlRoot = Incoming.Where(x => !x.parent.Contains("j1_")).ToList();
-                foreach (var matrix in mlRoot)
-                {
-                    long result = CreateMatrix(Convert.ToInt64(matrix.parent), matrix.text);
-                    if (result > 0)
-                    {
-                        Incoming.Where(x => x.parent == matrix.id).Select(c => { c.parent = result.ToString(); return c; }).ToList();
-                        Incoming.Where(x => x.id == matrix.id).Select(c => { c.id = result.ToString(); return c; }).ToList();
-                    }
-                }
-                if (Incoming.Where(x => x.id.Contains("j1_")).ToList().Count > 0)
-                {
-                    status = HandleIncoming(Incoming);
-                    if (!status)
-                    {
-                        return status;
-                    }
-                }
-                status = true;
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return status;
-        }
-        public bool HandleUpdate(List<CRUDMatrix> dt)
-        {
-            List<CRUDMatrix> update = new List<CRUDMatrix>();
-            PerspectiveContext context = new PerspectiveContext();
-            bool status = false;
-            try
-            {
-                update = dt.Where(x => !x.id.Contains("j1_")).ToList();
-                foreach (CRUDMatrix u in update)
-                {
-                    SYS_GroupMatrix gm = context.SYS_GroupMatrix.Where(x => x.GMID == Convert.ToInt64(u.id)).FirstOrDefault();
-                    if (gm.GMDescription != u.text)
-                    {
-                        gm.GMDescription = u.text;
-                        context.SYS_GroupMatrix.Update(gm);
-                        context.SaveChanges();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return status;
-        }
-        
-        public List<long> GetExisting(List<CRUDMatrix> dt)
-        {
-            List<long> Existing = new List<long>();
-            try
-            {
-                foreach (string e in dt.Where(x => !x.id.Contains("j1_")).Select(y => y.id).ToList())
-                {
-                    Existing.Add(Convert.ToInt64(e));
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return Existing;
-        }
-        public long CreateMatrix(long pgmid, string gmdes)
-        {
-            PerspectiveContext context = new PerspectiveContext();
-            long id = 0;
-            try
-            {
-                SYS_GroupMatrix gm = new SYS_GroupMatrix()
-                {
-                    ParentGMID = pgmid,
-                    GMDescription = gmdes,
-                    Remarks = string.Empty,
-                    IsCompany = true,
-                    CompanyCode = string.Empty,
-                    LegalName = string.Empty,
-                };
-                context.SYS_GroupMatrix.Add(gm);
-                context.SaveChanges();
-                id = gm.GMID;
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return id;
-        }
-        public bool DeleteMatrix(List<long> Removed)
-        {
-            PerspectiveContext context = new PerspectiveContext();
-            bool status = false;
-            try
-            {
-                foreach (long Id in Removed)
-                {
-                    SYS_GroupMatrix gm = context.SYS_GroupMatrix.Where(x => x.GMID == Id).FirstOrDefault();
-                    gm.DeleteStatus = true;
-                    context.SYS_GroupMatrix.Update(gm);
-                    context.SaveChanges();
-                }
-                status = true;
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return status;
-        }
 
         #endregion
     }

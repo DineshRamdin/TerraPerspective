@@ -42,6 +42,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\SampleFile\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\SharedResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedResource.Designer.cs</LastGenOutput>

@@ -7,6 +7,7 @@ using DAL.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System.Data;
@@ -20,10 +21,18 @@ namespace UI.Controllers
     {
         public ZoneManagementService service;
         public MatrixService _MatrixService;
-        public ZoneManagementController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext) : base(userManager, signInManager, rolemanager, Dbcontext)
+        private QueryResult _queryResult;
+
+        private readonly IWebHostEnvironment _IWebHostEnvironment;
+        public ZoneManagementController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext,
+            IWebHostEnvironment _webHostEnvironment)
+            : base(userManager, signInManager, rolemanager, Dbcontext)
         {
             service = new ZoneManagementService();
             _MatrixService = new MatrixService();
+
+            _IWebHostEnvironment = _webHostEnvironment;
+            _queryResult = new QueryResult();
         }
 
         public IActionResult Index()
@@ -110,7 +119,7 @@ namespace UI.Controllers
 
                 var reader = new WKTReader();
                 dto.geometry = reader.Read(dto.FeatureGeoJson);
-
+                
                 // Ensure the geometry is a polygon and check orientation
                 if (dto.geometry is Polygon polygon)
                 {
@@ -138,11 +147,19 @@ namespace UI.Controllers
                 if (dto.Id == 0)
                 {
                     dt = await service.SaveAsync(dto);
-                }
+					if (dt.Data == true)
+					{
+						dt = _MatrixService.SaveZoneM(dto.ZoneMatrix,Convert.ToInt64(dt.ExtData));
+					}
+				}
                 else
                 {
                     dt = await service.UpdateAsync(dto);
-                }
+					if (dt.Data == true)
+					{
+						dt = _MatrixService.UpdateZoneM(dto.ZoneMatrix, Convert.ToInt64(dt.ExtData));
+					}
+				}
 
                 return Ok(dt);
             }
@@ -192,12 +209,20 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<List<CRUDMatrix>> GetTree(long Id)
+        public ActionResult<BaseResponseDTO<List<CRUDMatrix>>> GetTree(long Id)
         {
             try
             {
                 BaseResponseDTO<List<CRUDMatrix>> tree = new BaseResponseDTO<List<CRUDMatrix>>();
-                tree = _MatrixService.GetTreeForZone(Id);
+                if(Id== 0)
+                {
+                    tree = _MatrixService.GetTree();
+                }
+                else
+                {
+
+                    tree = service.GetTreeZone(Id);
+                }
                 return Ok(tree);
 
 
@@ -209,6 +234,103 @@ namespace UI.Controllers
 
             }
         }
+
+        [HttpGet]
+        public IActionResult DownloadZoneSampleExcel()
+        {
+            var filePath = Path.Combine(_IWebHostEnvironment.WebRootPath, "SampleFile", "ImportZoneSampleFile.xlsx");
+            var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var fileName = "ImportZoneSampleFile.xlsx";
+
+            return PhysicalFile(filePath, fileType, fileName);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<bool>>> ImportExcel(IFormFile excelFile)
+        {
+            BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+            BaseResponseDTO<bool> SaveZonedt = new BaseResponseDTO<bool>();
+            BaseResponseDTO<List<CRUDMatrix>> LoginUserMatrix = new BaseResponseDTO<List<CRUDMatrix>>();
+
+            if (excelFile == null || excelFile.Length == 0)
+            {
+                dt.Data = false;
+                dt.ErrorMessage = "Please Upload Valid Excel..!";
+                dt.QryResult = _queryResult.FAILED;
+                return Ok(dt);
+            }
+            try
+            {
+                LoginUserMatrix = _MatrixService.GetTree();
+                var dtSourceData = ExcelToDataTableService.GetDataTableFromExcel_data(excelFile); // First worksheet
+
+                if (dtSourceData != null && dtSourceData.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dtSourceData.Rows)
+                    {
+                        var Type = Convert.ToString(row["Type"]);
+                        var Zone = Convert.ToString(row["Zone"]);
+                        var ExternalReference = Convert.ToString(row["ExternalReference"]);
+                        string FeatureGeoJson = Convert.ToString(row["Map"]);
+                        var reader = new WKTReader();
+                        var geometry = reader.Read(FeatureGeoJson);
+
+                        // Ensure the geometry is a polygon and check orientation
+                        if (geometry is Polygon polygon)
+                        {
+                            //bool Resu = GeometryDataHelper.IsGeometryDataCounterClockwise(polygon);
+                            if (!GeometryDataHelper.IsGeometryDataCounterClockwise(polygon))
+                            {
+                                geometry = GeometryDataHelper.GeometryDataReversePolygon(polygon); // Reverse to clockwise
+                            }
+                        }
+                        geometry.SRID = 4326;
+
+                        var ZoneManagementDTO = new ZoneManagementDTO
+                        {
+                            Zone = Zone ?? string.Empty,
+                            Type = Type ?? string.Empty,
+                            ExternalReference = ExternalReference ?? string.Empty,
+                            Folder = string.Empty,
+                            geometry = geometry,
+                        };
+                        SaveZonedt= await service.SaveAsync(ZoneManagementDTO);
+                        if (SaveZonedt.Data == true)
+                        {
+                            if (LoginUserMatrix.QryResult == _queryResult.SUCEEDED)
+                            {
+                                List<long> ZoneMatrix = new List<long>();
+
+                                foreach (var item in LoginUserMatrix.Data)
+                                {
+                                    long MId = Convert.ToInt64(item.id);
+                                    ZoneMatrix.Add(MId);
+                                }
+                                long ZoneId = Convert.ToInt64(SaveZonedt.ExtData);
+                                _MatrixService.SaveZoneM(ZoneMatrix, ZoneId);
+                            }
+                        }
+                    }
+
+                    dt.Data = true;
+                    dt.ErrorMessage = "Data successfully imported.";
+                    dt.QryResult = _queryResult.SUCEEDED;
+                    return Ok(dt);
+                }
+                else
+                {
+                    dt.Data = false;
+                    dt.ErrorMessage = "No Data Found in Excel.";
+                    dt.QryResult = _queryResult.FAILED;
+                    return Ok(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
 
     }
 }

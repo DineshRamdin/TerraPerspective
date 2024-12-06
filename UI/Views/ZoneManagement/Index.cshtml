@@ -104,8 +104,9 @@
                 <div class="row">
                     <div class="col-10">
                     </div>
-                    <div class="col-2">
-                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openZoneManagementModal(0)">Add</button>
+                    <div class="col-2 text-right">
+                        <button type="button" class="btn btn-primary mb-3" onclick="openZoneManagementModal(0)">Add</button>
+                        <button type="button" class="btn btn-info mb-3" onclick="openImportZoneModal()">Import</button>
                     </div>
                 </div>
                 <div class="row">
@@ -134,6 +135,12 @@
     <partial name="_AddZoneManagement.cshtml" />
 </div> *@
 
+<div class="modal fade" id="ImportZoneModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_ImportZone.cshtml" />
+</div>
+
+
+
 @section scripts
 {
 
@@ -150,6 +157,8 @@
         var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "ZoneManagement")';
         var ZoneFilePreviewUrl = '@Url.Action("Fileview", "ZoneManagement")';
         var GetZoneMatrixTree = '@Url.Action("GetTree", "ZoneManagement")';
+        var DownloadZoneSampleExcelUrl = '@Url.Action("DownloadZoneSampleExcel", "ZoneManagement")';
+        var ImportZoneDataUrl = '@Url.Action("ImportExcel", "ZoneManagement")';
 
         $(function () {
             $('.nav-link').removeClass('active');
@@ -184,59 +193,21 @@
 
                 }
             });
+        });
 
-            function initializeTreeView(treeData) {
-                $('#tree').jstree({
-                    "core": {
-                        "animation": 0,
-                        "check_callback": true,
-                        "themes": { "icons": true },
-                        'data': treeData
-                    },
-                    "types": {
-                        "#": {
-                            "icon": "fa-solid fa-circle-notch",
-                            "valid_children": ["root"]
-                        },
-                        "root": {
-                            "icon": "fa-solid fa-circle-notch",
-                            "valid_children": ["default"]
-                        },
-                        "default": {
-                            "icon": "fa-regular fa-circle-dot",
-                            "valid_children": ["default", "file"]
-                        },
-                        "file": {
-                            "icon": "fa-regular fa-circle-dot",
-                            "valid_children": []
-                        }
-                    },
-                    "plugins": [
-                        "contextmenu", "search",
-                        "state", "types"
-                    ]
+        function ShowAllZonebtnClick()
+        {
+            if (map) {
+                map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
+                    animate: true,
+                    duration: 3  // Duration for zoom out animation
                 });
             }
+            setTimeout(function () {
+                initMap();
+            }, 3000);  // Match this to the duration of the zoom-out animation (1.5s here)
+        }
 
-            // Fetch data from the server and initialize the tree
-            $.ajax({
-                url: GetZoneMatrixTree, // API endpoint to fetch the matrix data
-                type: "POST",
-                success: function (response) {
-                    if (response && response.data) {
-                        data = response.data;
-                        initializeTreeView(data);
-                    } else {
-                        console.error("Failed to fetch tree data.");
-                    }
-                },
-                error: function () {
-                    console.error("An error occurred while fetching tree data.");
-                }
-            });
-
-
-        });
         function GetAllZoneManagement() {
             var columnList = [
                 { data: 'id', title: 'Id', visible: false },
@@ -438,7 +409,7 @@
                             select: function (event, ui) {
 
                                 var geoJsonData = JSON.parse(ui.item.featureGeoJson);
-
+                                
                                 // Add the GeoJSON polygon to the map
                                 var layer = L.geoJSON(geoJsonData).addTo(map);
 
@@ -494,7 +465,7 @@
 
                     bounds.extend(layer.getBounds());
 
-                     var center = layer.getBounds().getCenter();
+                    var center = layer.getBounds().getCenter();
 
                     var marker = L.marker(center).addTo(map);
 
@@ -563,6 +534,25 @@
                             existingGeoJson = JSON.parse(response.data.featureGeoJson)
                             $('#hdnMapdata').val(ConvertGeoJSONtoWKT(response.data.featureGeoJson));
                         }
+
+                        // Fetch data from the server and initialize the tree
+                        $.ajax({
+                            url: GetZoneMatrixTree, // API endpoint to fetch the matrix data
+                            type: "POST",
+                            data: dataObject,
+                            success: function (response) {
+                                if (response && response.data) {
+                                    data = response.data;
+                                    initializeTreeView(data);
+                                } else {
+                                    console.error("Failed to fetch tree data.");
+                                }
+                            },
+                            error: function () {
+                                console.error("An error occurred while fetching tree data.");
+                            }
+                        });
+
                     }
                     else {
                         toastr.error(response.errorMessage);
@@ -587,12 +577,24 @@
                 // Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
                 map = L.map('map').setView([-20.081670, 57.598266], 12);
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19
                 }).addTo(map);
 
+                // Satellite layer (ESRI Satellite)
+                var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+                });
 
-                // Add drawing control
+                // Define base maps for the dropdown
+                var baseMaps = {
+                    "Map": osmLayer,
+                    "Satellite": satelliteLayer
+                };
+
+                 L.control.layers(baseMaps).addTo(map);
+                
+                 // Add drawing control
                 var drawnItems = new L.FeatureGroup();
                 map.addLayer(drawnItems);
 
@@ -709,6 +711,8 @@
             $('#txtType').val("");
             $("#txtFolder").val("");
             $("#txtExternalReference").val("");
+            $('#tree').jstree("destroy").empty(); 
+
         }
 
         function CloseZoneManagement() {
@@ -722,7 +726,15 @@
         function SaveZoneManagement() {
             // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
             let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
-            var treeData = $("#tree").jstree(true).get_json("#", { flat: true });
+            //get tree selected data
+            var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+            //get tree selected ids
+            var selectedIds = []
+            if (treeData.length > 0) {
+                selectedIds = treeData.map(function (datum) {
+                    return parseInt(datum['id']);
+                });
+            }
           
             if (valid && $("#hdnMapdata").val() != "") {
                 var dataObject = {};
@@ -732,7 +744,7 @@
                 dataObject.Type = $('#txtType').val();
                 dataObject.Folder = $("#txtFolder").val();
                 dataObject.ExternalReference = $("#txtExternalReference").val();
-                dataObject.TreeData = treeData;
+                dataObject.ZoneMatrix = selectedIds;
 
 
                 $.ajax({
@@ -774,6 +786,91 @@
             }
 
         }
+
+        function openImportZoneModal() {
+            ClearImportZoneModal();
+            $('#ImportZoneModal').modal('show');
+        }
+
+        function ClearImportZoneModal() {
+            $('#importzonefile').val(null);
+        }
+
+        function DownloadSampleZoneFile() {
+            window.open(DownloadZoneSampleExcelUrl, '_blank');
+        }
+
+        function ImportZoneData()
+        {
+            // Validate the file input field
+            var fileInput = $('#importzonefile')[0];
+            var file = fileInput.files[0];
+
+            if (file) {
+                var formData = new FormData();
+                formData.append('excelFile', file);
+
+                $.ajax({
+                    url: ImportZoneDataUrl,
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // Prevent jQuery from processing the data
+                    contentType: false, // Prevent jQuery from setting the content type
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#ImportZoneModal').modal('hide');
+                            GetAllZoneManagement();
+                            initMap();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while uploading the file.');
+                    }
+                });
+            } 
+            else {
+                toastr.warning("Please Select File");
+            }
+        }
+
+        function initializeTreeView(treeData) {
+            $('#tree').jstree({
+                "core": {
+                    "animation": 0,
+                    "check_callback": true,
+                    "themes": { "icons": false },
+                    'data': treeData
+                },
+                "types": {
+                    "#": {
+                        "valid_children": ["root"]
+                    },
+                    "root": {
+                        "valid_children": ["default"]
+                    },
+                    "default": {
+                        "valid_children": ["default", "file"]
+                    },
+                    "file": {
+                        "valid_children": []
+                    }
+                },
+                "checkbox": {
+                    "tie_selection": false,
+                    "three_state": false,
+                },
+                "plugins": [
+                    "checkbox"
+                ]
+            });
+        }
+
+
     </script>
 
 }
