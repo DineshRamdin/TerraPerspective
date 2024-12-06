@@ -1,19 +1,19 @@
 ﻿@{
 	ViewData["Title"] = "User";
 }
-
+@using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">User</h1>
+				<h1 class="m-0">@SharedResource.User</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">User</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.User</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -66,15 +66,17 @@
 		});
 
 		function GetAllUser() {
+
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'surname', title: 'Surname' },
-				{ data: 'othername', title: 'Othername' },
-				{ data: 'email', title: 'Email' },
-				{ data: 'roleName', title: 'Role Name' },
+				//{ data: 'surname', title: 'Surname' },
+				{ data: 'surname', title: '@SharedResource.Surname'},
+				{ data: 'othername', title: '@SharedResource.Othername' },
+				{ data: 'email', title: '@SharedResource.Email' },
+				{ data: 'roleName', title: '@SharedResource.Role_Name' },
 				{
 					data: 'profileImagebase64',
-					title: 'Profile Image',
+					title: '@SharedResource.Profile_Image',
 					render: function (data, type, row, meta) {
 						// Check if the data (base64 string) is valid
 						if (data && data.trim() !== "") {
@@ -88,7 +90,36 @@
 				},
 			];
 
-				initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false,true,true,true,true,'PreviewUserModal',true,null);
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
+
+
+			initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false,true,true,true,true,'PreviewUserModal',true,null,langResource);
 
 			// $.ajax({
 			//     url: GetAllUserUrl,
@@ -194,9 +225,9 @@
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-							$("#h4UserTitle").html("Modify User");
+							$("#h4UserTitle").html('@SharedResource.Modify_User');
 						else {
-							$("#h4UserTitle").html("Add User");
+							$("#h4UserTitle").html('@SharedResource.Add_User');
 						}
 
 						$("#hdnuserId").val(response.data.id);
@@ -260,7 +291,7 @@
 		}
 
 		function ClearUserModal() {
-			$("#h4UserTitle").html("Add User");
+			$("#h4UserTitle").html('@SharedResource.Add_User');
 			$("#hdnuserId").val("");
 			$("#txtSurname").val("");
 			$("#txtOthername").val("");
@@ -285,7 +316,7 @@
 					if (response.data) {
 						$.each(response.data, function (key, value) {
 							if (value.title == "Roles") {
-								$("#ddlRole").append($("<option></option>").val('').html("Select Role"));
+								$("#ddlRole").append($("<option></option>").val('').html('@SharedResource.Select_Role'));
 								$.each(value.items, function (itemskey, itemsvalue) {
 									$("#ddlRole").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
@@ -349,7 +380,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning('@SharedResource.Please_fill_in_required_field_s_');
 			}
 		}
 

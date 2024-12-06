@@ -1,7 +1,7 @@
 ﻿@{
 	ViewData["Title"] = "Access Rights";
 }
-
+@using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -70,7 +70,35 @@
 				{ data: 'roleName', title: 'Role Name' }
 			];
 
-			initializeDataGrid('AccessRightsTable', 'openAccessRightsModal', GetAllAccessRightsUrl, columnList, false, true, true, false,true);
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
+
+			initializeDataGrid('AccessRightsTable', 'openAccessRightsModal', GetAllAccessRightsUrl, columnList, false, true, true, false,true,null,false,null,langResource);
 
 		}
 
@@ -107,7 +135,7 @@
 			}
 		}
 
-		
+
 
 		function openAccessRightsModal(id) {
 			var dataObject = {};
@@ -211,15 +239,15 @@
 		}
 
 
-		function GetAllAccessRights() {
-			var columnList = [
-				{ data: 'roleName', title: 'Role Name' }
-			];
+		// function GetAllAccessRights() {
+		// 	var columnList = [
+		// 		{ data: 'roleName', title: 'Role Name' }
+		// 	];
 
-			initializeDataGrid('AccessRightsTable', 'openAccessRightsModal', GetAllAccessRightsUrl, columnList, false, true, true, false);
+		// 	initializeDataGrid('AccessRightsTable', 'openAccessRightsModal', GetAllAccessRightsUrl, columnList, false, true, true, false);
 
-		}
-		
+		// }
+
 		function ClearUserModal() {
 			$("#h4UserTitle").html("Add User");
 			$("#hdnuserId").val("");
@@ -233,7 +261,7 @@
 			$("#viewProfileImage").css("display", "none");
 		}
 
-		
+
 		function SaveAccessRight(){
 			let valid = formValidation(["txtRole"]);
 			if (!valid) {
@@ -242,7 +270,7 @@
 				var rolename = $("#txtRole").val();
 				GridData.roleName = rolename;
 				GridData.roleId = $("#hdnAccessRoleId").val() == "" ? null : $("#hdnAccessRoleId").val();
-				
+
 				$.ajax({
 					url: createUpdateARURL,
 					type: "POST",

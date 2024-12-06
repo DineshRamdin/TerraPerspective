@@ -1,30 +1,33 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
+
 }
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
+@using UI.Resources
 
 @{
-    // Get the Base64 string from session
-    var base64Image = HttpContextAccessor.HttpContext.Session.GetString("ProfileImage");
-    var profileImage = string.IsNullOrEmpty(base64Image)
-        ? "/image/default-profile.png" // Use default image if no Base64 image is stored
-        : $"data:image/png;base64,{base64Image}"; // Prepend the Base64 string with the data type
+	// Get the Base64 string from session
+	var base64Image = HttpContextAccessor.HttpContext.Session.GetString("ProfileImage");
+	var profileImage = string.IsNullOrEmpty(base64Image)
+		? "/image/default-profile.png" // Use default image if no Base64 image is stored
+		: $"data:image/png;base64,{base64Image}"; // Prepend the Base64 string with the data type
+	var Language = HttpContextAccessor.HttpContext.Session.GetString("Language");
 
 }
-  <!-- Navbar -->
+<!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-        </li>
-    </ul>
+	<!-- Left navbar links -->
+	<ul class="navbar-nav">
+		<li class="nav-item">
+			<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+		</li>
+	</ul>
 
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-        <!-- Messages Dropdown Menu -->
-      @*   <li class="nav-item dropdown">
+	<!-- Right navbar links -->
+	<ul class="navbar-nav ml-auto">
+		<!-- Messages Dropdown Menu -->
+		@*   <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-comments"></i>
                 <span class="badge badge-danger navbar-badge">3</span>
@@ -81,8 +84,8 @@
                 <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
             </div>
         </li> *@
-        <!-- Notifications Dropdown Menu -->
-        @* <li class="nav-item dropdown">
+		<!-- Notifications Dropdown Menu -->
+		@* <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-bell"></i>
                 <span class="badge badge-warning navbar-badge">15</span>
@@ -108,37 +111,57 @@
                 <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
             </div>
         </li> *@
-       
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <img id="profileUserImg" class="img-circle img-size-32" src="@profileImage" />
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+		<li class="nav-item">
+			<div class="form-group">
+				<select id="inputlanguage" class="form-control custom-select" onchange="changeLanguage(this)">
+					<option value="en-US" selected="@(Language == null || Language == "" || Language == "en-US" ? true : false)">English</option>
+					<option value="fr-FR" selected="@(Language == "fr-FR" ? true : false)">French</option>
+					<option value="pt-BR" selected="@(Language == "pt-BR" ? true : false)">Portuguese</option>
+					@* <option value="de-DE" selected="@ViewData["CurrentCulture"]?.ToString() == " de-DE"">German</option> *@
+				</select>
+				@* <select id="inputlanguage" class="form-control custom-select" onchange="changeLanguage(this)">
+					<option value="en-US" selected>English</option>
+					<option value="fr-FR">French</option>
+					<option value="pt-BR">Portuguese</option>
+					<option value="de-DE">German</option>
+				</select> *@
+			</div>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="dropdown" href="#">
+				<img id="profileUserImg" class="img-circle img-size-32" src="@profileImage" />
+			</a>
+			<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 
-                <a class="dropdown-item" id="changePassword" role="button" onclick="showModal();">
-                    <i class="fas fa-key mr-2"></i> Change Password
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-cog mr-2"></i> Settings
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-area="" asp-controller="Base" asp-action="Logout" role="button">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                <i class="fas fa-expand-arrows-alt"></i>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                <i class="fas fa-th-large"></i>
-            </a>
-        </li>
-    </ul>
+				<a class="dropdown-item" id="changePassword" role="button" onclick="showModal();">
+					<i class="fas fa-key mr-2"></i> @SharedResource.Change_Password
+				</a>
+				<div class="dropdown-divider"></div>
+				<a href="#" class="dropdown-item">
+					<i class="fas fa-cog mr-2"></i> @SharedResource.Settings
+				</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" asp-area="" asp-controller="Base" asp-action="Logout" role="button">
+					<i class="fas fa-sign-out-alt"></i> @SharedResource.Logout
+				</a>
+			</div>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-widget="fullscreen" href="#" role="button">
+				<i class="fas fa-expand-arrows-alt"></i>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+				<i class="fas fa-th-large"></i>
+			</a>
+		</li>
+	</ul>
 </nav>
+<script>
+	function changeLanguage(selectElement) {
+		 var culture = selectElement.value;
+		window.location.href = '/Language/ChangeLanguage?culture=' + culture;
+	}
+</script>
 <!-- /.navbar -->
-

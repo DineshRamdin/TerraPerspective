@@ -1,18 +1,18 @@
 ﻿@{
 	ViewData["Title"] = "Report";
 }
-
+@using UI.Resources
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">Report</h1>
+				<h1 class="m-0">@SharedResource.Report</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">Report</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Report</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -63,13 +63,41 @@
 		function GetAllReports() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: 'Name' },
-				{ data: 'type', title: 'Type' },
-				{ data: 'viewName', title: 'View Name' },
+				{ data: 'name', title: '@SharedResource.Name' },
+				{ data: 'type', title: '@SharedResource.Type' },
+				{ data: 'viewName', title: '@SharedResource.View_Name' },
 
 			];
 
-			initializeDataGrid('ReportsTable', 'openReportsModal', GetAllReportsUrl, columnList, true,true,true,false,true,'PreviewReportsModal',true,'ReportsDelete');
+			var langResource = {
+					AddNewLabel: '@SharedResource.Add_New',
+					ExportLabel: '@SharedResource.Export',
+					ExportPDFLabel:'@SharedResource.Export_PDF',
+					ExportCSVLabel:'@SharedResource.Export_CSV',
+					ExportExcelLabel:'@SharedResource.Export_Excel',
+					ExcelLabel:'@SharedResource.Excel',
+					PDFLabel:'@SharedResource.PDF',
+					CSVLabel:'@SharedResource.CSV',
+					NodataavailableLabel :'@SharedResource.No_data_available',
+					SearchLabel :'@SharedResource.Search',
+					ShowingLabel :'@SharedResource.Showing',
+					EntriesLabel :'@SharedResource.entries',
+					FilteredfromLabel :'@SharedResource.filtered_from',
+					ViewLabel :'@SharedResource.View',
+					PreviewLabel :'@SharedResource.Preview',
+					DeleteLabel :'@SharedResource.Delete',
+					EditLabel :'@SharedResource.Edit',
+					ResetPasswordLabel :'@SharedResource.Reset_Password',
+					UserNameLabel :'@SharedResource.UserName',
+					DateLabel :'@SharedResource.Date',
+					PageLabel :'@SharedResource.Page',
+					OfLabel :'@SharedResource.of',
+					GeneratedonLabel :'@SharedResource.Generated_on',
+					PreviousLabel :'@SharedResource.Previous',
+					NextLabel :'@SharedResource.Next',
+				};
+
+			initializeDataGrid('ReportsTable', 'openReportsModal', GetAllReportsUrl, columnList, true,true,true,false,true,'PreviewReportsModal',true,'ReportsDelete',langResource);
 		}
 
 		 function PreviewReportsModal(viewName) {
@@ -91,9 +119,9 @@
 					if (response.data) {
 						$("#deleteImageBtn").hide();
 						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-							$("#h4ReportsTitle").html("Modify Report");
+							$("#h4ReportsTitle").html('@SharedResource.Modify  @SharedResource.Report');
 						else {
-							$("#h4ReportsTitle").html("Add Report");
+							$("#h4ReportsTitle").html('@SharedResource.Add  @SharedResource.Report');
 						}
 
 						$("#hdnReportsId").val(response.data.id);
@@ -134,7 +162,7 @@
 		}
 
 		function ClearReportsModal() {
-			$("#h4ReportsTitle").html("Add Report");
+			$("#h4ReportsTitle").html('@SharedResource.Add  @SharedResource.Report');
 			$("#hdnReportsId").val("");
 			$("#txtName").val("");
 			$("#txtType").val("");
@@ -191,7 +219,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 
 		}

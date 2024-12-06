@@ -45,7 +45,7 @@ function validatePassword() {
         return true;
     } else {
         toastr.error("The password you entered do not match. Please re-enter your password");
-       
+
     }
 }
 
@@ -87,7 +87,7 @@ function ChangeUserPassword() {
     }
 }
 
-function loadMenu() {
+function loadMenu(langResource) {
     //const roleId = localStorage.getItem("RoleId");
     //const userToken = localStorage.getItem("userToken");
 
@@ -102,7 +102,7 @@ function loadMenu() {
         url: GetMenuUrl, // Adjust to your controller and action
         data: null,
         success: function (response) {
-            renderDynamicMenu(response.data);
+            renderDynamicMenu(response.data, langResource);
         },
         error: function (error) {
             console.error("Error loading menu:", error);
@@ -110,33 +110,194 @@ function loadMenu() {
     });
 }
 
-function renderDynamicMenu(data) {
+function renderDynamicMenu(data, langResource) {
+
     const menuContainer = $(".sidebar nav ul");
     menuContainer.empty(); // Clear the existing menu
     data.forEach(grandParent => {
 
+        var MenuName = "";
+        if (grandParent.name == "Dashboard") {
+            MenuName = langResource.DashboardMenuLabel;
+        }
+        else if (grandParent.name == "User") {
+            MenuName = langResource.UserMenuLabel;
+        }
+        else if (grandParent.name == "Poster") {
+            MenuName = langResource.PosterMenuLabel;
+        }
+        else if (grandParent.name == "Carousel") {
+            MenuName = langResource.CarouselMenuLabel;
+        }
+        else if (grandParent.name == "Device") {
+            MenuName = langResource.DeviceMenuLabel;
+        }
+        else if (grandParent.name == "LookUpType") {
+            MenuName = langResource.LookUpTypeMenuLabel;
+        }
+        else if (grandParent.name == "LookUpValue") {
+            MenuName = langResource.LookUpValueMenuLabel;
+        }
+        else if (grandParent.name == "Log") {
+            MenuName = langResource.LogMenuLabel;
+        }
+        else if (grandParent.name == "Room") {
+            MenuName = langResource.RoomMenuLabel;
+        }
+        else if (grandParent.name == "Resource") {
+            MenuName = langResource.ResourceMenuLabel;
+        }
+        else if (grandParent.name == "Check In/Out") {
+            MenuName = langResource.CheckInOutMenuLabel;
+        }
+        else if (grandParent.name == "Access Log") {
+            MenuName = langResource.AccessLogMenuLabel;
+        }
+        else if (grandParent.name == "Test Geomerty Data") {
+            MenuName = langResource.TestGeomertyDataMenuLabel;
+        }
+        else if (grandParent.name == "Global Param") {
+            MenuName = langResource.GlobalParamMenuLabel;
+        }
+        else if (grandParent.name == "Testing") {
+            MenuName = langResource.TestingMenuLabel;
+        }
+        else if (grandParent.name == "Access Rights") {
+            MenuName = langResource.AccessRightsMenuLabel;
+        }
+        else if (grandParent.name == "Report") {
+            MenuName = langResource.ReportMenuLabel;
+        }
+        else if (grandParent.name == "Administration") {
+            MenuName = langResource.AdministrationMenuLabel;
+        }
+        else if (grandParent.name == "Access") {
+            MenuName = langResource.AccessMenuLabel;
+        }
+        else if (grandParent.name == "Matrix") {
+            MenuName = langResource.MatrixMenuLabel;
+        }
+        else if (grandParent.name == "Menu") {
+            MenuName = langResource.MenuLabel;
+        }
+        else if (grandParent.name == "System Icon") {
+            MenuName = langResource.SystemIconMenuLabel;
+        }
+        else if (grandParent.name == "All System Icon") {
+            MenuName = langResource.AllSystemIconMenuLabel;
+        }
+        else if (grandParent.name == "Zone Management") {
+            MenuName = langResource.ZoneManagementMenuLabel;
+        }
+        else {
+            MenuName = grandParent.name;
+        }
+
         // Build grandparent menu item
         let grandParentHtml = `
                     <li class="nav-item">
-                        <a href="${ grandParent.url ? '/' + grandParent.url : '#'}" class="nav-link">
+                        <a href="${grandParent.url ? '/' + grandParent.url : '#'}" class="nav-link">
                             <i class="nav-icon ${grandParent.icon}"></i>
-                            <p>
-                                ${grandParent.name}
+                            <p>                           
+                                ${MenuName}
                                 ${grandParent.subMenu.length ? '<i class="fas fa-angle-right right"></i>' : ''}
                             </p>
                         </a>
                 `;
+
+
+
 
         // Check for submenus
         if (grandParent.subMenu.length > 0) {
             let parentHtml = '<ul class="nav nav-treeview">';
 
             grandParent.subMenu.forEach(parent => {
+
+
+                //For Sub Menu 
+                var SubMenuName = "";
+                if (parent.name == "Dashboard") {
+                    SubMenuName = langResource.DashboardMenuLabel;
+                }
+                else if (parent.name == "User") {
+                    SubMenuName = langResource.UserMenuLabel;
+                }
+                else if (parent.name == "Poster") {
+                    SubMenuName = langResource.PosterMenuLabel;
+                }
+                else if (parent.name == "Carousel") {
+                    SubMenuName = langResource.CarouselMenuLabel;
+                }
+                else if (parent.name == "Device") {
+                    SubMenuName = langResource.DeviceMenuLabel;
+                }
+                else if (parent.name == "LookUpType") {
+                    SubMenuName = langResource.LookUpTypeMenuLabel;
+                }
+                else if (parent.name == "LookUpValue") {
+                    SubMenuName = langResource.LookUpValueMenuLabel;
+                }
+                else if (parent.name == "Log") {
+                    SubMenuName = langResource.LogMenuLabel;
+                }
+                else if (parent.name == "Room") {
+                    SubMenuName = langResource.RoomMenuLabel;
+                }
+                else if (parent.name == "Resource") {
+                    SubMenuName = langResource.ResourceMenuLabel;
+                }
+                else if (parent.name == "Check In/Out") {
+                    SubMenuName = langResource.CheckInOutMenuLabel;
+                }
+                else if (parent.name == "Access Log") {
+                    SubMenuName = langResource.AccessLogMenuLabel;
+                }
+                else if (parent.name == "Test Geomerty Data") {
+                    SubMenuName = langResource.TestGeomertyDataMenuLabel;
+                }
+                else if (parent.name == "Global Param") {
+                    SubMenuName = langResource.GlobalParamMenuLabel;
+                }
+                else if (parent.name == "Testing") {
+                    SubMenuName = langResource.TestingMenuLabel;
+                }
+                else if (parent.name == "Access Rights") {
+                    SubMenuName = langResource.AccessRightsMenuLabel;
+                }
+                else if (parent.name == "Report") {
+                    SubMenuName = langResource.ReportMenuLabel;
+                }
+                else if (parent.name == "Administration") {
+                    SubMenuName = langResource.AdministrationMenuLabel;
+                }
+                else if (parent.name == "Access") {
+                    SubMenuName = langResource.AccessMenuLabel;
+                }
+                else if (parent.name == "Matrix") {
+                    SubMenuName = langResource.MatrixMenuLabel;
+                }
+                else if (parent.name == "Menu") {
+                    SubMenuName = langResource.MenuLabel;
+                }
+                else if (parent.name == "System Icon") {
+                    SubMenuName = langResource.SystemIconMenuLabel;
+                }
+                else if (parent.name == "All System Icon") {
+                    SubMenuName = langResource.AllSystemIconMenuLabel;
+                }
+                else if (parent.name == "Zone Management") {
+                    SubMenuName = langResource.ZoneManagementMenuLabel;
+                }
+                else {
+                    SubMenuName = parent.name;
+                }
+
                 parentHtml += `
                             <li class="nav-item">
                                 <a href="${parent.url ? '/' + parent.url : '#'}" class="nav-link">
                                     <i class="${parent.icon || 'far fa-circle nav-icon'}"></i>
-                                    <p>${parent.name}</p>
+                                    <p>${SubMenuName}</p>
                                 </a>
                         `;
 
@@ -145,11 +306,90 @@ function renderDynamicMenu(data) {
                     parentHtml += '<ul class="nav nav-treeview">';
 
                     parent.child.forEach(child => {
+
+                        //For Child Sub Menu
+                        var ChildSubMenuName = "";
+                        if (child.name == "Dashboard") {
+                            ChildSubMenuName = langResource.DashboardMenuLabel;
+                        }
+                        else if (child.name == "User") {
+                            ChildSubMenuName = langResource.UserMenuLabel;
+                        }
+                        else if (child.name == "Poster") {
+                            ChildSubMenuName = langResource.PosterMenuLabel;
+                        }
+                        else if (child.name == "Carousel") {
+                            ChildSubMenuName = langResource.CarouselMenuLabel;
+                        }
+                        else if (child.name == "Device") {
+                            ChildSubMenuName = langResource.DeviceMenuLabel;
+                        }
+                        else if (child.name == "LookUpType") {
+                            ChildSubMenuName = langResource.LookUpTypeMenuLabel;
+                        }
+                        else if (child.name == "LookUpValue") {
+                            ChildSubMenuName = langResource.LookUpValueMenuLabel;
+                        }
+                        else if (child.name == "Log") {
+                            ChildSubMenuName = langResource.LogMenuLabel;
+                        }
+                        else if (child.name == "Room") {
+                            ChildSubMenuName = langResource.RoomMenuLabel;
+                        }
+                        else if (child.name == "Resource") {
+                            ChildSubMenuName = langResource.ResourceMenuLabel;
+                        }
+                        else if (child.name == "Check In/Out") {
+                            ChildSubMenuName = langResource.CheckInOutMenuLabel;
+                        }
+                        else if (child.name == "Access Log") {
+                            ChildSubMenuName = langResource.AccessLogMenuLabel;
+                        }
+                        else if (child.name == "Test Geomerty Data") {
+                            ChildSubMenuName = langResource.TestGeomertyDataMenuLabel;
+                        }
+                        else if (child.name == "Global Param") {
+                            ChildSubMenuName = langResource.GlobalParamMenuLabel;
+                        }
+                        else if (child.name == "Testing") {
+                            ChildSubMenuName = langResource.TestingMenuLabel;
+                        }
+                        else if (child.name == "Access Rights") {
+                            ChildSubMenuName = langResource.AccessRightsMenuLabel;
+                        }
+                        else if (child.name == "Report") {
+                            ChildSubMenuName = langResource.ReportMenuLabel;
+                        }
+                        else if (child.name == "Administration") {
+                            ChildSubMenuName = langResource.AdministrationMenuLabel;
+                        }
+                        else if (child.name == "Access") {
+                            ChildSubMenuName = langResource.AccessMenuLabel;
+                        }
+                        else if (child.name == "Matrix") {
+                            ChildSubMenuName = langResource.MatrixMenuLabel;
+                        }
+                        else if (child.name == "Menu") {
+                            ChildSubMenuName = langResource.MenuLabel;
+                        }
+                        else if (child.name == "System Icon") {
+                            ChildSubMenuName = langResource.SystemIconMenuLabel;
+                        }
+                        else if (child.name == "All System Icon") {
+                            ChildSubMenuName = langResource.AllSystemIconMenuLabel;
+                        }
+                        else if (child.name == "Zone Management") {
+                            ChildSubMenuName = langResource.ZoneManagementMenuLabel;
+                        }
+                        else {
+                            ChildSubMenuName = child.name;
+                        }
+
                         parentHtml += `
                                     <li class="nav-item">
                                         <a href="${child.url ? '/' + child.url : '#'}" class="nav-link">
                                             <i class="${child.icon || 'far fa-dot-circle nav-icon'}"></i>
-                                            <p>${child.name}</p>
+                                            <p>${ChildSubMenuName}</p>
                                         </a>
                                     </li>
                                 `;

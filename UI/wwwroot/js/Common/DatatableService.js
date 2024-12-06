@@ -1,7 +1,7 @@
 ﻿
 
 function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
-    showExcel = true, onclickDelete = null) {
+    showExcel = true, onclickDelete = null, langResource = null) {
 
     var dataToShow = null; //init data variable
     var access = null; // init access variable
@@ -43,11 +43,11 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         lengthChange: false,
                         language: { // search anf info bars
                             search: '',
-                            emptyTable: 'No data available',
-                            searchPlaceholder: 'Search',
-                            info: "Showing _TOTAL_ entries",
-                            infoEmpty: "Showing 0 entries",
-                            infoFiltered: "(filtered from _MAX_ entries)",
+                            emptyTable: langResource.NodataavailableLabel,  //'No data available',
+                            searchPlaceholder: langResource.SearchLabel, //'Search',
+                            info: langResource.ShowingLabel + " _TOTAL_ " + langResource.EntriesLabel, //"Showing _TOTAL_ entries",
+                            infoEmpty: langResource.ShowingLabel + " 0 " + langResource.EntriesLabel,//"Showing 0 entries",
+                            infoFiltered: "(" + langResource.FilteredfromLabel + " _MAX_ " + langResource.EntriesLabel + ")",  //"(filtered from _MAX_ entries)",
                         },
                         data: dataToShow, // data to display
                         columnDefs: [ // set action column
@@ -61,17 +61,17 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                 render: function (data, type, full, meta) {
 
                                     //view button
-                                    var view = '<a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="View"><i class="fa fa-eye text-secondary ms-1"></i></a> |';
+                                    var view = '<a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="' + langResource.ViewLabel + '"><i class="fa fa-eye text-secondary ms-1"></i></a> |';
                                     //edit button
-                                    var edit = '<a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+                                    var edit = '<a href="#" onclick="' + onclickPartial + '(\'' + full.id + '\')" title="' + langResource.EditLabel + '"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
                                     //delete button
                                     /*var del = ' | <a href="#" onclick="delete(\'' + full.id + '\')" title="Delete"><i class="fa fa-delete text-secondary "></i></a>';*/
-                                    var del = '| <a href="#" onclick="' + onclickDelete + '(\'' + full.id + '\')" title="Delete"><i class="fa fa-trash text-secondary ms-1"></i></a> ';
+                                    var del = '| <a href="#" onclick="' + onclickDelete + '(\'' + full.id + '\')" title="' + langResource.DeleteLabel + '"><i class="fa fa-trash text-secondary ms-1"></i></a> ';
                                     //reset user 
-                                    var reset = '| <a href="#" onclick="ResetUserPassword(\'' + full.id + '\')"  title="Reset Password To Default"><i class="fas fa-undo text-secondary ms-1"></i></a> ';
+                                    var reset = '| <a href="#" onclick="ResetUserPassword(\'' + full.id + '\')"  title="' + langResource.ResetPasswordLabel + '"><i class="fas fa-undo text-secondary ms-1"></i></a> ';
                                     //list of buttons
 
-                                    var preview = '| <a href="#" onclick="' + onclickPreview + '(\'' + full.id + '\')" title="Preview"><i class="fa fa-eye text-secondary ms-1"></i></a> ';
+                                    var preview = '| <a href="#" onclick="' + onclickPreview + '(\'' + full.id + '\')" title="' + langResource.PreviewLabel + '"><i class="fa fa-eye text-secondary ms-1"></i></a> ';
 
                                     var btn = '';
 
@@ -89,7 +89,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                         if (tableID == "ReportsTable") {
                                             // if (full.isImage == true) {
                                             if (full.viewName !== "") {
-                                                btn += '| <a href="#" onclick="' + onclickPreview + '(\'' + full.viewName + '\')" title="Preview"><i class="fa fa-eye text-secondary ms-1"></i></a> ';//preview
+                                                btn += '| <a href="#" onclick="' + onclickPreview + '(\'' + full.viewName + '\')" title="' + langResource.PreviewLabel + '"><i class="fa fa-eye text-secondary ms-1"></i></a> ';//preview
                                             }
                                             //else if (=="PosterTable")
                                         }
@@ -107,7 +107,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                         }
                                         else if (tableID == "ZoneManagementTable") {
                                             if (full.folder != null && full.folder != "") {
-                                                btn += '| <a href="#" onclick="' + onclickPreview + '(\'' + full.folder + '\')" title="Preview"><i class="fa fa-folder-open text-secondary ms-1"></i></a> ';//preview
+                                                btn += '| <a href="#" onclick="' + onclickPreview + '(\'' + full.folder + '\')" title="' + langResource.PreviewLabel + '"><i class="fa fa-folder-open text-secondary ms-1"></i></a> ';//preview
                                             }
                                             //else if (=="PosterTable")
                                         }
@@ -124,7 +124,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         columns: columnList, //column list
                         buttons: [
                             {
-                                text: '<i class="fa fa-plus me-2"></i> Add New',
+                                text: '<i class="fa fa-plus me-2"></i> ' + langResource.AddNewLabel, // Add New',
                                 className: 'btn btn-sm btn-primary custom-class addbtn',
                                 action: function (e, dt, node, config) {
                                     // Replace this with your custom action
@@ -136,7 +136,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             //Excel Export Button
                             {
                                 extend: 'excel',
-                                text: '<i class="fa fa-file-excel me-2"></i>  Export Excel',
+                                text: '<i class="fa fa-file-excel me-2"></i>' + langResource.ExportExcelLabel,//  Export Excel',
                                 className: 'btn-sm btn-c-secondary d-none excelbtn',
                                 exportOptions: {
                                     columns: ':visible:not(.sorting_disabled)'
@@ -184,10 +184,16 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                         var footerRowPosition = rowCount + 4; // The footer row is placed 4 rows after the last row of data
 
                                         // Create the footer row with valid XML structure
+                                        //var footerRow = `
+                                        //<row r="${footerRowPosition}">
+                                        //    <c t="s" r="A${footerRowPosition}"><v>UserName : ${username}</v></c>
+                                        //    <c t="s" r="B${footerRowPosition}"><v>Date : ${currentDate}</v></c>
+                                        //</row>`;
+
                                         var footerRow = `
                                         <row r="${footerRowPosition}">
-                                            <c t="s" r="A${footerRowPosition}"><v>UserName : ${username}</v></c>
-                                            <c t="s" r="B${footerRowPosition}"><v>Date : ${currentDate}</v></c>
+                                            <c t="s" r="A${footerRowPosition}"><v>${langResource.UserNameLabel} : ${username}</v></c>
+                                            <c t="s" r="B${footerRowPosition}"><v>${langResource.DateLabel} : ${currentDate}</v></c>
                                         </row>`;
 
                                         // Append the footer row to the sheet data, ensuring proper structure
@@ -198,7 +204,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             //PDF Export Button
                             {
                                 extend: 'pdf',
-                                text: '<i class="fa fa-file-pdf me-2"></i>  Export PDF',
+                                text: '<i class="fa fa-file-pdf me-2"></i>' + langResource.ExportPDFLabel, //  Export PDF',
                                 className: 'btn-sm btn-c-secondary d-none printbtn',
                                 exportOptions: {
                                     columns: ':visible:not(.sorting_disabled)'
@@ -248,9 +254,17 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                         doc.styles.header.fontSize = 12;
                                         doc.styles.footer.fontSize = 10;
 
+                                        //// Add custom footer content with username and date after all data
+                                        //doc.content.push({  // Push to the end of the content array
+                                        //    text: `UserName : ${username} | Date : ${currentDate}`,
+                                        //    style: 'footer',  // Use the defined footer style
+                                        //    alignment: 'left',
+                                        //    margin: [0, 30, 10, 0] // Add some space before the footer text
+                                        //});
+
                                         // Add custom footer content with username and date after all data
                                         doc.content.push({  // Push to the end of the content array
-                                            text: `UserName : ${username} | Date : ${currentDate}`,
+                                            text: `${langResource.UserNameLabel} : ${username} | ${langResource.DateLabel} : ${currentDate}`,
                                             style: 'footer',  // Use the defined footer style
                                             alignment: 'left',
                                             margin: [0, 30, 10, 0] // Add some space before the footer text
@@ -261,11 +275,13 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                             return {
                                                 columns: [
                                                     {
-                                                        text: `Page ${currentPage} of ${pageCount}`,
+                                                        //text: `Page ${currentPage} of ${pageCount}`,
+                                                        text: `${langResource.PageLabel} ${currentPage} ${langResource.OfLabel} ${pageCount}`,
                                                         alignment: 'center'
                                                     },
                                                     {
-                                                        text: `Generated on ${currentDate}`,
+                                                        //text: `Generated on ${currentDate}`,
+                                                        text: `${langResource.GeneratedonLabel} ${currentDate}`,
                                                         alignment: 'right'
                                                     }
                                                 ],
@@ -281,7 +297,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             //CSV Export Button
                             {
                                 extend: 'csv',
-                                text: '<i class="fa fa-file-excel me-2"></i>  Export CSV',
+                                text: '<i class="fa fa-file-excel me-2"></i>' + langResource.ExportCSVLabel, //  Export CSV',
                                 className: 'btn-sm btn-c-secondary d-none printbtn',
                                 exportOptions: {
                                     columns: ':visible:not(.sorting_disabled)'
@@ -327,7 +343,8 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                         rows.push(`,`);
                                         rows.push(`, `);
                                         rows.push(`, `);
-                                        rows.push(`UserName : ${username}, Date : ${currentDate}`);
+                                        //rows.push(`UserName : ${username}, Date : ${currentDate}`);
+                                        rows.push(`${langResource.UserNameLabel} : ${username}, ${langResource.DateLabel} : ${currentDate}`);
 
                                         // Join the rows back into a single CSV string and return
                                         return rows.join('\n');
@@ -357,12 +374,12 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             var dropdownHtml = `
                                     <div class="custom-dropdown">
                                         <button id="dropdownButton" class="form-control btn-sm btn-info btn btn-secondary dropdown-toggle clsDownload" style="width: auto;">
-                                            Export
+                                            ${langResource.ExportLabel}
                                         </button>
                                         <div id="dropdownMenu" class="${clsDropdownmenu}" style="display: none;">
-                                            <div class="dropdown-item" data-value="1"><i class="fa fa-file-pdf me-2"></i> PDF</div>
-                                            <div class="dropdown-item" data-value="2"><i class="fa fa-file-excel me-2"></i> Excel</div>
-                                            <div class="dropdown-item" data-value="3"><i class="fa fa-file-csv me-2"></i> CSV</div>
+                                            <div class="dropdown-item" data-value="1"><i class="fa fa-file-pdf me-2"></i> ${langResource.PDFLabel}</div>
+                                            <div class="dropdown-item" data-value="2"><i class="fa fa-file-excel me-2"></i> ${langResource.ExcelLabel}</div>
+                                            <div class="dropdown-item" data-value="3"><i class="fa fa-file-csv me-2"></i> ${langResource.CSVLabel}</div>
                                         </div>
                                     </div>
                                 `;
@@ -440,6 +457,9 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         $('.dataTables_paginate').css('margin-top', '0px');
                     }
 
+                    $('#' + tableID + '_previous a').html(langResource.PreviousLabel);
+                    $('#' + tableID + '_next a').html(langResource.NextLabel);
+
                     if (showAdd) {
                         $('.addbtn').removeClass('d-none');
                     }
@@ -478,7 +498,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
 }
 
-function initializeDataGridNested(tableID, columnList, childColumns, dataToShow = null, search = false, exportExcel = false) {
+function initializeDataGridNested(tableID, columnList, childColumns, dataToShow = null, search = false, exportExcel = false, langResource = null) {
     var exportButtons = [];
     if (exportExcel) {
         exportButtons.push(this.exportExcelBtn)
@@ -497,12 +517,21 @@ function initializeDataGridNested(tableID, columnList, childColumns, dataToShow 
             scrollCollapse: true,//scroll
             language: { // search anf info bars
                 search: '',
-                emptyTable: 'No data available',
-                searchPlaceholder: 'Search',
-                info: "Showing _TOTAL_ entries",
-                infoEmpty: "Showing 0 entries",
-                infoFiltered: "(filtered from _MAX_ entries)",
+                emptyTable: langResource.NodataavailableLabel,  //'No data available',
+                searchPlaceholder: langResource.SearchLabel, //'Search',
+                info: langResource.ShowingLabel + " _TOTAL_ " + langResource.EntriesLabel, //"Showing _TOTAL_ entries",
+                infoEmpty: langResource.ShowingLabel + " 0 " + langResource.EntriesLabel,//"Showing 0 entries",
+                infoFiltered: "(" + langResource.FilteredfromLabel + " _MAX_ " + langResource.EntriesLabel + ")",  //"(filtered from _MAX_ entries)",
             },
+
+            //language: { // search anf info bars
+            //    search: '',
+            //    emptyTable: 'No data available',
+            //    searchPlaceholder: 'Search',
+            //    info: "Showing _TOTAL_ entries",
+            //    infoEmpty: "Showing 0 entries",
+            //    infoFiltered: "(filtered from _MAX_ entries)",
+            //},
             //scrollX: true,
             data: dataToShow, // data to display
             columns: columnList, //column list
@@ -556,7 +585,7 @@ function addDataToChild(d, rowIndex, childColumns) {
     });
 }
 
-function initializeDataGridForViews(tableID, showExcel = true) {
+function initializeDataGridForViews(tableID, showExcel = true, langResource = null) {
 
     var UserNamelocal = localStorage.getItem('UserName');
     var GlobalParamValuelocal = localStorage.getItem('GlobalParamValue');
@@ -585,17 +614,25 @@ function initializeDataGridForViews(tableID, showExcel = true) {
             lengthChange: false,
             language: { // search anf info bars
                 search: '',
-                emptyTable: 'No data available',
-                searchPlaceholder: 'Search',
-                info: "Showing _TOTAL_ entries",
-                infoEmpty: "Showing 0 entries",
-                infoFiltered: "(filtered from _MAX_ entries)",
+                emptyTable: langResource.NodataavailableLabel,  //'No data available',
+                searchPlaceholder: langResource.SearchLabel, //'Search',
+                info: langResource.ShowingLabel + " _TOTAL_ " + langResource.EntriesLabel, //"Showing _TOTAL_ entries",
+                infoEmpty: langResource.ShowingLabel + " 0 " + langResource.EntriesLabel,//"Showing 0 entries",
+                infoFiltered: "(" + langResource.FilteredfromLabel + " _MAX_ " + langResource.EntriesLabel + ")",  //"(filtered from _MAX_ entries)",
             },
+            //language: { // search anf info bars
+            //    search: '',
+            //    emptyTable: 'No data available',
+            //    searchPlaceholder: 'Search',
+            //    info: "Showing _TOTAL_ entries",
+            //    infoEmpty: "Showing 0 entries",
+            //    infoFiltered: "(filtered from _MAX_ entries)",
+            //},
             buttons: [
                 //Excel Export Button
                 {
                     extend: 'excel',
-                    text: '<i class="fa fa-file-excel me-2"></i>  Export Excel',
+                    text: '<i class="fa fa-file-excel me-2"></i>' + langResource.ExportExcelLabel, //Export Excel',
                     className: 'btn-sm btn-c-secondary d-none excelbtn',
                     exportOptions: {
                         columns: ':visible:not(.sorting_disabled)'
@@ -642,12 +679,17 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                             // Add 4 to the rowCount to place the footer 4 rows after the last data row
                             var footerRowPosition = rowCount + 4; // The footer row is placed 4 rows after the last row of data
 
-                            // Create the footer row with valid XML structure
                             var footerRow = `
                                         <row r="${footerRowPosition}">
-                                            <c t="s" r="A${footerRowPosition}"><v>UserName : ${username}</v></c>
-                                            <c t="s" r="B${footerRowPosition}"><v>Date : ${currentDate}</v></c>
+                                            <c t="s" r="A${footerRowPosition}"><v>${langResource.UserNameLabel} : ${username}</v></c>
+                                            <c t="s" r="B${footerRowPosition}"><v>${langResource.DateLabel} : ${currentDate}</v></c>
                                         </row>`;
+                            //// Create the footer row with valid XML structure
+                            //var footerRow = `
+                            //            <row r="${footerRowPosition}">
+                            //                <c t="s" r="A${footerRowPosition}"><v>UserName : ${username}</v></c>
+                            //                <c t="s" r="B${footerRowPosition}"><v>Date : ${currentDate}</v></c>
+                            //            </row>`;
 
                             // Append the footer row to the sheet data, ensuring proper structure
                             $(sheet).find('sheetData').append(footerRow);
@@ -657,7 +699,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                 //PDF Export Button
                 {
                     extend: 'pdf',
-                    text: '<i class="fa fa-file-pdf me-2"></i>  Export PDF',
+                    text: '<i class="fa fa-file-pdf me-2"></i>' + langResource.ExportPDFLabel,//  Export PDF',
                     className: 'btn-sm btn-c-secondary d-none printbtn',
                     exportOptions: {
                         columns: ':visible:not(.sorting_disabled)'
@@ -707,7 +749,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
 
                             // Add custom footer content with username and date after all data
                             doc.content.push({  // Push to the end of the content array
-                                text: `UserName : ${username} | Date : ${currentDate}`,
+                                text: `${langResource.UserNameLabel} : ${username} | ${langResource.DateLabel} : ${currentDate}`,
                                 style: 'footer',  // Use the defined footer style
                                 alignment: 'left',
                                 margin: [0, 30, 10, 0] // Add some space before the footer text
@@ -718,17 +760,44 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                                 return {
                                     columns: [
                                         {
-                                            text: `Page ${currentPage} of ${pageCount}`,
+                                            //text: `Page ${currentPage} of ${pageCount}`,
+                                            text: `${langResource.PageLabel} ${currentPage} ${langResource.OfLabel} ${pageCount}`,
                                             alignment: 'center'
                                         },
                                         {
-                                            text: `Generated on ${currentDate}`,
+                                            //text: `Generated on ${currentDate}`,
+                                            text: `${langResource.GeneratedonLabel} ${currentDate}`,
                                             alignment: 'right'
                                         }
                                     ],
                                     margin: [20, 0]
                                 };
                             };
+
+                            //// Add custom footer content with username and date after all data
+                            //doc.content.push({  // Push to the end of the content array
+                            //    text: `UserName : ${username} | Date : ${currentDate}`,
+                            //    style: 'footer',  // Use the defined footer style
+                            //    alignment: 'left',
+                            //    margin: [0, 30, 10, 0] // Add some space before the footer text
+                            //});
+
+                            //// Optionally add the content to the footer (if needed)
+                            //doc.footer = function (currentPage, pageCount) {
+                            //    return {
+                            //        columns: [
+                            //            {
+                            //                text: `Page ${currentPage} of ${pageCount}`,
+                            //                alignment: 'center'
+                            //            },
+                            //            {
+                            //                text: `Generated on ${currentDate}`,
+                            //                alignment: 'right'
+                            //            }
+                            //        ],
+                            //        margin: [20, 0]
+                            //    };
+                            //};
 
                             // Optionally, adjust document settings like font size for the entire document
                             doc.defaultStyle.fontSize = 10;
@@ -738,7 +807,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                 //CSV Export Button
                 {
                     extend: 'csv',
-                    text: '<i class="fa fa-file-excel me-2"></i>  Export CSV',
+                    text: '<i class="fa fa-file-excel me-2"></i>' + langResource.ExportCSVLabel, // Export CSV',
                     className: 'btn-sm btn-c-secondary d-none csvbtn',
                     exportOptions: {
                         columns: ':visible:not(.sorting_disabled)'
@@ -783,7 +852,8 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                             rows.push(`,`);
                             rows.push(`, `);
                             rows.push(`, `);
-                            rows.push(`UserName : ${username}, Date : ${currentDate}`);
+                            // rows.push(`UserName : ${username}, Date : ${currentDate}`);
+                            rows.push(`${langResource.UserNameLabel} : ${username}, ${langResource.DateLabel} : ${currentDate}`);
 
                             // Join the rows back into a single CSV string and return
                             return rows.join('\n');
@@ -801,12 +871,12 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                 var dropdownHtml = `
                                     <div class="custom-dropdown">
                                         <button id="dropdownButton" class="form-control btn-sm btn-info btn btn-secondary dropdown-toggle clsDownload" style="width: auto;">
-                                            Export
+                                            ${langResource.ExportLabel}
                                         </button>
                                         <div id="dropdownMenu" class="dropdown-menu-export-accesslog" style="display: none;">
-                                            <div class="dropdown-item" data-value="1"><i class="fa fa-file-pdf me-2"></i> PDF</div>
-                                            <div class="dropdown-item" data-value="2"><i class="fa fa-file-excel me-2"></i> Excel</div>
-                                            <div class="dropdown-item" data-value="3"><i class="fa fa-file-csv me-2"></i> CSV</div>
+                                            <div class="dropdown-item" data-value="1"><i class="fa fa-file-pdf me-2"></i> ${langResource.PDFLabel}</div>
+                                            <div class="dropdown-item" data-value="2"><i class="fa fa-file-excel me-2"></i> ${langResource.ExcelLabel}</div>
+                                            <div class="dropdown-item" data-value="3"><i class="fa fa-file-csv me-2"></i> ${langResource.CSVLabel}</div>
                                         </div>
                                     </div>
                                 `;
@@ -847,7 +917,7 @@ function initializeDataGridForViews(tableID, showExcel = true) {
                 );
 
                 $('div.dataTables_filter').css({
-                    'gap': '10px' 
+                    'gap': '10px'
                 });
             },
         })
@@ -866,6 +936,9 @@ function initializeDataGridForViews(tableID, showExcel = true) {
         else {
             $('.clsDownload').addClass('d-none');
         }
+
+        $('#' + tableID + '_previous a').html(langResource.PreviousLabel);
+        $('#' + tableID + '_next a').html(langResource.NextLabel);
 
         if (errorMessageColumnIndex == 0) {
             $('.clsDownload').addClass('d-none');

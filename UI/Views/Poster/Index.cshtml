@@ -1,19 +1,19 @@
 ﻿@{
 	ViewData["Title"] = "Poster";
 }
-
+@using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">Poster</h1>
+				<h1 class="m-0">@SharedResource.Poster</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">Poster</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Poster</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -69,7 +69,35 @@
 				{ data: 'typeName', title: 'Type' },
 			];
 
-				initializeDataGrid('PosterTable', 'openPosterModal', GetAllPosterUrl, columnList, false,true,true,false,true, 'PreviewPosterModal',true,null);
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
+
+			initializeDataGrid('PosterTable', 'openPosterModal', GetAllPosterUrl, columnList, false,true,true,false,true, 'PreviewPosterModal',true,null,langResource);
 
 			// $.ajax({
 			//     url: GetAllPosterUrl,
@@ -273,7 +301,7 @@
 				dataObject.Status = $('#chkStatus').prop('checked');
 
 				var FileData = await FiletoBase64string("imagefile");
-				
+
 
 				if (FileData == "") {
 					FileData = $('#oldimage').val();
