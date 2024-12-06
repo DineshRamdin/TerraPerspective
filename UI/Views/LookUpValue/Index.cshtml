@@ -8,12 +8,12 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">LookUp Value</h1>
+				<h1 class="m-0">@SharedResource.Look_Up_Value</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">LookUp Value</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Look_Up_Value</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -64,9 +64,9 @@
 		function GetAllLookUpValue() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: 'LookUp Value' },
-				{ data: 'lookUpType', title: 'LookUp Type' },
-				{ data: 'description', title: 'Description' },
+				{ data: 'name', title: '@SharedResource.Look_Up_Value' },
+				{ data: 'lookUpType', title: '@SharedResource.Look_Up_Type' },
+				{ data: 'description', title: '@SharedResource.Description' },
 			];
 
 			var langResource = {
@@ -197,9 +197,9 @@
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id > 0)
-							$("#h4LookUpValueTitle").html("Modify LookUp Value");
+							$("#h4LookUpValueTitle").html("@SharedResource.Modify  @SharedResource.Look_Up_Value");
 						else
-							$("#h4LookUpValueTitle").html("Add LookUp Value");
+							$("#h4LookUpValueTitle").html("@SharedResource.Add  @SharedResource.Look_Up_Value");
 
 						$("#hdnId").val(response.data.id);
 						$("#txtLookUpValueName").val(response.data.name);
@@ -222,7 +222,7 @@
 		}
 
 		function ClearLookUpValueModal() {
-			$("#h4LookUpValueTitle").html("Add LookUp Value");
+			$("#h4LookUpValueTitle").html("@SharedResource.Add  @SharedResource.Look_Up_Value");
 			$("#hdnId").val(0);
 			$("#txtLookUpValueName").val("");
 			$("#txtDescription").val("");
@@ -241,7 +241,7 @@
 					if (response.data) {
 						$.each(response.data, function (key, value) {
 							if (value.title == "LookUp Type") {
-								$("#ddlLookUpType").append($("<option></option>").val('').html("Select Type"));
+								$("#ddlLookUpType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
 								$.each(value.items, function (itemskey, itemsvalue) {
 									$("#ddlLookUpType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
@@ -295,7 +295,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 		}
 

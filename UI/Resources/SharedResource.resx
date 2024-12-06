@@ -129,6 +129,10 @@
     <value>Access Rights</value>
     <comment>Access Rights</comment>
   </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+    <comment>Action</comment>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
     <comment>Add</comment>
@@ -141,6 +145,14 @@
     <value>Add User</value>
     <comment>Add User</comment>
   </data>
+  <data name="Additional Value" xml:space="preserve">
+    <value>Additional Value</value>
+    <comment>Additional Value</comment>
+  </data>
+  <data name="Admin Only" xml:space="preserve">
+    <value>Admin Only</value>
+    <comment>Admin Only</comment>
+  </data>
   <data name="Administration" xml:space="preserve">
     <value>Administration</value>
     <comment>Administration</comment>
@@ -149,9 +161,17 @@
     <value>All System Icon</value>
     <comment>All System Icon</comment>
   </data>
+  <data name="An error occurred while fetching tree data." xml:space="preserve">
+    <value>An error occurred while fetching tree data.</value>
+    <comment>An error occurred while fetching tree data.</comment>
+  </data>
   <data name="Carousel" xml:space="preserve">
     <value>Carousel</value>
     <comment>Carousel</comment>
+  </data>
+  <data name="Carousel Name" xml:space="preserve">
+    <value>Carousel Name</value>
+    <comment>Carousel Name</comment>
   </data>
   <data name="Change Password" xml:space="preserve">
     <value>Change Password</value>
@@ -165,6 +185,10 @@
     <value>Close</value>
     <comment>Close</comment>
   </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+    <comment>Comment</comment>
+  </data>
   <data name="CSV" xml:space="preserve">
     <value>CSV</value>
     <comment>CSV</comment>
@@ -177,13 +201,29 @@
     <value>Date</value>
     <comment>Date</comment>
   </data>
+  <data name="Default Carousel" xml:space="preserve">
+    <value>Default Carousel</value>
+    <comment>Default Carousel</comment>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
     <comment>Delete</comment>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+    <comment>Description</comment>
+  </data>
   <data name="Device" xml:space="preserve">
     <value>Device</value>
     <comment>Device</comment>
+  </data>
+  <data name="Device Name" xml:space="preserve">
+    <value>Device Name</value>
+    <comment>Device Name</comment>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+    <comment>Duration</comment>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
@@ -192,6 +232,10 @@
   <data name="Email" xml:space="preserve">
     <value>Email</value>
     <comment>Email</comment>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Enable</value>
+    <comment>Enable</comment>
   </data>
   <data name="entries" xml:space="preserve">
     <value>entries</value>
@@ -217,6 +261,10 @@
     <value>Export PDF</value>
     <comment>Export PDF</comment>
   </data>
+  <data name="Failed to fetch tree data." xml:space="preserve">
+    <value>Failed to fetch tree data.</value>
+    <comment>Failed to fetch tree data.</comment>
+  </data>
   <data name="filtered from" xml:space="preserve">
     <value>filtered from</value>
     <comment>filtered from</comment>
@@ -233,6 +281,22 @@
     <value>Home</value>
     <comment>Home</comment>
   </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+    <comment>Image</comment>
+  </data>
+  <data name="Image Not found" xml:space="preserve">
+    <value>Image Not found</value>
+    <comment>Image Not found</comment>
+  </data>
+  <data name="Invalid date" xml:space="preserve">
+    <value>Invalid date</value>
+    <comment>Invalid date</comment>
+  </data>
+  <data name="Is Testing" xml:space="preserve">
+    <value>Is Testing</value>
+    <comment>Is Testing</comment>
+  </data>
   <data name="Log" xml:space="preserve">
     <value>Log</value>
     <comment>Log</comment>
@@ -248,6 +312,14 @@
   <data name="Look Up Value" xml:space="preserve">
     <value>Look Up Value</value>
     <comment>Look Up Value</comment>
+  </data>
+  <data name="MAC Address" xml:space="preserve">
+    <value>MAC Address</value>
+    <comment>MAC Address</comment>
+  </data>
+  <data name="Main Menu" xml:space="preserve">
+    <value>Main Menu</value>
+    <comment>Main Menu</comment>
   </data>
   <data name="Matrix" xml:space="preserve">
     <value>Matrix</value>
@@ -277,6 +349,10 @@
     <value>Next</value>
     <comment>Next</comment>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+    <comment>No</comment>
+  </data>
   <data name="No data available" xml:space="preserve">
     <value>No data available</value>
     <comment>No data available</comment>
@@ -284,6 +360,10 @@
   <data name="of" xml:space="preserve">
     <value>of</value>
     <comment>of</comment>
+  </data>
+  <data name="Operation" xml:space="preserve">
+    <value>Operation</value>
+    <comment>Operation</comment>
   </data>
   <data name="Othername" xml:space="preserve">
     <value>Othername</value>
@@ -297,13 +377,25 @@
     <value>PDF</value>
     <comment>PDF</comment>
   </data>
+  <data name="Please Fill In Mandatory Fields" xml:space="preserve">
+    <value>Please Fill In Mandatory Fields</value>
+    <comment>Please Fill In Mandatory Fields</comment>
+  </data>
   <data name="Please fill in required field(s)" xml:space="preserve">
     <value>Please fill in required field(s)</value>
     <comment>Please fill in required field(s)</comment>
   </data>
+  <data name="Please select Proper Poster..!" xml:space="preserve">
+    <value>Please select Proper Poster..!</value>
+    <comment>Please select Proper Poster..!</comment>
+  </data>
   <data name="Poster" xml:space="preserve">
     <value>Poster</value>
     <comment>Poster</comment>
+  </data>
+  <data name="Poster Name" xml:space="preserve">
+    <value>Poster Name</value>
+    <comment>Poster Name</comment>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Preview</value>
@@ -357,6 +449,10 @@
     <value>Select Role</value>
     <comment>Select Role</comment>
   </data>
+  <data name="Select Type" xml:space="preserve">
+    <value>Select Type</value>
+    <comment>Select Type</comment>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
     <comment>Settings</comment>
@@ -364,6 +460,14 @@
   <data name="Showing" xml:space="preserve">
     <value>Showing</value>
     <comment>Showing</comment>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+    <comment>Status</comment>
+  </data>
+  <data name="Sub Menu" xml:space="preserve">
+    <value>Sub Menu</value>
+    <comment>Sub Menu</comment>
   </data>
   <data name="Surname" xml:space="preserve">
     <value>Surname</value>
@@ -373,6 +477,10 @@
     <value>System Icon</value>
     <comment>System Icon</comment>
   </data>
+  <data name="Test Count" xml:space="preserve">
+    <value>Test Count</value>
+    <comment>Test Count</comment>
+  </data>
   <data name="Test Geomerty Data" xml:space="preserve">
     <value>Test Geomerty Data</value>
     <comment>Test Geomerty Data</comment>
@@ -380,6 +488,26 @@
   <data name="Testing" xml:space="preserve">
     <value>Testing</value>
     <comment>Testing</comment>
+  </data>
+  <data name="Testing Code" xml:space="preserve">
+    <value>Testing Code</value>
+    <comment>Testing Code</comment>
+  </data>
+  <data name="Testing Date" xml:space="preserve">
+    <value>Testing Date</value>
+    <comment>Testing Date</comment>
+  </data>
+  <data name="Testing Image" xml:space="preserve">
+    <value>Testing Image</value>
+    <comment>Testing Image</comment>
+  </data>
+  <data name="Testing Name" xml:space="preserve">
+    <value>Testing Name</value>
+    <comment>Testing Name</comment>
+  </data>
+  <data name="Testing Type" xml:space="preserve">
+    <value>Testing Type</value>
+    <comment>Testing Type</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
@@ -393,6 +521,10 @@
     <value>UserName</value>
     <comment>UserName</comment>
   </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+    <comment>Value</comment>
+  </data>
   <data name="View" xml:space="preserve">
     <value>View</value>
     <comment>View</comment>
@@ -400,6 +532,10 @@
   <data name="View Name" xml:space="preserve">
     <value>View Name</value>
     <comment>View Name</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+    <comment>Yes</comment>
   </data>
   <data name="Zone Management" xml:space="preserve">
     <value>Zone Management</value>

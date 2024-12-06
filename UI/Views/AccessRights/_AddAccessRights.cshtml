@@ -1,37 +1,38 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
+@using UI.Resources
 
 <div class="modal-dialog modal-xl">
-    <form id="frnAccessRightsCreate">
-        <input type="hidden" id="hdnAccessRoleId" value="" />
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="h4AccessRightsTitle">
-                </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row"> 
-                    <div class="col-12 form-group">
-                        <label>Role<span class="red-required">*</span></label>
-                        <input type="text" id="txtRole" class="form-control" placeholder="Role" required />
-                    </div>
-                </div>
-            </div>
-            @*Access Rights Table*@
-            <div class="col-12 mb-10">
-                <table id="AccesRightsDataTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
-            </div>
+	<form id="frnAccessRightsCreate">
+		<input type="hidden" id="hdnAccessRoleId" value="" />
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="h4AccessRightsTitle">
+				</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12 form-group">
+						<label>@SharedResource.Role<span class="red-required">*</span></label>
+						<input type="text" id="txtRole" class="form-control" placeholder="@SharedResource.Role" required />
+					</div>
+				</div>
+			</div>
+			@*Access Rights Table*@
+			<div class="col-12 mb-10">
+				<table id="AccesRightsDataTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+			</div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SaveAccessRight();">Save</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="SaveAccessRight();">@SharedResource.Save</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</form>
 
 
 </div>

@@ -88,6 +88,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -115,6 +124,24 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional Value.
+        /// </summary>
+        public static string Additional_Value {
+            get {
+                return ResourceManager.GetString("Additional Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Admin Only.
+        /// </summary>
+        public static string Admin_Only {
+            get {
+                return ResourceManager.GetString("Admin Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Administration.
         /// </summary>
         public static string Administration {
@@ -133,11 +160,29 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while fetching tree data..
+        /// </summary>
+        public static string An_error_occurred_while_fetching_tree_data_ {
+            get {
+                return ResourceManager.GetString("An error occurred while fetching tree data.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Carousel.
         /// </summary>
         public static string Carousel {
             get {
                 return ResourceManager.GetString("Carousel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Carousel Name.
+        /// </summary>
+        public static string Carousel_Name {
+            get {
+                return ResourceManager.GetString("Carousel Name", resourceCulture);
             }
         }
         
@@ -169,6 +214,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CSV.
         /// </summary>
         public static string CSV {
@@ -196,6 +250,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default Carousel.
+        /// </summary>
+        public static string Default_Carousel {
+            get {
+                return ResourceManager.GetString("Default Carousel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -205,11 +268,38 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Device.
         /// </summary>
         public static string Device {
             get {
                 return ResourceManager.GetString("Device", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device Name.
+        /// </summary>
+        public static string Device_Name {
+            get {
+                return ResourceManager.GetString("Device Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duration.
+        /// </summary>
+        public static string Duration {
+            get {
+                return ResourceManager.GetString("Duration", resourceCulture);
             }
         }
         
@@ -228,6 +318,15 @@ namespace UI.Resources {
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable.
+        /// </summary>
+        public static string Enable {
+            get {
+                return ResourceManager.GetString("Enable", resourceCulture);
             }
         }
         
@@ -286,6 +385,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to fetch tree data..
+        /// </summary>
+        public static string Failed_to_fetch_tree_data_ {
+            get {
+                return ResourceManager.GetString("Failed to fetch tree data.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to filtered from.
         /// </summary>
         public static string filtered_from {
@@ -322,6 +430,42 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image.
+        /// </summary>
+        public static string Image {
+            get {
+                return ResourceManager.GetString("Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Not found.
+        /// </summary>
+        public static string Image_Not_found {
+            get {
+                return ResourceManager.GetString("Image Not found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid date.
+        /// </summary>
+        public static string Invalid_date {
+            get {
+                return ResourceManager.GetString("Invalid date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Testing.
+        /// </summary>
+        public static string Is_Testing {
+            get {
+                return ResourceManager.GetString("Is Testing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log.
         /// </summary>
         public static string Log {
@@ -354,6 +498,24 @@ namespace UI.Resources {
         public static string Look_Up_Value {
             get {
                 return ResourceManager.GetString("Look Up Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAC Address.
+        /// </summary>
+        public static string MAC_Address {
+            get {
+                return ResourceManager.GetString("MAC Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Menu.
+        /// </summary>
+        public static string Main_Menu {
+            get {
+                return ResourceManager.GetString("Main Menu", resourceCulture);
             }
         }
         
@@ -421,6 +583,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No data available.
         /// </summary>
         public static string No_data_available {
@@ -435,6 +606,15 @@ namespace UI.Resources {
         public static string of {
             get {
                 return ResourceManager.GetString("of", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation.
+        /// </summary>
+        public static string Operation {
+            get {
+                return ResourceManager.GetString("Operation", resourceCulture);
             }
         }
         
@@ -466,6 +646,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Fill In Mandatory Fields.
+        /// </summary>
+        public static string Please_Fill_In_Mandatory_Fields {
+            get {
+                return ResourceManager.GetString("Please Fill In Mandatory Fields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please fill in required field(s).
         /// </summary>
         public static string Please_fill_in_required_field_s_ {
@@ -475,11 +664,29 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select Proper Poster..!.
+        /// </summary>
+        public static string Please_select_Proper_Poster___ {
+            get {
+                return ResourceManager.GetString("Please select Proper Poster..!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Poster.
         /// </summary>
         public static string Poster {
             get {
                 return ResourceManager.GetString("Poster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poster Name.
+        /// </summary>
+        public static string Poster_Name {
+            get {
+                return ResourceManager.GetString("Poster Name", resourceCulture);
             }
         }
         
@@ -601,6 +808,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Type.
+        /// </summary>
+        public static string Select_Type {
+            get {
+                return ResourceManager.GetString("Select Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {
@@ -615,6 +831,24 @@ namespace UI.Resources {
         public static string Showing {
             get {
                 return ResourceManager.GetString("Showing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Menu.
+        /// </summary>
+        public static string Sub_Menu {
+            get {
+                return ResourceManager.GetString("Sub Menu", resourceCulture);
             }
         }
         
@@ -637,6 +871,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test Count.
+        /// </summary>
+        public static string Test_Count {
+            get {
+                return ResourceManager.GetString("Test Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test Geomerty Data.
         /// </summary>
         public static string Test_Geomerty_Data {
@@ -651,6 +894,51 @@ namespace UI.Resources {
         public static string Testing {
             get {
                 return ResourceManager.GetString("Testing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Testing Code.
+        /// </summary>
+        public static string Testing_Code {
+            get {
+                return ResourceManager.GetString("Testing Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Testing Date.
+        /// </summary>
+        public static string Testing_Date {
+            get {
+                return ResourceManager.GetString("Testing Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Testing Image.
+        /// </summary>
+        public static string Testing_Image {
+            get {
+                return ResourceManager.GetString("Testing Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Testing Name.
+        /// </summary>
+        public static string Testing_Name {
+            get {
+                return ResourceManager.GetString("Testing Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Testing Type.
+        /// </summary>
+        public static string Testing_Type {
+            get {
+                return ResourceManager.GetString("Testing Type", resourceCulture);
             }
         }
         
@@ -682,6 +970,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View.
         /// </summary>
         public static string View {
@@ -696,6 +993,15 @@ namespace UI.Resources {
         public static string View_Name {
             get {
                 return ResourceManager.GetString("View Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
         

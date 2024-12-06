@@ -1,6 +1,7 @@
 ﻿@{
 	Layout = null;
 }
+@using UI.Resources
 
 <div class="modal-dialog">
 	<form id="frnPosterCreate">
@@ -16,15 +17,15 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-12 form-group">
-						<label>Poster Name<span class="red-required">*</span></label>
-						<input type="text" id="txtPosterName" class="form-control" placeholder="Poster Name" required />
+						<label>@SharedResource.Poster_Name<span class="red-required">*</span></label>
+						<input type="text" id="txtPosterName" class="form-control" placeholder="@SharedResource.Poster_Name" required />
 					</div>
 					<div class="col-12 form-group">
-						<label>Type<span class="red-required">*</span></label>
+						<label>@SharedResource.Type<span class="red-required">*</span></label>
 						<select class="form-control" id="ddlType" required min=0></select>
 					</div>
 					<div class="col-12 form-group">
-						<label>Status<span class="red-required">*</span></label>
+						<label>@SharedResource.Status<span class="red-required">*</span></label>
 						<div class="form-group">
 							<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
 								<input type="checkbox" class="custom-control-input" id="chkStatus">
@@ -35,15 +36,15 @@
 
 					<div class="col-12 row form-group">
 						<div class="col-6">
-							<label for="imagefile">Image</label>
+							<label for="imagefile">@SharedResource.Image</label>
 							<input type="file" id="imagefile" name="imagefile" accept="image/*" onchange="UploadFileisValidImage('imagefile')">
 							<input type="hidden" id="oldimage" value="" />
 						</div>
 						<div class="col-6">
 							<img id="viewImage" style="height: 80%;width: 80%;" />
 							<button type="button" title="Delete Image" class="btn btn-block btn-info btn-sm" id="deleteImageBtn"
-									style="display: none; margin-top: 13px; width: 50%;" onclick="deleteImage()">
-								Delete Image
+									style="display: none; margin-top: 13px; width: 55%;" onclick="deleteImage()">
+								@SharedResource.Delete @SharedResource.Image
 							</button>
 						</div>
 
@@ -52,8 +53,8 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" onclick="SavePoster();">Save</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" onclick="SavePoster();">@SharedResource.Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

@@ -8,12 +8,12 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">Testing</h1>
+				<h1 class="m-0">@SharedResource.Testing</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">Testing</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Testing</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -77,11 +77,11 @@
 		{
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'testingName', title: 'Testing Name' },
-				{ data: 'testingType', title: 'Testing Type' },
-				{ data: 'testingDate', title: 'Testing Date' },
-				{ data: 'testingCode', title: 'Testing Code' },
-				{ data: 'description', title: 'Description' },
+				{ data: 'testingName', title: '@SharedResource.Testing_Name' },
+				{ data: 'testingType', title: '@SharedResource.Testing_Type' },
+				{ data: 'testingDate', title: '@SharedResource.Testing_Date' },
+				{ data: 'testingCode', title: '@SharedResource.Testing_Code' },
+				{ data: 'description', title: '@SharedResource.Description' },
 
 			];
 
@@ -133,9 +133,9 @@
 					//console.log(response.data)
 					if (response.data) {
 						if (response.data.id > 0)
-							$("#h4TestingTitle").html("Modify Testing");
+							$("#h4TestingTitle").html("@SharedResource.Modify  @SharedResource.Testing");
 						else
-							$("#h4TestingTitle").html("Add Testing");
+							$("#h4TestingTitle").html("@SharedResource.Add  @SharedResource.Testing");
 
 
 						$("#hdnId").val(response.data.id);
@@ -193,7 +193,7 @@
 		}
 
 		 function ClearTestingModal() {
-			$("#h4TestingTitle").html("Add Testing");
+			$("#h4TestingTitle").html("@SharedResource.Add  @SharedResource.Testing");
 			$("#hdnId").val("0");
 			$("#txtTestingName").val("");
 			$('#txtTestingCode').val("");
@@ -220,7 +220,7 @@
 						$.each(response.data, function (key, value) {
 
 							if (value.title == "Testing") {
-								$("#ddlTestingType").append($("<option></option>").val('').html("Select Type"));
+								$("#ddlTestingType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
 								$.each(value.items, function (itemskey, itemsvalue) {
 									$("#ddlTestingType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
@@ -270,9 +270,6 @@
 
 				dataObject.TestingImagebase64 = FileData;
 
-
-
-
 				$.ajax({
 					url: CreateUpdateTestingUrl,
 					type: "POST",
@@ -300,7 +297,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 
 		}

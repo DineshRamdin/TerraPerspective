@@ -81,7 +81,7 @@
 						// Check if the data (base64 string) is valid
 						if (data && data.trim() !== "") {
 							// Render the base64 image in an <img> tag
-							return '<img src="data:image/png;base64,' + data + '" alt="System Icon" style="width: 35px; height: 35px;" />';
+							return '<img src="data:image/png;base64,' + data + '" alt="@SharedResource.System_Icon" style="width: 35px; height: 35px;" />';
 						} else {
 							// If no valid base64 string, return a placeholder or empty image
 							return '<img src="" />';
@@ -252,11 +252,11 @@
 									data = response.data;
 									initializeTreeView(data);
 								} else {
-									console.error("Failed to fetch tree data.");
+									console.error("@SharedResource.Failed_to_fetch_tree_data_");
 								}
 							},
 							error: function () {
-								console.error("An error occurred while fetching tree data.");
+								console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
 							}
 						});
 

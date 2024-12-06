@@ -8,12 +8,12 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">Access Rights</h1>
+				<h1 class="m-0">@SharedResource.Access_Rights</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">Access Rights</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Access_Rights</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -67,7 +67,7 @@
 
 		function GetAllAccessRights() {
 			var columnList = [
-				{ data: 'roleName', title: 'Role Name' }
+				{ data: 'roleName', title: '@SharedResource.Role_Name' }
 			];
 
 			var langResource = {
@@ -98,7 +98,7 @@
 				NextLabel :'@SharedResource.Next',
 			};
 
-			initializeDataGrid('AccessRightsTable', 'openAccessRightsModal', GetAllAccessRightsUrl, columnList, false, true, true, false,true,null,false,null,langResource);
+			initializeDataGrid('AccessRightsTable', 'openAccessRightsModal', GetAllAccessRightsUrl, columnList, false, true, true, false,false,null,false,null,langResource);
 
 		}
 
@@ -152,26 +152,55 @@
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-							$("#h4AccessRightsTitle").html("Modify Access Rights");
+							$("#h4AccessRightsTitle").html("@SharedResource.Modify  @SharedResource.Access_Rights");
 						else {
-							$("#h4AccessRightsTitle").html("Add Access Rights");
+							$("#h4AccessRightsTitle").html("@SharedResource.Add  @SharedResource.Access_Rights");
 						}
 
 						$("#hdnAccessRoleId").val(response.data.id);
 						$("#txtRole").val(response.data.roleName);
 
 
+					var langResource = {
+						AddNewLabel: '@SharedResource.Add_New',
+						ExportLabel: '@SharedResource.Export',
+						ExportPDFLabel:'@SharedResource.Export_PDF',
+						ExportCSVLabel:'@SharedResource.Export_CSV',
+						ExportExcelLabel:'@SharedResource.Export_Excel',
+						ExcelLabel:'@SharedResource.Excel',
+						PDFLabel:'@SharedResource.PDF',
+						CSVLabel:'@SharedResource.CSV',
+						NodataavailableLabel :'@SharedResource.No_data_available',
+						SearchLabel :'@SharedResource.Search',
+						ShowingLabel :'@SharedResource.Showing',
+						EntriesLabel :'@SharedResource.entries',
+						FilteredfromLabel :'@SharedResource.filtered_from',
+						ViewLabel :'@SharedResource.View',
+						PreviewLabel :'@SharedResource.Preview',
+						DeleteLabel :'@SharedResource.Delete',
+						EditLabel :'@SharedResource.Edit',
+						ResetPasswordLabel :'@SharedResource.Reset_Password',
+						UserNameLabel :'@SharedResource.UserName',
+						DateLabel :'@SharedResource.Date',
+						PageLabel :'@SharedResource.Page',
+						OfLabel :'@SharedResource.of',
+						GeneratedonLabel :'@SharedResource.Generated_on',
+						PreviousLabel :'@SharedResource.Previous',
+						NextLabel :'@SharedResource.Next',
+					};
+
+
 						var columns = [ //Module Column List
 							{
-								title: "Action",
+								title: "@SharedResource.Action",
 								className: 'dt-control fa fa-angle-down',
 								orderable: false,
 								data: null,
 								defaultContent: ''
 							},
-							{ data: 'level1', title: 'Main Menu' },
-							{ data: 'level2', title: 'Menu' },
-							{ data: 'level3', title: 'Sub Menu' }
+							{ data: 'level1', title: '@SharedResource.Main_Menu' },
+							{ data: 'level2', title: '@SharedResource.Menu' },
+							{ data: 'level3', title: '@SharedResource.Sub_Menu' }
 						];
 
 						var childColumns = [
@@ -192,7 +221,7 @@
 									return datax;
 								}
 							},
-							{ data: 'operationTypeName', title: 'Operation' }
+							{ data: 'operationTypeName', title: '@SharedResource.Operation' }
 						];
 
 						var urlFinal = "";
@@ -212,7 +241,7 @@
 								if (response) {
 									GridData = response.data;
 									// Initialize the DataTable with the fetched data
-									initializeDataGridNested("AccesRightsDataTable", columns, childColumns, GridData.accessRightDTO);
+									initializeDataGridNested("AccesRightsDataTable", columns, childColumns, GridData.accessRightDTO,false,false, langResource);
 								}
 							},
 							error: function (xhr, status, error) {
@@ -249,7 +278,7 @@
 		// }
 
 		function ClearUserModal() {
-			$("#h4UserTitle").html("Add User");
+			$("#h4UserTitle").html("@SharedResource.Add  @SharedResource.Access_Rights");
 			$("#hdnuserId").val("");
 			$("#txtSurname").val("");
 			$("#txtOthername").val("");
@@ -265,7 +294,7 @@
 		function SaveAccessRight(){
 			let valid = formValidation(["txtRole"]);
 			if (!valid) {
-				toastr.error("Please Fill In Mandatory Fields")
+				toastr.error("@SharedResource.Please_Fill_In_Mandatory_Fields")
 			} else {
 				var rolename = $("#txtRole").val();
 				GridData.roleName = rolename;

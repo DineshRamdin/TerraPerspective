@@ -126,6 +126,9 @@
   <data name="Access Rights" xml:space="preserve">
     <value>Direitos de acesso</value>
   </data>
+  <data name="Action" xml:space="preserve">
+    <value>Ação</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Adicionar</value>
   </data>
@@ -135,14 +138,26 @@
   <data name="Add User" xml:space="preserve">
     <value>Adicionar usuário</value>
   </data>
+  <data name="Additional Value" xml:space="preserve">
+    <value>Valor Adicional</value>
+  </data>
+  <data name="Admin Only" xml:space="preserve">
+    <value>Somente administrador</value>
+  </data>
   <data name="Administration" xml:space="preserve">
     <value>Administração</value>
   </data>
   <data name="All System Icon" xml:space="preserve">
     <value>Todos os ícones do sistema</value>
   </data>
+  <data name="An error occurred while fetching tree data." xml:space="preserve">
+    <value>Ocorreu um erro ao buscar dados da árvore.</value>
+  </data>
   <data name="Carousel" xml:space="preserve">
     <value>Carrossel</value>
+  </data>
+  <data name="Carousel Name" xml:space="preserve">
+    <value>Nome do carrossel</value>
   </data>
   <data name="Change Password" xml:space="preserve">
     <value>Alterar a senha</value>
@@ -153,6 +168,9 @@
   <data name="Close" xml:space="preserve">
     <value>Fechar</value>
   </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comentário</value>
+  </data>
   <data name="CSV" xml:space="preserve">
     <value>CSV</value>
   </data>
@@ -162,17 +180,32 @@
   <data name="Date" xml:space="preserve">
     <value>Data</value>
   </data>
+  <data name="Default Carousel" xml:space="preserve">
+    <value>Carrossel padrão</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Excluir</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
   <data name="Device" xml:space="preserve">
     <value>Dispositiva</value>
+  </data>
+  <data name="Device Name" xml:space="preserve">
+    <value>Nome do dispositivo</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duração</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Editar</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-mail</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Habilitar</value>
   </data>
   <data name="entries" xml:space="preserve">
     <value>entradas</value>
@@ -192,6 +225,9 @@
   <data name="Export PDF" xml:space="preserve">
     <value>Exportar PDF</value>
   </data>
+  <data name="Failed to fetch tree data." xml:space="preserve">
+    <value>Falha ao buscar dados da árvore.</value>
+  </data>
   <data name="filtered from" xml:space="preserve">
     <value>filtrado de</value>
   </data>
@@ -204,6 +240,18 @@
   <data name="Home" xml:space="preserve">
     <value>Lar</value>
   </data>
+  <data name="Image" xml:space="preserve">
+    <value>Imagem</value>
+  </data>
+  <data name="Image Not found" xml:space="preserve">
+    <value>Imagem não encontrada</value>
+  </data>
+  <data name="Invalid date" xml:space="preserve">
+    <value>Data inválida</value>
+  </data>
+  <data name="Is Testing" xml:space="preserve">
+    <value>Está testando</value>
+  </data>
   <data name="Log" xml:space="preserve">
     <value>Registro</value>
   </data>
@@ -215,6 +263,12 @@
   </data>
   <data name="Look Up Value" xml:space="preserve">
     <value>Valor de pesquisa</value>
+  </data>
+  <data name="MAC Address" xml:space="preserve">
+    <value>Endereço MAC</value>
+  </data>
+  <data name="Main Menu" xml:space="preserve">
+    <value>Menu Principal</value>
   </data>
   <data name="Matrix" xml:space="preserve">
     <value>Matriz</value>
@@ -237,11 +291,17 @@
   <data name="Next" xml:space="preserve">
     <value>Próxima</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
   <data name="No data available" xml:space="preserve">
     <value>Não há dados disponíveis</value>
   </data>
   <data name="of" xml:space="preserve">
     <value>de</value>
+  </data>
+  <data name="Operation" xml:space="preserve">
+    <value>Operação</value>
   </data>
   <data name="Othername" xml:space="preserve">
     <value>Outro nome</value>
@@ -252,11 +312,20 @@
   <data name="PDF" xml:space="preserve">
     <value>PDF</value>
   </data>
+  <data name="Please Fill In Mandatory Fields" xml:space="preserve">
+    <value>Por favor preencha os campos obrigatórios</value>
+  </data>
   <data name="Please fill in required field(s)" xml:space="preserve">
     <value>Por favor preencha os campos obrigatórios</value>
   </data>
+  <data name="Please select Proper Poster..!" xml:space="preserve">
+    <value>Selecione o pôster adequado..!</value>
+  </data>
   <data name="Poster" xml:space="preserve">
     <value>Poster</value>
+  </data>
+  <data name="Poster Name" xml:space="preserve">
+    <value>Nome do pôster</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Visualização</value>
@@ -297,11 +366,20 @@
   <data name="Select Role" xml:space="preserve">
     <value>Selecione a função</value>
   </data>
+  <data name="Select Type" xml:space="preserve">
+    <value>Selecione o tipo</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Configurações</value>
   </data>
   <data name="Showing" xml:space="preserve">
     <value>Mostrando</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Sub Menu" xml:space="preserve">
+    <value>Submenu</value>
   </data>
   <data name="Surname" xml:space="preserve">
     <value>Sobrenome</value>
@@ -309,11 +387,29 @@
   <data name="System Icon" xml:space="preserve">
     <value>Ícone do sistema</value>
   </data>
+  <data name="Test Count" xml:space="preserve">
+    <value>Contagem de testes</value>
+  </data>
   <data name="Test Geomerty Data" xml:space="preserve">
     <value>Teste os dados do Geomerty</value>
   </data>
   <data name="Testing" xml:space="preserve">
     <value>Teste</value>
+  </data>
+  <data name="Testing Code" xml:space="preserve">
+    <value>Código de teste</value>
+  </data>
+  <data name="Testing Date" xml:space="preserve">
+    <value>Data do teste</value>
+  </data>
+  <data name="Testing Image" xml:space="preserve">
+    <value>Testando imagem</value>
+  </data>
+  <data name="Testing Name" xml:space="preserve">
+    <value>Nome do teste</value>
+  </data>
+  <data name="Testing Type" xml:space="preserve">
+    <value>Tipo de teste</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tipo</value>
@@ -324,11 +420,17 @@
   <data name="UserName" xml:space="preserve">
     <value>Nome de usuário</value>
   </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valor</value>
+  </data>
   <data name="View" xml:space="preserve">
     <value>Visualizar</value>
   </data>
   <data name="View Name" xml:space="preserve">
     <value>Ver nome</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
   </data>
   <data name="Zone Management" xml:space="preserve">
     <value>Gerenciamento de zona</value>
