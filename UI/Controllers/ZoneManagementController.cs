@@ -209,19 +209,19 @@ namespace UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<BaseResponseDTO<List<CRUDMatrix>>> GetTree(long Id)
+        public ActionResult<BaseResponseDTO<List<OutputNode>>> GetTree(long Id)
         {
             try
             {
-                BaseResponseDTO<List<CRUDMatrix>> tree = new BaseResponseDTO<List<CRUDMatrix>>();
+                BaseResponseDTO<List<OutputNode>> tree = new BaseResponseDTO<List<OutputNode>>();
                 if(Id== 0)
                 {
-                    tree = _MatrixService.GetTree();
+                    tree = _MatrixService.GetTreeDropdown();
                 }
                 else
                 {
 
-                    tree = service.GetTreeZone(Id);
+                    tree = service.GetTreeDropDownZone(Id);
                 }
                 return Ok(tree);
 

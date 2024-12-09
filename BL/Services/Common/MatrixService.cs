@@ -218,7 +218,6 @@ namespace BL.Services.Common
 						  parent = a.ParentGMID.ToString(),
 					  }).ToList();
 				ml.AddRange(mlRoot);
-				List<DropdownNode> dropdownNodes = new List<DropdownNode>();
 				var nodeMap = ml.ToDictionary(node => node.id, node => new OutputNode
 				{
 					Title = node.text,
