@@ -165,6 +165,10 @@
     <value>An error occurred while fetching tree data.</value>
     <comment>An error occurred while fetching tree data.</comment>
   </data>
+  <data name="An error occurred while uploading the file." xml:space="preserve">
+    <value>An error occurred while uploading the file.</value>
+    <comment>An error occurred while uploading the file.</comment>
+  </data>
   <data name="Carousel" xml:space="preserve">
     <value>Carousel</value>
     <comment>Carousel</comment>
@@ -177,13 +181,29 @@
     <value>Change Password</value>
     <comment>Change Password</comment>
   </data>
+  <data name="Check in" xml:space="preserve">
+    <value>Check in</value>
+    <comment>Check in</comment>
+  </data>
   <data name="Check In/Out" xml:space="preserve">
     <value>Check In/Out</value>
     <comment>Check In/Out</comment>
   </data>
+  <data name="Check Out" xml:space="preserve">
+    <value>Check Out</value>
+    <comment>Check Out</comment>
+  </data>
+  <data name="Click To Access Icon Library." xml:space="preserve">
+    <value>Click To Access Icon Library.</value>
+    <comment>Click To Access Icon Library.</comment>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
     <comment>Close</comment>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+    <comment>Code</comment>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>Comment</value>
@@ -220,6 +240,14 @@
   <data name="Device Name" xml:space="preserve">
     <value>Device Name</value>
     <comment>Device Name</comment>
+  </data>
+  <data name="Display Name" xml:space="preserve">
+    <value>Display Name</value>
+    <comment>Display Name</comment>
+  </data>
+  <data name="Download sample" xml:space="preserve">
+    <value>Download sample</value>
+    <comment>Download sample</comment>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>Duration</value>
@@ -261,6 +289,10 @@
     <value>Export PDF</value>
     <comment>Export PDF</comment>
   </data>
+  <data name="External Reference" xml:space="preserve">
+    <value>External Reference</value>
+    <comment>External Reference</comment>
+  </data>
   <data name="Failed to fetch tree data." xml:space="preserve">
     <value>Failed to fetch tree data.</value>
     <comment>Failed to fetch tree data.</comment>
@@ -269,9 +301,17 @@
     <value>filtered from</value>
     <comment>filtered from</comment>
   </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Folder</value>
+    <comment>Folder</comment>
+  </data>
   <data name="Generated on" xml:space="preserve">
     <value>Generated on</value>
     <comment>Generated on</comment>
+  </data>
+  <data name="Geomerty Data" xml:space="preserve">
+    <value>Geomerty Data</value>
+    <comment>Geomerty Data</comment>
   </data>
   <data name="Global Param" xml:space="preserve">
     <value>Global Param</value>
@@ -281,6 +321,10 @@
     <value>Home</value>
     <comment>Home</comment>
   </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icon</value>
+    <comment>Icon</comment>
+  </data>
   <data name="Image" xml:space="preserve">
     <value>Image</value>
     <comment>Image</comment>
@@ -288,6 +332,10 @@
   <data name="Image Not found" xml:space="preserve">
     <value>Image Not found</value>
     <comment>Image Not found</comment>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+    <comment>Import</comment>
   </data>
   <data name="Invalid date" xml:space="preserve">
     <value>Invalid date</value>
@@ -365,6 +413,10 @@
     <value>Operation</value>
     <comment>Operation</comment>
   </data>
+  <data name="Order" xml:space="preserve">
+    <value>Order</value>
+    <comment>Order</comment>
+  </data>
   <data name="Othername" xml:space="preserve">
     <value>Othername</value>
     <comment>Othername</comment>
@@ -372,6 +424,10 @@
   <data name="Page" xml:space="preserve">
     <value>Page</value>
     <comment>Page</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+    <comment>Password</comment>
   </data>
   <data name="PDF" xml:space="preserve">
     <value>PDF</value>
@@ -385,9 +441,25 @@
     <value>Please fill in required field(s)</value>
     <comment>Please fill in required field(s)</comment>
   </data>
+  <data name="Please Select File" xml:space="preserve">
+    <value>Please Select File</value>
+    <comment>Please Select File</comment>
+  </data>
+  <data name="Please select Map" xml:space="preserve">
+    <value>Please select Map</value>
+    <comment>Please select Map</comment>
+  </data>
   <data name="Please select Proper Poster..!" xml:space="preserve">
     <value>Please select Proper Poster..!</value>
     <comment>Please select Proper Poster..!</comment>
+  </data>
+  <data name="Please Select the Icon" xml:space="preserve">
+    <value>Please Select the Icon</value>
+    <comment>Please Select the Icon</comment>
+  </data>
+  <data name="Please upload a valid file in one of the following formats: JPEG, or PNG." xml:space="preserve">
+    <value>Please upload a valid file in one of the following formats: JPEG, or PNG.</value>
+    <comment>Please upload a valid file in one of the following formats: JPEG, or PNG.</comment>
   </data>
   <data name="Poster" xml:space="preserve">
     <value>Poster</value>
@@ -408,6 +480,14 @@
   <data name="Profile Image" xml:space="preserve">
     <value>Profile Image</value>
     <comment>Profile Image</comment>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Purpose</value>
+    <comment>Purpose</comment>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>Remarks</value>
+    <comment>Remarks</comment>
   </data>
   <data name="Report" xml:space="preserve">
     <value>Report</value>
@@ -437,6 +517,18 @@
     <value>Room</value>
     <comment>Room</comment>
   </data>
+  <data name="Room Location" xml:space="preserve">
+    <value>Room Location</value>
+    <comment>Room Location</comment>
+  </data>
+  <data name="Room Name" xml:space="preserve">
+    <value>Room Name</value>
+    <comment>Room Name</comment>
+  </data>
+  <data name="Room Type" xml:space="preserve">
+    <value>Room Type</value>
+    <comment>Room Type</comment>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
     <comment>Save</comment>
@@ -445,9 +537,25 @@
     <value>Search</value>
     <comment>Search</comment>
   </data>
+  <data name="Search for a Zone..." xml:space="preserve">
+    <value>Search for a Zone...</value>
+    <comment>Search for a Zone...</comment>
+  </data>
+  <data name="Select Purpose" xml:space="preserve">
+    <value>Select Purpose</value>
+    <comment>Select Purpose</comment>
+  </data>
+  <data name="Select Resource" xml:space="preserve">
+    <value>Select Resource</value>
+    <comment>Select Resource</comment>
+  </data>
   <data name="Select Role" xml:space="preserve">
     <value>Select Role</value>
     <comment>Select Role</comment>
+  </data>
+  <data name="Select Room" xml:space="preserve">
+    <value>Select Room</value>
+    <comment>Select Room</comment>
   </data>
   <data name="Select Type" xml:space="preserve">
     <value>Select Type</value>
@@ -509,9 +617,21 @@
     <value>Testing Type</value>
     <comment>Testing Type</comment>
   </data>
+  <data name="The file size exceeds the allowed limit of 2MB." xml:space="preserve">
+    <value>The file size exceeds the allowed limit of 2MB.</value>
+    <comment>The file size exceeds the allowed limit of 2MB.</comment>
+  </data>
+  <data name="Tree View" xml:space="preserve">
+    <value>Tree View</value>
+    <comment>Tree View</comment>
+  </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
     <comment>Type</comment>
+  </data>
+  <data name="Upload File" xml:space="preserve">
+    <value>Upload File</value>
+    <comment>Upload File</comment>
   </data>
   <data name="User" xml:space="preserve">
     <value>User</value>
@@ -533,12 +653,24 @@
     <value>View Name</value>
     <comment>View Name</comment>
   </data>
+  <data name="Visitor" xml:space="preserve">
+    <value>Visitor</value>
+    <comment>Visitor</comment>
+  </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
     <comment>Yes</comment>
   </data>
+  <data name="Zone" xml:space="preserve">
+    <value>Zone</value>
+    <comment>Zone</comment>
+  </data>
   <data name="Zone Management" xml:space="preserve">
     <value>Zone Management</value>
     <comment>Zone Management</comment>
+  </data>
+  <data name="Zone Matrix" xml:space="preserve">
+    <value>Zone Matrix</value>
+    <comment>Zone Matrix</comment>
   </data>
 </root>

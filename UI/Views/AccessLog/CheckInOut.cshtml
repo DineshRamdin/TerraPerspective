@@ -1,352 +1,352 @@
 ﻿@{
-    Layout = "_BlankLayout";
-    ViewData["Title"] = "Access Log";
+	Layout = "_BlankLayout";
+	ViewData["Title"] = "Access Log";
 }
 @using UI.Resources
 
 
 <style>
-    .card {
-        height: 92vh;
-    }
-    /* Main container for the watch */
-    .clock {
-        width: 200px;
-        height: 200px;
-        border: 8px solid #333;
-        border-radius: 50%;
-        position: relative;
-        margin: 50px auto auto;
-        background: #f9f9f9;
-    }
+	.card {
+		height: 92vh;
+	}
+	/* Main container for the watch */
+	.clock {
+		width: 200px;
+		height: 200px;
+		border: 8px solid #333;
+		border-radius: 50%;
+		position: relative;
+		margin: 50px auto auto;
+		background: #f9f9f9;
+	}
 
-        /* Center point of the clock */
-        .clock::after {
-            content: '';
-            width: 12px;
-            height: 12px;
-            background: #333;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-        }
+		/* Center point of the clock */
+		.clock::after {
+			content: '';
+			width: 12px;
+			height: 12px;
+			background: #333;
+			border-radius: 50%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 10;
+		}
 
-    /* Clock hands */
-    .hand {
-        position: absolute;
-        bottom: 50%;
-        left: 50%;
-        transform-origin: bottom;
-        transform: translateX(-50%);
-    }
+	/* Clock hands */
+	.hand {
+		position: absolute;
+		bottom: 50%;
+		left: 50%;
+		transform-origin: bottom;
+		transform: translateX(-50%);
+	}
 
-    .hour {
-        width: 6px;
-        height: 50px;
-        background: #333;
-        z-index: 7;
-    }
+	.hour {
+		width: 6px;
+		height: 50px;
+		background: #333;
+		z-index: 7;
+	}
 
-    .minute {
-        width: 4px;
-        height: 70px;
-        background: #666;
-        z-index: 6;
-    }
+	.minute {
+		width: 4px;
+		height: 70px;
+		background: #666;
+		z-index: 6;
+	}
 
-    .second {
-        width: 2px;
-        height: 80px;
-        background: red;
-        z-index: 5;
-    }
+	.second {
+		width: 2px;
+		height: 80px;
+		background: red;
+		z-index: 5;
+	}
 
-    /* Digital clock style */
-    .digital-clock {
-        text-align: center;
-        font-size: 1.5em;
-        margin-top: 20px;
-        color: #333;
-    }
+	/* Digital clock style */
+	.digital-clock {
+		text-align: center;
+		font-size: 1.5em;
+		margin-top: 20px;
+		color: #333;
+	}
 
-    .selected-row > .jsgrid-cell {
-        background: #cce5ff;
-        border-color: #cce5ff;
-    }
+	.selected-row > .jsgrid-cell {
+		background: #cce5ff;
+		border-color: #cce5ff;
+	}
 </style>
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="row form-group text-center">
-                    <div class="col-12">
-                        <div class="clock">
-                            <div class="hand hour" id="hour"></div>
-                            <div class="hand minute" id="minute"></div>
-                            <div class="hand second" id="second"></div>
-                        </div>
-                        <!-- Digital clock display -->
-                        <div class="digital-clock" id="digital-clock">00:00:00</div>
-                    </div>
-                </div>
-                <div class="row form-group text-center">
-                    <div class="col-12 form-group">
-                        <button id="checkin" class="btn btn-primary" onclick="OpenCheckinModal()">Check in </button>
-                        <button id="checkout" class="btn btn-primary" onclick="SaveCheckOut()">Check Out </button>
-                    </div>
-                    <div class="col-12 form-group">
-                        <div id="ActiveSessionGrid"></div>
-                    </div>
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row form-group text-center">
+					<div class="col-12">
+						<div class="clock">
+							<div class="hand hour" id="hour"></div>
+							<div class="hand minute" id="minute"></div>
+							<div class="hand second" id="second"></div>
+						</div>
+						<!-- Digital clock display -->
+						<div class="digital-clock" id="digital-clock">00:00:00</div>
+					</div>
+				</div>
+				<div class="row form-group text-center">
+					<div class="col-12 form-group">
+						<button id="checkin" class="btn btn-primary" onclick="OpenCheckinModal()">@SharedResource.Check_in</button>
+						<button id="checkout" class="btn btn-primary" onclick="SaveCheckOut()">@SharedResource.Check_Out </button>
+					</div>
+					<div class="col-12 form-group">
+						<div id="ActiveSessionGrid"></div>
+					</div>
 
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 <input type="hidden" id="selectSessionId" value="0" />
 <div class="modal fade" id="CheckInModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <partial name="_CheckIn.cshtml" />
+	<partial name="_CheckIn.cshtml" />
 </div>
 <!-- /.modal -->
 @section scripts
 {
-    <script>
-        var GetAllActiveSessionUrl = '@Url.Action("GetAllActiveSession", "AccessLog")';
-        var getCheckinDropDownUrl = '@Url.Action("GetAllDropDownValues", "AccessLog")';
-        var CheckInAccessUrl = '@Url.Action("CheckInAccess", "AccessLog")';
-        var CheckOutAccessUrl = '@Url.Action("CheckOutAccess", "AccessLog")';
+	<script>
+		var GetAllActiveSessionUrl = '@Url.Action("GetAllActiveSession", "AccessLog")';
+		var getCheckinDropDownUrl = '@Url.Action("GetAllDropDownValues", "AccessLog")';
+		var CheckInAccessUrl = '@Url.Action("CheckInAccess", "AccessLog")';
+		var CheckOutAccessUrl = '@Url.Action("CheckOutAccess", "AccessLog")';
 
-        $(function () {
-            setInterval(updateClock, 1000); // Update every second
-            updateClock(); // Initialize immediately
+		$(function () {
+			setInterval(updateClock, 1000); // Update every second
+			updateClock(); // Initialize immediately
 
-            GetAllActiveSession();
-        });
+			GetAllActiveSession();
+		});
 
-        function updateClock() {
-            const now = new Date();
-            const seconds = now.getSeconds();
-            const minutes = now.getMinutes();
-            const hours = now.getHours();
+		function updateClock() {
+			const now = new Date();
+			const seconds = now.getSeconds();
+			const minutes = now.getMinutes();
+			const hours = now.getHours();
 
-            const secondDegree = seconds * 6;
-            const minuteDegree = minutes * 6 + seconds * 0.1;
-            const hourDegree = hours * 30 + minutes * 0.5;
+			const secondDegree = seconds * 6;
+			const minuteDegree = minutes * 6 + seconds * 0.1;
+			const hourDegree = hours * 30 + minutes * 0.5;
 
-            document.getElementById("second").style.transform = `rotate(${secondDegree}deg)`;
-            document.getElementById("minute").style.transform = `rotate(${minuteDegree}deg)`;
-            document.getElementById("hour").style.transform = `rotate(${hourDegree}deg)`;
+			document.getElementById("second").style.transform = `rotate(${secondDegree}deg)`;
+			document.getElementById("minute").style.transform = `rotate(${minuteDegree}deg)`;
+			document.getElementById("hour").style.transform = `rotate(${hourDegree}deg)`;
 
-            // Format the digital time as HH:MM:SS
-            // const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            const formattedTime =
-                (hours < 10 ? '0' : '') + hours + ':' +
-                (minutes < 10 ? '0' : '') + minutes + ':' +
-                (seconds < 10 ? '0' : '') + seconds;
-            document.getElementById("digital-clock").textContent = formattedTime;
-        }
+			// Format the digital time as HH:MM:SS
+			// const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+			const formattedTime =
+				(hours < 10 ? '0' : '') + hours + ':' +
+				(minutes < 10 ? '0' : '') + minutes + ':' +
+				(seconds < 10 ? '0' : '') + seconds;
+			document.getElementById("digital-clock").textContent = formattedTime;
+		}
 
-        function GetAllActiveSession() {
-            $.ajax({
-                url: GetAllActiveSessionUrl,
-                type: "POST",
-                success: function (response) {
-                    if (response.data) {
-                        var Data = response.data;
-                        if (!$("#ActiveSessionGrid").data("jsGrid")) {
-                            $("#ActiveSessionGrid").jsGrid({
-                                height: "auto",
-                                width: "100%",
+		function GetAllActiveSession() {
+			$.ajax({
+				url: GetAllActiveSessionUrl,
+				type: "POST",
+				success: function (response) {
+					if (response.data) {
+						var Data = response.data;
+						if (!$("#ActiveSessionGrid").data("jsGrid")) {
+							$("#ActiveSessionGrid").jsGrid({
+								height: "auto",
+								width: "100%",
 
-                                sorting: true,
-                                paging: true,
+								sorting: true,
+								paging: true,
 
-                                data: Data,
+								data: Data,
 
-                                fields: [
-                                    { name: "id", type: "number", title: "Id", visible: false },
-                                    { name: "roomName", type: "text", width: 150, title: "Room" },
-                                    { name: "resourceName", type: "text", width: 150, title: "Resource" },
-                                    { name: "timeIn", type: "text", width: 150, title: "Check In" },
-                                ],
-                                gridview: true,
-                                rowClick: function (args) {
-                                    $("#ActiveSessionGrid .jsgrid-row, #ActiveSessionGrid .jsgrid-alt-row").removeClass("selected-row");
+								fields: [
+									{ name: "id", type: "number", title: "Id", visible: false },
+									{ name: "roomName", type: "text", width: 150, title: "@SharedResource.Room" },
+									{ name: "resourceName", type: "text", width: 150, title: "@SharedResource.Resource" },
+									{ name: "timeIn", type: "text", width: 150, title: "@SharedResource.Check_in" },
+								],
+								gridview: true,
+								rowClick: function (args) {
+									$("#ActiveSessionGrid .jsgrid-row, #ActiveSessionGrid .jsgrid-alt-row").removeClass("selected-row");
 
-                                    $(args.event.target).closest("tr").addClass("selected-row");
+									$(args.event.target).closest("tr").addClass("selected-row");
 
-                                    var item = args.item; // Get the data item of the selected row
-                                    if (item) {
-                                        $('#selectSessionId').val(item.id);
-                                    }
-                                    else {
-                                        $('#selectSessionId').val(0);
-                                    }
-                                    // Perform any additional actions here, such as updating the UI
-                                }
-                            });
-                        }
-                        else {
-                            $("#ActiveSessionGrid").jsGrid("refresh"); // Force a refresh
-                        }
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-                $('#selectSessionId').val(0);
-            });
-        }
+									var item = args.item; // Get the data item of the selected row
+									if (item) {
+										$('#selectSessionId').val(item.id);
+									}
+									else {
+										$('#selectSessionId').val(0);
+									}
+									// Perform any additional actions here, such as updating the UI
+								}
+							});
+						}
+						else {
+							$("#ActiveSessionGrid").jsGrid("refresh"); // Force a refresh
+						}
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#selectSessionId').val(0);
+			});
+		}
 
-        function OpenCheckinModal() {
-            ClearCheckInModal();
-            GetDropdownData();
+		function OpenCheckinModal() {
+			ClearCheckInModal();
+			GetDropdownData();
 
-            $('#CheckInModal').modal('show');
-            $("#frnCheckinCreate").validate({}).resetForm();
+			$('#CheckInModal').modal('show');
+			$("#frnCheckinCreate").validate({}).resetForm();
 
-        }
+		}
 
-        function ClearCheckInModal() {
+		function ClearCheckInModal() {
 
-            $("#txtPassword").val("");
-            $("#txtPurpose").val("");
-            $("#txtRemarks").val("");
-            $("#txtVisitor").val("");
-        }
+			$("#txtPassword").val("");
+			$("#txtPurpose").val("");
+			$("#txtRemarks").val("");
+			$("#txtVisitor").val("");
+		}
 
-        function GetDropdownData() {
-            $.ajax({
-                url: getCheckinDropDownUrl,
-                type: "POST",
-                async: false,
-                // data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    $("#ddlResource").html('');
-                    $("#ddlRoom").html('');
-                    $("#ddlPurpose").html('');
-                },
-                success: function (response) {
-                    if (response.data) {
-                        $.each(response.data, function (key, value) {
-                            if (value.title == "Room") {
-                                $("#ddlRoom").append($("<option></option>").val('').html("Select Room"));
-                                $.each(value.items, function (itemskey, itemsvalue) {
-                                    $("#ddlRoom").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-                                });
-                            }
-                            else if (value.title == "Resource") {
-                                $("#ddlResource").append($("<option></option>").val('').html("Select Resource"));
-                                $.each(value.items, function (itemskey, itemsvalue) {
-                                    $("#ddlResource").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-                                });
-                            }
-                            else if (value.title == "InterventionReason") {
-                                $("#ddlPurpose").append($("<option></option>").val('').html("Select Purpose"));
-                                $.each(value.items, function (itemskey, itemsvalue) {
-                                    $("#ddlPurpose").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-                                });
-                                
-                            }
-                        });
-                    }
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    // toastr.error("Error:" + error);
-                }
+		function GetDropdownData() {
+			$.ajax({
+				url: getCheckinDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlResource").html('');
+					$("#ddlRoom").html('');
+					$("#ddlPurpose").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						$.each(response.data, function (key, value) {
+							if (value.title == "Room") {
+								$("#ddlRoom").append($("<option></option>").val('').html("@SharedResource.Select_Room"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlRoom").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+							else if (value.title == "Resource") {
+								$("#ddlResource").append($("<option></option>").val('').html("@SharedResource.Resource"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlResource").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+							else if (value.title == "InterventionReason") {
+								$("#ddlPurpose").append($("<option></option>").val('').html("@SharedResource.Select_Purpose"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlPurpose").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
 
-            });
-        }
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
 
-        function SaveCheckin() {
-            // let valid = formValidation(["txtCarouselName", "txtHeader", "txtDuration"]);
-            let valid = formValidation(["ddlResource", "txtPassword", "ddlRoom"]);
-            if (valid) {
-                var dataObject = {};
+			});
+		}
 
-                dataObject.Resource = $("#ddlResource").val();
-                dataObject.Room = $("#ddlRoom").val();
-                dataObject.Password = $("#txtPassword").val();
-                dataObject.Purpose = $("#ddlPurpose").val();
-                dataObject.Remarks = $("#txtRemarks").val();
-                dataObject.Visitor = $("#txtVisitor").val();
+		function SaveCheckin() {
+			// let valid = formValidation(["txtCarouselName", "txtHeader", "txtDuration"]);
+			let valid = formValidation(["ddlResource", "txtPassword", "ddlRoom"]);
+			if (valid) {
+				var dataObject = {};
 
-                $.ajax({
-                    url: CheckInAccessUrl,
-                    type: "POST",
-                    data: dataObject,  // Send data if needed
-                    beforeSend: function () {
+				dataObject.Resource = $("#ddlResource").val();
+				dataObject.Room = $("#ddlRoom").val();
+				dataObject.Password = $("#txtPassword").val();
+				dataObject.Purpose = $("#ddlPurpose").val();
+				dataObject.Remarks = $("#txtRemarks").val();
+				dataObject.Visitor = $("#txtVisitor").val();
 
-                    },
-                    success: function (response) {
-                        if (response.data) {
-                            toastr.success(response.errorMessage);
-                            $('#CheckInModal').modal('hide');
-                            GetAllActiveSession();
-                        }
-                        else {
-                            toastr.error(response.errorMessage);
-                        }
-                        // Handle success (e.g., update UI with response data)
-                    },
-                    error: function (error) {
-                        console.log("Error:", error);
-                        toastr.error("Error:" + error);
-                    }
-                }).done(function () {
+				$.ajax({
+					url: CheckInAccessUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
 
-                });
-            }
-            else {
-                toastr.warning("Please fill in required field(s)");
-            }
-        }
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#CheckInModal').modal('hide');
+							GetAllActiveSession();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
 
-        function SaveCheckOut() {
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			}
+		}
 
-            if ($("#selectSessionId").val() != "" && $("#selectSessionId").val() > 0) {
-                var dataObject = {};
-                dataObject.Id = $("#selectSessionId").val();
-                $.ajax({
-                    url: CheckOutAccessUrl,
-                    type: "POST",
-                    data: dataObject,  // Send data if needed
-                    beforeSend: function () {
+		function SaveCheckOut() {
 
-                    },
-                    success: function (response) {
-                        if (response.data) {
-                            toastr.success(response.errorMessage);
-                            GetAllActiveSession();
-                        }
-                        else {
-                            toastr.error(response.errorMessage);
-                        }
-                        // Handle success (e.g., update UI with response data)
-                    },
-                    error: function (error) {
-                        console.log("Error:", error);
-                        toastr.error("Error:" + error);
-                    }
-                }).done(function () {
+			if ($("#selectSessionId").val() != "" && $("#selectSessionId").val() > 0) {
+				var dataObject = {};
+				dataObject.Id = $("#selectSessionId").val();
+				$.ajax({
+					url: CheckOutAccessUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
 
-                });
-            }
-            else {
-                toastr.warning("Please fill in required field(s)");
-            }
-        }
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							GetAllActiveSession();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
 
-    </script>
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			}
+		}
+
+	</script>
 }

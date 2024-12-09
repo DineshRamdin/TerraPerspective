@@ -169,6 +169,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while uploading the file..
+        /// </summary>
+        public static string An_error_occurred_while_uploading_the_file_ {
+            get {
+                return ResourceManager.GetString("An error occurred while uploading the file.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Carousel.
         /// </summary>
         public static string Carousel {
@@ -196,6 +205,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check in.
+        /// </summary>
+        public static string Check_in {
+            get {
+                return ResourceManager.GetString("Check in", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check In/Out.
         /// </summary>
         public static string Check_In_Out {
@@ -205,11 +223,38 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check Out.
+        /// </summary>
+        public static string Check_Out {
+            get {
+                return ResourceManager.GetString("Check Out", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click To Access Icon Library..
+        /// </summary>
+        public static string Click_To_Access_Icon_Library_ {
+            get {
+                return ResourceManager.GetString("Click To Access Icon Library.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {
             get {
                 return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string Code {
+            get {
+                return ResourceManager.GetString("Code", resourceCulture);
             }
         }
         
@@ -291,6 +336,24 @@ namespace UI.Resources {
         public static string Device_Name {
             get {
                 return ResourceManager.GetString("Device Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Name.
+        /// </summary>
+        public static string Display_Name {
+            get {
+                return ResourceManager.GetString("Display Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download sample.
+        /// </summary>
+        public static string Download_sample {
+            get {
+                return ResourceManager.GetString("Download sample", resourceCulture);
             }
         }
         
@@ -385,6 +448,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to External Reference.
+        /// </summary>
+        public static string External_Reference {
+            get {
+                return ResourceManager.GetString("External Reference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to fetch tree data..
         /// </summary>
         public static string Failed_to_fetch_tree_data_ {
@@ -403,11 +475,29 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Folder.
+        /// </summary>
+        public static string Folder {
+            get {
+                return ResourceManager.GetString("Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generated on.
         /// </summary>
         public static string Generated_on {
             get {
                 return ResourceManager.GetString("Generated on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geomerty Data.
+        /// </summary>
+        public static string Geomerty_Data {
+            get {
+                return ResourceManager.GetString("Geomerty Data", resourceCulture);
             }
         }
         
@@ -430,6 +520,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Icon.
+        /// </summary>
+        public static string Icon {
+            get {
+                return ResourceManager.GetString("Icon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Image.
         /// </summary>
         public static string Image {
@@ -444,6 +543,15 @@ namespace UI.Resources {
         public static string Image_Not_found {
             get {
                 return ResourceManager.GetString("Image Not found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
             }
         }
         
@@ -619,6 +727,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Order.
+        /// </summary>
+        public static string Order {
+            get {
+                return ResourceManager.GetString("Order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Othername.
         /// </summary>
         public static string Othername {
@@ -633,6 +750,15 @@ namespace UI.Resources {
         public static string Page {
             get {
                 return ResourceManager.GetString("Page", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
             }
         }
         
@@ -664,11 +790,47 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Select File.
+        /// </summary>
+        public static string Please_Select_File {
+            get {
+                return ResourceManager.GetString("Please Select File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select Map.
+        /// </summary>
+        public static string Please_select_Map {
+            get {
+                return ResourceManager.GetString("Please select Map", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select Proper Poster..!.
         /// </summary>
         public static string Please_select_Proper_Poster___ {
             get {
                 return ResourceManager.GetString("Please select Proper Poster..!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please Select the Icon.
+        /// </summary>
+        public static string Please_Select_the_Icon {
+            get {
+                return ResourceManager.GetString("Please Select the Icon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please upload a valid file in one of the following formats: JPEG, or PNG..
+        /// </summary>
+        public static string Please_upload_a_valid_file_in_one_of_the_following_formats__JPEG__or_PNG_ {
+            get {
+                return ResourceManager.GetString("Please upload a valid file in one of the following formats: JPEG, or PNG.", resourceCulture);
             }
         }
         
@@ -714,6 +876,24 @@ namespace UI.Resources {
         public static string Profile_Image {
             get {
                 return ResourceManager.GetString("Profile Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purpose.
+        /// </summary>
+        public static string Purpose {
+            get {
+                return ResourceManager.GetString("Purpose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remarks.
+        /// </summary>
+        public static string Remarks {
+            get {
+                return ResourceManager.GetString("Remarks", resourceCulture);
             }
         }
         
@@ -781,6 +961,33 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Room Location.
+        /// </summary>
+        public static string Room_Location {
+            get {
+                return ResourceManager.GetString("Room Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Room Name.
+        /// </summary>
+        public static string Room_Name {
+            get {
+                return ResourceManager.GetString("Room Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Room Type.
+        /// </summary>
+        public static string Room_Type {
+            get {
+                return ResourceManager.GetString("Room Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -799,11 +1006,47 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search for a Zone....
+        /// </summary>
+        public static string Search_for_a_Zone___ {
+            get {
+                return ResourceManager.GetString("Search for a Zone...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Purpose.
+        /// </summary>
+        public static string Select_Purpose {
+            get {
+                return ResourceManager.GetString("Select Purpose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Resource.
+        /// </summary>
+        public static string Select_Resource {
+            get {
+                return ResourceManager.GetString("Select Resource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Role.
         /// </summary>
         public static string Select_Role {
             get {
                 return ResourceManager.GetString("Select Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Room.
+        /// </summary>
+        public static string Select_Room {
+            get {
+                return ResourceManager.GetString("Select Room", resourceCulture);
             }
         }
         
@@ -943,11 +1186,38 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file size exceeds the allowed limit of 2MB..
+        /// </summary>
+        public static string The_file_size_exceeds_the_allowed_limit_of_2MB_ {
+            get {
+                return ResourceManager.GetString("The file size exceeds the allowed limit of 2MB.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree View.
+        /// </summary>
+        public static string Tree_View {
+            get {
+                return ResourceManager.GetString("Tree View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type.
         /// </summary>
         public static string Type {
             get {
                 return ResourceManager.GetString("Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload File.
+        /// </summary>
+        public static string Upload_File {
+            get {
+                return ResourceManager.GetString("Upload File", resourceCulture);
             }
         }
         
@@ -997,6 +1267,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Visitor.
+        /// </summary>
+        public static string Visitor {
+            get {
+                return ResourceManager.GetString("Visitor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string Yes {
@@ -1006,11 +1285,29 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zone.
+        /// </summary>
+        public static string Zone {
+            get {
+                return ResourceManager.GetString("Zone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zone Management.
         /// </summary>
         public static string Zone_Management {
             get {
                 return ResourceManager.GetString("Zone Management", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zone Matrix.
+        /// </summary>
+        public static string Zone_Matrix {
+            get {
+                return ResourceManager.GetString("Zone Matrix", resourceCulture);
             }
         }
     }

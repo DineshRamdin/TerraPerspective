@@ -8,12 +8,12 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">System Icon</h1>
+				<h1 class="m-0">@SharedResource.System_Icon</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">System Icon</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.System_Icon</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -64,16 +64,16 @@
 		function GetAllSystemIcon() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: 'Name' },
+				{ data: 'name', title: '@SharedResource.Name' },
 				// { data: 'systemIconImagebase64', title: 'System Icon' },
 				{
 					data: 'systemIconImagebase64',
-					title: 'System Icon',
+					title: '@SharedResource.System_Icon',
 					render: function (data, type, row, meta) {
 						// Check if the data (base64 string) is valid
 						if (data && data.trim() !== "") {
 							// Render the base64 image in an <img> tag
-							return '<img src="data:image/png;base64,' + data + '" alt="System Icon" style="width: 35px; height: 35px;" />';
+							return '<img src="data:image/png;base64,' + data + '" alt="@SharedResource.System_Icon" style="width: 35px; height: 35px;" />';
 						} else {
 							// If no valid base64 string, return a placeholder or empty image
 							return '<img src="" />';
@@ -134,9 +134,9 @@
 					if (response.data) {
 						$("#deleteImageBtn").hide();
 						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-							$("#h4SystemIconTitle").html("Modify System Icon");
+							$("#h4SystemIconTitle").html("@SharedResource.Modify  @SharedResource.System_Icon");
 						else {
-							$("#h4SystemIconTitle").html("Add System Icon");
+							$("#h4SystemIconTitle").html("@SharedResource.Add  @SharedResource.System_Icon");
 						}
 
 						$("#hdnSystemIconId").val(response.data.id);
@@ -175,7 +175,7 @@
 		}
 
 		function ClearSystemIconModal() {
-			$("#h4SystemIconTitle").html("Add System Icon");
+			$("#h4SystemIconTitle").html("@SharedResource.Add  @SharedResource.System_Icon");
 			$("#hdnSystemIconId").val("");
 			$("#txtName").val("");
 			$("#systemIconimagefile").val(null);
@@ -205,14 +205,14 @@
 					// Check if file is of valid type (JPEG or PNG)
 					const allowedTypes = ['image/jpeg', 'image/png'];
 					if (!allowedTypes.includes(file.type)) {
-						toastr.warning("Please upload a valid file in one of the following formats: JPEG, or PNG.");
+						toastr.warning("@SharedResource.Please_upload_a_valid_file_in_one_of_the_following_formats__JPEG__or_PNG_");
 						return; // Stop the process if invalid type
 					}
 
-					// Check file size (max 5MB)
+					// Check file size (max 2MB)
 					const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
 					if (file.size > maxFileSize) {
-						toastr.warning("The file size exceeds the allowed limit of 5MB.");
+						toastr.warning("@SharedResource.The_file_size_exceeds_the_allowed_limit_of_2MB_");
 						return; // Stop the process if file is too large
 					}
 				}
@@ -220,7 +220,7 @@
 				{
 					if(!oldfile)
 					{
-						toastr.warning("Please Select the Icon");
+						toastr.warning("@SharedResource.Please_Select_the_Icon");
 						return; // Stop the process if invalid type
 					}
 				}
@@ -260,7 +260,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 
 		}

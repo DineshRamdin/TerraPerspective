@@ -2,6 +2,8 @@
 	Layout = null;
 }
 
+@using UI.Resources
+
 <div class="modal-dialog">
 	<form id="frnSystemIconCreate">
 		<input type="hidden" id="hdnSystemIconId" value="" />
@@ -16,14 +18,14 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-12 form-group">
-						<label>Name<span class="red-required">*</span></label>
-						<input type="text" id="txtName" class="form-control" placeholder="Name" required />
+						<label>@SharedResource.Name<span class="red-required">*</span></label>
+						<input type="text" id="txtName" class="form-control" placeholder="@SharedResource.Name" required />
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-12 row form-group">
 						<div class="col-6">
-							<label for="systemIconimagefile">System Icon<span class="red-required">*</span></label>
+							<label for="systemIconimagefile">@SharedResource.System_Icon<span class="red-required">*</span></label>
 							<input type="file" id="systemIconimagefile" name="systemIconimagefile" accept="image/*" onchange="UploadFileisValidImageFormarJPEGAndPNG('systemIconimagefile')">
 							<input type="hidden" id="oldsystemIconimage" value="" />
 						</div>
@@ -31,7 +33,7 @@
 							<img id="viewSystemIconImage" style="height: 60%;width: 60%;" />
 							<button type="button" title="Delete Image" class="btn btn-block btn-info btn-sm" id="deleteImageBtn"
 									style="display: none; margin-top: 13px; width: 50%;" onclick="deleteImage()">
-								Delete Image
+								@SharedResource.Delete @SharedResource.Image
 							</button>
 						</div>
 					</div>
@@ -39,8 +41,8 @@
 
 			</div>
 			<div class="modal-footer">
-				<button type="button" title="Save" class="btn btn-primary" onclick="SaveSystemIcon();">Save</button>
-				<button type="button" title="Close" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" title="Save" class="btn btn-primary" onclick="SaveSystemIcon();">@SharedResource.Save</button>
+				<button type="button" title="Close" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

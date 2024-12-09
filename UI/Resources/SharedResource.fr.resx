@@ -153,6 +153,9 @@
   <data name="An error occurred while fetching tree data." xml:space="preserve">
     <value>Une erreur s'est produite lors de la récupération des données de l'arborescence.</value>
   </data>
+  <data name="An error occurred while uploading the file." xml:space="preserve">
+    <value>Une erreur s'est produite lors du téléchargement du fichier.</value>
+  </data>
   <data name="Carousel" xml:space="preserve">
     <value>Carrousel</value>
   </data>
@@ -162,11 +165,23 @@
   <data name="Change Password" xml:space="preserve">
     <value>Changer le mot de passe</value>
   </data>
+  <data name="Check in" xml:space="preserve">
+    <value>Enregistrement</value>
+  </data>
   <data name="Check In/Out" xml:space="preserve">
     <value>Arrivée/Départ</value>
   </data>
+  <data name="Check Out" xml:space="preserve">
+    <value>Vérifier</value>
+  </data>
+  <data name="Click To Access Icon Library." xml:space="preserve">
+    <value>Cliquez pour accéder à la bibliothèque d'icônes.</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Fermer</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>Commentaire</value>
@@ -194,6 +209,12 @@
   </data>
   <data name="Device Name" xml:space="preserve">
     <value>Nom de l'appareil</value>
+  </data>
+  <data name="Display Name" xml:space="preserve">
+    <value>Nom d'affichage</value>
+  </data>
+  <data name="Download sample" xml:space="preserve">
+    <value>Télécharger un échantillon</value>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>Durée</value>
@@ -225,14 +246,23 @@
   <data name="Export PDF" xml:space="preserve">
     <value>Exporter un PDF</value>
   </data>
+  <data name="External Reference" xml:space="preserve">
+    <value>Référence externe</value>
+  </data>
   <data name="Failed to fetch tree data." xml:space="preserve">
     <value>Échec de la récupération des données de l'arborescence.</value>
   </data>
   <data name="filtered from" xml:space="preserve">
     <value>filtré de</value>
   </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Dossier</value>
+  </data>
   <data name="Generated on" xml:space="preserve">
     <value>Généré le</value>
+  </data>
+  <data name="Geomerty Data" xml:space="preserve">
+    <value>Données géométriques</value>
   </data>
   <data name="Global Param" xml:space="preserve">
     <value>Paramètre global</value>
@@ -240,11 +270,17 @@
   <data name="Home" xml:space="preserve">
     <value>Maison</value>
   </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icône</value>
+  </data>
   <data name="Image" xml:space="preserve">
     <value>Image</value>
   </data>
   <data name="Image Not found" xml:space="preserve">
     <value>Image non trouvée</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Importer</value>
   </data>
   <data name="Invalid date" xml:space="preserve">
     <value>Date invalide</value>
@@ -303,11 +339,17 @@
   <data name="Operation" xml:space="preserve">
     <value>Opération</value>
   </data>
+  <data name="Order" xml:space="preserve">
+    <value>Commande</value>
+  </data>
   <data name="Othername" xml:space="preserve">
     <value>Autre nom</value>
   </data>
   <data name="Page" xml:space="preserve">
     <value>Page</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Mot de passe</value>
   </data>
   <data name="PDF" xml:space="preserve">
     <value>PDF</value>
@@ -318,8 +360,20 @@
   <data name="Please fill in required field(s)" xml:space="preserve">
     <value>Veuillez remplir les champs obligatoires</value>
   </data>
+  <data name="Please Select File" xml:space="preserve">
+    <value>Veuillez sélectionner un fichier</value>
+  </data>
+  <data name="Please select Map" xml:space="preserve">
+    <value>Veuillez sélectionner la carte</value>
+  </data>
   <data name="Please select Proper Poster..!" xml:space="preserve">
     <value>Veuillez sélectionner l'affiche appropriée.. !</value>
+  </data>
+  <data name="Please Select the Icon" xml:space="preserve">
+    <value>Veuillez sélectionner l'icône</value>
+  </data>
+  <data name="Please upload a valid file in one of the following formats: JPEG, or PNG." xml:space="preserve">
+    <value>Veuillez télécharger un fichier valide dans l'un des formats suivants : JPEG ou PNG.</value>
   </data>
   <data name="Poster" xml:space="preserve">
     <value>Affiche</value>
@@ -335,6 +389,12 @@
   </data>
   <data name="Profile Image" xml:space="preserve">
     <value>Image de profil</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>But</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>Remarques</value>
   </data>
   <data name="Report" xml:space="preserve">
     <value>Rapport</value>
@@ -357,14 +417,35 @@
   <data name="Room" xml:space="preserve">
     <value>Chambre</value>
   </data>
+  <data name="Room Location" xml:space="preserve">
+    <value>Emplacement de la chambre</value>
+  </data>
+  <data name="Room Name" xml:space="preserve">
+    <value>Nom de la pièce</value>
+  </data>
+  <data name="Room Type" xml:space="preserve">
+    <value>Type de chambre</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Sauvegarder</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Recherche</value>
   </data>
+  <data name="Search for a Zone..." xml:space="preserve">
+    <value>Rechercher une zone...</value>
+  </data>
+  <data name="Select Purpose" xml:space="preserve">
+    <value>Sélectionnez un objectif</value>
+  </data>
+  <data name="Select Resource" xml:space="preserve">
+    <value>Sélectionner une ressource</value>
+  </data>
   <data name="Select Role" xml:space="preserve">
     <value>Sélectionnez un rôle</value>
+  </data>
+  <data name="Select Room" xml:space="preserve">
+    <value>Sélectionner une chambre</value>
   </data>
   <data name="Select Type" xml:space="preserve">
     <value>Sélectionnez le type</value>
@@ -411,8 +492,17 @@
   <data name="Testing Type" xml:space="preserve">
     <value>Type de test</value>
   </data>
+  <data name="The file size exceeds the allowed limit of 2MB." xml:space="preserve">
+    <value>La taille du fichier dépasse la limite autorisée de 2 Mo.</value>
+  </data>
+  <data name="Tree View" xml:space="preserve">
+    <value>Vue arborescente</value>
+  </data>
   <data name="Type" xml:space="preserve">
     <value>Taper</value>
+  </data>
+  <data name="Upload File" xml:space="preserve">
+    <value>Télécharger le fichier</value>
   </data>
   <data name="User" xml:space="preserve">
     <value>Utilisatrice</value>
@@ -429,10 +519,19 @@
   <data name="View Name" xml:space="preserve">
     <value>Afficher le nom</value>
   </data>
+  <data name="Visitor" xml:space="preserve">
+    <value>Visiteuse</value>
+  </data>
   <data name="Yes" xml:space="preserve">
     <value>Oui</value>
   </data>
+  <data name="Zone" xml:space="preserve">
+    <value>Zone</value>
+  </data>
   <data name="Zone Management" xml:space="preserve">
     <value>Gestion des zones</value>
+  </data>
+  <data name="Zone Matrix" xml:space="preserve">
+    <value>Matrice de zones</value>
   </data>
 </root>

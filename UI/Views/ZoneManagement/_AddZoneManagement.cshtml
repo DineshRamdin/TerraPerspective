@@ -1,41 +1,41 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
-
+@using UI.Resources
 <div class="modal-dialog modal-xl">
-    <form id="frnGeomertyDataCreate">
-        <input type="hidden" id="hdnId" value="" />
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="h4GeomertyDataTitle">
-                </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 form-group">
-                        <label>Type<span class="red-required">*</span></label>
-                        <input type="text" id="txtType" class="form-control" placeholder="Type" required />
-                    </div>
-                    <div class="col-12 form-group">
-                        <label>Zone<span class="red-required">*</span></label>
-                        <input type="text" id="txtZone" class="form-control" placeholder="Zone" required />
-                    </div>
+	<form id="frnGeomertyDataCreate">
+		<input type="hidden" id="hdnId" value="" />
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="h4GeomertyDataTitle">
+				</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12 form-group">
+						<label>@SharedResource.Type<span class="red-required">*</span></label>
+						<input type="text" id="txtType" class="form-control" placeholder="@SharedResource.Type" required />
+					</div>
+					<div class="col-12 form-group">
+						<label>@SharedResource.Zone<span class="red-required">*</span></label>
+						<input type="text" id="txtZone" class="form-control" placeholder="@SharedResource.Zone" required />
+					</div>
 
-                    <div class="col-12">
-                        <div id="Createmap" style="height: 400px;"></div>
-                        <input type="hidden" id="hdnMapdata" />
+					<div class="col-12">
+						<div id="Createmap" style="height: 400px;"></div>
+						<input type="hidden" id="hdnMapdata" />
 
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SaveGeomertyData();">Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </form>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="SaveGeomertyData();">@SharedResource.Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</form>
 </div>
