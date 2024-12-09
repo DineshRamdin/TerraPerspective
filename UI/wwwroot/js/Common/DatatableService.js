@@ -456,6 +456,10 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         $('.dataTables_paginate').css('margin-top', '0px');
                     }
 
+                    //$('#' + tableID + '_previous a').html(langResource.PreviousLabel);
+                    // $('#' + tableID + '_next a').html(langResource.NextLabel);
+
+
                     if (showAdd) {
                         $('.addbtn').removeClass('d-none');
                     }
@@ -589,12 +593,14 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
     if ($('#' + tableID).length > 0) { //check if table exists
 
         var errorMessageColumnIndex = -1;
+        // if (tableID == "FileViewTable") {
         $('#' + tableID + ' th').each(function (index) {
             var headerText = $(this).text().trim();
             if (headerText === 'ErrorMessage') {
-                errorMessageColumnIndex = index;
+                errorMessageColumnIndex = 0;
             }
         });
+        // }
 
 
         $('#' + tableID).DataTable({ //init table                       
@@ -924,6 +930,15 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
             $('.dataTables_filter').css('display', 'none');
             $('.dataTables_info').css('display', 'none');
         }
+
+        if (tableID === "FileViewTable") {
+            $('#' + tableID + '_previous').css('display', '');
+            $('#' + tableID + '_next').css('display', '');
+            $('.dataTables_paginate').css('display', '');
+            $('.dataTables_filter').css('display', '');
+            $('.dataTables_info').css('display', '');
+        }
+
     }
 
 
