@@ -172,9 +172,9 @@
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-							$("#h4UserTitle").html("Modify User");
+							$("#h4UserTitle").html("@SharedResource.Modify_User");
 						else {
-							$("#h4UserTitle").html("Add User");
+							$("#h4UserTitle").html("@SharedResource.Add_User");
 						}
 
 						$("#hdnuserId").val(response.data.id);
@@ -200,7 +200,7 @@
 									data = response.data;
 									// console.log("data : ", data);
 									var options = {
-										title: "User Matrix",
+										title: "@SharedResource.User_Matrix",
 										data: data,
 										maxHeight: 300,
 										closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
@@ -213,11 +213,11 @@
 
 									//initializeTreeView(data);
 								} else {
-									console.error("Failed to fetch tree data.");
+									console.error("@SharedResource.Failed_to_fetch_tree_data_");
 								}
 							},
 							error: function () {
-								console.error("An error occurred while fetching tree data.");
+								console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
 							}
 						});
 

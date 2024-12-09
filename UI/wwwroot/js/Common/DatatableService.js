@@ -48,6 +48,8 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             info: langResource.ShowingLabel + " _TOTAL_ " + langResource.EntriesLabel, //"Showing _TOTAL_ entries",
                             infoEmpty: langResource.ShowingLabel + " 0 " + langResource.EntriesLabel,//"Showing 0 entries",
                             infoFiltered: "(" + langResource.FilteredfromLabel + " _MAX_ " + langResource.EntriesLabel + ")",  //"(filtered from _MAX_ entries)",
+                            //previous: langResource.PreviousLabel,  // Set the "Previous" button text
+                            //next: langResource.NextLabel,
                         },
                         data: dataToShow, // data to display
                         columnDefs: [ // set action column
@@ -254,13 +256,6 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                         doc.styles.header.fontSize = 12;
                                         doc.styles.footer.fontSize = 10;
 
-                                        //// Add custom footer content with username and date after all data
-                                        //doc.content.push({  // Push to the end of the content array
-                                        //    text: `UserName : ${username} | Date : ${currentDate}`,
-                                        //    style: 'footer',  // Use the defined footer style
-                                        //    alignment: 'left',
-                                        //    margin: [0, 30, 10, 0] // Add some space before the footer text
-                                        //});
 
                                         // Add custom footer content with username and date after all data
                                         doc.content.push({  // Push to the end of the content array
@@ -361,7 +356,6 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         },
                         initComplete: function () {
 
-
                             var clsDropdownmenu = "dropdown-menu-export";
                             if (tableID === 'AccessLogTable') {
                                 clsDropdownmenu = "dropdown-menu-export-accesslog";
@@ -424,14 +418,6 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                 }
                             );
 
-                            //// Close the dropdown if the user clicks outside
-                            //$(document).on('click', function (e) {
-                            //    if (!$(e.target).closest('.custom-dropdown').length) {
-                            //        $('#dropdownMenu').hide();
-                            //    }
-                            //});
-
-
                             $('div.dataTables_filter').css({
                                 'gap': '10px' // Adds space between elements (dropdown and buttons)
                             });
@@ -440,16 +426,20 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                             // Optionally add some margin to the 'Add New' button to provide space between the dropdown and the button
                             $('.addbtn').css('margin-left', '10px'); // Adds margin between 'Add New' button and the dropdown
                             // $('.excelbtn').css('margin-left', '10px'); // Adds margin between 'Add New' button and the dropdown
-                        },
-                        drawCallback: function () {
 
                         },
+                        drawCallback: function () {
+                            $('#' + tableID + '_previous a').html(langResource.PreviousLabel);
+                            $('#' + tableID + '_next a').html(langResource.NextLabel);
+                        },
+
 
                     })//.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
+
                     $('div.dt-buttons').prepend($('.clsDownload'));
                     $('div.dt-buttons').prepend($('.clsShowAllZone'));
-                    
+
                     $('div.dt-buttons').css('float', 'inline-end');
                     $('.addbtn').css('border-radius', '.25rem');
                     $('.clsDownload').css('border-radius', '.25rem');
@@ -466,8 +456,9 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         $('.dataTables_paginate').css('margin-top', '0px');
                     }
 
-                    $('#' + tableID + '_previous a').html(langResource.PreviousLabel);
-                    $('#' + tableID + '_next a').html(langResource.NextLabel);
+                    //$('#' + tableID + '_previous a').html(langResource.PreviousLabel);
+                    // $('#' + tableID + '_next a').html(langResource.NextLabel);
+
 
                     if (showAdd) {
                         $('.addbtn').removeClass('d-none');
@@ -783,31 +774,6 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
                                 };
                             };
 
-                            //// Add custom footer content with username and date after all data
-                            //doc.content.push({  // Push to the end of the content array
-                            //    text: `UserName : ${username} | Date : ${currentDate}`,
-                            //    style: 'footer',  // Use the defined footer style
-                            //    alignment: 'left',
-                            //    margin: [0, 30, 10, 0] // Add some space before the footer text
-                            //});
-
-                            //// Optionally add the content to the footer (if needed)
-                            //doc.footer = function (currentPage, pageCount) {
-                            //    return {
-                            //        columns: [
-                            //            {
-                            //                text: `Page ${currentPage} of ${pageCount}`,
-                            //                alignment: 'center'
-                            //            },
-                            //            {
-                            //                text: `Generated on ${currentDate}`,
-                            //                alignment: 'right'
-                            //            }
-                            //        ],
-                            //        margin: [20, 0]
-                            //    };
-                            //};
-
                             // Optionally, adjust document settings like font size for the entire document
                             doc.defaultStyle.fontSize = 10;
                         }
@@ -929,6 +895,11 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
                     'gap': '10px'
                 });
             },
+            drawCallback: function () {
+                $('#' + tableID + '_previous a').html(langResource.PreviousLabel);
+                $('#' + tableID + '_next a').html(langResource.NextLabel);
+            },
+
         })
 
         $('div.dt-buttons').prepend($('.clsDownload'));
@@ -946,8 +917,8 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
             $('.clsDownload').addClass('d-none');
         }
 
-        $('#' + tableID + '_previous a').html(langResource.PreviousLabel);
-        $('#' + tableID + '_next a').html(langResource.NextLabel);
+        // $('#' + tableID + '_previous a').html(langResource.PreviousLabel);
+        //$('#' + tableID + '_next a').html(langResource.NextLabel);
 
         if (errorMessageColumnIndex == 0) {
             $('.clsDownload').addClass('d-none');

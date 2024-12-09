@@ -1,241 +1,243 @@
 ﻿@{
-    ViewData["Title"] = "Matrix";
+	ViewData["Title"] = "Matrix";
 }
+
+@using UI.Resources
 
 <link href="~/css/modules/access/matrix/matrix.css" rel="stylesheet" />
 <link href="~/css/Carouselstyle.css" rel="stylesheet" />
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Matrix</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-                    <li class="breadcrumb-item active">Matrix</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Matrix</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Matrix</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="form-group">
-                    <div class="row justify-content-center">
-                        <h6>Tree View</h6>
-                        @*   <div class="col-2">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="form-group">
+					<div class="row justify-content-center">
+						<h6>@SharedResource.Tree_View</h6>
+						@*   <div class="col-2">
                         <button type="button" class="btn btn-block btn-primary mb-3" onclick="openResourceModal()">Add</button>
                         </div> *@
-                    </div>
-                    <hr />
-                    <div class="row form-group ">
-                        <div class="col-12 mb-10">
-                            <div class="d-flex justify-content-center matrix-tree">
-                                <div id="tree" class="w-100 overflow-scroll">
-                                    @* Tree view content or component goes here *@
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center">
-                        <h6>Matrix Tree Manual</h6>
-                    </div>
-                    <div class="row">
+					</div>
+					<hr />
+					<div class="row form-group ">
+						<div class="col-12 mb-10">
+							<div class="d-flex justify-content-center matrix-tree">
+								<div id="tree" class="w-100 overflow-scroll">
+									@* Tree view content or component goes here *@
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row d-flex justify-content-center">
+						<h6>@SharedResource.Matrix_Tree_Manual</h6>
+					</div>
+					<div class="row">
 
-                        <div class="carousel">
-                            <div class="carousel-container">
-                                <div class="carousel-item active" id="item-1">
-                                    <img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Create.png" class="w-75" alt="Create Matrix Tree">
-                                </div>
-                                <div class="carousel-item" id="item-2">
-                                    <img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Rename.png" class="w-75" alt="Rename Matrix Tree">
-                                </div>
-                                <div class="carousel-item" id="item-3">
-                                    <img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Delete.png" class="w-75" alt="Delete Matrix Tree">
-                                </div>
-                                <div class="carousel-item" id="item-4">
-                                    <img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Cut.png" class="w-75" alt="Cut Matrix Tree">
-                                </div>
-                                <div class="carousel-item" id="item-5">
-                                    <img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Copy.png" class="w-75" alt="Copy Matrix Tree">
-                                </div>
-                                <div class="carousel-item" id="item-6">
-                                    <img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Paste.png" class="w-75" alt="Paste Matrix Tree">
-                                </div>
-                            </div>
-                            <button class="btn prev"><img src="~/image/left-arrow.png" class="img-sm" alt="Alternate Text" /></button>
-                            <button class="btn next"><img src="~/image/right-arrow.png" class="img-sm" alt="Alternate Text" /></button>
-                        </div>
+						<div class="carousel">
+							<div class="carousel-container">
+								<div class="carousel-item active" id="item-1">
+									<img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Create.png" class="w-75" alt="@SharedResource.Create_Matrix_Tree">
+								</div>
+								<div class="carousel-item" id="item-2">
+									<img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Rename.png" class="w-75" alt="@SharedResource.Rename_Matrix_Tree">
+								</div>
+								<div class="carousel-item" id="item-3">
+									<img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Delete.png" class="w-75" alt="@SharedResource.Delete_Matrix_Tree">
+								</div>
+								<div class="carousel-item" id="item-4">
+									<img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Cut.png" class="w-75" alt="@SharedResource.Cut_Matrix_Tree">
+								</div>
+								<div class="carousel-item" id="item-5">
+									<img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Copy.png" class="w-75" alt="@SharedResource.Copy_Matrix_Tree">
+								</div>
+								<div class="carousel-item" id="item-6">
+									<img src="~/image/Modules/Access/Matrix/Carousel/Matrix-Carousel-Paste.png" class="w-75" alt="@SharedResource.Paste_Matrix_Tree">
+								</div>
+							</div>
+							<button class="btn prev"><img src="~/image/left-arrow.png" class="img-sm" alt="@SharedResource.Alternate_Text" /></button>
+							<button class="btn next"><img src="~/image/right-arrow.png" class="img-sm" alt="@SharedResource.Alternate_Text" /></button>
+						</div>
 
 
-                    </div>
+					</div>
 
-                    @*Actions*@
-                    <div class="row">
-                        <button id="saveTreeButton" type="button" class="btn-outline-secondary form-control position-sticky m-4" onclick="saveTreeData()"><i class="fa fa-save me-2"></i>Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+					@*Actions*@
+					<div class="row">
+						<button id="saveTreeButton" type="button" class="btn-outline-secondary form-control position-sticky m-4" onclick="saveTreeData()"><i class="fa fa-save me-2"></i>@SharedResource.Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 @section scripts
 {
 
-    <script>
+	<script>
 
-        var GetMatrixTree = '@Url.Action("GetTree", "Matrix")';
-        var SaveMatrix = '@Url.Action("CRUDMatrixList", "Matrix")';
+		var GetMatrixTree = '@Url.Action("GetTree", "Matrix")';
+		var SaveMatrix = '@Url.Action("CRUDMatrixList", "Matrix")';
 
-        document.addEventListener("DOMContentLoaded", function () {
-            let data = null;
-            let carousel = document.querySelector(".carousel");
-            let items = carousel.querySelectorAll(".carousel-item");
-            // Function to initialize the tree view
-            function initializeTreeView(treeData) {
-                $('#tree').jstree({
-                    "core": {
-                        "animation": 0,
-                        "check_callback": true,
-                        "themes": { "icons": true },
-                        'data': treeData
-                    },
-                    "types": {
-                        "#": {
-                            "icon": "fa-solid fa-circle-notch",
-                            "valid_children": ["root"]
-                        },
-                        "root": {
-                            "icon": "fa-solid fa-circle-notch",
-                            "valid_children": ["default"]
-                        },
-                        "default": {
-                            "icon": "fa-regular fa-circle-dot",
-                            "valid_children": ["default", "file"]
-                        },
-                        "file": {
-                            "icon": "fa-regular fa-circle-dot",
-                            "valid_children": []
-                        }
-                    },
-                    "plugins": [
-                        "contextmenu", "search",
-                        "state", "types"
-                    ]
-                });
-            }
+		document.addEventListener("DOMContentLoaded", function () {
+			let data = null;
+			let carousel = document.querySelector(".carousel");
+			let items = carousel.querySelectorAll(".carousel-item");
+			// Function to initialize the tree view
+			function initializeTreeView(treeData) {
+				$('#tree').jstree({
+					"core": {
+						"animation": 0,
+						"check_callback": true,
+						"themes": { "icons": true },
+						'data': treeData
+					},
+					"types": {
+						"#": {
+							"icon": "fa-solid fa-circle-notch",
+							"valid_children": ["root"]
+						},
+						"root": {
+							"icon": "fa-solid fa-circle-notch",
+							"valid_children": ["default"]
+						},
+						"default": {
+							"icon": "fa-regular fa-circle-dot",
+							"valid_children": ["default", "file"]
+						},
+						"file": {
+							"icon": "fa-regular fa-circle-dot",
+							"valid_children": []
+						}
+					},
+					"plugins": [
+						"contextmenu", "search",
+						"state", "types"
+					]
+				});
+			}
 
-            // Fetch data from the server and initialize the tree
-            $.ajax({
-                url: GetMatrixTree, // API endpoint to fetch the matrix data
-                type: "POST",
-                success: function (response) {
-                    if (response && response.data) {
-                        data = response.data;
-                        initializeTreeView(data);
-                    } else {
-                        console.error("Failed to fetch tree data.");
-                    }
-                },
-                error: function () {
-                    console.error("An error occurred while fetching tree data.");
-                }
-            });
+			// Fetch data from the server and initialize the tree
+			$.ajax({
+				url: GetMatrixTree, // API endpoint to fetch the matrix data
+				type: "POST",
+				success: function (response) {
+					if (response && response.data) {
+						data = response.data;
+						initializeTreeView(data);
+					} else {
+						console.error("@SharedResource.Failed_to_fetch_tree_data_");
+					}
+				},
+				error: function () {
+					console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
+				}
+			});
 
-            // Event listeners for buttons
-            document.querySelector(".prev").addEventListener("click", () => {
-                let index = [...items].findIndex((item) =>
-                    item.classList.contains("active")
-                );
-                showItem((index - 1 + items.length) % items.length);
-            });
+			// Event listeners for buttons
+			document.querySelector(".prev").addEventListener("click", () => {
+				let index = [...items].findIndex((item) =>
+					item.classList.contains("active")
+				);
+				showItem((index - 1 + items.length) % items.length);
+			});
 
-            document.querySelector(".next").addEventListener("click", () => {
-                let index = [...items].findIndex((item) =>
-                    item.classList.contains("active")
-                );
-                showItem((index + 1) % items.length);
-            });
+			document.querySelector(".next").addEventListener("click", () => {
+				let index = [...items].findIndex((item) =>
+					item.classList.contains("active")
+				);
+				showItem((index + 1) % items.length);
+			});
 
-            // Function to show a specific item
-            function showItem(index) {
-                items.forEach((item, idx) => {
-                    item.classList.remove("active");
-                    //dots[idx].classList.remove("active");
-                    if (idx === index) {
-                        item.classList.add("active");
-                        //dots[idx].classList.add("active");
-                    }
-                    let interval = $('.carousel-item').eq(index).attr('data-interval');
-                    let intervalInt = parseInt(interval, 10);
+			// Function to show a specific item
+			function showItem(index) {
+				items.forEach((item, idx) => {
+					item.classList.remove("active");
+					//dots[idx].classList.remove("active");
+					if (idx === index) {
+						item.classList.add("active");
+						//dots[idx].classList.add("active");
+					}
+					let interval = $('.carousel-item').eq(index).attr('data-interval');
+					let intervalInt = parseInt(interval, 10);
 
-                    if (isNaN(intervalInt)) {
-                        intervalInt = 3;
-                    }
+					if (isNaN(intervalInt)) {
+						intervalInt = 3;
+					}
 
-                    let intervalValue = intervalInt * 1000;
+					let intervalValue = intervalInt * 1000;
 
-                    resetAutoScroll(intervalValue);
-                });
+					resetAutoScroll(intervalValue);
+				});
 
-            }
+			}
 
-        });
-        let Firstinterval = $('.carousel-item').first().attr('data-interval');
-        let FirstintervalInt = parseInt(Firstinterval, 10);
+		});
+		let Firstinterval = $('.carousel-item').first().attr('data-interval');
+		let FirstintervalInt = parseInt(Firstinterval, 10);
 
-        if (isNaN(FirstintervalInt)) {
-            FirstintervalInt = 1;
-        }
+		if (isNaN(FirstintervalInt)) {
+			FirstintervalInt = 1;
+		}
 
-        let FirstintervalValue = FirstintervalInt * 1000;
+		let FirstintervalValue = FirstintervalInt * 1000;
 
-        let autoScrollInterval = setInterval(nextItem, FirstintervalValue);
+		let autoScrollInterval = setInterval(nextItem, FirstintervalValue);
 
-        function resetAutoScroll(interval) {
-            clearInterval(autoScrollInterval);
-            autoScrollInterval = setInterval(nextItem, interval);
-        }
+		function resetAutoScroll(interval) {
+			clearInterval(autoScrollInterval);
+			autoScrollInterval = setInterval(nextItem, interval);
+		}
 
-        function nextItem() {
-            $('.next').click();
-        }
-
-
-        // Save tree data to the server
-        function saveTreeData() {
-            var treeData = $("#tree").jstree(true).get_json("#", { flat: true });
-            console.log("data : ", treeData);
-            // return;
-            $.ajax({
-                url: SaveMatrix, // API endpoint to save the matrix data
-                type: "POST",
-                data: {
-                    "treeData": treeData
-                },
-                success: function (data) {
-                    if (data) {
-                        toastr.success("Save Successful");
-                    } else {
-                        toastr.error("An error occurred. Please contact administrator.");
-                    }
-                },
-                error: function () {
-                    toastr.error("An error occurred. Please contact administrator.");
-                }
-            });
-        }
+		function nextItem() {
+			$('.next').click();
+		}
 
 
-    </script>
+		// Save tree data to the server
+		function saveTreeData() {
+			var treeData = $("#tree").jstree(true).get_json("#", { flat: true });
+			console.log("data : ", treeData);
+			// return;
+			$.ajax({
+				url: SaveMatrix, // API endpoint to save the matrix data
+				type: "POST",
+				data: {
+					"treeData": treeData
+				},
+				success: function (data) {
+					if (data) {
+						toastr.success("@SharedResource.Save_Successful");
+					} else {
+						toastr.error("@SharedResource.An_error_occurred__Please_contact_administrator_");
+					}
+				},
+				error: function () {
+					toastr.error("@SharedResource.An_error_occurred__Please_contact_administrator_");
+				}
+			});
+		}
+
+
+	</script>
 
 
 }

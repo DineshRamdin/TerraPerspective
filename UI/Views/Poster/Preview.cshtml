@@ -3,7 +3,7 @@
 	ViewData["Title"] = "Preview";
 }
 @model List<BL.Models.Administration.PosterDTO>
-
+@using UI.Resources
 
 <div class="outer_main">
 	<main class="">
@@ -28,7 +28,7 @@
 			}
 			else
 			{
-				<label>Image Not found</label>
+				<label>@SharedResource.Image_Not_found</label>
 			}
 
 		</div>

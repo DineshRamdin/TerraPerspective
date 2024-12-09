@@ -150,8 +150,17 @@
   <data name="All System Icon" xml:space="preserve">
     <value>Todos os ícones do sistema</value>
   </data>
+  <data name="Alternate Text" xml:space="preserve">
+    <value>Texto alternativo</value>
+  </data>
   <data name="An error occurred while fetching tree data." xml:space="preserve">
     <value>Ocorreu um erro ao buscar dados da árvore.</value>
+  </data>
+  <data name="An error occurred while uploading the file." xml:space="preserve">
+    <value>Ocorreu um erro ao carregar o arquivo.</value>
+  </data>
+  <data name="An error occurred. Please contact administrator." xml:space="preserve">
+    <value>Ocorreu um erro. Entre em contato com o administrador.</value>
   </data>
   <data name="Carousel" xml:space="preserve">
     <value>Carrossel</value>
@@ -162,17 +171,38 @@
   <data name="Change Password" xml:space="preserve">
     <value>Alterar a senha</value>
   </data>
+  <data name="Check in" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
   <data name="Check In/Out" xml:space="preserve">
     <value>Check-in/check-out</value>
+  </data>
+  <data name="Check Out" xml:space="preserve">
+    <value>Confira</value>
+  </data>
+  <data name="Click To Access Icon Library." xml:space="preserve">
+    <value>Clique para acessar a biblioteca de ícones.</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Fechar</value>
   </data>
+  <data name="Code" xml:space="preserve">
+    <value>Código</value>
+  </data>
   <data name="Comment" xml:space="preserve">
     <value>Comentário</value>
   </data>
+  <data name="Copy Matrix Tree" xml:space="preserve">
+    <value>Copiar árvore matricial</value>
+  </data>
+  <data name="Create Matrix Tree" xml:space="preserve">
+    <value>Criar árvore matricial</value>
+  </data>
   <data name="CSV" xml:space="preserve">
     <value>CSV</value>
+  </data>
+  <data name="Cut Matrix Tree" xml:space="preserve">
+    <value>Cortar Árvore Matriz</value>
   </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Painel</value>
@@ -186,6 +216,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Excluir</value>
   </data>
+  <data name="Delete Matrix Tree" xml:space="preserve">
+    <value>Excluir árvore matricial</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Descrição</value>
   </data>
@@ -194,6 +227,12 @@
   </data>
   <data name="Device Name" xml:space="preserve">
     <value>Nome do dispositivo</value>
+  </data>
+  <data name="Display Name" xml:space="preserve">
+    <value>Nome de exibição</value>
+  </data>
+  <data name="Download sample" xml:space="preserve">
+    <value>Baixar amostra</value>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>Duração</value>
@@ -225,14 +264,23 @@
   <data name="Export PDF" xml:space="preserve">
     <value>Exportar PDF</value>
   </data>
+  <data name="External Reference" xml:space="preserve">
+    <value>Referência Externa</value>
+  </data>
   <data name="Failed to fetch tree data." xml:space="preserve">
     <value>Falha ao buscar dados da árvore.</value>
   </data>
   <data name="filtered from" xml:space="preserve">
     <value>filtrado de</value>
   </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
   <data name="Generated on" xml:space="preserve">
     <value>Gerado em</value>
+  </data>
+  <data name="Geomerty Data" xml:space="preserve">
+    <value>Dados geométricos</value>
   </data>
   <data name="Global Param" xml:space="preserve">
     <value>Parâmetro Global</value>
@@ -240,11 +288,17 @@
   <data name="Home" xml:space="preserve">
     <value>Lar</value>
   </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Ícone</value>
+  </data>
   <data name="Image" xml:space="preserve">
     <value>Imagem</value>
   </data>
   <data name="Image Not found" xml:space="preserve">
     <value>Imagem não encontrada</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Importar</value>
   </data>
   <data name="Invalid date" xml:space="preserve">
     <value>Data inválida</value>
@@ -272,6 +326,9 @@
   </data>
   <data name="Matrix" xml:space="preserve">
     <value>Matriz</value>
+  </data>
+  <data name="Matrix Tree Manual" xml:space="preserve">
+    <value>Manual da árvore matricial</value>
   </data>
   <data name="Menu" xml:space="preserve">
     <value>Menu</value>
@@ -303,11 +360,20 @@
   <data name="Operation" xml:space="preserve">
     <value>Operação</value>
   </data>
+  <data name="Order" xml:space="preserve">
+    <value>Ordem</value>
+  </data>
   <data name="Othername" xml:space="preserve">
     <value>Outro nome</value>
   </data>
   <data name="Page" xml:space="preserve">
     <value>Página</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="Paste Matrix Tree" xml:space="preserve">
+    <value>Colar árvore matricial</value>
   </data>
   <data name="PDF" xml:space="preserve">
     <value>PDF</value>
@@ -318,8 +384,20 @@
   <data name="Please fill in required field(s)" xml:space="preserve">
     <value>Por favor preencha os campos obrigatórios</value>
   </data>
+  <data name="Please Select File" xml:space="preserve">
+    <value>Selecione o arquivo</value>
+  </data>
+  <data name="Please select Map" xml:space="preserve">
+    <value>Por favor selecione Mapa</value>
+  </data>
   <data name="Please select Proper Poster..!" xml:space="preserve">
     <value>Selecione o pôster adequado..!</value>
+  </data>
+  <data name="Please Select the Icon" xml:space="preserve">
+    <value>Selecione o ícone</value>
+  </data>
+  <data name="Please upload a valid file in one of the following formats: JPEG, or PNG." xml:space="preserve">
+    <value>Faça upload de um arquivo válido em um dos seguintes formatos: JPEG ou PNG.</value>
   </data>
   <data name="Poster" xml:space="preserve">
     <value>Poster</value>
@@ -335,6 +413,15 @@
   </data>
   <data name="Profile Image" xml:space="preserve">
     <value>Imagem do perfil</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Propósito</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>Observações</value>
+  </data>
+  <data name="Rename Matrix Tree" xml:space="preserve">
+    <value>Renomear árvore matricial</value>
   </data>
   <data name="Report" xml:space="preserve">
     <value>Relatório</value>
@@ -357,14 +444,38 @@
   <data name="Room" xml:space="preserve">
     <value>Sala</value>
   </data>
+  <data name="Room Location" xml:space="preserve">
+    <value>Localização do quarto</value>
+  </data>
+  <data name="Room Name" xml:space="preserve">
+    <value>Nome do quarto</value>
+  </data>
+  <data name="Room Type" xml:space="preserve">
+    <value>Tipo de quarto</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Salvar</value>
+  </data>
+  <data name="Save Successful" xml:space="preserve">
+    <value>Salvar com sucesso</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Procurar</value>
   </data>
+  <data name="Search for a Zone..." xml:space="preserve">
+    <value>Procure uma zona...</value>
+  </data>
+  <data name="Select Purpose" xml:space="preserve">
+    <value>Selecione a finalidade</value>
+  </data>
+  <data name="Select Resource" xml:space="preserve">
+    <value>Selecione o recurso</value>
+  </data>
   <data name="Select Role" xml:space="preserve">
     <value>Selecione a função</value>
+  </data>
+  <data name="Select Room" xml:space="preserve">
+    <value>Selecione o quarto</value>
   </data>
   <data name="Select Type" xml:space="preserve">
     <value>Selecione o tipo</value>
@@ -411,11 +522,23 @@
   <data name="Testing Type" xml:space="preserve">
     <value>Tipo de teste</value>
   </data>
+  <data name="The file size exceeds the allowed limit of 2MB." xml:space="preserve">
+    <value>O tamanho do arquivo excede o limite permitido de 2 MB.</value>
+  </data>
+  <data name="Tree View" xml:space="preserve">
+    <value>Vista em árvore</value>
+  </data>
   <data name="Type" xml:space="preserve">
     <value>Tipo</value>
   </data>
+  <data name="Upload File" xml:space="preserve">
+    <value>Carregar arquivo</value>
+  </data>
   <data name="User" xml:space="preserve">
     <value>Usuária</value>
+  </data>
+  <data name="User Matrix" xml:space="preserve">
+    <value>Matriz de usuários</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Nome de usuário</value>
@@ -429,10 +552,19 @@
   <data name="View Name" xml:space="preserve">
     <value>Ver nome</value>
   </data>
+  <data name="Visitor" xml:space="preserve">
+    <value>Visitante</value>
+  </data>
   <data name="Yes" xml:space="preserve">
     <value>Sim</value>
   </data>
+  <data name="Zone" xml:space="preserve">
+    <value>Zona</value>
+  </data>
   <data name="Zone Management" xml:space="preserve">
     <value>Gerenciamento de zona</value>
+  </data>
+  <data name="Zone Matrix" xml:space="preserve">
+    <value>Matriz de Zona</value>
   </data>
 </root>

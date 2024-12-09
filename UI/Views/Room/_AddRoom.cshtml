@@ -1,39 +1,40 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
+@using UI.Resources
 
 <div class="modal-dialog">
-    <form id="frnRoomCreate">
-        <input type="hidden" id="hdnId" value="" />
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="h4RoomTitle">
-                </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 form-group">
-                        <label>Room Name<span class="red-required">*</span></label>
-                        <input type="text" id="txtRoomName" class="form-control" placeholder="Room Name" required />
-                    </div>
-                    <div class="col-12 form-group">
-                        <label>Room Type<span class="red-required">*</span></label>
-                        <input type="text" id="txtRoomType" class="form-control" placeholder="Room Type" required />
-                    </div>
-                    <div class="col-12 form-group">
-                        <label>Room Location<span class="red-required">*</span></label>
-                        <input type="text" id="txtRoomLocation" class="form-control" placeholder="Room Location" required />
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SaveRoom();">Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </form>
+	<form id="frnRoomCreate">
+		<input type="hidden" id="hdnId" value="" />
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="h4RoomTitle">
+				</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12 form-group">
+						<label>@SharedResource.Room_Name<span class="red-required">*</span></label>
+						<input type="text" id="txtRoomName" class="form-control" placeholder="@SharedResource.Room_Name" required />
+					</div>
+					<div class="col-12 form-group">
+						<label>@SharedResource.Room_Type<span class="red-required">*</span></label>
+						<input type="text" id="txtRoomType" class="form-control" placeholder="@SharedResource.Room_Type" required />
+					</div>
+					<div class="col-12 form-group">
+						<label>@SharedResource.Room_Location<span class="red-required">*</span></label>
+						<input type="text" id="txtRoomLocation" class="form-control" placeholder="@SharedResource.Room_Location" required />
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="SaveRoom();">@SharedResource.Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</form>
 </div>

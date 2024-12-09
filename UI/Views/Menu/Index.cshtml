@@ -8,12 +8,12 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">Menu</h1>
+				<h1 class="m-0">@SharedResource.Menu</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">Menu</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Menu</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -65,9 +65,9 @@
 		function GetAllMenu() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'displayName', title: 'Display Name' },
-				{ data: 'icon', title: 'Icon' },
-				{ data: 'order', title: 'Order' },
+				{ data: 'displayName', title: '@SharedResource.Display_Name' },
+				{ data: 'icon', title: '@SharedResource.Icon' },
+				{ data: 'order', title: '@SharedResource.Order' },
 			];
 
 			var langResource = {
@@ -115,9 +115,9 @@
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-							$("#h4MenuTitle").html("Menu");
+							$("#h4MenuTitle").html("@SharedResource.Modify  @SharedResource.Menu");
 						else {
-							$("#h4MenuTitle").html("Menu");
+							$("#h4MenuTitle").html("@SharedResource.Add  @SharedResource.Menu");
 						}
 
 						$("#hdnmenuId").val(response.data.id);
@@ -195,7 +195,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 		}
 

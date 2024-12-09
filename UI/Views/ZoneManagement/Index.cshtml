@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Zone Management";
+	ViewData["Title"] = "Zone Management";
 }
 @using UI.Resources
 <link href="~/plugins/leaflet-1.7.1/leaflet.css" rel="stylesheet" />
@@ -7,146 +7,146 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
 <link href="~/plugins/dropdowntree/dropdowntree.css" rel="stylesheet" />
 <style>
-    #map {
-        width: 100%;
-        height: 85vh; /* Full viewport height */
-    }
+	#map {
+		width: 100%;
+		height: 85vh; /* Full viewport height */
+	}
 
-    #ZoneManagementTable > tbody > .selected-row {
-        background: #cce5ff;
-        border-color: #cce5ff;
-    }
+	#ZoneManagementTable > tbody > .selected-row {
+		background: #cce5ff;
+		border-color: #cce5ff;
+	}
 
-    .leaflet-bar input {
-        width: 200px;
-        padding: 5px;
-        position: relative;
-        z-index: 1000; /* Ensure it's above the map */
-    }
+	.leaflet-bar input {
+		width: 200px;
+		padding: 5px;
+		position: relative;
+		z-index: 1000; /* Ensure it's above the map */
+	}
 
-    /* Ensure that autocomplete suggestions don't overflow and stay within the map bounds */
-    .ui-autocomplete {
-        max-height: 200px;
-        overflow-y: auto;
-        z-index: 9999 !important;
-    }
+	/* Ensure that autocomplete suggestions don't overflow and stay within the map bounds */
+	.ui-autocomplete {
+		max-height: 200px;
+		overflow-y: auto;
+		z-index: 9999 !important;
+	}
 
-    /* Base container styling */
-    .search-control {
-        position: relative;
-        width: 40px; /* Show only the icon initially */
-        height: 40px;
-        background-color: white;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        overflow: hidden;
-        transition: width 0.3s ease; /* Smooth expansion */
-    }
+	/* Base container styling */
+	.search-control {
+		position: relative;
+		width: 40px; /* Show only the icon initially */
+		height: 40px;
+		background-color: white;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		overflow: hidden;
+		transition: width 0.3s ease; /* Smooth expansion */
+	}
 
-    /* Input box styling */
-    .search-input {
-        width: 0;
-        height: 100%;
-        border: none;
-        padding: 0 10px;
-        outline: none;
-        opacity: 0;
-        transition: width 0.3s ease, opacity 0.3s ease;
-    }
+	/* Input box styling */
+	.search-input {
+		width: 0;
+		height: 100%;
+		border: none;
+		padding: 0 10px;
+		outline: none;
+		opacity: 0;
+		transition: width 0.3s ease, opacity 0.3s ease;
+	}
 
-    /* Search icon styling */
-    .search-icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 20px;
-        cursor: pointer;
-    }
+	/* Search icon styling */
+	.search-icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-size: 20px;
+		cursor: pointer;
+	}
 
-    /* Show the input box on hover */
-    .search-control:hover {
-        width: 200px; /* Expanded width */
-    }
+	/* Show the input box on hover */
+	.search-control:hover {
+		width: 200px; /* Expanded width */
+	}
 
-        .search-control:hover .search-input {
-            width: 100%;
-            opacity: 1;
-        }
+		.search-control:hover .search-input {
+			width: 100%;
+			opacity: 1;
+		}
 
-        .search-control:hover .search-icon {
-            display: none; /* Hide the icon when expanded */
-        }
+		.search-control:hover .search-icon {
+			display: none; /* Hide the icon when expanded */
+		}
 
-    /* Ensure checkboxes inside the dropdown are visible */
-    .checkbox {
-        margin-right: 10px;
-        display: inline-block;
-    }
+	/* Ensure checkboxes inside the dropdown are visible */
+	.checkbox {
+		margin-right: 10px;
+		display: inline-block;
+	}
 
-    /* Style for the dropdown items */
-    .dropdown-item {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
+	/* Style for the dropdown items */
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		padding: 5px;
+	}
 
-        .dropdown-item label {
-            cursor: pointer;
-        }
+		.dropdown-item label {
+			cursor: pointer;
+		}
 </style>
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Zone Management</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-                    <li class="breadcrumb-item active">Zone Management</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Zone_Management</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Zone_Management</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="row">
-                    <div class="col-10">
-                    </div>
-                    <div class="col-2 text-right">
-                        <button type="button" class="btn btn-primary mb-3" onclick="openZoneManagementModal(0)">Add</button>
-                        <button type="button" class="btn btn-info mb-3" onclick="openImportZoneModal()">Import</button>
-                    </div>
-                </div>
-                <div class="row">
-                    @*  <div class="col-2 mb-3">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					<div class="col-2 text-right">
+						<button type="button" class="btn btn-primary mb-3" onclick="openZoneManagementModal(0)">@SharedResource.Add</button>
+						<button type="button" class="btn btn-info mb-3" onclick="openImportZoneModal()">@SharedResource.Import</button>
+					</div>
+				</div>
+				<div class="row">
+					@*  <div class="col-2 mb-3">
                     <div id="Zonejstree"></div>
                     </div> *@
-                    <div class="col-6  mb-3">
-                        <div class="col-12">
-                            <table id="ZoneManagementTable" class="table table-bordered table-striped"></table>
-                        </div>
-                        <div class="col-12" style="display:none" id="AddEditZone">
-                            <partial name="_AddZone.cshtml" />
-                        </div>
-                    </div>
+					<div class="col-6  mb-3">
+						<div class="col-12">
+							<table id="ZoneManagementTable" class="table table-bordered table-striped"></table>
+						</div>
+						<div class="col-12" style="display:none" id="AddEditZone">
+							<partial name="_AddZone.cshtml" />
+						</div>
+					</div>
 
-                    <div class="col-6  mb-3">
-                        <div id="map"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+					<div class="col-6  mb-3">
+						<div id="map"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 @* <div class="modal fade" id="AddZoneManagementModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -154,7 +154,7 @@
 </div> *@
 
 <div class="modal fade" id="ImportZoneModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <partial name="_ImportZone.cshtml" />
+	<partial name="_ImportZone.cshtml" />
 </div>
 
 
@@ -162,755 +162,755 @@
 @section scripts
 {
 
-    <script src="~/plugins/leaflet-1.7.1/leaflet.js"></script>
-    <script src="~/plugins/leaflet-draw-1.0.4/leaflet.draw.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="~/plugins/dropdowntree/dropdowntree.js"></script>
-    <script>
-
-        var GetAllZoneManagementUrl = '@Url.Action("GetAll", "ZoneManagement")';
-        var GetSelectedZoneDataUrl = '@Url.Action("GetSelectedZoneData", "ZoneManagement")';
-        var GetAllZoneUrl = '@Url.Action("GetAllZone", "ZoneManagement")';
-        var CreateUpdateZoneManagementUrl = '@Url.Action("CreateUpdate", "ZoneManagement")';
-        var ZoneManagementGetByIdUrl = '@Url.Action("GetById", "ZoneManagement")';
-        var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "ZoneManagement")';
-        var ZoneFilePreviewUrl = '@Url.Action("Fileview", "ZoneManagement")';
-        var GetZoneMatrixTree = '@Url.Action("GetTree", "ZoneManagement")';
-        var DownloadZoneSampleExcelUrl = '@Url.Action("DownloadZoneSampleExcel", "ZoneManagement")';
-        var ImportZoneDataUrl = '@Url.Action("ImportExcel", "ZoneManagement")';
-
-        $(function () {
-            $('.nav-link').removeClass('active');
-            $('#liZoneManagementmenu').addClass('active');
-
-            // BindJsTreeData();
-            initMap();
-            GetAllZoneManagement();
-            // $('#Zonejstree').on('changed.jstree', function (e, data) {
-            //     if (data.action != 'ready') { // Ensures it was triggered by node selection Or deselection
-            //         initMap();
-            //     }
-            // });
-
-            $('#ZoneManagementTreeDropdown').on('change', function () {
-                // Assuming the plugin has a method to get selected values
-                var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
-                console.log('Selected Values: ', selectedValues);
-            });
-
-            $("#ZoneManagementTable").on('click', 'tr', function (event) {
-                var target = $(event.target); // Get the clicked element
-                if (target.is("td")) {
-
-                    $("#ZoneManagementTable").find(".selected-row").removeClass("selected-row");
-                    var Id = $(this).attr("data-id")
-                    $(this).addClass("selected-row")
-
-                    if (map) {
-                        map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
-                            animate: true,
-                            duration: 3  // Duration for zoom out animation
-                        });
-                    }
-                    setTimeout(function () {
-                        initMap(Id);
-                    }, 3000);  // Match this to the duration of the zoom-out animation (1.5s here)
-
-                }
-            });
-        });
-
-        function ShowAllZonebtnClick()
-        {
-            if (map) {
-                map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
-                    animate: true,
-                    duration: 3  // Duration for zoom out animation
-                });
-            }
-            setTimeout(function () {
-                initMap();
-            }, 3000);  // Match this to the duration of the zoom-out animation (1.5s here)
-        }
-
-        function GetAllZoneManagement() {
-            var columnList = [
-                { data: 'id', title: 'Id', visible: false },
-                { data: 'zone', title: 'Zone' },
-                { data: 'type', title: 'Type' },
-                { data: 'folder', title: 'Folder' },
-                { data: 'externalReference', title: 'External Reference' },
-            ];
-
-            var langResource = {
-                AddNewLabel: '@SharedResource.Add_New',
-                ExportLabel: '@SharedResource.Export',
-                ExportPDFLabel:'@SharedResource.Export_PDF',
-                ExportCSVLabel:'@SharedResource.Export_CSV',
-                ExportExcelLabel:'@SharedResource.Export_Excel',
-                ExcelLabel:'@SharedResource.Excel',
-                PDFLabel:'@SharedResource.PDF',
-                CSVLabel:'@SharedResource.CSV',
-                NodataavailableLabel :'@SharedResource.No_data_available',
-                SearchLabel :'@SharedResource.Search',
-                ShowingLabel :'@SharedResource.Showing',
-                EntriesLabel :'@SharedResource.entries',
-                FilteredfromLabel :'@SharedResource.filtered_from',
-                ViewLabel :'@SharedResource.View',
-                PreviewLabel :'@SharedResource.Preview',
-                DeleteLabel :'@SharedResource.Delete',
-                EditLabel :'@SharedResource.Edit',
-                ResetPasswordLabel :'@SharedResource.Reset_Password',
-                UserNameLabel :'@SharedResource.UserName',
-                DateLabel :'@SharedResource.Date',
-                PageLabel :'@SharedResource.Page',
-                OfLabel :'@SharedResource.of',
-                GeneratedonLabel :'@SharedResource.Generated_on',
-                PreviousLabel :'@SharedResource.Previous',
-                NextLabel :'@SharedResource.Next',
-            };
-
-            initializeDataGrid('ZoneManagementTable', 'openZoneManagementModal', GetAllZoneUrl, columnList, false, false, true, false, true, "PreviewZoneManagementFolder",false,null,langResource);
-
-        }
-        function PreviewZoneManagementFolder(folder) {
-            if (folder != null && folder != "") {
-                window.open(ZoneFilePreviewUrl + "?folder=" + folder, '_blank');
-            }
-        }
-        function BindJsTreeData() {
-            var ZoneData = [];
-            $.ajax({
-                url: GetAllZoneUrl,
-                type: "POST",
-                async: false,
-                // data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    ZoneData = [];
-                },
-                success: function (response) {
-                    if (response.data) {
-                        ZoneData = response.data;
-                    }
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-                const groupedData = ZoneData.reduce((acc, item) => {
-                    const Type = item.type;
-                    if (!acc[Type]) {
-                        acc[Type] = { text: Type, children: [] };
-                    }
-                    acc[Type].children.push({ text: item.zone, Value: item.id });
-                    return acc;
-                }, {});
-
-                const selectArray = Object.values(groupedData);
-
-                if ($.jstree.reference('#Zonejstree')) {
-                    $('#Zonejstree').jstree("destroy").empty(); // Destroy and clear DOM content
-                }
-
-                $('#Zonejstree').on('loaded.jstree', function (e, data) {
-                    $('#Zonejstree').jstree('select_all'); // Select all nodes once the tree is fully loaded
-                }).jstree({
-                    'core': {
-                        'data': selectArray
-                    },
-                    "plugins": ["checkbox"] // Enable the checkbox plugin
-                });
-            });
-        }
-        function GetSelectedZone() {
-            var selectedNodes = $('#Zonejstree').jstree("get_selected", true); // Get selected nodes with full data
-            var values = [];
-
-            selectedNodes.forEach(function (node) {
-                if (node.original.Value !== undefined) { // Check if Value exists
-                    values.push(node.original.Value); // Push the Value to the array
-                }
-            });
-            return values.join(",");
-        }
-
-        let map;
-
-        function initMap(selectedZone) {
-            var MapData = [];
-            // var selectedZone = GetSelectedZone();
-
-            var dataObject = {};
-            dataObject.selectedZone = selectedZone == undefined ? "" : selectedZone;
-
-            $.ajax({
-                url: selectedZone == undefined ? GetAllZoneManagementUrl : GetSelectedZoneDataUrl,
-                type: "POST",
-                data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    MapData = [];
-
-                },
-                success: function (response) {
-                    if (response.data) {
-                        MapData = response.data;
-                    }
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-
-                if (map) {
-                    map.remove(); // Destroy the existing map instance if it exists
-                    map = null;    // Set it to null to ensure a clean start
-                }
-                map = L.map('map').setView([-20.081670, 57.598266], 10);
-
-                const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                }).addTo(map);
-
-                // Base layer: OpenStreetMap
-                var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '© OpenStreetMap'
-                }).addTo(map);
-
-                // Satellite layer (ESRI Satellite)
-                var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
-                });
-
-                // Define base maps for the dropdown
-                var baseMaps = {
-                    "Map": osmLayer,
-                    "Satellite": satelliteLayer
-                };
-
-                // Add the custom control to the map
-
-                var searchControl = L.Control.extend({
-                    onAdd: function () {
-
-                        // Create the main container
-                        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control search-control');
-
-                        // Create the input box (hidden by default)
-                        var inputBox = L.DomUtil.create('input', 'search-input', container);
-                        inputBox.type = 'text';
-                        inputBox.placeholder = 'Search for a Zone...';
-                        L.DomUtil.addClass(inputBox, 'form-control');
-
-                        // Create the search icon
-                        var icon = L.DomUtil.create('span', 'search-icon', container);
-                        icon.innerHTML = '<i class="fa fa-search"></i>'; // Unicode search icon, can replace with FontAwesome
-
-                        // Prevent map interactions when clicking inside the control
-                        L.DomEvent.disableClickPropagation(container);
-
-
-                        // jQuery UI Autocomplete
-                        $(inputBox).autocomplete({
-                            source: function (request, response) {
-                                // Make an AJAX call to the Nominatim API for location search
-                                $.ajax({
-                                    url: GetZoneAutocompleteDataUrl,
-                                    data: { term: request.term },
-                                    success: function (data) {
-                                        response(data.data.map(function (item) {
-                                            return {
-                                                label: item.zone,  // Displayed in autocomplete
-                                                value: item.zone,  // Selected value
-                                                featureGeoJson: item.featureGeoJson,
-                                            };
-                                        }));
-                                    }
-                                });
-                            },
-                            select: function (event, ui) {
-
-                                var geoJsonData = JSON.parse(ui.item.featureGeoJson);
-                                
-                                // Add the GeoJSON polygon to the map
-                                var layer = L.geoJSON(geoJsonData).addTo(map);
-
-                                map.flyToBounds(layer.getBounds(), {
-                                    padding: [50, 50],  // Adds padding around the bounds
-                                    // maxZoom: 12,        // Sets a maximum zoom level
-                                    animate: true,       // Animates the zoom transition
-                                    duration: 3 // Duration in seconds
-                                });
-                            }
-                        });
-
-                        // Ensure the autocomplete dropdown appears correctly
-                        $(inputBox).on("focus", function () {
-                            setTimeout(() => {
-                                $(".ui-autocomplete").css("position", "absolute");
-                                $(".ui-autocomplete").css("z-index", "9999");
-                            }, 100);
-                        });
-
-                        return container;
-                    }
-                });
-
-                // Add the custom search control to the map
-                map.addControl(new searchControl({ position: 'topright' }));
-
-
-                L.control.layers(baseMaps).addTo(map);
-
-                var bounds = L.latLngBounds();
-
-                // Loop through the data array and process each feature
-                MapData.forEach(function (item) {
-                    // Parse the GeoJSON string
-                    var geoJsonData = JSON.parse(item.featureGeoJson);
-
-                    // Add the GeoJSON polygon to the map
-                    var layer = L.geoJSON(geoJsonData, {
-                        onEachFeature: function (feature, layer) {
-                            layer.on('click', function (e) {
-                                // Customize the label content as needed
-                                var labelContent = `Polygon selected!<br>Zone: ${item.zone || 'N/A'}`;
-
-                                // Show popup at clicked location
-                                L.popup()
-                                    .setLatLng(e.latlng) // Get the clicked location
-                                    .setContent(labelContent)
-                                    .openOn(map);
-                            });
-                        }
-                    }).addTo(map);
-
-                    bounds.extend(layer.getBounds());
-
-                    var center = layer.getBounds().getCenter();
-
-                    var marker = L.marker(center).addTo(map);
-
-                    marker.on('click', function () {
-                        var markerInfo = `Marker clicked!<br>Zone: ${item.zone || 'N/A'}`;
-                        L.popup()
-                            .setLatLng(center) // Popup at the marker location
-                            .setContent(markerInfo)
-                            .openOn(map);
-                    });
-
-                });
-
-                // Fit the map to the accumulated bounds
-                if (bounds.isValid()) {
-                    map.flyToBounds(bounds, {
-                        padding: [50, 50],  // Adds padding around the bounds
-                        // maxZoom: 12,        // Sets a maximum zoom level
-                        animate: true,       // Animates the zoom transition
-                        duration: 3 // Duration in seconds
-                    });
-
-                }
-            });
-
-        }
-        function timeout(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        async function openZoneManagementModal(id) {
-
-            if (map) {
-                map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
-                    animate: true,
-                    duration: 3  // Duration for zoom out animation
-                });
-            }
-            await timeout(3000); // Wait for 3 seconds (adjust as needed)
-
-            var dataObject = {};
-            dataObject.id = id;
-            var existingGeoJson = "";
-            $.ajax({
-                url: ZoneManagementGetByIdUrl,
-                type: "POST",
-                data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    ClearZoneManagementModal();
-                },
-                success: function (response) {
-                    if (response.data) {
-                        if (response.data.id > 0)
-                            $("#h4ZoneManagementTitle").html("Modify Geomerty Data");
-                        else {
-                            $("#h4ZoneManagementTitle").html("Add Geomerty Data");
-                        }
-
-                        $("#hdnId").val(response.data.id);
-                        $("#txtZone").val(response.data.zone);
-                        $("#txtType").val(response.data.type);
-                        $("#txtFolder").val(response.data.folder);
-                        $("#txtExternalReference").val(response.data.externalReference);
-
-
-                        if (response.data.featureGeoJson != null) {
-                            existingGeoJson = JSON.parse(response.data.featureGeoJson)
-                            $('#hdnMapdata').val(ConvertGeoJSONtoWKT(response.data.featureGeoJson));
-                        }
-
-                        // Fetch data from the server and initialize the tree
-                        $.ajax({
-                            url: GetZoneMatrixTree, // API endpoint to fetch the matrix data
-                            type: "POST",
-                            data: dataObject,
-                            success: function (response) {
-                                if (response && response.data) {
-                                    data = response.data;
-                                    // console.log("data : ", data);
-                                    var options = {
-                                        title: "Zone Matrix",
-                                        data: data,
-                                        maxHeight: 300,
-                                        closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
-                                        openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
-                                        multiSelect: true,
-                                        selectChildren: true,
-                                    }
-
-                                    $("#ZoneManagementTreeDropdown").DropDownTree(options);
-                                    
-                                    //initializeTreeView(data);
-                                } else {
-                                    console.error("Failed to fetch tree data.");
-                                }
-                            },
-                            error: function () {
-                                console.error("An error occurred while fetching tree data.");
-                            }
-                        });
-
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-
-                // $('#AddZoneManagementModal').modal('show');
-                $("#AddEditZone").css('display', '');
-                $("#frnZoneManagementCreate").validate({}).resetForm();
-
-                if (map) {
-                    map.remove(); // Destroy the existing map instance if it exists
-                    map = null;    // Set it to null to ensure a clean start
-                }
-
-                // Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
-                map = L.map('map').setView([-20.081670, 57.598266], 12);
-
-                var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19
-                }).addTo(map);
-
-                // Satellite layer (ESRI Satellite)
-                var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
-                });
-
-                // Define base maps for the dropdown
-                var baseMaps = {
-                    "Map": osmLayer,
-                    "Satellite": satelliteLayer
-                };
-
-                 L.control.layers(baseMaps).addTo(map);
-                
-                 // Add drawing control
-                var drawnItems = new L.FeatureGroup();
-                map.addLayer(drawnItems);
-
-                var drawControl = new L.Control.Draw({
-                    edit: {
-                        featureGroup: drawnItems,
-                        remove: true
-                    },
-                    draw: {
-                        polygon: true,
-                        polyline: false,
-                        rectangle: false,
-                        circle: false,
-                        marker: false,
-                        circlemarker: false
-                    }
-                });
-                map.addControl(drawControl);
-
-                if (existingGeoJson) {
-                    var layer = L.geoJSON(existingGeoJson).eachLayer(function (layer) {
-                        drawnItems.addLayer(layer); // Ensure drawnItems exists here
-                    });
-
-                    map.flyToBounds(layer.getBounds(), {
-                        padding: [50, 50],  // Adds padding around the bounds
-                        // maxZoom: 12,        // Sets a maximum zoom level
-                        animate: true,       // Animates the zoom transition
-                        duration: 3 // Duration in seconds
-                    });
-                }
-
-                // Handle the creation of polygons
-                map.on(L.Draw.Event.CREATED, function (event) {
-                    var layer = event.layer;
-                    drawnItems.clearLayers(); // Clear any previously drawn shapes
-                    drawnItems.addLayer(layer);
-
-                    var latLngs = layer.getLatLngs()[0];
-
-                    // Check if the first and last points are the same
-                    if (latLngs[0] !== latLngs[latLngs.length - 1]) {
-                        latLngs.push(latLngs[0]); // Add the first point at the end to close the polygon
-                    }
-
-                    // Convert polygon to WKT format
-                    var coordinates = latLngs.map(function (point) {
-                        return point.lng + " " + point.lat;
-                    }).join(", ");
-                    var wkt = `POLYGON((${coordinates}))`;
-                    $('#hdnMapdata').val(wkt);
-                });
-
-                // Handle edit event
-                map.on(L.Draw.Event.EDITED, function (event) {
-                    var layers = event.layers;
-                    layers.eachLayer(function (layer) {
-
-                        var editedGeoJson = layer.toGeoJSON();
-
-                        // Convert edited GeoJSON to WKT
-                        var latLngs = layer.getLatLngs()[0];
-
-                        // Check if the first and last points are the same
-                        if (latLngs[0] !== latLngs[latLngs.length - 1]) {
-                            latLngs.push(latLngs[0]); // Add the first point at the end to close the polygon
-                        }
-
-                        var coordinates = latLngs.map(function (point) {
-                            return point.lng + " " + point.lat;
-                        }).join(", ");
-
-                        var wkt = `POLYGON((${coordinates}))`;
-
-                        $('#hdnMapdata').val(wkt);
-                    });
-                });
-
-                // $('#AddZoneManagementModal').on('shown.bs.modal', function () {
-                //     Createmap.invalidateSize();
-                // });
-            });
-        }
-
-
-        function ConvertGeoJSONtoWKT(geoJsonString) {
-
-            // Parse the GeoJSON string to a JavaScript object
-            var geoJson = JSON.parse(geoJsonString);
-
-            // Extract the coordinates array
-            var coordinates = geoJson.coordinates[0]; // Assuming single polygon
-
-            // Map the coordinates to "lng lat" strings
-            var wktCoordinates = coordinates.map(function (point) {
-                return point[0] + " " + point[1]; // lng lat
-            });
-
-            // Ensure the polygon is closed by checking the first and last points
-            if (wktCoordinates[0] !== wktCoordinates[wktCoordinates.length - 1]) {
-                wktCoordinates.push(wktCoordinates[0]); // Close the polygon
-            }
-
-            // Join the coordinates with commas and format as WKT
-            var wkt = `POLYGON((${wktCoordinates.join(", ")}))`;
-            return wkt;
-        }
-        function ClearZoneManagementModal() {
-            $('#txtZone').val("");
-            $('#hdnMapdata').val("");
-
-            $("#h4ZoneManagementTitle").html("Add Geomerty Data");
-            $("#hdnId").val("0");
-            $('#txtType').val("");
-            $("#txtFolder").val("");
-            $("#txtExternalReference").val("");
-            $('#tree').jstree("destroy").empty();
-            $("#ZoneManagementTreeDropdown").empty();
-        }
-
-        function CloseZoneManagement() {
-            ClearZoneManagementModal();
-            $("#AddEditZone").css('display', 'none');
-            // $('#AddZoneManagementModal').modal('hide');
-            // initMap();
-            GetAllZoneManagement();
-            initMap();
-        }
-        function SaveZoneManagement() {
-            // let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
-            let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
-            //get tree selected data
-            //var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
-            var treeDropDownData = $("#ZoneManagementTreeDropdown").init.prototype.GetSelected();
-
-            //get tree selected ids
-            var selectedIds = []
-            if (treeDropDownData.length > 0) {
-                selectedIds = treeDropDownData.map(function (datum) {
-                    return parseInt(datum);
-                });
-            }
-          
-            if (valid && $("#hdnMapdata").val() != "") {
-                var dataObject = {};
-                dataObject.Id = $("#hdnId").val();
-                dataObject.Zone = $("#txtZone").val();
-                dataObject.FeatureGeoJson = $('#hdnMapdata').val();
-                dataObject.Type = $('#txtType').val();
-                dataObject.Folder = $("#txtFolder").val();
-                dataObject.ExternalReference = $("#txtExternalReference").val();
-                dataObject.ZoneMatrix = selectedIds;
-
-
-                $.ajax({
-                    url: CreateUpdateZoneManagementUrl,
-                    type: "POST",
-                    data: dataObject,  // Send data if needed
-                    beforeSend: function () {
-
-                    },
-                    success: function (response) {
-                        if (response.data) {
-                            toastr.success(response.errorMessage);
-                            $("#AddEditZone").css('display', 'none');
-                            // $('#AddZoneManagementModal').modal('hide');
-                            // initMap();
-                            GetAllZoneManagement();
-                            initMap();
-                        }
-                        else {
-                            toastr.error(response.errorMessage);
-                        }
-                        // Handle success (e.g., update UI with response data)
-                    },
-                    error: function (error) {
-                        console.log("Error:", error);
-                        toastr.error("Error:" + error);
-                    }
-                }).done(function () {
-
-                });
-            }
-            else {
-                if (!valid) {
-                    toastr.warning("Please fill in required field(s)");
-                }
-                else {
-                    toastr.warning("Please select Map");
-                }
-            }
-
-        }
-
-        function openImportZoneModal() {
-            ClearImportZoneModal();
-            $('#ImportZoneModal').modal('show');
-        }
-
-        function ClearImportZoneModal() {
-            $('#importzonefile').val(null);
-        }
-
-        function DownloadSampleZoneFile() {
-            window.open(DownloadZoneSampleExcelUrl, '_blank');
-        }
-
-        function ImportZoneData()
-        {
-            // Validate the file input field
-            var fileInput = $('#importzonefile')[0];
-            var file = fileInput.files[0];
-
-            if (file) {
-                var formData = new FormData();
-                formData.append('excelFile', file);
-
-                $.ajax({
-                    url: ImportZoneDataUrl,
-                    type: 'POST',
-                    data: formData,
-                    processData: false, // Prevent jQuery from processing the data
-                    contentType: false, // Prevent jQuery from setting the content type
-                    success: function (response) {
-                        if (response.data) {
-                            toastr.success(response.errorMessage);
-                            $('#ImportZoneModal').modal('hide');
-                            GetAllZoneManagement();
-                            initMap();
-                        }
-                        else {
-                            toastr.error(response.errorMessage);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', error);
-                        alert('An error occurred while uploading the file.');
-                    }
-                });
-            } 
-            else {
-                toastr.warning("Please Select File");
-            }
-        }
-
-        function initializeTreeView(treeData) {
-            $('#tree').jstree({
-                "core": {
-                    "animation": 0,
-                    "check_callback": true,
-                    "themes": { "icons": false },
-                    'data': treeData
-                },
-                "types": {
-                    "#": {
-                        "valid_children": ["root"]
-                    },
-                    "root": {
-                        "valid_children": ["default"]
-                    },
-                    "default": {
-                        "valid_children": ["default", "file"]
-                    },
-                    "file": {
-                        "valid_children": []
-                    }
-                },
-                "checkbox": {
-                    "tie_selection": false,
-                    "three_state": false,
-                },
-                "plugins": [
-                    "checkbox"
-                ]
-            });
-        }
-
-
-    </script>
+	<script src="~/plugins/leaflet-1.7.1/leaflet.js"></script>
+	<script src="~/plugins/leaflet-draw-1.0.4/leaflet.draw.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="~/plugins/dropdowntree/dropdowntree.js"></script>
+	<script>
+
+		var GetAllZoneManagementUrl = '@Url.Action("GetAll", "ZoneManagement")';
+		var GetSelectedZoneDataUrl = '@Url.Action("GetSelectedZoneData", "ZoneManagement")';
+		var GetAllZoneUrl = '@Url.Action("GetAllZone", "ZoneManagement")';
+		var CreateUpdateZoneManagementUrl = '@Url.Action("CreateUpdate", "ZoneManagement")';
+		var ZoneManagementGetByIdUrl = '@Url.Action("GetById", "ZoneManagement")';
+		var GetZoneAutocompleteDataUrl = '@Url.Action("GetZoneAutocompleteData", "ZoneManagement")';
+		var ZoneFilePreviewUrl = '@Url.Action("Fileview", "ZoneManagement")';
+		var GetZoneMatrixTree = '@Url.Action("GetTree", "ZoneManagement")';
+		var DownloadZoneSampleExcelUrl = '@Url.Action("DownloadZoneSampleExcel", "ZoneManagement")';
+		var ImportZoneDataUrl = '@Url.Action("ImportExcel", "ZoneManagement")';
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liZoneManagementmenu').addClass('active');
+
+			// BindJsTreeData();
+			initMap();
+			GetAllZoneManagement();
+			// $('#Zonejstree').on('changed.jstree', function (e, data) {
+			//     if (data.action != 'ready') { // Ensures it was triggered by node selection Or deselection
+			//         initMap();
+			//     }
+			// });
+
+			$('#ZoneManagementTreeDropdown').on('change', function () {
+				// Assuming the plugin has a method to get selected values
+				var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
+				console.log('Selected Values: ', selectedValues);
+			});
+
+			$("#ZoneManagementTable").on('click', 'tr', function (event) {
+				var target = $(event.target); // Get the clicked element
+				if (target.is("td")) {
+
+					$("#ZoneManagementTable").find(".selected-row").removeClass("selected-row");
+					var Id = $(this).attr("data-id")
+					$(this).addClass("selected-row")
+
+					if (map) {
+						map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
+							animate: true,
+							duration: 3  // Duration for zoom out animation
+						});
+					}
+					setTimeout(function () {
+						initMap(Id);
+					}, 3000);  // Match this to the duration of the zoom-out animation (1.5s here)
+
+				}
+			});
+		});
+
+		function ShowAllZonebtnClick()
+		{
+			if (map) {
+				map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
+					animate: true,
+					duration: 3  // Duration for zoom out animation
+				});
+			}
+			setTimeout(function () {
+				initMap();
+			}, 3000);  // Match this to the duration of the zoom-out animation (1.5s here)
+		}
+
+		function GetAllZoneManagement() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'zone', title: '@SharedResource.Zone' },
+				{ data: 'type', title: '@SharedResource.Type' },
+				{ data: 'folder', title: '@SharedResource.Folder' },
+				{ data: 'externalReference', title: '@SharedResource.External_Reference' },
+			];
+
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
+
+			initializeDataGrid('ZoneManagementTable', 'openZoneManagementModal', GetAllZoneUrl, columnList, false, false, true, false, true, "PreviewZoneManagementFolder",false,null,langResource);
+
+		}
+		function PreviewZoneManagementFolder(folder) {
+			if (folder != null && folder != "") {
+				window.open(ZoneFilePreviewUrl + "?folder=" + folder, '_blank');
+			}
+		}
+		function BindJsTreeData() {
+			var ZoneData = [];
+			$.ajax({
+				url: GetAllZoneUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ZoneData = [];
+				},
+				success: function (response) {
+					if (response.data) {
+						ZoneData = response.data;
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				const groupedData = ZoneData.reduce((acc, item) => {
+					const Type = item.type;
+					if (!acc[Type]) {
+						acc[Type] = { text: Type, children: [] };
+					}
+					acc[Type].children.push({ text: item.zone, Value: item.id });
+					return acc;
+				}, {});
+
+				const selectArray = Object.values(groupedData);
+
+				if ($.jstree.reference('#Zonejstree')) {
+					$('#Zonejstree').jstree("destroy").empty(); // Destroy and clear DOM content
+				}
+
+				$('#Zonejstree').on('loaded.jstree', function (e, data) {
+					$('#Zonejstree').jstree('select_all'); // Select all nodes once the tree is fully loaded
+				}).jstree({
+					'core': {
+						'data': selectArray
+					},
+					"plugins": ["checkbox"] // Enable the checkbox plugin
+				});
+			});
+		}
+		function GetSelectedZone() {
+			var selectedNodes = $('#Zonejstree').jstree("get_selected", true); // Get selected nodes with full data
+			var values = [];
+
+			selectedNodes.forEach(function (node) {
+				if (node.original.Value !== undefined) { // Check if Value exists
+					values.push(node.original.Value); // Push the Value to the array
+				}
+			});
+			return values.join(",");
+		}
+
+		let map;
+
+		function initMap(selectedZone) {
+			var MapData = [];
+			// var selectedZone = GetSelectedZone();
+
+			var dataObject = {};
+			dataObject.selectedZone = selectedZone == undefined ? "" : selectedZone;
+
+			$.ajax({
+				url: selectedZone == undefined ? GetAllZoneManagementUrl : GetSelectedZoneDataUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					MapData = [];
+
+				},
+				success: function (response) {
+					if (response.data) {
+						MapData = response.data;
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+
+				if (map) {
+					map.remove(); // Destroy the existing map instance if it exists
+					map = null;    // Set it to null to ensure a clean start
+				}
+				map = L.map('map').setView([-20.081670, 57.598266], 10);
+
+				const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					maxZoom: 19,
+					attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+				}).addTo(map);
+
+				// Base layer: OpenStreetMap
+				var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					maxZoom: 19,
+					attribution: '© OpenStreetMap'
+				}).addTo(map);
+
+				// Satellite layer (ESRI Satellite)
+				var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+					attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+				});
+
+				// Define base maps for the dropdown
+				var baseMaps = {
+					"Map": osmLayer,
+					"Satellite": satelliteLayer
+				};
+
+				// Add the custom control to the map
+
+				var searchControl = L.Control.extend({
+					onAdd: function () {
+
+						// Create the main container
+						var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control search-control');
+
+						// Create the input box (hidden by default)
+						var inputBox = L.DomUtil.create('input', 'search-input', container);
+						inputBox.type = 'text';
+						inputBox.placeholder = '@SharedResource.Search_for_a_Zone___';
+						L.DomUtil.addClass(inputBox, 'form-control');
+
+						// Create the search icon
+						var icon = L.DomUtil.create('span', 'search-icon', container);
+						icon.innerHTML = '<i class="fa fa-search"></i>'; // Unicode search icon, can replace with FontAwesome
+
+						// Prevent map interactions when clicking inside the control
+						L.DomEvent.disableClickPropagation(container);
+
+
+						// jQuery UI Autocomplete
+						$(inputBox).autocomplete({
+							source: function (request, response) {
+								// Make an AJAX call to the Nominatim API for location search
+								$.ajax({
+									url: GetZoneAutocompleteDataUrl,
+									data: { term: request.term },
+									success: function (data) {
+										response(data.data.map(function (item) {
+											return {
+												label: item.zone,  // Displayed in autocomplete
+												value: item.zone,  // Selected value
+												featureGeoJson: item.featureGeoJson,
+											};
+										}));
+									}
+								});
+							},
+							select: function (event, ui) {
+
+								var geoJsonData = JSON.parse(ui.item.featureGeoJson);
+
+								// Add the GeoJSON polygon to the map
+								var layer = L.geoJSON(geoJsonData).addTo(map);
+
+								map.flyToBounds(layer.getBounds(), {
+									padding: [50, 50],  // Adds padding around the bounds
+									// maxZoom: 12,        // Sets a maximum zoom level
+									animate: true,       // Animates the zoom transition
+									duration: 3 // Duration in seconds
+								});
+							}
+						});
+
+						// Ensure the autocomplete dropdown appears correctly
+						$(inputBox).on("focus", function () {
+							setTimeout(() => {
+								$(".ui-autocomplete").css("position", "absolute");
+								$(".ui-autocomplete").css("z-index", "9999");
+							}, 100);
+						});
+
+						return container;
+					}
+				});
+
+				// Add the custom search control to the map
+				map.addControl(new searchControl({ position: 'topright' }));
+
+
+				L.control.layers(baseMaps).addTo(map);
+
+				var bounds = L.latLngBounds();
+
+				// Loop through the data array and process each feature
+				MapData.forEach(function (item) {
+					// Parse the GeoJSON string
+					var geoJsonData = JSON.parse(item.featureGeoJson);
+
+					// Add the GeoJSON polygon to the map
+					var layer = L.geoJSON(geoJsonData, {
+						onEachFeature: function (feature, layer) {
+							layer.on('click', function (e) {
+								// Customize the label content as needed
+								var labelContent = `Polygon selected!<br>Zone: ${item.zone || 'N/A'}`;
+
+								// Show popup at clicked location
+								L.popup()
+									.setLatLng(e.latlng) // Get the clicked location
+									.setContent(labelContent)
+									.openOn(map);
+							});
+						}
+					}).addTo(map);
+
+					bounds.extend(layer.getBounds());
+
+					var center = layer.getBounds().getCenter();
+
+					var marker = L.marker(center).addTo(map);
+
+					marker.on('click', function () {
+						var markerInfo = `Marker clicked!<br>Zone: ${item.zone || 'N/A'}`;
+						L.popup()
+							.setLatLng(center) // Popup at the marker location
+							.setContent(markerInfo)
+							.openOn(map);
+					});
+
+				});
+
+				// Fit the map to the accumulated bounds
+				if (bounds.isValid()) {
+					map.flyToBounds(bounds, {
+						padding: [50, 50],  // Adds padding around the bounds
+						// maxZoom: 12,        // Sets a maximum zoom level
+						animate: true,       // Animates the zoom transition
+						duration: 3 // Duration in seconds
+					});
+
+				}
+			});
+
+		}
+		function timeout(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+		async function openZoneManagementModal(id) {
+
+			if (map) {
+				map.flyTo(map.getCenter(), 11, {  // Adjust zoom level as needed
+					animate: true,
+					duration: 3  // Duration for zoom out animation
+				});
+			}
+			await timeout(3000); // Wait for 3 seconds (adjust as needed)
+
+			var dataObject = {};
+			dataObject.id = id;
+			var existingGeoJson = "";
+			$.ajax({
+				url: ZoneManagementGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearZoneManagementModal();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id > 0)
+							$("#h4ZoneManagementTitle").html("@SharedResource.Modify  @SharedResource.Geomerty_Data");
+						else {
+							$("#h4ZoneManagementTitle").html("@SharedResource.Add  @SharedResource.Geomerty_Data");
+						}
+
+						$("#hdnId").val(response.data.id);
+						$("#txtZone").val(response.data.zone);
+						$("#txtType").val(response.data.type);
+						$("#txtFolder").val(response.data.folder);
+						$("#txtExternalReference").val(response.data.externalReference);
+
+
+						if (response.data.featureGeoJson != null) {
+							existingGeoJson = JSON.parse(response.data.featureGeoJson)
+							$('#hdnMapdata').val(ConvertGeoJSONtoWKT(response.data.featureGeoJson));
+						}
+
+						// Fetch data from the server and initialize the tree
+						$.ajax({
+							url: GetZoneMatrixTree, // API endpoint to fetch the matrix data
+							type: "POST",
+							data: dataObject,
+							success: function (response) {
+								if (response && response.data) {
+									data = response.data;
+									// console.log("data : ", data);
+									var options = {
+										title: "Zone Matrix",
+										data: data,
+										maxHeight: 300,
+										closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+										openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+										multiSelect: true,
+										selectChildren: true,
+									}
+
+									$("#ZoneManagementTreeDropdown").DropDownTree(options);
+
+									//initializeTreeView(data);
+								} else {
+									console.error("@SharedResource.Failed_to_fetch_tree_data_");
+								}
+							},
+							error: function () {
+								console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
+							}
+						});
+
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+
+				// $('#AddZoneManagementModal').modal('show');
+				$("#AddEditZone").css('display', '');
+				$("#frnZoneManagementCreate").validate({}).resetForm();
+
+				if (map) {
+					map.remove(); // Destroy the existing map instance if it exists
+					map = null;    // Set it to null to ensure a clean start
+				}
+
+				// Createmap = L.map('Createmap').setView([51.505, -0.09], 13);
+				map = L.map('map').setView([-20.081670, 57.598266], 12);
+
+				var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					maxZoom: 19
+				}).addTo(map);
+
+				// Satellite layer (ESRI Satellite)
+				var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+					attribution: '© Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+				});
+
+				// Define base maps for the dropdown
+				var baseMaps = {
+					"Map": osmLayer,
+					"Satellite": satelliteLayer
+				};
+
+				 L.control.layers(baseMaps).addTo(map);
+
+				 // Add drawing control
+				var drawnItems = new L.FeatureGroup();
+				map.addLayer(drawnItems);
+
+				var drawControl = new L.Control.Draw({
+					edit: {
+						featureGroup: drawnItems,
+						remove: true
+					},
+					draw: {
+						polygon: true,
+						polyline: false,
+						rectangle: false,
+						circle: false,
+						marker: false,
+						circlemarker: false
+					}
+				});
+				map.addControl(drawControl);
+
+				if (existingGeoJson) {
+					var layer = L.geoJSON(existingGeoJson).eachLayer(function (layer) {
+						drawnItems.addLayer(layer); // Ensure drawnItems exists here
+					});
+
+					map.flyToBounds(layer.getBounds(), {
+						padding: [50, 50],  // Adds padding around the bounds
+						// maxZoom: 12,        // Sets a maximum zoom level
+						animate: true,       // Animates the zoom transition
+						duration: 3 // Duration in seconds
+					});
+				}
+
+				// Handle the creation of polygons
+				map.on(L.Draw.Event.CREATED, function (event) {
+					var layer = event.layer;
+					drawnItems.clearLayers(); // Clear any previously drawn shapes
+					drawnItems.addLayer(layer);
+
+					var latLngs = layer.getLatLngs()[0];
+
+					// Check if the first and last points are the same
+					if (latLngs[0] !== latLngs[latLngs.length - 1]) {
+						latLngs.push(latLngs[0]); // Add the first point at the end to close the polygon
+					}
+
+					// Convert polygon to WKT format
+					var coordinates = latLngs.map(function (point) {
+						return point.lng + " " + point.lat;
+					}).join(", ");
+					var wkt = `POLYGON((${coordinates}))`;
+					$('#hdnMapdata').val(wkt);
+				});
+
+				// Handle edit event
+				map.on(L.Draw.Event.EDITED, function (event) {
+					var layers = event.layers;
+					layers.eachLayer(function (layer) {
+
+						var editedGeoJson = layer.toGeoJSON();
+
+						// Convert edited GeoJSON to WKT
+						var latLngs = layer.getLatLngs()[0];
+
+						// Check if the first and last points are the same
+						if (latLngs[0] !== latLngs[latLngs.length - 1]) {
+							latLngs.push(latLngs[0]); // Add the first point at the end to close the polygon
+						}
+
+						var coordinates = latLngs.map(function (point) {
+							return point.lng + " " + point.lat;
+						}).join(", ");
+
+						var wkt = `POLYGON((${coordinates}))`;
+
+						$('#hdnMapdata').val(wkt);
+					});
+				});
+
+				// $('#AddZoneManagementModal').on('shown.bs.modal', function () {
+				//     Createmap.invalidateSize();
+				// });
+			});
+		}
+
+
+		function ConvertGeoJSONtoWKT(geoJsonString) {
+
+			// Parse the GeoJSON string to a JavaScript object
+			var geoJson = JSON.parse(geoJsonString);
+
+			// Extract the coordinates array
+			var coordinates = geoJson.coordinates[0]; // Assuming single polygon
+
+			// Map the coordinates to "lng lat" strings
+			var wktCoordinates = coordinates.map(function (point) {
+				return point[0] + " " + point[1]; // lng lat
+			});
+
+			// Ensure the polygon is closed by checking the first and last points
+			if (wktCoordinates[0] !== wktCoordinates[wktCoordinates.length - 1]) {
+				wktCoordinates.push(wktCoordinates[0]); // Close the polygon
+			}
+
+			// Join the coordinates with commas and format as WKT
+			var wkt = `POLYGON((${wktCoordinates.join(", ")}))`;
+			return wkt;
+		}
+		function ClearZoneManagementModal() {
+			$('#txtZone').val("");
+			$('#hdnMapdata').val("");
+
+			$("#h4ZoneManagementTitle").html("@SharedResource.Add  @SharedResource.Geomerty_Data");
+			$("#hdnId").val("0");
+			$('#txtType').val("");
+			$("#txtFolder").val("");
+			$("#txtExternalReference").val("");
+			$('#tree').jstree("destroy").empty();
+			$("#ZoneManagementTreeDropdown").empty();
+		}
+
+		function CloseZoneManagement() {
+			ClearZoneManagementModal();
+			$("#AddEditZone").css('display', 'none');
+			// $('#AddZoneManagementModal').modal('hide');
+			// initMap();
+			GetAllZoneManagement();
+			initMap();
+		}
+		function SaveZoneManagement() {
+			// let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
+			let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
+			//get tree selected data
+			//var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+			var treeDropDownData = $("#ZoneManagementTreeDropdown").init.prototype.GetSelected();
+
+			//get tree selected ids
+			var selectedIds = []
+			if (treeDropDownData.length > 0) {
+				selectedIds = treeDropDownData.map(function (datum) {
+					return parseInt(datum);
+				});
+			}
+
+			if (valid && $("#hdnMapdata").val() != "") {
+				var dataObject = {};
+				dataObject.Id = $("#hdnId").val();
+				dataObject.Zone = $("#txtZone").val();
+				dataObject.FeatureGeoJson = $('#hdnMapdata').val();
+				dataObject.Type = $('#txtType').val();
+				dataObject.Folder = $("#txtFolder").val();
+				dataObject.ExternalReference = $("#txtExternalReference").val();
+				dataObject.ZoneMatrix = selectedIds;
+
+
+				$.ajax({
+					url: CreateUpdateZoneManagementUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$("#AddEditZone").css('display', 'none');
+							// $('#AddZoneManagementModal').modal('hide');
+							// initMap();
+							GetAllZoneManagement();
+							initMap();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				if (!valid) {
+					toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+				}
+				else {
+					toastr.warning("@SharedResource.Please_select_Map");
+				}
+			}
+
+		}
+
+		function openImportZoneModal() {
+			ClearImportZoneModal();
+			$('#ImportZoneModal').modal('show');
+		}
+
+		function ClearImportZoneModal() {
+			$('#importzonefile').val(null);
+		}
+
+		function DownloadSampleZoneFile() {
+			window.open(DownloadZoneSampleExcelUrl, '_blank');
+		}
+
+		function ImportZoneData()
+		{
+			// Validate the file input field
+			var fileInput = $('#importzonefile')[0];
+			var file = fileInput.files[0];
+
+			if (file) {
+				var formData = new FormData();
+				formData.append('excelFile', file);
+
+				$.ajax({
+					url: ImportZoneDataUrl,
+					type: 'POST',
+					data: formData,
+					processData: false, // Prevent jQuery from processing the data
+					contentType: false, // Prevent jQuery from setting the content type
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#ImportZoneModal').modal('hide');
+							GetAllZoneManagement();
+							initMap();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+					},
+					error: function (xhr, status, error) {
+						console.error('Error:', error);
+						alert('@SharedResource.An_error_occurred_while_uploading_the_file_');
+					}
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_Select_File");
+			}
+		}
+
+		function initializeTreeView(treeData) {
+			$('#tree').jstree({
+				"core": {
+					"animation": 0,
+					"check_callback": true,
+					"themes": { "icons": false },
+					'data': treeData
+				},
+				"types": {
+					"#": {
+						"valid_children": ["root"]
+					},
+					"root": {
+						"valid_children": ["default"]
+					},
+					"default": {
+						"valid_children": ["default", "file"]
+					},
+					"file": {
+						"valid_children": []
+					}
+				},
+				"checkbox": {
+					"tie_selection": false,
+					"three_state": false,
+				},
+				"plugins": [
+					"checkbox"
+				]
+			});
+		}
+
+
+	</script>
 
 }
