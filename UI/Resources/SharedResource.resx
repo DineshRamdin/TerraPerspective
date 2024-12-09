@@ -161,6 +161,10 @@
     <value>All System Icon</value>
     <comment>All System Icon</comment>
   </data>
+  <data name="Alternate Text" xml:space="preserve">
+    <value>Alternate Text</value>
+    <comment>Alternate Text</comment>
+  </data>
   <data name="An error occurred while fetching tree data." xml:space="preserve">
     <value>An error occurred while fetching tree data.</value>
     <comment>An error occurred while fetching tree data.</comment>
@@ -168,6 +172,10 @@
   <data name="An error occurred while uploading the file." xml:space="preserve">
     <value>An error occurred while uploading the file.</value>
     <comment>An error occurred while uploading the file.</comment>
+  </data>
+  <data name="An error occurred. Please contact administrator." xml:space="preserve">
+    <value>An error occurred. Please contact administrator.</value>
+    <comment>An error occurred. Please contact administrator.</comment>
   </data>
   <data name="Carousel" xml:space="preserve">
     <value>Carousel</value>
@@ -209,9 +217,21 @@
     <value>Comment</value>
     <comment>Comment</comment>
   </data>
+  <data name="Copy Matrix Tree" xml:space="preserve">
+    <value>Copy Matrix Tree</value>
+    <comment>Copy Matrix Tree</comment>
+  </data>
+  <data name="Create Matrix Tree" xml:space="preserve">
+    <value>Create Matrix Tree</value>
+    <comment>Create Matrix Tree</comment>
+  </data>
   <data name="CSV" xml:space="preserve">
     <value>CSV</value>
     <comment>CSV</comment>
+  </data>
+  <data name="Cut Matrix Tree" xml:space="preserve">
+    <value>Cut Matrix Tree</value>
+    <comment>Cut Matrix Tree</comment>
   </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
@@ -228,6 +248,10 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
     <comment>Delete</comment>
+  </data>
+  <data name="Delete Matrix Tree" xml:space="preserve">
+    <value>Delete Matrix Tree</value>
+    <comment>Delete Matrix Tree</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
@@ -373,6 +397,10 @@
     <value>Matrix</value>
     <comment>Matrix</comment>
   </data>
+  <data name="Matrix Tree Manual" xml:space="preserve">
+    <value>Matrix Tree Manual</value>
+    <comment>Matrix Tree Manual</comment>
+  </data>
   <data name="Menu" xml:space="preserve">
     <value>Menu</value>
     <comment>Menu</comment>
@@ -428,6 +456,10 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
     <comment>Password</comment>
+  </data>
+  <data name="Paste Matrix Tree" xml:space="preserve">
+    <value>Paste Matrix Tree</value>
+    <comment>Paste Matrix Tree</comment>
   </data>
   <data name="PDF" xml:space="preserve">
     <value>PDF</value>
@@ -489,6 +521,10 @@
     <value>Remarks</value>
     <comment>Remarks</comment>
   </data>
+  <data name="Rename Matrix Tree" xml:space="preserve">
+    <value>Rename Matrix Tree</value>
+    <comment>Rename Matrix Tree</comment>
+  </data>
   <data name="Report" xml:space="preserve">
     <value>Report</value>
     <comment>Report</comment>
@@ -532,6 +568,10 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
     <comment>Save</comment>
+  </data>
+  <data name="Save Successful" xml:space="preserve">
+    <value>Save Successful</value>
+    <comment>Save Successful</comment>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>

@@ -160,6 +160,24 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alternate Text.
+        /// </summary>
+        public static string Alternate_Text {
+            get {
+                return ResourceManager.GetString("Alternate Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred. Please contact administrator..
+        /// </summary>
+        public static string An_error_occurred__Please_contact_administrator_ {
+            get {
+                return ResourceManager.GetString("An error occurred. Please contact administrator.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred while fetching tree data..
         /// </summary>
         public static string An_error_occurred_while_fetching_tree_data_ {
@@ -268,11 +286,38 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Matrix Tree.
+        /// </summary>
+        public static string Copy_Matrix_Tree {
+            get {
+                return ResourceManager.GetString("Copy Matrix Tree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Matrix Tree.
+        /// </summary>
+        public static string Create_Matrix_Tree {
+            get {
+                return ResourceManager.GetString("Create Matrix Tree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CSV.
         /// </summary>
         public static string CSV {
             get {
                 return ResourceManager.GetString("CSV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cut Matrix Tree.
+        /// </summary>
+        public static string Cut_Matrix_Tree {
+            get {
+                return ResourceManager.GetString("Cut Matrix Tree", resourceCulture);
             }
         }
         
@@ -309,6 +354,15 @@ namespace UI.Resources {
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Matrix Tree.
+        /// </summary>
+        public static string Delete_Matrix_Tree {
+            get {
+                return ResourceManager.GetString("Delete Matrix Tree", resourceCulture);
             }
         }
         
@@ -637,6 +691,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Matrix Tree Manual.
+        /// </summary>
+        public static string Matrix_Tree_Manual {
+            get {
+                return ResourceManager.GetString("Matrix Tree Manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Menu.
         /// </summary>
         public static string Menu {
@@ -759,6 +822,15 @@ namespace UI.Resources {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste Matrix Tree.
+        /// </summary>
+        public static string Paste_Matrix_Tree {
+            get {
+                return ResourceManager.GetString("Paste Matrix Tree", resourceCulture);
             }
         }
         
@@ -898,6 +970,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename Matrix Tree.
+        /// </summary>
+        public static string Rename_Matrix_Tree {
+            get {
+                return ResourceManager.GetString("Rename Matrix Tree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Report.
         /// </summary>
         public static string Report {
@@ -993,6 +1074,15 @@ namespace UI.Resources {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Successful.
+        /// </summary>
+        public static string Save_Successful {
+            get {
+                return ResourceManager.GetString("Save Successful", resourceCulture);
             }
         }
         

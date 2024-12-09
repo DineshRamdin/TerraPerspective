@@ -150,11 +150,17 @@
   <data name="All System Icon" xml:space="preserve">
     <value>Todos os ícones do sistema</value>
   </data>
+  <data name="Alternate Text" xml:space="preserve">
+    <value>Texto alternativo</value>
+  </data>
   <data name="An error occurred while fetching tree data." xml:space="preserve">
     <value>Ocorreu um erro ao buscar dados da árvore.</value>
   </data>
   <data name="An error occurred while uploading the file." xml:space="preserve">
     <value>Ocorreu um erro ao carregar o arquivo.</value>
+  </data>
+  <data name="An error occurred. Please contact administrator." xml:space="preserve">
+    <value>Ocorreu um erro. Entre em contato com o administrador.</value>
   </data>
   <data name="Carousel" xml:space="preserve">
     <value>Carrossel</value>
@@ -186,8 +192,17 @@
   <data name="Comment" xml:space="preserve">
     <value>Comentário</value>
   </data>
+  <data name="Copy Matrix Tree" xml:space="preserve">
+    <value>Copiar árvore matricial</value>
+  </data>
+  <data name="Create Matrix Tree" xml:space="preserve">
+    <value>Criar árvore matricial</value>
+  </data>
   <data name="CSV" xml:space="preserve">
     <value>CSV</value>
+  </data>
+  <data name="Cut Matrix Tree" xml:space="preserve">
+    <value>Cortar Árvore Matriz</value>
   </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Painel</value>
@@ -200,6 +215,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Excluir</value>
+  </data>
+  <data name="Delete Matrix Tree" xml:space="preserve">
+    <value>Excluir árvore matricial</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Descrição</value>
@@ -309,6 +327,9 @@
   <data name="Matrix" xml:space="preserve">
     <value>Matriz</value>
   </data>
+  <data name="Matrix Tree Manual" xml:space="preserve">
+    <value>Manual da árvore matricial</value>
+  </data>
   <data name="Menu" xml:space="preserve">
     <value>Menu</value>
   </data>
@@ -350,6 +371,9 @@
   </data>
   <data name="Password" xml:space="preserve">
     <value>Senha</value>
+  </data>
+  <data name="Paste Matrix Tree" xml:space="preserve">
+    <value>Colar árvore matricial</value>
   </data>
   <data name="PDF" xml:space="preserve">
     <value>PDF</value>
@@ -396,6 +420,9 @@
   <data name="Remarks" xml:space="preserve">
     <value>Observações</value>
   </data>
+  <data name="Rename Matrix Tree" xml:space="preserve">
+    <value>Renomear árvore matricial</value>
+  </data>
   <data name="Report" xml:space="preserve">
     <value>Relatório</value>
   </data>
@@ -428,6 +455,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Salvar</value>
+  </data>
+  <data name="Save Successful" xml:space="preserve">
+    <value>Salvar com sucesso</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Procurar</value>
