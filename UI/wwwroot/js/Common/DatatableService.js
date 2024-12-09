@@ -592,6 +592,8 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
 
     if ($('#' + tableID).length > 0) { //check if table exists
 
+        var dataRowCount = $('#' + tableID + ' tbody tr').length;
+       
         var errorMessageColumnIndex = -1;
         // if (tableID == "FileViewTable") {
         $('#' + tableID + ' th').each(function (index) {
@@ -931,12 +933,13 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
             $('.dataTables_info').css('display', 'none');
         }
 
-        if (tableID === "FileViewTable") {
-            $('#' + tableID + '_previous').css('display', '');
-            $('#' + tableID + '_next').css('display', '');
-            $('.dataTables_paginate').css('display', '');
-            $('.dataTables_filter').css('display', '');
-            $('.dataTables_info').css('display', '');
+        if (dataRowCount === 0) {
+            $('.clsDownload').addClass('d-none');
+            $('#' + tableID + '_previous').css('display', 'none');
+            $('#' + tableID + '_next').css('display', 'none');
+            $('.dataTables_paginate').css('display', 'none');
+            $('.dataTables_filter').css('display', 'none');
+            $('.dataTables_info').css('display', 'none');
         }
 
     }
