@@ -678,7 +678,7 @@ namespace BL.Services.Common
 				context.SYS_Modules.Add(new SYS_Modules()
 				{
 					Name = "Matrix",
-					Url = "Matrix/Matrix",
+					Url = "Matrix/Index",
 					Order = 24,
 					Icon = "fa fa-folder-tree",
 					CreatedBy = Guid.Parse(user.Id),

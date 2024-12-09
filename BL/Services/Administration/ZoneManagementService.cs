@@ -75,6 +75,7 @@ namespace BL.Services.Administration
 														  zmn.Type,
 														  zmn.Folder,
 														  zmn.ExternalReference,
+                                                          //zmn.GeomColumn
 													  })
 								.Union(
 									context.SYS_ZoneManagement
@@ -85,7 +86,8 @@ namespace BL.Services.Administration
 											a.Zone,
 											a.Type,
 											a.Folder,
-											a.ExternalReference
+											a.ExternalReference,
+                                            //a.GeomColumn
 										})
 								)
 								.AsEnumerable() // Move to client-side processing
@@ -97,6 +99,7 @@ namespace BL.Services.Administration
 									Folder = x.Folder,
 									ExternalReference = x.ExternalReference,
 									FeatureGeoJson = new GeoJsonWriter().Write(context.SYS_ZoneManagement.Where(a=>a.Id==x.Id).Select(a=>a.GeomColumn)) // Convert geometry to GeoJSON here
+									//FeatureGeoJson = new GeoJsonWriter().Write(x.GeomColumn) // Convert geometry to GeoJSON here
 								})
 								.ToList();
 
@@ -553,11 +556,12 @@ namespace BL.Services.Administration
             return dt;
         }
 
-        public BaseResponseDTO<List<CRUDMatrix>> GetTreeZone(long Id)
+        public BaseResponseDTO<List<OutputNode>> GetTreeDropDownZone(long Id)
         {
-            BaseResponseDTO<List<CRUDMatrix>> BaseDto = new BaseResponseDTO<List<CRUDMatrix>>();
+            BaseResponseDTO<List<OutputNode>> BaseDto = new BaseResponseDTO<List<OutputNode>>();
             List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
             List<CRUDMatrix> ml = new List<CRUDMatrix>();
+            List<OutputNode> outputNodes = new List<OutputNode>();
             PerspectiveContext context = new PerspectiveContext();
             try
             {
@@ -590,12 +594,34 @@ namespace BL.Services.Administration
                 {
                     ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
                 }
-                BaseDto.Data = ml;
+				var nodeMap = ml.ToDictionary(node => node.id, node => new OutputNode
+				{
+					Title = node.text,
+					Checked = node.state.Checked,
+					Href = $"#{node.id}",
+					DataAttrs = new List<DataAttr>
+					{
+						new DataAttr { Title = "value", Data = node.id }
+					}
+				});
+
+				foreach (var node in ml)
+				{
+					if (node.parent != "#")
+					{
+						nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+					}
+				}
+
+				outputNodes = nodeMap.Values
+					.Where(node => ml.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
+					.ToList();
+				BaseDto.Data = outputNodes;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
             }
             catch (Exception ex)
             {
-                BaseDto.Data = ml;
+                BaseDto.Data = outputNodes;
                 BaseDto.ErrorMessage = "An Error Occured";
                 BaseDto.QryResult = new QueryResult().FAILED;
             }

@@ -5,6 +5,7 @@
 <link href="~/plugins/leaflet-1.7.1/leaflet.css" rel="stylesheet" />
 <link href="~/plugins/leaflet-draw-1.0.4/leaflet.draw.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<link href="~/plugins/dropdowntree/dropdowntree.css" rel="stylesheet" />
 <style>
 	#map {
 		width: 100%;
@@ -76,6 +77,23 @@
 		.search-control:hover .search-icon {
 			display: none; /* Hide the icon when expanded */
 		}
+
+	/* Ensure checkboxes inside the dropdown are visible */
+	.checkbox {
+		margin-right: 10px;
+		display: inline-block;
+	}
+
+	/* Style for the dropdown items */
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		padding: 5px;
+	}
+
+		.dropdown-item label {
+			cursor: pointer;
+		}
 </style>
 
 <!-- Content Header (Page header) -->
@@ -87,7 +105,7 @@
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Name</a></li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
 					<li class="breadcrumb-item active">@SharedResource.Zone_Management</li>
 				</ol>
 			</div><!-- /.col -->
@@ -147,6 +165,7 @@
 	<script src="~/plugins/leaflet-1.7.1/leaflet.js"></script>
 	<script src="~/plugins/leaflet-draw-1.0.4/leaflet.draw.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="~/plugins/dropdowntree/dropdowntree.js"></script>
 	<script>
 
 		var GetAllZoneManagementUrl = '@Url.Action("GetAll", "ZoneManagement")';
@@ -172,6 +191,12 @@
 			//         initMap();
 			//     }
 			// });
+
+			$('#ZoneManagementTreeDropdown').on('change', function () {
+				// Assuming the plugin has a method to get selected values
+				var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
+				console.log('Selected Values: ', selectedValues);
+			});
 
 			$("#ZoneManagementTable").on('click', 'tr', function (event) {
 				var target = $(event.target); // Get the clicked element
@@ -543,7 +568,20 @@
 							success: function (response) {
 								if (response && response.data) {
 									data = response.data;
-									initializeTreeView(data);
+									// console.log("data : ", data);
+									var options = {
+										title: "Zone Matrix",
+										data: data,
+										maxHeight: 300,
+										closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+										openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+										multiSelect: true,
+										selectChildren: true,
+									}
+
+									$("#ZoneManagementTreeDropdown").DropDownTree(options);
+
+									//initializeTreeView(data);
 								} else {
 									console.error("@SharedResource.Failed_to_fetch_tree_data_");
 								}
@@ -712,7 +750,7 @@
 			$("#txtFolder").val("");
 			$("#txtExternalReference").val("");
 			$('#tree').jstree("destroy").empty();
-
+			$("#ZoneManagementTreeDropdown").empty();
 		}
 
 		function CloseZoneManagement() {
@@ -727,12 +765,14 @@
 			// let valid = formValidation(["txtDeviceName", "txtHeader", "txtDuration"]);
 			let valid = formValidation(["txtType", "txtZone", "txtFolder", "txtExternalReference"]);
 			//get tree selected data
-			var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+			//var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+			var treeDropDownData = $("#ZoneManagementTreeDropdown").init.prototype.GetSelected();
+
 			//get tree selected ids
 			var selectedIds = []
-			if (treeData.length > 0) {
-				selectedIds = treeData.map(function (datum) {
-					return parseInt(datum['id']);
+			if (treeDropDownData.length > 0) {
+				selectedIds = treeDropDownData.map(function (datum) {
+					return parseInt(datum);
 				});
 			}
 

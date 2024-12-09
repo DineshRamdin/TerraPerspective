@@ -40,7 +40,84 @@ namespace BL.Models.Administration
         public state state { get; set; } = new state();
     }
 
-    public class state
+	public class Node
+	{
+		public string Id { get; set; }
+		public string Text { get; set; }
+		public string Parent { get; set; }
+		public State State { get; set; }
+	}
+
+	public class State
+	{
+		public bool Checked { get; set; }
+		public bool Opened { get; set; }
+	}
+
+	public class OutputNode
+	{
+		public string Title { get; set; }
+		public bool Checked { get; set; }
+		public string Href { get; set; }
+		public List<OutputNode> Data { get; set; } = new List<OutputNode>();
+		public List<DataAttr> DataAttrs { get; set; } = new List<DataAttr>();
+	}
+
+	public class DataAttr
+	{
+		public string Title { get; set; }
+		public string Data { get; set; }
+	}
+
+
+	public class DropdownNodeNew
+    {
+        //public string Value { get; set; }
+        public string Title { get; set; }
+        public bool Checked { get; set; }
+        public string Href { get; set; }
+        public List<DropdownNodeNew> Data { get; set; } = new List<DropdownNodeNew>();
+        public List<DataAttr> DataAttrs { get; set; } = new List<DataAttr>();
+    }
+
+    public class ChildNodeNew
+    {
+        public string Value { get; set; }
+        public string Text { get; set; }
+        public bool Checked { get; set; }
+        public List<DataAttr> DataAttrs { get; set; } = new List<DataAttr>();
+        public List<ChildNode> Children { get; set; } = new List<ChildNode>();
+    }
+
+    //public class DataAttr
+    //{
+    //    public string Title { get; set; }
+    //    public string Data { get; set; }
+    //}
+
+
+    public class DropdownNode
+    {
+        public string Value { get; set; } // Parent node ID
+        public string Text { get; set; } // Parent node text
+        public bool Checked { get; set; }
+        public List<ChildNode> Children { get; set; } // Child nodes
+    }
+
+    public class ChildNode
+    {
+        public string Value { get; set; } // Child node ID
+        public string Text { get; set; } // Child node text
+        public bool Checked { get; set; }
+    }
+
+    public class ChildToChildNode
+	{
+		public string Id { get; set; } // Child node ID
+		public string Text { get; set; } // Child node text
+	}
+
+	public class state
     {
         public bool Checked { get; set; } = false;
         public bool Opened { get; set; } = false;

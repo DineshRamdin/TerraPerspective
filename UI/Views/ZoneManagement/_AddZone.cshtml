@@ -1,5 +1,4 @@
 ﻿@using UI.Resources
-
 <form id="frnZoneManagementCreate">
 	<input type="hidden" id="hdnId" value="" />
 	<div class="row">
@@ -23,8 +22,8 @@
 			<input type="hidden" id="hdnMapdata" required />
 		</div>
 		<div class="col-12 form-group">
-			<label for="tree" class="mb-2 label-required">@SharedResource.Zone_Matrix </label>
-			<div id="tree"></div>
+			<label for="tree" class="mb-2 label-required">@SharedResource.Zone_Matrix</label>
+			<div id="ZoneManagementTreeDropdown" class="dropdown dropdown-tree"></div>
 		</div>
 		<div class="col-12 mb-3">
 			<button type="button" class="btn btn-primary" onclick="SaveZoneManagement();">@SharedResource.Save</button>

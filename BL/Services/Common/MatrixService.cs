@@ -51,15 +51,21 @@ namespace BL.Services.Common
 										   }).ToList();
 				List<MatrixListDTO> ML = new List<MatrixListDTO>();
 				ML.AddRange(MLL);
+				List<DropdownNode> dropdownNodelst = new List<DropdownNode>();
 				foreach (MatrixListDTO m in MLL)
 				{
+     //               DropdownNode dropdownNode = new DropdownNode(); 
+					//dropdownNode.Id = m.GMID;
+     //               dropdownNode.Text = m.GMDescription;
+     //               dropdownNodelst.Add(dropdownNode);
 					ML.AddRange(GetMatrixChild(m.GMID));
+					//dropdownNodelst = GetMatrixChildDropDown(m.GMID, dropdownNodelst);
 				}
 				dt.ParentIDS = MLL.Select(y => y.GMID).ToList();
 				dt.UID = UsrId;
 				dt.AUID = AID;
 				dt.IDS = ML.Select(y => y.GMID).ToList();
-
+                //dt.dropdownNodelst = dropdownNodelst;
 			}
 			catch (Exception ex)
 			{
@@ -100,7 +106,51 @@ namespace BL.Services.Common
 			return MLL;
 		}
 
-        public BaseResponseDTO<List<CRUDMatrix>> GetTree()
+		//public static List<DropdownNode> GetMatrixChildDropDown(long GMID,List<DropdownNode> dropdownNode)
+		//{
+		//	List<MatrixListDTO> ml = new List<MatrixListDTO>();
+		//	List<MatrixListDTO> MLL = new List<MatrixListDTO>();
+  //          List<ChildNode> childNodes = new List<ChildNode>();
+		//	PerspectiveContext context = new PerspectiveContext();
+		//	try
+		//	{
+		//		ml = (from a in context.SYS_GroupMatrix
+		//			  where a.ParentGMID == GMID && a.DeleteStatus == false
+		//			  select new MatrixListDTO()
+		//			  {
+		//				  GMID = a.GMID,
+		//				  GMDescription = a.GMDescription
+		//			  }).ToList();
+		//		if (ml.Count > 0)
+		//		{
+		//			MLL.AddRange(ml);
+  //                  foreach (var item in dropdownNode)
+  //                  {
+  //                      if (item.Id == GMID)
+  //                      {
+		//					foreach (MatrixListDTO m in ml)
+		//					{
+		//						ChildNode child = new ChildNode();
+		//						child.Id = m.GMID;
+		//						child.Text = m.GMDescription;
+		//						childNodes.Add(child);
+		//						MLL.AddRange(GetMatrixChild(m.GMID));
+		//					}
+		//					item.Children = childNodes;
+		//				}
+  //                  }
+					
+		//		}
+
+		//	}
+		//	catch (Exception ex)
+		//	{
+
+		//	}
+		//	return dropdownNode;
+		//}
+
+		public BaseResponseDTO<List<CRUDMatrix>> GetTree()
         {
             BaseResponseDTO<List<CRUDMatrix>> BaseDto = new BaseResponseDTO<List<CRUDMatrix>>();
             List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
@@ -127,7 +177,8 @@ namespace BL.Services.Common
                           parent = a.ParentGMID.ToString(),
                       }).ToList();
                 ml.AddRange(mlRoot);
-                BaseDto.Data = ml;
+                
+				BaseDto.Data = ml;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
             }
             catch (Exception ex)
@@ -139,7 +190,70 @@ namespace BL.Services.Common
             return BaseDto;
         }
 
-        public UserMatrixDTO sGetMatrixUserByUserIDParam(string Id)
+		public BaseResponseDTO<List<OutputNode>> GetTreeDropdown()
+		{
+			BaseResponseDTO<List<OutputNode>> BaseDto = new BaseResponseDTO<List<OutputNode>>();
+			List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
+			List<CRUDMatrix> ml = new List<CRUDMatrix>();
+			List<OutputNode> outputNodes = new List<OutputNode>();
+			PerspectiveContext context = new PerspectiveContext();
+			try
+			{
+				UserMatrixDTO UM = sGetMatrixUserByUserID();
+
+				mlRoot = (from a in context.SYS_GroupMatrix
+						  where UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+						  select new CRUDMatrix()
+						  {
+							  id = a.GMID.ToString(),
+							  text = a.GMDescription,
+							  parent = "#",
+						  }).ToList();
+				ml = (from a in context.SYS_GroupMatrix
+					  where UM.IDS.Contains(a.GMID) && !UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+					  select new CRUDMatrix()
+					  {
+						  id = a.GMID.ToString(),
+						  text = a.GMDescription,
+						  parent = a.ParentGMID.ToString(),
+					  }).ToList();
+				ml.AddRange(mlRoot);
+				var nodeMap = ml.ToDictionary(node => node.id, node => new OutputNode
+				{
+					Title = node.text,
+					Checked = node.state.Checked,
+					Href = $"#{node.id}",
+					DataAttrs = new List<DataAttr>
+					{
+						new DataAttr { Title = "value", Data = node.id }
+					}
+				});
+
+				foreach (var node in ml)
+				{
+					if (node.parent != "#")
+					{
+						nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+					}
+				}
+
+				outputNodes = nodeMap.Values
+					.Where(node => ml.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
+					.ToList();
+
+				BaseDto.Data = outputNodes;
+				BaseDto.QryResult = new QueryResult().SUCEEDED;
+			}
+			catch (Exception ex)
+			{
+				BaseDto.Data = outputNodes;
+				BaseDto.ErrorMessage = "An Error Occured";
+				BaseDto.QryResult = new QueryResult().FAILED;
+			}
+			return BaseDto;
+		}
+
+		public UserMatrixDTO sGetMatrixUserByUserIDParam(string Id)
         {
             UserMatrixDTO dt = new UserMatrixDTO();
             PerspectiveContext context = new PerspectiveContext();
@@ -206,12 +320,13 @@ namespace BL.Services.Common
                           id = a.GMID.ToString(),
                           text = a.GMDescription,
                           parent = a.ParentGMID.ToString(),
-                      }).ToList();
+                      }).OrderBy(x=>x.id).ToList();
                 ml.AddRange(mlRoot);
                 foreach (long gmid in UMId.ParentIDS)
                 {
                     ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
                 }
+				
                 BaseDto.Data = ml;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
             }
@@ -224,7 +339,81 @@ namespace BL.Services.Common
             return BaseDto;
         }
 
-        public BaseResponseDTO<bool> CRUDM(List<CRUDMatrix> dt)
+		public BaseResponseDTO<List<OutputNode>> GetTreeDropdownUser(string UserId)
+		{
+			BaseResponseDTO<List<OutputNode>> BaseDto = new BaseResponseDTO<List<OutputNode>>();
+			List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
+			List<CRUDMatrix> ml = new List<CRUDMatrix>();
+			List<OutputNode> outputNodes = new List<OutputNode>();
+			PerspectiveContext context = new PerspectiveContext();
+			try
+			{
+				UserMatrixDTO UM = sGetMatrixUserByUserID();
+				UserMatrixDTO UMId = sGetMatrixUserByUserIDParam(UserId);
+
+				mlRoot = (from a in context.SYS_GroupMatrix
+						  where UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+						  select new CRUDMatrix()
+						  {
+							  id = a.GMID.ToString(),
+							  text = a.GMDescription,
+							  parent = "#",
+							  state = new state()
+							  {
+								  Checked = false,
+								  Opened = true
+							  }
+						  }).ToList();
+				ml = (from a in context.SYS_GroupMatrix
+					  where UM.IDS.Contains(a.GMID) && !UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+					  select new CRUDMatrix()
+					  {
+						  id = a.GMID.ToString(),
+						  text = a.GMDescription,
+						  parent = a.ParentGMID.ToString(),
+					  }).OrderBy(x => x.id).ToList();
+				ml.AddRange(mlRoot);
+				foreach (long gmid in UMId.ParentIDS)
+				{
+					ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
+				}
+				
+				var nodeMap = ml.ToDictionary(node => node.id, node => new OutputNode
+				{
+					Title = node.text,
+					Checked = node.state.Checked,
+					Href = $"#{node.id}",
+					DataAttrs = new List<DataAttr>
+					{
+						new DataAttr { Title = "value", Data = node.id }
+					}
+				});
+
+				foreach (var node in ml)
+				{
+					if (node.parent != "#")
+					{
+						nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+					}
+				}
+
+				outputNodes = nodeMap.Values
+					.Where(node => ml.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
+					.ToList();
+				
+				BaseDto.Data = outputNodes;
+				BaseDto.QryResult = new QueryResult().SUCEEDED;
+			}
+			catch (Exception ex)
+			{
+				BaseDto.Data = outputNodes;
+				BaseDto.ErrorMessage = "An Error Occured";
+				BaseDto.QryResult = new QueryResult().FAILED;
+			}
+			return BaseDto;
+		}
+
+		public BaseResponseDTO<bool> CRUDM(List<CRUDMatrix> dt)
         {
             BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
             try
