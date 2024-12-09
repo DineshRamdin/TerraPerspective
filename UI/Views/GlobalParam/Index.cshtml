@@ -1,18 +1,19 @@
 ﻿@{
 	ViewData["Title"] = "Global Param";
 }
+@using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">Global Param</h1>
+				<h1 class="m-0">@SharedResource.Global_Param</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">Global Param</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Global_Param</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -61,13 +62,41 @@
 		function GetAllGlobalParam() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: 'Name' },
-				{ data: 'value', title: 'Value' },
-				{ data: 'additionalValue', title: 'Additional Value' },
-				{ data: 'comment', title: 'Comment' },
+				{ data: 'name', title: '@SharedResource.Name' },
+				{ data: 'value', title: '@SharedResource.Value' },
+				{ data: 'additionalValue', title: '@SharedResource.Additional_Value' },
+				{ data: 'comment', title: '@SharedResource.Comment' },
 			];
 
-			initializeDataGrid('GlobalParamTable', 'openGlobalParamModal', GetAllGlobalParamUrl, columnList, false,true,true,false,false,null,true,null);
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
+
+			initializeDataGrid('GlobalParamTable', 'openGlobalParamModal', GetAllGlobalParamUrl, columnList, false,true,true,false,false,null,true,null,langResource);
 
 		}
 
@@ -86,9 +115,9 @@
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-							$("#h4GlobalParamTitle").html("Modify Global Param");
+							$("#h4GlobalParamTitle").html("@SharedResource.Modify  @SharedResource.Global_Param");
 						else {
-							$("#h4GlobalParamTitle").html("Add Global Param");
+							$("#h4GlobalParamTitle").html("@SharedResource.Add  @SharedResource.Global_Param");
 						}
 
 						$("#hdnGlobalParamId").val(response.data.id);
@@ -118,7 +147,7 @@
 		}
 
 		function ClearGlobalParamModal() {
-			$("#h4GlobalParamTitle").html("Add Global Param");
+			$("#h4GlobalParamTitle").html("@SharedResource.Add  @SharedResource.Global_Param");
 			$("#hdnGlobalParamId").val("0");
 			$("#hdnGlobalParamId").val("");
 			$("#txtName").val("");
@@ -174,7 +203,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 
 		}

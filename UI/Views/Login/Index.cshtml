@@ -84,13 +84,14 @@
 				success: function (response) {
 					if (response.qryResult == "success") {
 
-						if (response.data.status == 3) {
-							toastr.warning(response.errorMessage);
-						}
-						else if(response.data.status == 5){
+						// if (response.data.status == 3) {
+						// 	toastr.warning(response.errorMessage);
+						// }
+						// else 
+						if(response.data.status == 5){
 							$('#ChangePasswordLT').modal('show');
 						}
-						else if (response.data.status == 0) {
+						else if (response.data.status == 0 || response.data.status == 3) {
 
 							localStorage.setItem('UserName', response.data.userName); // Store it in localStorage
 							localStorage.setItem('GlobalParamValue', response.data.globalParamValue); // Store it in localStorage

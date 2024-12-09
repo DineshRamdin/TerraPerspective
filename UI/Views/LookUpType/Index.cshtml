@@ -1,243 +1,271 @@
 ﻿@{
-    ViewData["Title"] = "LookUp Type";
+	ViewData["Title"] = "LookUp Type";
 }
 
-
+@using UI.Resources
 <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">LookUp Type</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-                    <li class="breadcrumb-item active">LookUp Type</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Look_Up_Type</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Look_Up_Type</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="row">
-                    <div class="col-10">
-                    </div>
-                  @*   <div class="col-2">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*   <div class="col-2">
                         <button type="button" class="btn btn-block btn-primary mb-3" onclick="openLookUpTypeModal(0)">Add</button>
                     </div> *@
-                </div>
-                <div class="row">
-                    <div class="col-12  mb-10">
-                        <table id="LookUpTypeTable" class="table table-bordered table-striped"></table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="LookUpTypeTable" class="table table-bordered table-striped"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 <div class="modal fade" id="AddLookUpTypeModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <partial name="_AddLookUpType.cshtml" />
+	<partial name="_AddLookUpType.cshtml" />
 </div>
 <!-- /.modal -->
 @section scripts
 {
-    <script>
-        var GetAllLookUpTypeUrl = '@Url.Action("GetAll", "LookUpType")';
-        var LookUpTypeGetByIdUrl = '@Url.Action("GetById", "LookUpType")';        
-        var CreateUpdateLookUpTypeUrl = '@Url.Action("CreateUpdate", "LookUpType")';
+	<script>
+		var GetAllLookUpTypeUrl = '@Url.Action("GetAll", "LookUpType")';
+		var LookUpTypeGetByIdUrl = '@Url.Action("GetById", "LookUpType")';
+		var CreateUpdateLookUpTypeUrl = '@Url.Action("CreateUpdate", "LookUpType")';
 
-        $(function () {
-            $('.nav-link').removeClass('active');
-            $('#liLookUpTypemenu').addClass('active');
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liLookUpTypemenu').addClass('active');
 
-            GetAllLookUpType();
-        });
+			GetAllLookUpType();
+		});
 
-        function GetAllLookUpType() {
-            var columnList = [
-                { data: 'id', title: 'Id', visible: false },
-                { data: 'name', title: 'LookUp Type' },
-                { data: 'description', title: 'Description' },
-            ];
+		function GetAllLookUpType() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'name', title: '@SharedResource.Look_Up_Type' },
+				{ data: 'description', title: '@SharedResource.Description' },
+			];
 
-             initializeDataGrid('LookUpTypeTable', 'openLookUpTypeModal', GetAllLookUpTypeUrl, columnList, false,true,true,false,false, null,true,null);
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
 
-            // $.ajax({
-            //     url: GetAllLookUpTypeUrl,
-            //     type: "POST",
-            //     // data: dataObject,  // Send data if needed
-            //     beforeSend: function () {
-            //         if ($.fn.dataTable.isDataTable('#LookUpTypeTable')) {
-            //             $('#LookUpTypeTable').DataTable().clear().destroy();
-            //         }
-            //     },
-            //     success: function (response) {
-            //         if (response.data) {
-            //             dataToShow = response.data;
-            //             $('#LookUpTypeTable').DataTable({ //init table
-            //                 dom: "Bfrtip", //button Strip
-            //                 searching: true, //show search
-            //                 paging: false, //no paging
-            //                 processing: true, //processing
-            //                 scrollY: 'auto', //fixed height
-            //                 scrollCollapse: true,//scroll
-            //                 order: [[0, 'desc']], //order
-            //                 language: { // search anf info bars
-            //                     search: '',
-            //                     emptyTable: 'No data available',
-            //                     searchPlaceholder: 'Search',
-            //                     info: "Showing _TOTAL_ entries",
-            //                     infoEmpty: "Showing 0 entries",
-            //                     infoFiltered: "(filtered from _MAX_ entries)",
-            //                 },
-            //                 data: dataToShow, // data to display
-            //                 columnDefs: [ // set action column
-            //                     {
-            //                         //set column order for action
-            //                         targets: columnList.length,
-            //                         //remove sorting on action
-            //                         orderable: false,
-            //                         //set width of action column
-            //                         width: "10%",
-            //                         render: function (data, type, full, meta) {
-            //                             //edit button
-            //                             var edit = '<a onclick="openLookUpTypeModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
-            //                             //list of buttons
-            //                             var btn = '';
-            //                             btn = edit
-            //                             data = '<div class="text-nowrap">' + btn + '</div>';
-            //                             return data;
-            //                         }
-            //                     }
-            //                 ],
-            //                 columns: columnList, //column list
+			 initializeDataGrid('LookUpTypeTable', 'openLookUpTypeModal', GetAllLookUpTypeUrl, columnList, false,true,true,false,false, null,true,null,langResource);
 
-            //                 buttons: [ //set buttons above table
-            //                     //Excel Export Button
-            //                     {
-            //                         extend: 'excel',
-            //                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-            //                         className: 'form-control btn-c-secondary d-none',
-            //                         exportOptions: {
-            //                             columns: ':visible:not(.sorting_disabled)'
+			// $.ajax({
+			//     url: GetAllLookUpTypeUrl,
+			//     type: "POST",
+			//     // data: dataObject,  // Send data if needed
+			//     beforeSend: function () {
+			//         if ($.fn.dataTable.isDataTable('#LookUpTypeTable')) {
+			//             $('#LookUpTypeTable').DataTable().clear().destroy();
+			//         }
+			//     },
+			//     success: function (response) {
+			//         if (response.data) {
+			//             dataToShow = response.data;
+			//             $('#LookUpTypeTable').DataTable({ //init table
+			//                 dom: "Bfrtip", //button Strip
+			//                 searching: true, //show search
+			//                 paging: false, //no paging
+			//                 processing: true, //processing
+			//                 scrollY: 'auto', //fixed height
+			//                 scrollCollapse: true,//scroll
+			//                 order: [[0, 'desc']], //order
+			//                 language: { // search anf info bars
+			//                     search: '',
+			//                     emptyTable: 'No data available',
+			//                     searchPlaceholder: 'Search',
+			//                     info: "Showing _TOTAL_ entries",
+			//                     infoEmpty: "Showing 0 entries",
+			//                     infoFiltered: "(filtered from _MAX_ entries)",
+			//                 },
+			//                 data: dataToShow, // data to display
+			//                 columnDefs: [ // set action column
+			//                     {
+			//                         //set column order for action
+			//                         targets: columnList.length,
+			//                         //remove sorting on action
+			//                         orderable: false,
+			//                         //set width of action column
+			//                         width: "10%",
+			//                         render: function (data, type, full, meta) {
+			//                             //edit button
+			//                             var edit = '<a onclick="openLookUpTypeModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+			//                             //list of buttons
+			//                             var btn = '';
+			//                             btn = edit
+			//                             data = '<div class="text-nowrap">' + btn + '</div>';
+			//                             return data;
+			//                         }
+			//                     }
+			//                 ],
+			//                 columns: columnList, //column list
 
-            //                         }
-            //                     },
-            //                     //Open Add popup
+			//                 buttons: [ //set buttons above table
+			//                     //Excel Export Button
+			//                     {
+			//                         extend: 'excel',
+			//                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+			//                         className: 'form-control btn-c-secondary d-none',
+			//                         exportOptions: {
+			//                             columns: ':visible:not(.sorting_disabled)'
 
-            //                     '<a><button class="form-control btn-c-primary d-inline" onclick="openLookUpTypeModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
-            //                 ],
-            //                 drawCallback: function () {
-            //                     // BUTTON EVENT ON THE DATA TABLE
-            //                 }
-            //             });
-            //         }
-            //         else {
-            //             toastr.error(response.errorMessage);
-            //         }
-            //         // Handle success (e.g., update UI with response data)
-            //     },
-            //     error: function (error) {
-            //         console.log("Error:", error);
-            //         toastr.error("Error:" + error);
-            //     }
-            // }).done(function () {
-            // });
-        }
+			//                         }
+			//                     },
+			//                     //Open Add popup
 
-        function openLookUpTypeModal(id) {
-            var dataObject = {};
-            dataObject.id = id;
+			//                     '<a><button class="form-control btn-c-primary d-inline" onclick="openLookUpTypeModal("0")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+			//                 ],
+			//                 drawCallback: function () {
+			//                     // BUTTON EVENT ON THE DATA TABLE
+			//                 }
+			//             });
+			//         }
+			//         else {
+			//             toastr.error(response.errorMessage);
+			//         }
+			//         // Handle success (e.g., update UI with response data)
+			//     },
+			//     error: function (error) {
+			//         console.log("Error:", error);
+			//         toastr.error("Error:" + error);
+			//     }
+			// }).done(function () {
+			// });
+		}
 
-            $.ajax({
-                url: LookUpTypeGetByIdUrl,
-                type: "POST",
-                data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    ClearLookUpTypeModal();                    
-                },
-                success: function (response) {
-                    if (response.data) {
-                        if (response.data.id > 0)
-                            $("#h4LookUpTypeTitle").html("Modify LookUp Type");
-                        else
-                            $("#h4LookUpTypeTitle").html("Add LookUp Type");
+		function openLookUpTypeModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
 
-                        $("#hdnId").val(response.data.id);
-                        $("#txtLookUpTypeName").val(response.data.name);
-                        $("#txtDescription").val(response.data.description);
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-                $('#AddLookUpTypeModal').modal('show');
-                $("#frnLookUpTypeCreate").validate({}).resetForm();;
-            });
+			$.ajax({
+				url: LookUpTypeGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearLookUpTypeModal();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id > 0)
+							$("#h4LookUpTypeTitle").html("@SharedResource.Modify  @SharedResource.Look_Up_Type");
+						else
+							$("#h4LookUpTypeTitle").html("@SharedResource.Add  @SharedResource.Look_Up_Type");
+
+						$("#hdnId").val(response.data.id);
+						$("#txtLookUpTypeName").val(response.data.name);
+						$("#txtDescription").val(response.data.description);
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddLookUpTypeModal').modal('show');
+				$("#frnLookUpTypeCreate").validate({}).resetForm();;
+			});
 
 
-        }
+		}
 
-        function ClearLookUpTypeModal() {
-            $("#h4LookUpTypeTitle").html("Add LookUp Type");
-            $("#hdnId").val(0);
-            $("#txtLookUpTypeName").val("");
-            $("#txtDescription").val("");
-        }
+		function ClearLookUpTypeModal() {
+			$("#h4LookUpTypeTitle").html("@SharedResource.Add  @SharedResource.Look_Up_Type");
+			$("#hdnId").val(0);
+			$("#txtLookUpTypeName").val("");
+			$("#txtDescription").val("");
+		}
 
-        function SaveLookUpType() {
+		function SaveLookUpType() {
 
-            let valid = formValidation(["txtLookUpTypeName"]);
+			let valid = formValidation(["txtLookUpTypeName"]);
 
-            if (valid) {
-                var dataObject = {};
-                dataObject.Id = $("#hdnId").val();
-                dataObject.Name = $("#txtLookUpTypeName").val();
-                dataObject.Description = $("#txtDescription").val();
+			if (valid) {
+				var dataObject = {};
+				dataObject.Id = $("#hdnId").val();
+				dataObject.Name = $("#txtLookUpTypeName").val();
+				dataObject.Description = $("#txtDescription").val();
 
-                $.ajax({
-                    url: CreateUpdateLookUpTypeUrl,
-                    type: "POST",
-                    data: dataObject,  // Send data if needed
-                    beforeSend: function () {
+				$.ajax({
+					url: CreateUpdateLookUpTypeUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
 
-                    },
-                    success: function (response) {
-                        if (response.data) {
-                            toastr.success(response.errorMessage);
-                            $('#AddLookUpTypeModal').modal('hide');
-                            GetAllLookUpType();
-                        }
-                        else {
-                            toastr.error(response.errorMessage);
-                        }
-                        // Handle success (e.g., update UI with response data)
-                    },
-                    error: function (error) {
-                        console.log("Error:", error);
-                        toastr.error("Error:" + error);
-                    }
-                }).done(function () {
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddLookUpTypeModal').modal('hide');
+							GetAllLookUpType();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
 
-                });
-            }
-            else {
-                toastr.warning("Please fill in required field(s)");
-            }
-        }
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			}
+		}
 
-    </script>
+	</script>
 }

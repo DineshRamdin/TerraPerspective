@@ -2,6 +2,8 @@
 	Layout = null;
 }
 
+@using UI.Resources
+
 <div class="modal-dialog">
 	<form id="frnTestingCreate">
 		<input type="hidden" id="hdnId" value="" />
@@ -16,25 +18,25 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-12 form-group">
-						<label>Testing Name<span class="red-required">*</span></label>
-						<input type="text" id="txtTestingName" class="form-control" placeholder="Testing Name" required />
+						<label>@SharedResource.Testing_Name<span class="red-required">*</span></label>
+						<input type="text" id="txtTestingName" class="form-control" placeholder="@SharedResource.Testing_Name" required />
 					</div>
 
 					<div class="col-12 form-group">
-						<label>Testing Type</label>
+						<label>@SharedResource.Testing_Type</label>
 						<select class="form-control" id="ddlTestingType" required></select>
 					</div>
 
 					<div class="col-12 form-group">
-						<label>Testing Code<span class="red-required">*</span></label>
-						<input type="text" id="txtTestingCode" class="form-control" placeholder="Testing Code" required />
+						<label>@SharedResource.Testing_Code<span class="red-required">*</span></label>
+						<input type="text" id="txtTestingCode" class="form-control" placeholder="@SharedResource.Testing_Code" required />
 					</div>
 					@* <div class="col-12 form-group">
 						<label>Testing Date<span class="red-required">*</span></label>
 						<input type="text" id="txtTestingDate" class="form-control" placeholder="Testing Date" required />
 					</div> *@
 					<div class="col-12 form-group">
-						<label>Testing Date</label>
+						<label>@SharedResource.Testing_Date</label>
 						<div class="input-group date" id="txtTestingDate" data-target-input="nearest">
 							<input type="text" class="form-control datetimepicker-input" data-target="#txtTestingDate" />
 							<div class="input-group-append" data-target="#txtTestingDate" data-toggle="datetimepicker">
@@ -44,8 +46,8 @@
 					</div>
 
 					<div class="col-12 form-group">
-						<label>Description<span class="red-required">*</span></label>
-						<input type="text" id="txtDescription" class="form-control" placeholder="Description" required />
+						<label>@SharedResource.Description<span class="red-required">*</span></label>
+						<input type="text" id="txtDescription" class="form-control" placeholder="@SharedResource.Description" required />
 					</div>
 
 
@@ -57,7 +59,7 @@
 							<div class="icheck-primary d-inline">
 								<input type="checkbox" id="IsTestingChk">
 								<label for="IsTestingChk">
-									Is Testing
+									@SharedResource.Is_Testing
 								</label>
 							</div>
 
@@ -69,13 +71,13 @@
 							<div class="icheck-primary d-inline">
 								<input type="radio" id="IsTestYesRD" name="r1" checked>
 								<label for="IsTestYesRD">
-									Yes
+									@SharedResource.Yes
 								</label>
 							</div>
 							<div class="icheck-primary d-inline">
 								<input type="radio" id="IsTestNoRD" name="r1">
 								<label for="IsTestNoRD">
-									No
+									@SharedResource.No
 								</label>
 							</div>
 
@@ -85,14 +87,14 @@
 
 						<input type="checkbox" name="my-checkbox" id="IsTestCountchk" data-bootstrap-switch>
 						<label for="IsTestCountchk">
-							Test Count
+							@SharedResource.Test_Count
 						</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-12 row form-group">
 						<div class="col-6">
-							<label for="testingimagefile">Testing Image</label>
+							<label for="testingimagefile">@SharedResource.Testing_Image </label>
 							<input type="file" id="testingimagefile" name="testingimagefile" accept="image/*" onchange="UploadFileisValidImageFormarJPEGAndPNG('testingimagefile')">
 							<input type="hidden" id="oldtestingimage" value="" />
 						</div>
@@ -104,8 +106,8 @@
 
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" onclick="SaveTesting();">Save</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" onclick="SaveTesting();">@SharedResource.Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

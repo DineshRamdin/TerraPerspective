@@ -2,18 +2,18 @@
 	ViewData["Title"] = "LookUp Value";
 }
 
-
+@using UI.Resources
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">LookUp Value</h1>
+				<h1 class="m-0">@SharedResource.Look_Up_Value</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">LookUp Value</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Look_Up_Value</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -64,12 +64,40 @@
 		function GetAllLookUpValue() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: 'LookUp Value' },
-				{ data: 'lookUpType', title: 'LookUp Type' },
-				{ data: 'description', title: 'Description' },
+				{ data: 'name', title: '@SharedResource.Look_Up_Value' },
+				{ data: 'lookUpType', title: '@SharedResource.Look_Up_Type' },
+				{ data: 'description', title: '@SharedResource.Description' },
 			];
 
-			 initializeDataGrid('LookUpValueTable', 'openLookUpValueModal', GetAllLookUpValueUrl, columnList, false,true,true,false,false, null,true,null);
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
+
+			 initializeDataGrid('LookUpValueTable', 'openLookUpValueModal', GetAllLookUpValueUrl, columnList, false,true,true,false,false, null,true,null,langResource);
 
 			// $.ajax({
 			//     url: GetAllLookUpValueUrl,
@@ -169,9 +197,9 @@
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id > 0)
-							$("#h4LookUpValueTitle").html("Modify LookUp Value");
+							$("#h4LookUpValueTitle").html("@SharedResource.Modify  @SharedResource.Look_Up_Value");
 						else
-							$("#h4LookUpValueTitle").html("Add LookUp Value");
+							$("#h4LookUpValueTitle").html("@SharedResource.Add  @SharedResource.Look_Up_Value");
 
 						$("#hdnId").val(response.data.id);
 						$("#txtLookUpValueName").val(response.data.name);
@@ -194,7 +222,7 @@
 		}
 
 		function ClearLookUpValueModal() {
-			$("#h4LookUpValueTitle").html("Add LookUp Value");
+			$("#h4LookUpValueTitle").html("@SharedResource.Add  @SharedResource.Look_Up_Value");
 			$("#hdnId").val(0);
 			$("#txtLookUpValueName").val("");
 			$("#txtDescription").val("");
@@ -213,7 +241,7 @@
 					if (response.data) {
 						$.each(response.data, function (key, value) {
 							if (value.title == "LookUp Type") {
-								$("#ddlLookUpType").append($("<option></option>").val('').html("Select Type"));
+								$("#ddlLookUpType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
 								$.each(value.items, function (itemskey, itemsvalue) {
 									$("#ddlLookUpType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
@@ -267,7 +295,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 		}
 

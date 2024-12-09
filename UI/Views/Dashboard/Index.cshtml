@@ -1,36 +1,50 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
+	// var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
 }
 
-<!-- Content Header (Page header) -->
+@* @using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options *@
+@using UI.Resources
+
+@* @using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources *@
+
+@* @inject IStringLocalizer<UI.Resources.Resources> Localizer *@
+@* @inject IStringLocalizer<UI.Resources.SharedResource> StringLocalizer
+ *@
+
+
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Dashboard</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    
-                    <li class="breadcrumb-item active">Dashboard</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Dashboard</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item active">@SharedResource.Dashboard</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-    <div class="container-fluid">
-    </div>
+	<div class="container-fluid">
+	</div>
 </section>
 
 @section scripts
 {
-    <script>
-          $(function () {
-            $('.nav-link').removeClass('active');
-                $('#lidashboardmenu').addClass('active');
-          });
-</script>
+	<script>
+		$(function () {
+		  $('.nav-link').removeClass('active');
+			  $('#lidashboardmenu').addClass('active');
+		});
+	</script>
 }

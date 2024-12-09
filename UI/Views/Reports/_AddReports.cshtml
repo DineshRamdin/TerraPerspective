@@ -1,6 +1,7 @@
 ﻿@{
 	Layout = null;
 }
+@using UI.Resources
 
 <div class="modal-dialog">
 	<form id="frnReportsCreate">
@@ -16,23 +17,23 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-12 form-group">
-						<label>Name<span class="red-required">*</span></label>
-						<input type="text" id="txtName" class="form-control" placeholder="Name" required />
+						<label>@SharedResource.Name<span class="red-required">*</span></label>
+						<input type="text" id="txtName" class="form-control" placeholder="@SharedResource.Name" required />
 					</div>
 					<div class="col-12 form-group">
-						<label>Type<span class="red-required">*</span></label>
-						<input type="text" id="txtType" class="form-control" placeholder="Type" required />
+						<label>@SharedResource.Type<span class="red-required">*</span></label>
+						<input type="text" id="txtType" class="form-control" placeholder="@SharedResource.Type" required />
 					</div>
 					<div class="col-12 form-group">
-						<label>View Name<span class="red-required">*</span></label>
-						<input type="text" id="txtViewName" class="form-control" placeholder="View Name" required />
+						<label>@SharedResource.View_Name<span class="red-required">*</span></label>
+						<input type="text" id="txtViewName" class="form-control" placeholder="@SharedResource.View_Name" required />
 					</div>
 
 				</div>
 				<div class="row">
 					<div class="col-12 row form-group">
 						<div class="col-6">
-							<label for="reportimagefile">Report Image</label>
+							<label for="reportimagefile">@SharedResource.Report_Image</label>
 							<input type="file" id="reportimagefile" name="reportimagefile" accept="image/*" onchange="UploadFileisValidImageFormarJPEGAndPNG('reportimagefile')">
 							<input type="hidden" id="oldreportimage" value="" />
 						</div>
@@ -40,7 +41,7 @@
 							<img id="viewReportImage" style="height: 80%;width: 80%;" />
 							<button type="button" title="Delete Image" class="btn btn-block btn-info btn-sm" id="deleteImageBtn"
 									style="display: none; margin-top: 13px; width: 50%;" onclick="deleteImage()">
-								Delete Image
+								@SharedResource.Delete @SharedResource.Image
 							</button>
 						</div>
 					</div>
@@ -48,8 +49,8 @@
 
 			</div>
 			<div class="modal-footer">
-				<button type="button" title="Save" class="btn btn-primary" onclick="SaveReports();">Save</button>
-				<button type="button" title="Close" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" title="Save" class="btn btn-primary" onclick="SaveReports();">@SharedResource.Save</button>
+				<button type="button" title="Close" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

@@ -1,19 +1,19 @@
 ﻿@{
 	ViewData["Title"] = "Poster";
 }
-
+@using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">Poster</h1>
+				<h1 class="m-0">@SharedResource.Poster</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">Poster</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Poster</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -65,11 +65,39 @@
 		function GetAllPoster() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: 'Poster Name' },
-				{ data: 'typeName', title: 'Type' },
+				{ data: 'name', title: '@SharedResource.Poster_Name' },
+				{ data: 'typeName', title: '@SharedResource.Type' },
 			];
 
-				initializeDataGrid('PosterTable', 'openPosterModal', GetAllPosterUrl, columnList, false,true,true,false,true, 'PreviewPosterModal',true,null);
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
+
+			initializeDataGrid('PosterTable', 'openPosterModal', GetAllPosterUrl, columnList, false,true,true,false,true, 'PreviewPosterModal',true,null,langResource);
 
 			// $.ajax({
 			//     url: GetAllPosterUrl,
@@ -174,9 +202,9 @@
 					if (response.data) {
 						$("#deleteImageBtn").hide();
 						if (response.data.id > 0)
-							$("#h4PosterTitle").html("Modify Poster");
+							$("#h4PosterTitle").html("@SharedResource.Modify  @SharedResource.Poster");
 						else
-							$("#h4PosterTitle").html("Add Poster");
+							$("#h4PosterTitle").html("@SharedResource.Add  @SharedResource.Poster");
 
 						$("#hdnId").val(response.data.id);
 						$("#txtPosterName").val(response.data.name);
@@ -220,7 +248,7 @@
 		}
 
 		function ClearPosterModal() {
-			$("#h4PosterTitle").html("Add Poster");
+			$("#h4PosterTitle").html("@SharedResource.Add  @SharedResource.Poster");
 			$("#hdnId").val(0);
 			$("#txtPosterName").val("");
 			$("#ddlType").val("");
@@ -245,7 +273,7 @@
 					if (response.data) {
 						$.each(response.data, function (key, value) {
 							if (value.title == "Type") {
-								$("#ddlType").append($("<option></option>").val('').html("Select Type"));
+								$("#ddlType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
 								$.each(value.items, function (itemskey, itemsvalue) {
 									$("#ddlType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
@@ -273,7 +301,7 @@
 				dataObject.Status = $('#chkStatus').prop('checked');
 
 				var FileData = await FiletoBase64string("imagefile");
-				
+
 
 				if (FileData == "") {
 					FileData = $('#oldimage').val();
@@ -308,7 +336,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 		}
 

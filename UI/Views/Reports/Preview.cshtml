@@ -3,8 +3,9 @@
 	ViewData["Title"] = "Preview";
 }
 
-
+@using UI.Resources
 @model List<Dictionary<string, object>>
+
 <section class="content">
 	<div class="container-fluid">
 		<div class="card card-solid">
@@ -43,7 +44,7 @@
 								}
 								else
 								{
-									<tr><td colspan="100%" style="text-align:center">No data available</td></tr>
+									<tr><td colspan="100%" style="text-align:center">@SharedResource.No_data_available</td></tr>
 								}
 							</tbody>
 						</table>
@@ -60,7 +61,35 @@
 {
 	<script>
 		$(function () {
-			initializeDataGridForViews('ReportsViewTable', true);
+
+				var langResource = {
+					AddNewLabel: '@SharedResource.Add_New',
+					ExportLabel: '@SharedResource.Export',
+					ExportPDFLabel:'@SharedResource.Export_PDF',
+					ExportCSVLabel:'@SharedResource.Export_CSV',
+					ExportExcelLabel:'@SharedResource.Export_Excel',
+					ExcelLabel:'@SharedResource.Excel',
+					PDFLabel:'@SharedResource.PDF',
+					CSVLabel:'@SharedResource.CSV',
+					NodataavailableLabel :'@SharedResource.No_data_available',
+					SearchLabel :'@SharedResource.Search',
+					ShowingLabel :'@SharedResource.Showing',
+					EntriesLabel :'@SharedResource.entries',
+					FilteredfromLabel :'@SharedResource.filtered_from',
+					ViewLabel :'@SharedResource.View',
+					PreviewLabel :'@SharedResource.Preview',
+					DeleteLabel :'@SharedResource.Delete',
+					EditLabel :'@SharedResource.Edit',
+					ResetPasswordLabel :'@SharedResource.Reset_Password',
+					UserNameLabel :'@SharedResource.UserName',
+					DateLabel :'@SharedResource.Date',
+					PageLabel :'@SharedResource.Page',
+					OfLabel :'@SharedResource.of',
+					GeneratedonLabel :'@SharedResource.Generated_on',
+					PreviousLabel :'@SharedResource.Previous',
+					NextLabel :'@SharedResource.Next',
+				};
+			initializeDataGridForViews('ReportsViewTable', true,langResource);
 		});
 	</script>
 

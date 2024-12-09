@@ -1,0 +1,544 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Access" xml:space="preserve">
+    <value>Access</value>
+    <comment>Access</comment>
+  </data>
+  <data name="Access Log" xml:space="preserve">
+    <value>Access Log</value>
+    <comment>Access Log</comment>
+  </data>
+  <data name="Access Rights" xml:space="preserve">
+    <value>Access Rights</value>
+    <comment>Access Rights</comment>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+    <comment>Action</comment>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+    <comment>Add</comment>
+  </data>
+  <data name="Add New" xml:space="preserve">
+    <value>Add New</value>
+    <comment>Add New</comment>
+  </data>
+  <data name="Add User" xml:space="preserve">
+    <value>Add User</value>
+    <comment>Add User</comment>
+  </data>
+  <data name="Additional Value" xml:space="preserve">
+    <value>Additional Value</value>
+    <comment>Additional Value</comment>
+  </data>
+  <data name="Admin Only" xml:space="preserve">
+    <value>Admin Only</value>
+    <comment>Admin Only</comment>
+  </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Administration</value>
+    <comment>Administration</comment>
+  </data>
+  <data name="All System Icon" xml:space="preserve">
+    <value>All System Icon</value>
+    <comment>All System Icon</comment>
+  </data>
+  <data name="An error occurred while fetching tree data." xml:space="preserve">
+    <value>An error occurred while fetching tree data.</value>
+    <comment>An error occurred while fetching tree data.</comment>
+  </data>
+  <data name="Carousel" xml:space="preserve">
+    <value>Carousel</value>
+    <comment>Carousel</comment>
+  </data>
+  <data name="Carousel Name" xml:space="preserve">
+    <value>Carousel Name</value>
+    <comment>Carousel Name</comment>
+  </data>
+  <data name="Change Password" xml:space="preserve">
+    <value>Change Password</value>
+    <comment>Change Password</comment>
+  </data>
+  <data name="Check In/Out" xml:space="preserve">
+    <value>Check In/Out</value>
+    <comment>Check In/Out</comment>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Close</comment>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+    <comment>Comment</comment>
+  </data>
+  <data name="CSV" xml:space="preserve">
+    <value>CSV</value>
+    <comment>CSV</comment>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+    <comment>Dashboard</comment>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+    <comment>Date</comment>
+  </data>
+  <data name="Default Carousel" xml:space="preserve">
+    <value>Default Carousel</value>
+    <comment>Default Carousel</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Delete</comment>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+    <comment>Description</comment>
+  </data>
+  <data name="Device" xml:space="preserve">
+    <value>Device</value>
+    <comment>Device</comment>
+  </data>
+  <data name="Device Name" xml:space="preserve">
+    <value>Device Name</value>
+    <comment>Device Name</comment>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+    <comment>Duration</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+    <comment>Edit</comment>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+    <comment>Email</comment>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Enable</value>
+    <comment>Enable</comment>
+  </data>
+  <data name="entries" xml:space="preserve">
+    <value>entries</value>
+    <comment>entries</comment>
+  </data>
+  <data name="Excel" xml:space="preserve">
+    <value>Excel</value>
+    <comment>Excel</comment>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+    <comment>Export</comment>
+  </data>
+  <data name="Export CSV" xml:space="preserve">
+    <value>Export CSV</value>
+    <comment>Export CSV</comment>
+  </data>
+  <data name="Export Excel" xml:space="preserve">
+    <value>Export Excel</value>
+    <comment>Export Excel</comment>
+  </data>
+  <data name="Export PDF" xml:space="preserve">
+    <value>Export PDF</value>
+    <comment>Export PDF</comment>
+  </data>
+  <data name="Failed to fetch tree data." xml:space="preserve">
+    <value>Failed to fetch tree data.</value>
+    <comment>Failed to fetch tree data.</comment>
+  </data>
+  <data name="filtered from" xml:space="preserve">
+    <value>filtered from</value>
+    <comment>filtered from</comment>
+  </data>
+  <data name="Generated on" xml:space="preserve">
+    <value>Generated on</value>
+    <comment>Generated on</comment>
+  </data>
+  <data name="Global Param" xml:space="preserve">
+    <value>Global Param</value>
+    <comment>Global Param</comment>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+    <comment>Home</comment>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+    <comment>Image</comment>
+  </data>
+  <data name="Image Not found" xml:space="preserve">
+    <value>Image Not found</value>
+    <comment>Image Not found</comment>
+  </data>
+  <data name="Invalid date" xml:space="preserve">
+    <value>Invalid date</value>
+    <comment>Invalid date</comment>
+  </data>
+  <data name="Is Testing" xml:space="preserve">
+    <value>Is Testing</value>
+    <comment>Is Testing</comment>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Log</value>
+    <comment>Log</comment>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+    <comment>Logout</comment>
+  </data>
+  <data name="Look Up Type" xml:space="preserve">
+    <value>Look Up Type</value>
+    <comment>Look Up Type</comment>
+  </data>
+  <data name="Look Up Value" xml:space="preserve">
+    <value>Look Up Value</value>
+    <comment>Look Up Value</comment>
+  </data>
+  <data name="MAC Address" xml:space="preserve">
+    <value>MAC Address</value>
+    <comment>MAC Address</comment>
+  </data>
+  <data name="Main Menu" xml:space="preserve">
+    <value>Main Menu</value>
+    <comment>Main Menu</comment>
+  </data>
+  <data name="Matrix" xml:space="preserve">
+    <value>Matrix</value>
+    <comment>Matrix</comment>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menu</value>
+    <comment>Menu</comment>
+  </data>
+  <data name="Mobile No" xml:space="preserve">
+    <value>Mobile No</value>
+    <comment>Mobile No</comment>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Modify</value>
+    <comment>Modify</comment>
+  </data>
+  <data name="Modify User" xml:space="preserve">
+    <value>Modify User</value>
+    <comment>Modify User</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+    <comment>Next</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+    <comment>No</comment>
+  </data>
+  <data name="No data available" xml:space="preserve">
+    <value>No data available</value>
+    <comment>No data available</comment>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>of</value>
+    <comment>of</comment>
+  </data>
+  <data name="Operation" xml:space="preserve">
+    <value>Operation</value>
+    <comment>Operation</comment>
+  </data>
+  <data name="Othername" xml:space="preserve">
+    <value>Othername</value>
+    <comment>Othername</comment>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page</value>
+    <comment>Page</comment>
+  </data>
+  <data name="PDF" xml:space="preserve">
+    <value>PDF</value>
+    <comment>PDF</comment>
+  </data>
+  <data name="Please Fill In Mandatory Fields" xml:space="preserve">
+    <value>Please Fill In Mandatory Fields</value>
+    <comment>Please Fill In Mandatory Fields</comment>
+  </data>
+  <data name="Please fill in required field(s)" xml:space="preserve">
+    <value>Please fill in required field(s)</value>
+    <comment>Please fill in required field(s)</comment>
+  </data>
+  <data name="Please select Proper Poster..!" xml:space="preserve">
+    <value>Please select Proper Poster..!</value>
+    <comment>Please select Proper Poster..!</comment>
+  </data>
+  <data name="Poster" xml:space="preserve">
+    <value>Poster</value>
+    <comment>Poster</comment>
+  </data>
+  <data name="Poster Name" xml:space="preserve">
+    <value>Poster Name</value>
+    <comment>Poster Name</comment>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Preview</value>
+    <comment>Preview</comment>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+    <comment>Previous</comment>
+  </data>
+  <data name="Profile Image" xml:space="preserve">
+    <value>Profile Image</value>
+    <comment>Profile Image</comment>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Report</value>
+    <comment>Report</comment>
+  </data>
+  <data name="Report Image" xml:space="preserve">
+    <value>Report Image</value>
+    <comment>Report Image</comment>
+  </data>
+  <data name="Reset Password" xml:space="preserve">
+    <value>Reset Password</value>
+    <comment>Reset Password</comment>
+  </data>
+  <data name="Resource" xml:space="preserve">
+    <value>Resource</value>
+    <comment>Resource</comment>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+    <comment>Role</comment>
+  </data>
+  <data name="Role Name" xml:space="preserve">
+    <value>Role Name</value>
+    <comment>Role Name</comment>
+  </data>
+  <data name="Room" xml:space="preserve">
+    <value>Room</value>
+    <comment>Room</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+    <comment>Save</comment>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+    <comment>Search</comment>
+  </data>
+  <data name="Select Role" xml:space="preserve">
+    <value>Select Role</value>
+    <comment>Select Role</comment>
+  </data>
+  <data name="Select Type" xml:space="preserve">
+    <value>Select Type</value>
+    <comment>Select Type</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Settings</comment>
+  </data>
+  <data name="Showing" xml:space="preserve">
+    <value>Showing</value>
+    <comment>Showing</comment>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+    <comment>Status</comment>
+  </data>
+  <data name="Sub Menu" xml:space="preserve">
+    <value>Sub Menu</value>
+    <comment>Sub Menu</comment>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Surname</value>
+    <comment>Surname</comment>
+  </data>
+  <data name="System Icon" xml:space="preserve">
+    <value>System Icon</value>
+    <comment>System Icon</comment>
+  </data>
+  <data name="Test Count" xml:space="preserve">
+    <value>Test Count</value>
+    <comment>Test Count</comment>
+  </data>
+  <data name="Test Geomerty Data" xml:space="preserve">
+    <value>Test Geomerty Data</value>
+    <comment>Test Geomerty Data</comment>
+  </data>
+  <data name="Testing" xml:space="preserve">
+    <value>Testing</value>
+    <comment>Testing</comment>
+  </data>
+  <data name="Testing Code" xml:space="preserve">
+    <value>Testing Code</value>
+    <comment>Testing Code</comment>
+  </data>
+  <data name="Testing Date" xml:space="preserve">
+    <value>Testing Date</value>
+    <comment>Testing Date</comment>
+  </data>
+  <data name="Testing Image" xml:space="preserve">
+    <value>Testing Image</value>
+    <comment>Testing Image</comment>
+  </data>
+  <data name="Testing Name" xml:space="preserve">
+    <value>Testing Name</value>
+    <comment>Testing Name</comment>
+  </data>
+  <data name="Testing Type" xml:space="preserve">
+    <value>Testing Type</value>
+    <comment>Testing Type</comment>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+    <comment>Type</comment>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+    <comment>User</comment>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>UserName</value>
+    <comment>UserName</comment>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+    <comment>Value</comment>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+    <comment>View</comment>
+  </data>
+  <data name="View Name" xml:space="preserve">
+    <value>View Name</value>
+    <comment>View Name</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+    <comment>Yes</comment>
+  </data>
+  <data name="Zone Management" xml:space="preserve">
+    <value>Zone Management</value>
+    <comment>Zone Management</comment>
+  </data>
+</root>

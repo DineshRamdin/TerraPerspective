@@ -1,583 +1,449 @@
 ﻿@{
-    ViewData["Title"] = "User";
+	ViewData["Title"] = "User";
 }
-<link href="~/plugins/dropdowntree/dropdowntree.css" rel="stylesheet" />
-
-<style>
-    /* Ensure checkboxes inside the dropdown are visible */
-    .checkbox {
-        margin-right: 10px;
-        display: inline-block;
-    }
-
-    /* Style for the dropdown items */
-    .dropdown-item {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
-
-        .dropdown-item label {
-            cursor: pointer;
-        }
-
-</style>
+@using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">User</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-                    <li class="breadcrumb-item active">User</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.User</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.User</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="row">
-                    <div class="col-10">
-                    </div>
-                    @*  <div class="col-2">
-                    <button type="button" class="btn btn-block btn-primary mb-3" onclick="openUserModal()">Add</button>
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*  <div class="col-2">
+                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openUserModal()">Add</button>
                     </div> *@
 
-                </div>
-                <div class="row">
-                    <div class="col-12  mb-10">
-                        <table id="UserTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="UserTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 <div class="modal fade" id="AddUserModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <partial name="_AddUser.cshtml" />
+	<partial name="_AddUser.cshtml" />
 </div>
 <!-- /.modal -->
 @section scripts
 {
-    <script src="~/plugins/dropdowntree/dropdowntree.js"></script>
+	<script>
+		var GetAllUserUrl = '@Url.Action("GetAll", "User")';
+		var UserGetByIdUrl = '@Url.Action("GetById", "User")';
+		var getUserDropDownUrl = '@Url.Action("getUserDropDown", "User")';
+		var CreateUpdateUserUrl = '@Url.Action("CreateUpdate", "User")';
+		var ResetUserPasswordUrl = '@Url.Action("ResetUserPassword", "User")';
+		var UserPreviewUrl = '@Url.Action("Preview", "User")';
+		var UserMatrix = '@Url.Action("GetTree", "User")';
 
-    <script>
-        var GetAllUserUrl = '@Url.Action("GetAll", "User")';
-        var UserGetByIdUrl = '@Url.Action("GetById", "User")';
-        var getUserDropDownUrl = '@Url.Action("getUserDropDown", "User")';
-        var CreateUpdateUserUrl = '@Url.Action("CreateUpdate", "User")';
-        var ResetUserPasswordUrl = '@Url.Action("ResetUserPassword", "User")';
-        var UserPreviewUrl = '@Url.Action("Preview", "User")';
-        var UserMatrix = '@Url.Action("GetTree", "User")';
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liusermenu').addClass('active');
 
-        $(function () {
-            $('.nav-link').removeClass('active');
-            $('#liusermenu').addClass('active');
+			GetAllUser();
+		});
 
-            GetAllUser();
+		function GetAllUser() {
 
-            $('#dropdownTree').on('changed.jstree', function (e, data) {
-                let selectedNodes = data.selected.map(nodeId => data.instance.get_node(nodeId).text);
-                console.log("Selected Nodes:", selectedNodes);
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				//{ data: 'surname', title: 'Surname' },
+				{ data: 'surname', title: '@SharedResource.Surname'},
+				{ data: 'othername', title: '@SharedResource.Othername' },
+				{ data: 'email', title: '@SharedResource.Email' },
+				{ data: 'roleName', title: '@SharedResource.Role_Name' },
+				{
+					data: 'profileImagebase64',
+					title: '@SharedResource.Profile_Image',
+					render: function (data, type, row, meta) {
+						// Check if the data (base64 string) is valid
+						if (data && data.trim() !== "") {
+							// Render the base64 image in an <img> tag
+							return '<img src="data:image/png;base64,' + data + '" alt="@SharedResource.System_Icon" style="width: 35px; height: 35px;" />';
+						} else {
+							// If no valid base64 string, return a placeholder or empty image
+							return '<img src="" />';
+						}
+					}
+				},
+			];
 
-                // Optional: Hide the tree after selection
-                $('#dropdownTree').hide();
-            });
-
-            $('#NewDropdowntree').on('change', function () {
-                // Assuming the plugin has a method to get selected values
-                var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
-                console.log('Selected Values: ', selectedValues);
-            });
-        });
-
-        function GetAllUser() {
-            var columnList = [
-                { data: 'id', title: 'Id', visible: false },
-                { data: 'surname', title: 'Surname' },
-                { data: 'othername', title: 'Othername' },
-                { data: 'email', title: 'Email' },
-                { data: 'roleName', title: 'Role Name' },
-                {
-                    data: 'profileImagebase64',
-                    title: 'Profile Image',
-                    render: function (data, type, row, meta) {
-                        // Check if the data (base64 string) is valid
-                        if (data && data.trim() !== "") {
-                            // Render the base64 image in an <img> tag
-                            return '<img src="data:image/png;base64,' + data + '" alt="System Icon" style="width: 35px; height: 35px;" />';
-                        } else {
-                            // If no valid base64 string, return a placeholder or empty image
-                            return '<img src="" />';
-                        }
-                    }
-                },
-            ];
-
-            initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false, true, true, true, true, 'PreviewUserModal', true, null);
-
-            // $.ajax({
-            //     url: GetAllUserUrl,
-            //     type: "POST",
-            //     // data: dataObject,  // Send data if needed
-            //     beforeSend: function () {
-            //         if ($.fn.dataTable.isDataTable('#UserTable')) {
-            //             $('#UserTable').DataTable().clear().destroy();
-            //         }
-            //     },
-            //     success: function (response) {
-            //         if (response.data) {
-            //             dataToShow = response.data;
-            //             $('#UserTable').DataTable({ //init table
-            //                 dom: "Bfrtip", //button Strip
-            //                 searching: true, //show search
-            //                 paging: false, //no paging
-            //                 processing: true, //processing
-            //                 scrollY: 'auto', //fixed height
-            //                 scrollCollapse: true,//scroll
-            //                 order: [[0, 'desc']], //order
-            //                 language: { // search anf info bars
-            //                     search: '',
-            //                     emptyTable: 'No data available',
-            //                     searchPlaceholder: 'Search',
-            //                     info: "Showing _TOTAL_ entries",
-            //                     infoEmpty: "Showing 0 entries",
-            //                     infoFiltered: "(filtered from _MAX_ entries)",
-            //                 },
-            //                 data: dataToShow, // data to display
-            //                 columnDefs: [ // set action column
-            //                     {
-            //                         //set column order for action
-            //                         targets: columnList.length,
-            //                         //remove sorting on action
-            //                         orderable: false,
-            //                         //set width of action column
-            //                         width: "10%",
-            //                         render: function (data, type, full, meta) {
-            //                             //edit button
-            //                             var edit = '<a onclick="openUserModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
-            //                             //list of buttons
-            //                             var btn = '';
-            //                             btn = edit;
-            //                             var reset = '<a onclick="ResetUserPassword(\'' + full.id + '\')" title="Reset Password"><i class="fas fa-undo text-secondary ms-1"></i></a>';
-            //                             btn += reset;
-            //                             data = '<div class="text-nowrap">' + btn + '</div>';
-            //                             return data;
-            //                         }
-            //                     }
-            //                 ],
-            //                 columns: columnList, //column list
-
-            //                 buttons: [ //set buttons above table
-            //                     //Excel Export Button
-            //                     {
-            //                         extend: 'excel',
-            //                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-            //                         className: 'form-control btn-c-secondary d-none',
-            //                         exportOptions: {
-            //                             columns: ':visible:not(.sorting_disabled)'
-
-            //                         }
-            //                     },
-            //                     //Open Add popup
-
-            //                     '<a><button class="form-control btn-c-primary d-inline" onclick="openUserModal("")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
-            //                 ],
-            //                 drawCallback: function () {
-            //                     // BUTTON EVENT ON THE DATA TABLE
-            //                 }
-            //             });
-            //         }
-            //         else {
-            //             toastr.error(response.errorMessage);
-            //         }
-            //         // Handle success (e.g., update UI with response data)
-            //     },
-            //     error: function (error) {
-            //         console.log("Error:", error);
-            //         toastr.error("Error:" + error);
-            //     }
-            // }).done(function () {
-            // });
-        }
-
-        function PreviewUserModal(id) {
-            window.open(UserPreviewUrl + "?id=" + id, '_blank');
-        }
-
-        function openUserModal(id) {
-            var options;
-            var dataObject = {};
-            dataObject.id = id;
-
-            $.ajax({
-                url: UserGetByIdUrl,
-                type: "POST",
-                data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    ClearUserModal();
-                    GetDropdownData();
-                },
-                success: function (response) {
-                    if (response.data) {
-                        if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-                            $("#h4UserTitle").html("Modify User");
-                        else {
-                            $("#h4UserTitle").html("Add User");
-                        }
-
-                        $("#hdnuserId").val(response.data.id);
-                        $("#txtSurname").val(response.data.surname);
-                        $("#txtOthername").val(response.data.othername);
-                        $("#txtEmail").val(response.data.email);
-                        $("#txtMobile").val(response.data.phoneNumber);
-                        $("#ddlRole").val(response.data.role);
-                        if (response.data.profileImagebase64 != null && response.data.profileImagebase64 != "") {
-                            $("#oldprofileimage").val(response.data.profileImagebase64);
-
-                            $("#viewProfileImage").attr("src", "data:image/png;base64," + response.data.profileImagebase64);
-                            $("#viewProfileImage").css("display", "");
-
-                        }
-                        // Fetch data from the server and initialize the tree
-                        $.ajax({
-                            url: UserMatrix, // API endpoint to fetch the matrix data
-                            type: "POST",
-                            success: function (response) {
-                                if (response && response.data) {
-                                    data = response.data;
-                                    const ddlTreeDATA = data[0].dropdownNodes; // Do not stringify
-
-                                    // var options = {
-                                    // 	title: "DropDown Tree",
-                                    // 	data: ddlTreeDATA,
-                                    // 	clickHandler: function (element) {
-                                    // 		console.log("Clicked Element: ", element);
-                                    // 	}
-                                    // };
-                                    // $("#tree").DropDownTree(options);
-                                    // var ddlTreeDATA = [
-                                    // 	{ id: 1, parent: null, text: "Root Node" }
-                                    // ];
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
 
 
-                                    var arr4 = [
-                                        { title: "St Fatima", href: "#1", checked: false, dataAttrs: [{ title: "dataattr1", data: "value1" }, { title: "dataattr2", data: "value2" }, { title: "dataattr3", data: "value3" }] },
-                                        { title: "Korba", href: "#2", checked: false, dataAttrs: [{ title: "dataattr4", data: "value4" }, { title: "dataattr5", data: "value5" }, { title: "dataattr6", data: "value6" }] },
-                                        { title: "Roxi", href: "#3", checked: false, dataAttrs: [{ title: "dataattr7", data: "value7" }, { title: "dataattr8", data: "value8" }, { title: "dataattr9", data: "value9" }] }
-                                    ];
+			initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false,true,true,true,true,'PreviewUserModal',true,null,langResource);
 
-                                    var arr3 = [
-                                        { title: "Abbas Al Akkad", href: "#1", checked: false, dataAttrs: [{ title: "dataattr1", data: "value1" }, { title: "dataattr2", data: "value2" }, { title: "dataattr3", data: "value3" }] },
-                                        { title: "Makram Obeid", href: "#2", checked: false, dataAttrs: [{ title: "dataattr4", data: "value4" }, { title: "dataattr5", data: "value5" }, { title: "dataattr6", data: "value6" }], data: arr4 },
-                                        { title: "Mostafa Al Nahas", href: "#3", checked: false, dataAttrs: [{ title: "dataattr7", data: "value7" }, { title: "dataattr8", data: "value8" }, { title: "dataattr9", data: "value9" }] }
-                                    ];
+			// $.ajax({
+			//     url: GetAllUserUrl,
+			//     type: "POST",
+			//     // data: dataObject,  // Send data if needed
+			//     beforeSend: function () {
+			//         if ($.fn.dataTable.isDataTable('#UserTable')) {
+			//             $('#UserTable').DataTable().clear().destroy();
+			//         }
+			//     },
+			//     success: function (response) {
+			//         if (response.data) {
+			//             dataToShow = response.data;
+			//             $('#UserTable').DataTable({ //init table
+			//                 dom: "Bfrtip", //button Strip
+			//                 searching: true, //show search
+			//                 paging: false, //no paging
+			//                 processing: true, //processing
+			//                 scrollY: 'auto', //fixed height
+			//                 scrollCollapse: true,//scroll
+			//                 order: [[0, 'desc']], //order
+			//                 language: { // search anf info bars
+			//                     search: '',
+			//                     emptyTable: 'No data available',
+			//                     searchPlaceholder: 'Search',
+			//                     info: "Showing _TOTAL_ entries",
+			//                     infoEmpty: "Showing 0 entries",
+			//                     infoFiltered: "(filtered from _MAX_ entries)",
+			//                 },
+			//                 data: dataToShow, // data to display
+			//                 columnDefs: [ // set action column
+			//                     {
+			//                         //set column order for action
+			//                         targets: columnList.length,
+			//                         //remove sorting on action
+			//                         orderable: false,
+			//                         //set width of action column
+			//                         width: "10%",
+			//                         render: function (data, type, full, meta) {
+			//                             //edit button
+			//                             var edit = '<a onclick="openUserModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+			//                             //list of buttons
+			//                             var btn = '';
+			//                             btn = edit;
+			//                             var reset = '<a onclick="ResetUserPassword(\'' + full.id + '\')" title="Reset Password"><i class="fas fa-undo text-secondary ms-1"></i></a>';
+			//                             btn += reset;
+			//                             data = '<div class="text-nowrap">' + btn + '</div>';
+			//                             return data;
+			//                         }
+			//                     }
+			//                 ],
+			//                 columns: columnList, //column list
 
-                                    var arr2 = [
-                                        { title: "Teriumph", href: "#1", checked: false, dataAttrs: [{ title: "dataattr1", data: "value1" }, { title: "dataattr2", data: "value2" }, { title: "dataattr3", data: "value3" }], data: arr3 },
-                                        { title: "Safir", href: "#2", checked: false, dataAttrs: [{ title: "dataattr4", data: "value4" }, { title: "dataattr5", data: "value5" }, { title: "dataattr6", data: "value6" }] },
-                                        { title: "El-Hegaz Sq", href: "#3", checked: false, dataAttrs: [{ title: "dataattr7", data: "value7" }, { title: "dataattr8", data: "value8" }, { title: "dataattr9", data: "value9" }] }
-                                    ];
+			//                 buttons: [ //set buttons above table
+			//                     //Excel Export Button
+			//                     {
+			//                         extend: 'excel',
+			//                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
+			//                         className: 'form-control btn-c-secondary d-none',
+			//                         exportOptions: {
+			//                             columns: ':visible:not(.sorting_disabled)'
 
-                                    var arr = [
-                                        { title: "Heliopolis", href: "#1", checked: true, dataAttrs: [{ title: "value", data: "1" }], data: arr2 },
-                                        { title: "Nasr City", href: "#2", checked: true, dataAttrs: [{ title: "value", data: "2" }] },
-                                        { title: "Down Town", href: "#3", checked: false, dataAttrs: [{ title: "value", data: "3" }], data: arr3 }
-                                    ];
+			//                         }
+			//                     },
+			//                     //Open Add popup
 
-                                    console.log("data : ", ddlTreeDATA);
+			//                     '<a><button class="form-control btn-c-primary d-inline" onclick="openUserModal("")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
+			//                 ],
+			//                 drawCallback: function () {
+			//                     // BUTTON EVENT ON THE DATA TABLE
+			//                 }
+			//             });
+			//         }
+			//         else {
+			//             toastr.error(response.errorMessage);
+			//         }
+			//         // Handle success (e.g., update UI with response data)
+			//     },
+			//     error: function (error) {
+			//         console.log("Error:", error);
+			//         toastr.error("Error:" + error);
+			//     }
+			// }).done(function () {
+			// });
+		}
 
-                                    //                      options = {
-                                    //                         title: "Areas 2",
-                                    //                         data: arr,
-                                    //                         maxHeight: 300,
-                                    //                         multiSelect: true,
-                                    //                         selectChildren: true,
-                                    //                         closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
-                                    //                         openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+		 function PreviewUserModal(id) {
+			window.open(UserPreviewUrl + "?id=" + id, '_blank');
+		}
 
-                                    //                         // Custom item rendering to add checkboxes
-                                    //                         itemRenderer: function (data) {
-                                    //                             var checkbox = data.checked ? '<input type="checkbox" checked class="checkbox" data-title="' + data.title + '">' : '<input type="checkbox" class="checkbox" data-title="' + data.title + '">';
-                                    //                             return `
-                                    //     <div class="dropdown-item">
-                                    //         <label>
-                                    //             ${checkbox}
-                                    //             <span>${data.title}</span>
-                                    //         </label>
-                                    //     </div>
-                                    // `;
-                                    //                         },
+		function openUserModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
 
-                                    //                         // Event triggered when checkbox is clicked
-                                    //                         checkHandler: function (element, checked) {
-                                    //                             var title = $(element).find("span").text();  // Get the title of the clicked item
-                                    //                             console.log("Checkbox state changed:", title, checked);
+			$.ajax({
+				url: UserGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearUserModal();
+					GetDropdownData();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
+							$("#h4UserTitle").html('@SharedResource.Modify_User');
+						else {
+							$("#h4UserTitle").html('@SharedResource.Add_User');
+						}
 
-                                    //                             // Update the checked state in the data structure
-                                    //                             updateCheckedState(title, checked,arr);
-                                    //                         },
+						$("#hdnuserId").val(response.data.id);
+						$("#txtSurname").val(response.data.surname);
+						$("#txtOthername").val(response.data.othername);
+						$("#txtEmail").val(response.data.email);
+						$("#txtMobile").val(response.data.phoneNumber);
+						$("#ddlRole").val(response.data.role);
+						if (response.data.profileImagebase64 != null && response.data.profileImagebase64 != "") {
+							$("#oldprofileimage").val(response.data.profileImagebase64);
 
-                                    //                         clickHandler: function (element) {
-                                    //                             console.log("Element clicked:", element);
-                                    //                         },
+							$("#viewProfileImage").attr("src", "data:image/png;base64," + response.data.profileImagebase64);
+							$("#viewProfileImage").css("display", "");
 
-                                    //                         expandHandler: function (element, expanded) {
-                                    //                             console.log("Expand handler triggered", element, expanded);
-                                    //                         }
-                                    //                     };
-                                    var options = {
-                                        title: "Areas 2",
-                                        data: ddlTreeDATA,
-                                        maxHeight: 300,
-                                        closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
-                                        openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
-                                        multiSelect: true,
-                                        selectChildren: true,
-                                    }
+						}
+						// Fetch data from the server and initialize the tree
+						$.ajax({
+							url: UserMatrix, // API endpoint to fetch the matrix data
+							type: "POST",
+							success: function (response) {
+								if (response && response.data) {
+									data = response.data;
+									initializeTreeView(data);
+								} else {
+									console.error("@SharedResource.Failed_to_fetch_tree_data_");
+								}
+							},
+							error: function () {
+								console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
+							}
+						});
 
-                                    $("#NewDropdowntree").DropDownTree(options);
-
-                                    //initializeTreeView(data);
-                                } else {
-                                    console.error("Failed to fetch tree data.");
-                                }
-                            },
-                            error: function () {
-                                console.error("An error occurred while fetching tree data.");
-                            }
-                        });
-
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
-                $('#AddUserModal').modal('show');
-                $("#frnUserCreate").validate({}).resetForm();
-            });
-
-
-        }
-
-        // Function to update the checked state in the data structure
-        function updateCheckedState(title, checked, arr) {
-            // Function to update the checked state in the data structure
-            // console.log("Updating checked state:", title, checked);
-
-            // // Traverse the data array and update the checked state
-            // arr.forEach(function (area) {
-            //     console.log("Area:", area);
-            //     // Check if the area has data and if it's an array
-            //     if (Array.isArray(area.data)) {
-            //         area.data.forEach(function (city) {
-            //             console.log("City:", city);
-            //             if (city.title === title) {
-            //                 city.checked = checked;
-            //             }
-            //         });
-            //     }
-            // });
-        }
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddUserModal').modal('show');
+				$("#frnUserCreate").validate({}).resetForm();
+			});
 
 
+		}
 
-        function convertToJsTreeFormat(data) {
-            return data.map(item => {
-                return {
-                    text: item.text,
-                    state: {
-                        selected: item.checked
-                    },
-                    children: item.children.length > 0 ? convertToJsTreeFormat(item.children) : []
-                };
-            });
-        }
+		function ResetUserPassword(id){
+			var dataObject = {};
+			dataObject.id = id;
+			$.ajax({
+				url: ResetUserPasswordUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
 
-        function ResetUserPassword(id) {
-            var dataObject = {};
-            dataObject.id = id;
-            $.ajax({
-                url: ResetUserPasswordUrl,
-                type: "POST",
-                data: dataObject,  // Send data if needed
-                beforeSend: function () {
+				},
+				success: function (response) {
+					if (response.data) {
+						toastr.success(response.errorMessage);
+						GetAllUser();
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
 
-                },
-                success: function (response) {
-                    if (response.data) {
-                        toastr.success(response.errorMessage);
-                        GetAllUser();
-                    }
-                    else {
-                        toastr.error(response.errorMessage);
-                    }
-                    // Handle success (e.g., update UI with response data)
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    toastr.error("Error:" + error);
-                }
-            }).done(function () {
+			});
+		}
 
-            });
-        }
+		function ClearUserModal() {
+			$("#h4UserTitle").html('@SharedResource.Add_User');
+			$("#hdnuserId").val("");
+			$("#txtSurname").val("");
+			$("#txtOthername").val("");
+			$("#txtEmail").val("");
+			$("#txtMobile").val("");
+			$("#profileimagefile").val(null);
+			$("#oldprofileimage").val("");
+			$("#viewProfileImage").attr("src", "");
+			$("#viewProfileImage").css("display", "none");
+			$('#tree').jstree("destroy").empty();
+		}
 
-        function ClearUserModal() {
-            $("#h4UserTitle").html("Add User");
-            $("#hdnuserId").val("");
-            $("#txtSurname").val("");
-            $("#txtOthername").val("");
-            $("#txtEmail").val("");
-            $("#txtMobile").val("");
-            $("#profileimagefile").val(null);
-            $("#oldprofileimage").val("");
-            $("#viewProfileImage").attr("src", "");
-            $("#viewProfileImage").css("display", "none");
-            $('#tree').jstree("destroy").empty();
-            $("#NewDropdowntree").empty();
-        }
+		function GetDropdownData() {
+			$.ajax({
+				url: getUserDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlRole").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						$.each(response.data, function (key, value) {
+							if (value.title == "Roles") {
+								$("#ddlRole").append($("<option></option>").val('').html('@SharedResource.Select_Role'));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlRole").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
 
-        function GetDropdownData() {
-            $.ajax({
-                url: getUserDropDownUrl,
-                type: "POST",
-                async: false,
-                // data: dataObject,  // Send data if needed
-                beforeSend: function () {
-                    $("#ddlRole").html('');
-                },
-                success: function (response) {
-                    if (response.data) {
-                        $.each(response.data, function (key, value) {
-                            if (value.title == "Roles") {
-                                $("#ddlRole").append($("<option></option>").val('').html("Select Role"));
-                                $.each(value.items, function (itemskey, itemsvalue) {
-                                    $("#ddlRole").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-                                });
-                            }
-                        });
-                    }
-                },
-                error: function (error) {
-                    console.log("Error:", error);
-                    // toastr.error("Error:" + error);
-                }
+			});
+		}
 
-            });
-        }
+		async function SaveUser() {
 
-        async function SaveUser() {
+			let valid = formValidation(["txtSurname", "txtOthername", "txtEmail", "ddlRole", "txtMobile"]);
+			//get tree selected data
+			var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+			//get tree selected ids
+			var selectedIds = []
+			if (treeData.length > 0) {
+				selectedIds = treeData.map(function (datum) {
+					return parseInt(datum['id']);
+				});
+			}
+			if (valid) {
+				var dataObject = {};
+				dataObject.id = $("#hdnuserId").val();
+				dataObject.Surname = $("#txtSurname").val();
+				dataObject.Othername = $("#txtOthername").val();
+				dataObject.Email = $("#txtEmail").val();
+				dataObject.PhoneNumber = $("#txtMobile").val();
+				dataObject.Role = $("#ddlRole").val();
+				dataObject.UserMatrix = selectedIds;
 
-            let valid = formValidation(["txtSurname", "txtOthername", "txtEmail", "ddlRole", "txtMobile"]);
-            //get tree selected data
-            var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
-            //get tree selected ids
-            var selectedIds = []
-            if (treeData.length > 0) {
-                selectedIds = treeData.map(function (datum) {
-                    return parseInt(datum['id']);
-                });
-            }
-            if (valid) {
-                var dataObject = {};
-                dataObject.id = $("#hdnuserId").val();
-                dataObject.Surname = $("#txtSurname").val();
-                dataObject.Othername = $("#txtOthername").val();
-                dataObject.Email = $("#txtEmail").val();
-                dataObject.PhoneNumber = $("#txtMobile").val();
-                dataObject.Role = $("#ddlRole").val();
-                dataObject.UserMatrix = selectedIds;
+				var FileData = await FiletoBase64string("profileimagefile");
 
-                var FileData = await FiletoBase64string("profileimagefile");
+				if (FileData == "") {
+					FileData = $('#oldprofileimage').val();
+				}
 
-                if (FileData == "") {
-                    FileData = $('#oldprofileimage').val();
-                }
+				dataObject.ProfileImagebase64 = FileData;
 
-                dataObject.ProfileImagebase64 = FileData;
+				$.ajax({
+					url: CreateUpdateUserUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
 
-                $.ajax({
-                    url: CreateUpdateUserUrl,
-                    type: "POST",
-                    data: dataObject,  // Send data if needed
-                    beforeSend: function () {
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddUserModal').modal('hide');
+							GetAllUser();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
 
-                    },
-                    success: function (response) {
-                        if (response.data) {
-                            toastr.success(response.errorMessage);
-                            $('#AddUserModal').modal('hide');
-                            GetAllUser();
-                        }
-                        else {
-                            toastr.error(response.errorMessage);
-                        }
-                        // Handle success (e.g., update UI with response data)
-                    },
-                    error: function (error) {
-                        console.log("Error:", error);
-                        toastr.error("Error:" + error);
-                    }
-                }).done(function () {
+				});
+			}
+			else {
+				toastr.warning('@SharedResource.Please_fill_in_required_field_s_');
+			}
+		}
 
-                });
-            }
-            else {
-                toastr.warning("Please fill in required field(s)");
-            }
-        }
-
-        function initializeTreeView(treeData) {
-            $('#tree').jstree({
-                "core": {
-                    "animation": 0,
-                    "check_callback": true,
-                    "themes": { "icons": false },
-                    'data': treeData
-                },
-                "types": {
-                    "#": {
-                        "valid_children": ["root"]
-                    },
-                    "root": {
-                        "valid_children": ["default"]
-                    },
-                    "default": {
-                        "valid_children": ["default", "file"]
-                    },
-                    "file": {
-                        "valid_children": []
-                    }
-                },
-                "checkbox": {
-                    "tie_selection": false,
-                    "three_state": false,
-                },
-                "plugins": [
-                    "checkbox"
-                ]
-            });
-        }
+		function initializeTreeView(treeData) {
+			$('#tree').jstree({
+				"core": {
+					"animation": 0,
+					"check_callback": true,
+					"themes": { "icons": false },
+					'data': treeData
+				},
+				"types": {
+					"#": {
+						"valid_children": ["root"]
+					},
+					"root": {
+						"valid_children": ["default"]
+					},
+					"default": {
+						"valid_children": ["default", "file"]
+					},
+					"file": {
+						"valid_children": []
+					}
+				},
+				"checkbox": {
+					"tie_selection": false,
+					"three_state": false,
+				},
+				"plugins": [
+					"checkbox"
+				]
+			});
+		}
 
 
 
-
-    </script>
+	</script>
 }

@@ -2,18 +2,18 @@
 	ViewData["Title"] = "Device";
 }
 
-
+@using UI.Resources
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0">Device</h1>
+				<h1 class="m-0">@SharedResource.Device</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">Home</a></li>
-					<li class="breadcrumb-item active">Device</li>
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Device</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -65,13 +65,41 @@
 		function GetAllDevice() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: 'Device Name' },
-				{ data: 'macAddress', title: 'MAC Address' },
-				{ data: 'type', title: 'Type' },
-				{ data: 'defaultCarousel', title: 'Default Carousel' },
+				{ data: 'name', title: '@SharedResource.Device_Name' },
+				{ data: 'macAddress', title: '@SharedResource.MAC_Address' },
+				{ data: 'type', title: '@SharedResource.Type' },
+				{ data: 'defaultCarousel', title: '@SharedResource.Default_Carousel' },
 			];
 
-			initializeDataGrid('DeviceTable', 'openDeviceModal', GetAllDeviceUrl, columnList, false,true,true,false,false, null,true,null);
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel:'@SharedResource.Export_PDF',
+				ExportCSVLabel:'@SharedResource.Export_CSV',
+				ExportExcelLabel:'@SharedResource.Export_Excel',
+				ExcelLabel:'@SharedResource.Excel',
+				PDFLabel:'@SharedResource.PDF',
+				CSVLabel:'@SharedResource.CSV',
+				NodataavailableLabel :'@SharedResource.No_data_available',
+				SearchLabel :'@SharedResource.Search',
+				ShowingLabel :'@SharedResource.Showing',
+				EntriesLabel :'@SharedResource.entries',
+				FilteredfromLabel :'@SharedResource.filtered_from',
+				ViewLabel :'@SharedResource.View',
+				PreviewLabel :'@SharedResource.Preview',
+				DeleteLabel :'@SharedResource.Delete',
+				EditLabel :'@SharedResource.Edit',
+				ResetPasswordLabel :'@SharedResource.Reset_Password',
+				UserNameLabel :'@SharedResource.UserName',
+				DateLabel :'@SharedResource.Date',
+				PageLabel :'@SharedResource.Page',
+				OfLabel :'@SharedResource.of',
+				GeneratedonLabel :'@SharedResource.Generated_on',
+				PreviousLabel :'@SharedResource.Previous',
+				NextLabel :'@SharedResource.Next',
+			};
+
+			initializeDataGrid('DeviceTable', 'openDeviceModal', GetAllDeviceUrl, columnList, false,true,true,false,false, null,true,null,langResource);
 
 			// $.ajax({
 			//     url: GetAllDeviceUrl,
@@ -172,9 +200,9 @@
 					console.log(response.data)
 					if (response.data) {
 						if (response.data.id > 0)
-							$("#h4DeviceTitle").html("Modify Device");
+							$("#h4DeviceTitle").html("@SharedResource.Modify  @SharedResource.Device");
 						else
-							$("#h4DeviceTitle").html("Add Device");
+							$("#h4DeviceTitle").html("@SharedResource.Add  @SharedResource.Device");
 
 						$("#hdnId").val(response.data.id);
 						$("#txtDeviceName").val(response.data.name);
@@ -198,7 +226,7 @@
 		}
 
 		function ClearDeviceModal() {
-			$("#h4DeviceTitle").html("Add Device");
+			$("#h4DeviceTitle").html("@SharedResource.Add  @SharedResource.Device");
 			$("#hdnId").val("0");
 			$("#txtDeviceName").val("");
 			$('#txtMACAddress').val("");
@@ -218,13 +246,13 @@
 					if (response.data) {
 						$.each(response.data, function (key, value) {
 							if (value.title == "Carousel") {
-								$("#ddlDefaultCarousel").append($("<option></option>").val('').html("Select Type"));
+								$("#ddlDefaultCarousel").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
 								$.each(value.items, function (itemskey, itemsvalue) {
 									$("#ddlDefaultCarousel").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
 							}
 							if (value.title == "Type") {
-								$("#ddlType").append($("<option></option>").val('').html("Select Type"));
+								$("#ddlType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
 								$.each(value.items, function (itemskey, itemsvalue) {
 									$("#ddlType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
@@ -282,7 +310,7 @@
 				});
 			}
 			else {
-				toastr.warning("Please fill in required field(s)");
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
 			}
 		}
 	</script>

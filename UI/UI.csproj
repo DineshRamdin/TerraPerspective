@@ -14,11 +14,20 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="8.0.10" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.12.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
     <ProjectReference Include="..\DAL\DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\SharedResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SharedResource.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +43,13 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\SampleFile\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SharedResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SharedResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="Tes" /></VisualStudio></ProjectExtensions>
