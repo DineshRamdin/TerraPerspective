@@ -3,8 +3,8 @@
        Content
 =======================
 */
-#tree{
-    height: 20vh !important;
+#tree {
+    height:fit-content !important;
 }
 
  /*Carousel container*/ 
@@ -18,7 +18,7 @@
  /*Items container - display items in a row*/
 .carousel-container {
     display: flex;
-    transition: opacity 0.120s ease-in-out; /*Smooth sliding transition */
+    transition: opacity 0.5s ease-in-out !important; /*Smooth sliding transition */
 }
 
  /*Each carousel item*/ 
@@ -49,7 +49,6 @@
 .next {
     right: 10px;
 }
-
 
   /*  100% {
         transform: translateX(0);

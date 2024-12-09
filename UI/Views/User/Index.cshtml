@@ -3,6 +3,28 @@
 }
 @using UI.Resources
 
+<link href="~/plugins/dropdowntree/dropdowntree.css" rel="stylesheet" />
+
+<style>
+	/* Ensure checkboxes inside the dropdown are visible */
+	.checkbox {
+		margin-right: 10px;
+		display: inline-block;
+	}
+
+	/* Style for the dropdown items */
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		padding: 5px;
+	}
+
+		.dropdown-item label {
+			cursor: pointer;
+		}
+
+</style>
+
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
@@ -49,6 +71,7 @@
 <!-- /.modal -->
 @section scripts
 {
+	<script src="~/plugins/dropdowntree/dropdowntree.js"></script>
 	<script>
 		var GetAllUserUrl = '@Url.Action("GetAll", "User")';
 		var UserGetByIdUrl = '@Url.Action("GetById", "User")';
@@ -56,13 +79,19 @@
 		var CreateUpdateUserUrl = '@Url.Action("CreateUpdate", "User")';
 		var ResetUserPasswordUrl = '@Url.Action("ResetUserPassword", "User")';
 		var UserPreviewUrl = '@Url.Action("Preview", "User")';
-		var UserMatrix = '@Url.Action("GetTree", "User")';
+		var UserMatrix = '@Url.Action("GetTreeDropDown", "User")';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
 			$('#liusermenu').addClass('active');
 
 			GetAllUser();
+
+			$('#UserTreeDropdown').on('change', function () {
+				// Assuming the plugin has a method to get selected values
+				var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
+				console.log('Selected Values: ', selectedValues);
+			});
 		});
 
 		function GetAllUser() {
@@ -121,89 +150,6 @@
 
 			initializeDataGrid('UserTable', 'openUserModal', GetAllUserUrl, columnList, false,true,true,true,true,'PreviewUserModal',true,null,langResource);
 
-			// $.ajax({
-			//     url: GetAllUserUrl,
-			//     type: "POST",
-			//     // data: dataObject,  // Send data if needed
-			//     beforeSend: function () {
-			//         if ($.fn.dataTable.isDataTable('#UserTable')) {
-			//             $('#UserTable').DataTable().clear().destroy();
-			//         }
-			//     },
-			//     success: function (response) {
-			//         if (response.data) {
-			//             dataToShow = response.data;
-			//             $('#UserTable').DataTable({ //init table
-			//                 dom: "Bfrtip", //button Strip
-			//                 searching: true, //show search
-			//                 paging: false, //no paging
-			//                 processing: true, //processing
-			//                 scrollY: 'auto', //fixed height
-			//                 scrollCollapse: true,//scroll
-			//                 order: [[0, 'desc']], //order
-			//                 language: { // search anf info bars
-			//                     search: '',
-			//                     emptyTable: 'No data available',
-			//                     searchPlaceholder: 'Search',
-			//                     info: "Showing _TOTAL_ entries",
-			//                     infoEmpty: "Showing 0 entries",
-			//                     infoFiltered: "(filtered from _MAX_ entries)",
-			//                 },
-			//                 data: dataToShow, // data to display
-			//                 columnDefs: [ // set action column
-			//                     {
-			//                         //set column order for action
-			//                         targets: columnList.length,
-			//                         //remove sorting on action
-			//                         orderable: false,
-			//                         //set width of action column
-			//                         width: "10%",
-			//                         render: function (data, type, full, meta) {
-			//                             //edit button
-			//                             var edit = '<a onclick="openUserModal(\'' + full.id + '\')" title="Edit"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
-			//                             //list of buttons
-			//                             var btn = '';
-			//                             btn = edit;
-			//                             var reset = '<a onclick="ResetUserPassword(\'' + full.id + '\')" title="Reset Password"><i class="fas fa-undo text-secondary ms-1"></i></a>';
-			//                             btn += reset;
-			//                             data = '<div class="text-nowrap">' + btn + '</div>';
-			//                             return data;
-			//                         }
-			//                     }
-			//                 ],
-			//                 columns: columnList, //column list
-
-			//                 buttons: [ //set buttons above table
-			//                     //Excel Export Button
-			//                     {
-			//                         extend: 'excel',
-			//                         text: '<i class="fa fa-file-excel me-2"></i>Export Excel',
-			//                         className: 'form-control btn-c-secondary d-none',
-			//                         exportOptions: {
-			//                             columns: ':visible:not(.sorting_disabled)'
-
-			//                         }
-			//                     },
-			//                     //Open Add popup
-
-			//                     '<a><button class="form-control btn-c-primary d-inline" onclick="openUserModal("")"><i class="fa fa-plus me-2"></i>Add New</button></a>',
-			//                 ],
-			//                 drawCallback: function () {
-			//                     // BUTTON EVENT ON THE DATA TABLE
-			//                 }
-			//             });
-			//         }
-			//         else {
-			//             toastr.error(response.errorMessage);
-			//         }
-			//         // Handle success (e.g., update UI with response data)
-			//     },
-			//     error: function (error) {
-			//         console.log("Error:", error);
-			//         toastr.error("Error:" + error);
-			//     }
-			// }).done(function () {
-			// });
 		}
 
 		 function PreviewUserModal(id) {
@@ -211,6 +157,7 @@
 		}
 
 		function openUserModal(id) {
+			var options;
 			var dataObject = {};
 			dataObject.id = id;
 
@@ -225,9 +172,9 @@
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id != undefined && response.data.id != null && response.data.id != "")
-							$("#h4UserTitle").html('@SharedResource.Modify_User');
+							$("#h4UserTitle").html("Modify User");
 						else {
-							$("#h4UserTitle").html('@SharedResource.Add_User');
+							$("#h4UserTitle").html("Add User");
 						}
 
 						$("#hdnuserId").val(response.data.id);
@@ -247,16 +194,30 @@
 						$.ajax({
 							url: UserMatrix, // API endpoint to fetch the matrix data
 							type: "POST",
+							data: dataObject,  // Send data if needed
 							success: function (response) {
 								if (response && response.data) {
 									data = response.data;
-									initializeTreeView(data);
+									console.log("data : ", data);
+									var options = {
+										title: "User Matrix",
+										data: data,
+										maxHeight: 300,
+										closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+										openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+										multiSelect: true,
+										selectChildren: true,
+									}
+
+									$("#UserTreeDropdown").DropDownTree(options);
+
+									//initializeTreeView(data);
 								} else {
-									console.error("@SharedResource.Failed_to_fetch_tree_data_");
+									console.error("Failed to fetch tree data.");
 								}
 							},
 							error: function () {
-								console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
+								console.error("An error occurred while fetching tree data.");
 							}
 						});
 
@@ -319,6 +280,7 @@
 			$("#viewProfileImage").attr("src", "");
 			$("#viewProfileImage").css("display", "none");
 			$('#tree').jstree("destroy").empty();
+			$("#UserTreeDropdown").empty();
 		}
 
 		function GetDropdownData() {
@@ -354,12 +316,14 @@
 
 			let valid = formValidation(["txtSurname", "txtOthername", "txtEmail", "ddlRole", "txtMobile"]);
 			//get tree selected data
-			var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+			//var treeData = $('#tree').jstree(true).get_json('#', { flat: true }).filter(x => x.state.checked == true);
+			var treeDropDownData = $("#UserTreeDropdown").init.prototype.GetSelected();
+			
 			//get tree selected ids
 			var selectedIds = []
-			if (treeData.length > 0) {
-				selectedIds = treeData.map(function (datum) {
-					return parseInt(datum['id']);
+			if (treeDropDownData.length > 0) {
+				selectedIds = treeDropDownData.map(function (datum) {
+					return parseInt(datum);
 				});
 			}
 			if (valid) {

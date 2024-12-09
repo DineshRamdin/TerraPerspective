@@ -220,5 +220,31 @@ namespace UI.Controllers
             }
         }
 
-    }
+		[HttpPost]
+		public ActionResult<BaseResponseDTO<List<OutputNode>>> GetTreeDropDown(string Id)
+		{
+			try
+			{
+				BaseResponseDTO<List<OutputNode>> tree = new BaseResponseDTO<List<OutputNode>>();
+				if (string.IsNullOrEmpty(Id))
+				{
+					tree = matrixService.GetTreeDropdown();
+				}
+				else
+				{
+					tree = matrixService.GetTreeDropdownUser(Id);
+				}
+				return Ok(tree);
+
+
+			}
+			catch (Exception ex)
+			{
+
+				return BadRequest();
+
+			}
+		}
+
+	}
 }

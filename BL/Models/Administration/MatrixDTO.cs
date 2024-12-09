@@ -38,10 +38,39 @@ namespace BL.Models.Administration
         public string text { get; set; }
         public string parent { get; set; }
         public state state { get; set; } = new state();
-		public List<DropdownNodeNew> dropdownNodes { get; set; } = new List<DropdownNodeNew>();
     }
 
-    public class DropdownNodeNew
+	public class Node
+	{
+		public string Id { get; set; }
+		public string Text { get; set; }
+		public string Parent { get; set; }
+		public State State { get; set; }
+	}
+
+	public class State
+	{
+		public bool Checked { get; set; }
+		public bool Opened { get; set; }
+	}
+
+	public class OutputNode
+	{
+		public string Title { get; set; }
+		public bool Checked { get; set; }
+		public string Href { get; set; }
+		public List<OutputNode> Data { get; set; } = new List<OutputNode>();
+		public List<DataAttr> DataAttrs { get; set; } = new List<DataAttr>();
+	}
+
+	public class DataAttr
+	{
+		public string Title { get; set; }
+		public string Data { get; set; }
+	}
+
+
+	public class DropdownNodeNew
     {
         //public string Value { get; set; }
         public string Title { get; set; }
@@ -60,11 +89,11 @@ namespace BL.Models.Administration
         public List<ChildNode> Children { get; set; } = new List<ChildNode>();
     }
 
-    public class DataAttr
-    {
-        public string Title { get; set; }
-        public string Data { get; set; }
-    }
+    //public class DataAttr
+    //{
+    //    public string Title { get; set; }
+    //    public string Data { get; set; }
+    //}
 
 
     public class DropdownNode
