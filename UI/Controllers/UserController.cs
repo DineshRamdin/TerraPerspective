@@ -200,7 +200,7 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<List<CRUDMatrix>> tree = new BaseResponseDTO<List<CRUDMatrix>>();
-                if (Id == string.Empty)
+                if (string.IsNullOrEmpty(Id))
                 {
                     tree = matrixService.GetTree();
                 }

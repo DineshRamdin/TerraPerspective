@@ -15,10 +15,10 @@
     overflow: hidden;
 }
 
- /*Items container - display items in a row*/ 
+ /*Items container - display items in a row*/
 .carousel-container {
     display: flex;
-    transition: transform 0.20s ease-in-out;  /*Smooth sliding transition */
+    transition: opacity 0.120s ease-in-out; /*Smooth sliding transition */
 }
 
  /*Each carousel item*/ 

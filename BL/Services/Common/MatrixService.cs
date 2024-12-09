@@ -51,15 +51,21 @@ namespace BL.Services.Common
 										   }).ToList();
 				List<MatrixListDTO> ML = new List<MatrixListDTO>();
 				ML.AddRange(MLL);
+				List<DropdownNode> dropdownNodelst = new List<DropdownNode>();
 				foreach (MatrixListDTO m in MLL)
 				{
+     //               DropdownNode dropdownNode = new DropdownNode(); 
+					//dropdownNode.Id = m.GMID;
+     //               dropdownNode.Text = m.GMDescription;
+     //               dropdownNodelst.Add(dropdownNode);
 					ML.AddRange(GetMatrixChild(m.GMID));
+					//dropdownNodelst = GetMatrixChildDropDown(m.GMID, dropdownNodelst);
 				}
 				dt.ParentIDS = MLL.Select(y => y.GMID).ToList();
 				dt.UID = UsrId;
 				dt.AUID = AID;
 				dt.IDS = ML.Select(y => y.GMID).ToList();
-
+                //dt.dropdownNodelst = dropdownNodelst;
 			}
 			catch (Exception ex)
 			{
@@ -100,7 +106,51 @@ namespace BL.Services.Common
 			return MLL;
 		}
 
-        public BaseResponseDTO<List<CRUDMatrix>> GetTree()
+		//public static List<DropdownNode> GetMatrixChildDropDown(long GMID,List<DropdownNode> dropdownNode)
+		//{
+		//	List<MatrixListDTO> ml = new List<MatrixListDTO>();
+		//	List<MatrixListDTO> MLL = new List<MatrixListDTO>();
+  //          List<ChildNode> childNodes = new List<ChildNode>();
+		//	PerspectiveContext context = new PerspectiveContext();
+		//	try
+		//	{
+		//		ml = (from a in context.SYS_GroupMatrix
+		//			  where a.ParentGMID == GMID && a.DeleteStatus == false
+		//			  select new MatrixListDTO()
+		//			  {
+		//				  GMID = a.GMID,
+		//				  GMDescription = a.GMDescription
+		//			  }).ToList();
+		//		if (ml.Count > 0)
+		//		{
+		//			MLL.AddRange(ml);
+  //                  foreach (var item in dropdownNode)
+  //                  {
+  //                      if (item.Id == GMID)
+  //                      {
+		//					foreach (MatrixListDTO m in ml)
+		//					{
+		//						ChildNode child = new ChildNode();
+		//						child.Id = m.GMID;
+		//						child.Text = m.GMDescription;
+		//						childNodes.Add(child);
+		//						MLL.AddRange(GetMatrixChild(m.GMID));
+		//					}
+		//					item.Children = childNodes;
+		//				}
+  //                  }
+					
+		//		}
+
+		//	}
+		//	catch (Exception ex)
+		//	{
+
+		//	}
+		//	return dropdownNode;
+		//}
+
+		public BaseResponseDTO<List<CRUDMatrix>> GetTree()
         {
             BaseResponseDTO<List<CRUDMatrix>> BaseDto = new BaseResponseDTO<List<CRUDMatrix>>();
             List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
@@ -127,6 +177,97 @@ namespace BL.Services.Common
                           parent = a.ParentGMID.ToString(),
                       }).ToList();
                 ml.AddRange(mlRoot);
+                List<DropdownNode> dropdownNodes = new List<DropdownNode>();
+
+                foreach (var item in ml)
+                {
+
+                    if (item.parent == "#")
+                    {
+                        if (!dropdownNodes.Any(x => x.Value.Contains(item.id)))
+                        {
+                            DropdownNode dropdownNode = new DropdownNode();
+                            dropdownNode.Value = item.id;
+                            dropdownNode.Text = item.text;
+                            dropdownNode.Checked = item.state.Checked;
+                            List<ChildNode> childNode = new List<ChildNode>();
+                            dropdownNode.Children = childNode;
+                            dropdownNodes.Add(dropdownNode);
+                        }
+
+                    }
+                    else if (item.parent != "#")
+                    {
+                        if (dropdownNodes.Count == 0)
+                        {
+                            DropdownNode dropdownNode = new DropdownNode();
+                            dropdownNode.Value = item.parent;
+                            dropdownNode.Text = ml.Where(x => x.id.Contains(item.parent)).FirstOrDefault().text;
+                            dropdownNode.Checked = ml.Where(x => x.id.Contains(item.parent)).FirstOrDefault().state.Checked;
+                            List<ChildNode> childNode = new List<ChildNode>();
+                            dropdownNode.Children = childNode;
+                            dropdownNodes.Add(dropdownNode);
+                        }
+                        foreach (var dropdown in dropdownNodes)
+                        {
+                            if (dropdown.Value == item.parent)
+                            {
+
+                                ChildNode childNode1 = new ChildNode();
+                                childNode1.Value = item.id;
+                                childNode1.Text = item.text;
+                                childNode1.Checked = item.state.Checked;
+                                dropdown.Children.Add(childNode1);
+                            }
+                        }
+                    }
+
+                }
+                List<DropdownNodeNew> DropdownNodeNew = new List<DropdownNodeNew>();
+                List<DataAttr> DataAttrParent = new List<DataAttr>();
+                foreach (var item in dropdownNodes)
+                {
+                    DropdownNodeNew dropdownNode = new DropdownNodeNew
+                    {
+                        //Value = item.Value,
+                        Title = item.Text,
+                        Checked = item.Checked,
+                        Href = '#' + item.Value
+                    };
+                    DataAttr dataAttr = new DataAttr();
+                    dataAttr.Title = "value";
+                    dataAttr.Data = item.Value;
+                    dropdownNode.DataAttrs.Add(dataAttr);
+
+                    if (item.Children.Count > 0)
+                    {
+                        List<DropdownNodeNew> DropdownNodeNewchild = new List<DropdownNodeNew>();
+                        List<DataAttr> DataAttrChild = new List<DataAttr>();
+                        foreach (var items in item.Children)
+                        {
+                            DropdownNodeNew dropdownNodeChild = new DropdownNodeNew
+                            {
+                                //Value = item.Value,
+                                Title = items.Text,
+                                Checked = items.Checked,
+                                Href = '#' + items.Value
+                            };
+                            DataAttr dataAttrchild = new DataAttr();
+                            dataAttrchild.Title = "value";
+                            dataAttrchild.Data = items.Value;
+                            DataAttrChild.Add(dataAttrchild);
+
+                            dropdownNodeChild.DataAttrs = DataAttrChild;
+                            DropdownNodeNewchild.Add(dropdownNodeChild);
+
+                        }
+
+                        dropdownNode.Data = DropdownNodeNewchild;
+                    }
+
+                    DropdownNodeNew.Add(dropdownNode);
+                }
+                ml[0].dropdownNodes = DropdownNodeNew;
                 BaseDto.Data = ml;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
             }
@@ -206,12 +347,103 @@ namespace BL.Services.Common
                           id = a.GMID.ToString(),
                           text = a.GMDescription,
                           parent = a.ParentGMID.ToString(),
-                      }).ToList();
+                      }).OrderBy(x=>x.id).ToList();
                 ml.AddRange(mlRoot);
                 foreach (long gmid in UMId.ParentIDS)
                 {
                     ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
                 }
+                List<DropdownNode> dropdownNodes = new List<DropdownNode>();
+
+                foreach (var item in ml)
+                {
+
+                    if (item.parent == "#")
+                    {
+                        if (!dropdownNodes.Any(x => x.Value.Contains(item.id)))
+                        {
+                            DropdownNode dropdownNode = new DropdownNode();
+                            dropdownNode.Value = item.id;
+                            dropdownNode.Text = item.text;
+                            dropdownNode.Checked = item.state.Checked;
+                            List<ChildNode> childNode = new List<ChildNode>();
+                            dropdownNode.Children = childNode;
+                            dropdownNodes.Add(dropdownNode);
+                        }
+
+                    }
+                    else if (item.parent != "#")
+                    {
+                        if (dropdownNodes.Count == 0)
+                        {
+                            DropdownNode dropdownNode = new DropdownNode();
+                            dropdownNode.Value = item.parent;
+                            dropdownNode.Text = ml.Where(x => x.id.Contains(item.parent)).FirstOrDefault().text;
+                            dropdownNode.Checked = ml.Where(x => x.id.Contains(item.parent)).FirstOrDefault().state.Checked;
+                            List<ChildNode> childNode = new List<ChildNode>();
+                            dropdownNode.Children = childNode;
+                            dropdownNodes.Add(dropdownNode);
+                        }
+                        foreach (var dropdown in dropdownNodes)
+                        {
+                            if (dropdown.Value == item.parent)
+                            {
+
+                                ChildNode childNode1 = new ChildNode();
+                                childNode1.Value = item.id;
+                                childNode1.Text = item.text;
+                                childNode1.Checked = item.state.Checked;
+                                dropdown.Children.Add(childNode1);
+                            }
+                        }
+                    }
+                    
+                }
+                List<DropdownNodeNew> DropdownNodeNew = new List<DropdownNodeNew>();
+                List<DataAttr> DataAttrParent = new List<DataAttr>();
+                foreach (var item in dropdownNodes)
+                {
+                    DropdownNodeNew dropdownNode = new DropdownNodeNew
+                    {
+                        //Value = item.Value,
+                        Title = item.Text,
+                        Checked = item.Checked,
+                        Href= '#'+item.Value
+                    };
+                    DataAttr dataAttr = new DataAttr();
+                    dataAttr.Title = "value";
+                    dataAttr.Data = item.Value;
+                    dropdownNode.DataAttrs.Add(dataAttr);
+
+                    if (item.Children.Count > 0)
+                    {
+                        List<DropdownNodeNew> DropdownNodeNewchild = new List<DropdownNodeNew>();
+                        List<DataAttr> DataAttrChild = new List<DataAttr>();
+                        foreach (var items in item.Children)
+                        {
+                            DropdownNodeNew dropdownNodeChild = new DropdownNodeNew
+                            {
+                                //Value = item.Value,
+                                Title = items.Text,
+                                Checked = items.Checked,
+                                Href = '#' + items.Value
+                            };
+                            DataAttr dataAttrchild = new DataAttr();
+                            dataAttrchild.Title = "value";
+                            dataAttrchild.Data = items.Value;
+                            DataAttrChild.Add(dataAttrchild);
+
+                            dropdownNodeChild.DataAttrs = DataAttrChild;
+                            DropdownNodeNewchild.Add(dropdownNodeChild);
+
+                        }
+
+                        dropdownNode.Data = DropdownNodeNewchild;
+                    }
+
+                    DropdownNodeNew.Add(dropdownNode);
+                }
+                ml[0].dropdownNodes=DropdownNodeNew;
                 BaseDto.Data = ml;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
             }
