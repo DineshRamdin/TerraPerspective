@@ -537,6 +537,9 @@
   <data name="User" xml:space="preserve">
     <value>Utilisatrice</value>
   </data>
+  <data name="User Matrix" xml:space="preserve">
+    <value>Matrice utilisateur</value>
+  </data>
   <data name="UserName" xml:space="preserve">
     <value>Nom d'utilisateur</value>
   </data>

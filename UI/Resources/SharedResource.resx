@@ -677,6 +677,10 @@
     <value>User</value>
     <comment>User</comment>
   </data>
+  <data name="User Matrix" xml:space="preserve">
+    <value>User Matrix</value>
+    <comment>User Matrix</comment>
+  </data>
   <data name="UserName" xml:space="preserve">
     <value>UserName</value>
     <comment>UserName</comment>

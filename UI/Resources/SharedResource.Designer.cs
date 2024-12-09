@@ -1321,6 +1321,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User Matrix.
+        /// </summary>
+        public static string User_Matrix {
+            get {
+                return ResourceManager.GetString("User Matrix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to UserName.
         /// </summary>
         public static string UserName {
