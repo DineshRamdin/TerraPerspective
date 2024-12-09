@@ -54,35 +54,35 @@ namespace BL.Services.Administration
 							};
 						}
 
-                        try
-                        {
-                            if (user.LastPasswordChangedDate.HasValue)
-                            {
-                                int passwordParamForExpiry = Convert.ToInt32(new ApplicationSettingsHandler().settings.Params.GetValueOrDefault("PasswordEpxiry"));
-                                DateTime dateTimeLastPasswordChangedDate = user.LastPasswordChangedDate.Value.AddDays(passwordParamForExpiry);
-                                if (dateTimeLastPasswordChangedDate < DateTime.UtcNow)
-                                {
-                                    errorMsg = "Password Expired.Please change your Password";
-                                    user.Status = UserStatus.PasswordExpired;
+      //                  try
+      //                  {
+      //                      if (user.LastPasswordChangedDate.HasValue)
+      //                      {
+      //                          int passwordParamForExpiry = Convert.ToInt32(new ApplicationSettingsHandler().settings.Params.GetValueOrDefault("PasswordEpxiry"));
+      //                          DateTime dateTimeLastPasswordChangedDate = user.LastPasswordChangedDate.Value.AddDays(passwordParamForExpiry);
+      //                          if (dateTimeLastPasswordChangedDate < DateTime.UtcNow)
+      //                          {
+      //                              errorMsg = "Password Expired.Please change your Password";
+      //                              user.Status = UserStatus.PasswordExpired;
 
-                                }
-                            }
-						}
-                        catch (Exception ex)
-                        {
+      //                          }
+      //                      }
+						//}
+      //                  catch (Exception ex)
+      //                  {
 
-                        }
-
-                    }
-                    else if (result.IsLockedOut)
-                    {
-                        errorMsg = "Account Locked.Please Contact Administrator";
-                        user.Status = UserStatus.AccountLocked;
-                        await _userManager.UpdateAsync(user);
-                        user = new ApplicationUser();
-                        sQryResult = queryResult.FAILED;
+      //                  }
 
                     }
+                    //else if (result.IsLockedOut)
+                    //{
+                    //    errorMsg = "Account Locked.Please Contact Administrator";
+                    //    user.Status = UserStatus.AccountLocked;
+                    //    await _userManager.UpdateAsync(user);
+                    //    user = new ApplicationUser();
+                    //    sQryResult = queryResult.FAILED;
+
+                    //}
                     else
                     {
                         int AccountLockedAttempts = Convert.ToInt32(new ApplicationSettingsHandler().settings.Params.GetValueOrDefault("AccountLockedAttempts"));
