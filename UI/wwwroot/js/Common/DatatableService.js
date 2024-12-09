@@ -456,10 +456,6 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         $('.dataTables_paginate').css('margin-top', '0px');
                     }
 
-                    //$('#' + tableID + '_previous a').html(langResource.PreviousLabel);
-                    // $('#' + tableID + '_next a').html(langResource.NextLabel);
-
-
                     if (showAdd) {
                         $('.addbtn').removeClass('d-none');
                     }
