@@ -1,0 +1,46 @@
+﻿using BL.Models.Administration;
+using BL.Models.Common;
+using BL.Services.Administration;
+using DAL.Context;
+using DAL.Models;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using UI.Controllers.Common;
+
+namespace UI.Controllers
+{
+    public class CompanyController : BaseController
+    {
+        public CompanyService service;
+        public CompanyController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext) : base(userManager, signInManager, rolemanager, Dbcontext)
+        {
+            service = new CompanyService();
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult<BaseResponseDTO<List<CompanyDTO>>> GetAll()
+        {
+            try
+            {
+                BaseResponseDTO<List<CompanyDTO>> dt = new BaseResponseDTO<List<CompanyDTO>>();
+
+               dt = service.GetAll();
+
+                return Ok(dt);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+
+        }
+
+    }
+}

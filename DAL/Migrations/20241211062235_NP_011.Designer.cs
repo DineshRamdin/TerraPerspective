@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PerspectiveContext))]
-    partial class PerspectiveContextModelSnapshot : ModelSnapshot
+    [Migration("20241211062235_NP_011")]
+    partial class NP_011
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,7 +273,7 @@ namespace DAL.Migrations
                     b.ToTable("SYS_CarouselPosterMapping");
                 });
 
-            modelBuilder.Entity("DAL.Models.Administration.SYS_Company", b =>
+            modelBuilder.Entity("DAL.Models.Administration.SYS_CorporateInformation", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -332,8 +335,8 @@ namespace DAL.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("PostalCode")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
@@ -356,7 +359,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SYS_Company");
+                    b.ToTable("SYS_CorporateInformation");
                 });
 
             modelBuilder.Entity("DAL.Models.Administration.SYS_Device", b =>
