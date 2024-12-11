@@ -80,5 +80,52 @@ namespace BL.Services.Administration
 
             return dto;
         }
+
+
+        public BaseResponseDTO<List<CompanyDTO>> GetPreviewById(long? id)
+        {
+            BaseResponseDTO<List<CompanyDTO>> dto = new BaseResponseDTO<List<CompanyDTO>>();
+            List<CompanyDTO> result = new List<CompanyDTO>();
+            string errorMsg = "No Data Found";
+            try
+            {
+                result = (from a in context.SYS_Company
+                          where a.Id == id && a.DeleteStatus == false
+                          select new CompanyDTO()
+                          {
+                              Id = a.Id,
+                              Code = a.Code,
+                              RegistrationNumber = a.RegistrationNumber,
+                              NameofCompany = a.NameofCompany,
+                              RegistrationDate = a.RegistrationDate,
+                              TelephoneNumber = a.TelephoneNumber,
+                              MobileNumber = a.MobileNumber,
+                              Email = a.Email,
+                              Locality = a.Locality,
+                              Country = a.Country,
+                              PostalCode = a.PostalCode,
+                              MCAVCA = a.MCAVCA,
+                              CompanyIcon = a.CompanyIcon,
+                              CompanyIconFlag = a.CompanyIcon == null ? false : true,
+                              Follow1 = a.Follow1,
+                              Follow2 = a.Follow2,
+                              Follow3 = a.Follow3,
+                              Follow4 = a.Follow4,
+                              Follow5 = a.Follow5,
+
+                          }).ToList();
+                dto.Data = result;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                dto.Data = result;
+                dto.ErrorMessage = errorMsg;
+                dto.QryResult = queryResult.FAILED;
+            }
+
+            return dto;
+        }
+
     }
 }

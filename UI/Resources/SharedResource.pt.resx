@@ -192,6 +192,9 @@
   <data name="Comment" xml:space="preserve">
     <value>Comentário</value>
   </data>
+  <data name="Company" xml:space="preserve">
+    <value>Empresa</value>
+  </data>
   <data name="Copy Matrix Tree" xml:space="preserve">
     <value>Copiar árvore matricial</value>
   </data>

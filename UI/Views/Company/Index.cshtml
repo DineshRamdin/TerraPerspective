@@ -8,12 +8,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Company</h1>
+                <h1 class="m-0">@SharedResource.Company</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
-                    <li class="breadcrumb-item active">Company</li>
+                    <li class="breadcrumb-item active">@SharedResource.Company</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -47,6 +47,8 @@
 {
     <script>
         var GetAllCompanyUrl = '@Url.Action("GetAll", "Company")';
+        var CompanyPreviewUrl = '@Url.Action("Preview", "Company")';
+        var CompanyGetByIdUrl = '@Url.Action("GetById", "Company")';
 
         $(function () {
             $('.nav-link').removeClass('active');
@@ -65,6 +67,8 @@
                 { data: 'telephoneNumber', title: 'Telephone Number' },
                 { data: 'mobileNumber', title: 'Mobile Number' },
                 { data: 'email', title: 'Email' },
+                { data: 'postalCode', title: 'Postal Code' },
+
             ];
 
             var langResource = {
@@ -99,6 +103,120 @@
 
 
         }
+        function PreviewCompanyModal(id) {
+            window.open(CompanyPreviewUrl + "?id=" + id, '_blank');
+        }
+
+        function openCompanyModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: CompanyGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearPosterModal();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $("#deleteImageBtn").hide();
+                        if (response.data.id > 0)
+                            $("#h4CompanyTitle").html("@SharedResource.Modify  @SharedResource.Company");
+                        else
+                            $("#h4CompanyTitle").html("@SharedResource.Add  @SharedResource.Company");
+
+                        $("#hdnId").val(response.data.id);
+
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddCompanyModal').modal('show');
+                $("#frnCompanyCreate").validate({}).resetForm();;
+            });
+
+
+        }
+
+        function deleteImage() {
+            // Reset the file input and the hidden field
+            $('#imagefile').val("");
+            $("#imagefile").val(null);
+            $('#viewImage').attr('src', "");
+            $('#oldreportimage').val("");
+            $("#oldimage").val("");
+            $('#deleteImageBtn').hide();
+        }
+
+        function ClearPosterModal() {
+            $("#h4CompanyTitle").html("@SharedResource.Add  @SharedResource.Company");
+            $("#hdnId").val(0);
+            
+            $("#imagefile").val(null);
+            $("#oldimage").val("");
+            $("#viewImage").attr("src", "");
+            $("#viewImage").css("display", "none");
+        }
+
+        async function SaveCompany() {
+
+            let valid = formValidation(["txtPosterName", "ddlType"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtPosterName").val();
+                dataObject.Type = $("#ddlType").val();
+                dataObject.Status = $('#chkStatus').prop('checked');
+
+                var FileData = await FiletoBase64string("imagefile");
+
+
+                if (FileData == "") {
+                    FileData = $('#oldimage').val();
+                }
+
+                dataObject.PosterImageBase64 = FileData;
+
+                $.ajax({
+                    url: CreateUpdateCompanyUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddCompanyModal').modal('hide');
+                            GetAllCompany();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+        }
+
 
 
     </script>
