@@ -495,6 +495,7 @@ namespace DAL.Context
         public DbSet<SYS_Projects> SYS_Projects { get; set; }
 
 
+        public DbSet<SYS_Company> SYS_Company { get; set; }
 
 	}
 }

@@ -918,6 +918,24 @@ namespace BL.Services.Common
             }
             #endregion
 
+            #region Company
+            if (!context.SYS_Modules.Any(x => x.Name == "Company"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "Company",
+                    Url = "Company/index",
+                    Order = 0,
+                    Icon = "fas fa-chart-pie",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now
+
+
+                });
+                context.SaveChanges();
+            }
+            #endregion
+
             List<SYS_Modules> dtl = context.SYS_Modules.Where(x => x.DisplayName == null).ToList();
 			if (dtl.Count > 0)
 			{

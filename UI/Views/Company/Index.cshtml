@@ -1,0 +1,223 @@
+﻿@{
+    ViewData["Title"] = "Company";
+}
+@using UI.Resources
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Company</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Company</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="CompanyTable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddCompanyModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddCompany.cshtml" />
+</div>
+
+@section scripts
+{
+    <script>
+        var GetAllCompanyUrl = '@Url.Action("GetAll", "Company")';
+        var CompanyPreviewUrl = '@Url.Action("Preview", "Company")';
+        var CompanyGetByIdUrl = '@Url.Action("GetById", "Company")';
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#lipostermenu').addClass('active');
+
+            GetAllCompany();
+        });
+
+        function GetAllCompany() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'nameofCompany', title: 'Name of Company' },
+                { data: 'code', title: 'Code' },
+                { data: 'registrationNumber', title: 'Registration Number' },
+                { data: 'registrationDate', title: 'Registration Date' },
+                { data: 'telephoneNumber', title: 'Telephone Number' },
+                { data: 'mobileNumber', title: 'Mobile Number' },
+                { data: 'email', title: 'Email' },
+                { data: 'postalCode', title: 'Postal Code' },
+
+            ];
+
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+            };
+
+            initializeDataGrid('CompanyTable', 'openCompanyModal', GetAllCompanyUrl, columnList, false, true, true, false, true, 'PreviewCompanyModal', true, null, langResource);
+
+
+        }
+        function PreviewCompanyModal(id) {
+            window.open(CompanyPreviewUrl + "?id=" + id, '_blank');
+        }
+
+        function openCompanyModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: CompanyGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearPosterModal();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $("#deleteImageBtn").hide();
+                        if (response.data.id > 0)
+                            $("#h4CompanyTitle").html("@SharedResource.Modify  @SharedResource.Company");
+                        else
+                            $("#h4CompanyTitle").html("@SharedResource.Add  @SharedResource.Company");
+
+                        $("#hdnId").val(response.data.id);
+
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddCompanyModal').modal('show');
+                $("#frnCompanyCreate").validate({}).resetForm();;
+            });
+
+
+        }
+
+        function deleteImage() {
+            // Reset the file input and the hidden field
+            $('#imagefile').val("");
+            $("#imagefile").val(null);
+            $('#viewImage').attr('src', "");
+            $('#oldreportimage').val("");
+            $("#oldimage").val("");
+            $('#deleteImageBtn').hide();
+        }
+
+        function ClearPosterModal() {
+            $("#h4CompanyTitle").html("@SharedResource.Add  @SharedResource.Company");
+            $("#hdnId").val(0);
+            
+            $("#imagefile").val(null);
+            $("#oldimage").val("");
+            $("#viewImage").attr("src", "");
+            $("#viewImage").css("display", "none");
+        }
+
+        async function SaveCompany() {
+
+            let valid = formValidation(["txtPosterName", "ddlType"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtPosterName").val();
+                dataObject.Type = $("#ddlType").val();
+                dataObject.Status = $('#chkStatus').prop('checked');
+
+                var FileData = await FiletoBase64string("imagefile");
+
+
+                if (FileData == "") {
+                    FileData = $('#oldimage').val();
+                }
+
+                dataObject.PosterImageBase64 = FileData;
+
+                $.ajax({
+                    url: CreateUpdateCompanyUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddCompanyModal').modal('hide');
+                            GetAllCompany();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+        }
+
+
+
+    </script>
+}
