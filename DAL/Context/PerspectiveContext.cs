@@ -490,6 +490,7 @@ namespace DAL.Context
         public DbSet<SYS_Reports> SYS_Reports { get; set; }
         public DbSet<SYS_SystemIcon> SYS_SystemIcon { get; set; }
         public DbSet<SYS_ZoneMatrix> SYS_ZoneMatrix { get; set; }
+        public DbSet<SYS_Company> SYS_Company { get; set; }
 
     }
 }

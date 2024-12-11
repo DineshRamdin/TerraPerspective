@@ -217,6 +217,10 @@
     <value>Comment</value>
     <comment>Comment</comment>
   </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+    <comment>Company</comment>
+  </data>
   <data name="Copy Matrix Tree" xml:space="preserve">
     <value>Copy Matrix Tree</value>
     <comment>Copy Matrix Tree</comment>

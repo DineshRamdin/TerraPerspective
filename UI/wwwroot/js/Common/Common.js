@@ -189,6 +189,9 @@ function renderDynamicMenu(data, langResource) {
         else if (grandParent.name == "Zone Management") {
             MenuName = langResource.ZoneManagementMenuLabel;
         }
+        else if (grandParent.name == "Company") {
+            MenuName = langResource.CompanyMenuLabel;
+        }
         else {
             MenuName = grandParent.name;
         }
@@ -289,6 +292,9 @@ function renderDynamicMenu(data, langResource) {
                 else if (parent.name == "Zone Management") {
                     SubMenuName = langResource.ZoneManagementMenuLabel;
                 }
+                else if (parent.name == "Company") {
+                    SubMenuName = langResource.CompanyMenuLabel;
+                }
                 else {
                     SubMenuName = parent.name;
                 }
@@ -380,6 +386,9 @@ function renderDynamicMenu(data, langResource) {
                         }
                         else if (child.name == "Zone Management") {
                             ChildSubMenuName = langResource.ZoneManagementMenuLabel;
+                        }
+                        else if (child.name == "Company") {
+                            ChildSubMenuName = langResource.CompanyMenuLabel;
                         }
                         else {
                             ChildSubMenuName = child.name;
