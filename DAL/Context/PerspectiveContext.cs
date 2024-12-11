@@ -481,7 +481,9 @@ namespace DAL.Context
         public DbSet<SYS_ZoneManagement> SYS_ZoneManagement { get; set; }
         public DbSet<SYS_Testing> SYS_Testing { get; set; }
         public DbSet<SYS_GlobalParam> SYS_GlobalParam { get; set; }
-        public DbSet<SYS_Modules> SYS_Modules { get; set; }
+		public DbSet<SYS_CodeConfiguration> SYS_CodeConfiguration { get; set; }
+		public DbSet<SYS_TableCodeConfigurations> SYS_TableCodeConfigurations { get; set; }
+		public DbSet<SYS_Modules> SYS_Modules { get; set; }
         public DbSet<SYS_AccessRights> SYS_AccessRights { get; set; }
         public DbSet<SYS_AccessRightsDetails> SYS_AccessRightsDetails { get; set; }
         public DbSet<SYS_GroupMatrix> SYS_GroupMatrix { get; set; }
@@ -490,6 +492,9 @@ namespace DAL.Context
         public DbSet<SYS_Reports> SYS_Reports { get; set; }
         public DbSet<SYS_SystemIcon> SYS_SystemIcon { get; set; }
         public DbSet<SYS_ZoneMatrix> SYS_ZoneMatrix { get; set; }
+        public DbSet<SYS_Projects> SYS_Projects { get; set; }
 
-    }
+
+
+	}
 }

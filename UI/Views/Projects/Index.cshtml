@@ -1,0 +1,263 @@
+﻿@{
+	ViewData["Title"] = "Projects";
+}
+@using UI.Resources
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Projects</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Projects</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*   <div class="col-2">
+					<button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+					</div> *@
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="ProjectsTable" class="table table-bordered table-striped"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddProjectsModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddProjects.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllProjectsUrl = '@Url.Action("GetAll", "Projects")';
+		var PosterGetByIdUrl = '@Url.Action("GetById", "Projects")';
+		var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
+		var CreateUpdatePosterUrl = '@Url.Action("CreateUpdate", "Poster")';
+		var PosterPreviewUrl = '@Url.Action("Preview", "Poster")';
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liprojectsmenu').addClass('active');
+
+			GetAllProjects();
+		});
+
+		function GetAllProjects() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'name', title: '@SharedResource.Poster_Name' },
+				{ data: 'typeName', title: '@SharedResource.Type' },
+			];
+
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel: '@SharedResource.Export_PDF',
+				ExportCSVLabel: '@SharedResource.Export_CSV',
+				ExportExcelLabel: '@SharedResource.Export_Excel',
+				ExcelLabel: '@SharedResource.Excel',
+				PDFLabel: '@SharedResource.PDF',
+				CSVLabel: '@SharedResource.CSV',
+				NodataavailableLabel: '@SharedResource.No_data_available',
+				SearchLabel: '@SharedResource.Search',
+				ShowingLabel: '@SharedResource.Showing',
+				EntriesLabel: '@SharedResource.entries',
+				FilteredfromLabel: '@SharedResource.filtered_from',
+				ViewLabel: '@SharedResource.View',
+				PreviewLabel: '@SharedResource.Preview',
+				DeleteLabel: '@SharedResource.Delete',
+				EditLabel: '@SharedResource.Edit',
+				ResetPasswordLabel: '@SharedResource.Reset_Password',
+				UserNameLabel: '@SharedResource.UserName',
+				DateLabel: '@SharedResource.Date',
+				PageLabel: '@SharedResource.Page',
+				OfLabel: '@SharedResource.of',
+				GeneratedonLabel: '@SharedResource.Generated_on',
+				PreviousLabel: '@SharedResource.Previous',
+				NextLabel: '@SharedResource.Next',
+			};
+
+			initializeDataGrid('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, columnList, false, true, true, false, true, 'PreviewPosterModal', true, null, langResource);
+
+		}
+
+		function PreviewPosterModal(id) {
+			window.open(PosterPreviewUrl + "?id=" + id, '_blank');
+		}
+
+		function openProjectsModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: PosterGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearProjectsModal();
+					GetDropdownData();
+				},
+				success: function (response) {
+					if (response.data) {
+						$("#deleteImageBtn").hide();
+						if (response.data.id > 0)
+							$("#h4PosterTitle").html("@SharedResource.Modify  @SharedResource.Poster");
+						else
+							$("#h4PosterTitle").html("@SharedResource.Add  @SharedResource.Poster");
+
+						$("#hdnId").val(response.data.id);
+						$("#txtPosterName").val(response.data.name);
+						$("#ddlType").val(response.data.type == null || response.data.type == 0 ? "" : response.data.type);
+						$('#chkStatus').prop('checked', response.data.status == null ? true : response.data.status);
+
+						if (response.data.posterImageBase64 != null && response.data.posterImageBase64 != "") {
+							$("#oldimage").val(response.data.posterImageBase64);
+
+							$("#viewImage").attr("src", "data:image/png;base64," + response.data.posterImageBase64);
+							$("#viewImage").css("display", "");
+							$("#deleteImageBtn").show();
+
+						}
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddPosterModal').modal('show');
+				$("#frnPosterCreate").validate({}).resetForm();;
+			});
+
+
+		}
+
+		function deleteImage() {
+			// Reset the file input and the hidden field
+			$('#imagefile').val("");
+			$("#imagefile").val(null);
+			$('#viewImage').attr('src', "");
+			$('#oldreportimage').val("");
+			$("#oldimage").val("");
+			$('#deleteImageBtn').hide();
+		}
+
+		function ClearProjectsModal() {
+			$("#h4PosterTitle").html("@SharedResource.Add  @SharedResource.Poster");
+			$("#hdnId").val(0);
+			$("#txtPosterName").val("");
+			$("#ddlType").val("");
+			$('#chkStatus').prop('checked', true);
+			$("#txtMobile").val("");
+			$("#imagefile").val(null);
+			$("#oldimage").val("");
+			$("#viewImage").attr("src", "");
+			$("#viewImage").css("display", "none");
+		}
+
+		function GetDropdownData() {
+			$.ajax({
+				url: getProjectsDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlType").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						$.each(response.data, function (key, value) {
+							if (value.title == "Type") {
+								$("#ddlType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
+
+			});
+		}
+
+		async function SavePoster() {
+
+			let valid = formValidation(["txtPosterName", "ddlType"]);
+
+			if (valid) {
+				var dataObject = {};
+				dataObject.Id = $("#hdnId").val();
+				dataObject.Name = $("#txtPosterName").val();
+				dataObject.Type = $("#ddlType").val();
+				dataObject.Status = $('#chkStatus').prop('checked');
+
+				var FileData = await FiletoBase64string("imagefile");
+
+
+				if (FileData == "") {
+					FileData = $('#oldimage').val();
+				}
+
+				dataObject.PosterImageBase64 = FileData;
+
+				$.ajax({
+					url: CreateUpdatePosterUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddPosterModal').modal('hide');
+							GetAllPoster();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			}
+		}
+
+	</script>
+}
