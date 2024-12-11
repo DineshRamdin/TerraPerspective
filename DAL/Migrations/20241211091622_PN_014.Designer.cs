@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PerspectiveContext))]
-    partial class PerspectiveContextModelSnapshot : ModelSnapshot
+    [Migration("20241211091622_PN_014")]
+    partial class PN_014
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,21 +285,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Colour1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour4")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour5")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CompanyIcon")
                         .HasColumnType("nvarchar(max)");
 
@@ -315,6 +303,21 @@ namespace DAL.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("Follow1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow5")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Locality")
                         .HasColumnType("bigint");
@@ -357,42 +360,6 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SYS_Company");
-                });
-
-            modelBuilder.Entity("DAL.Models.Administration.SYS_Country", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("DeleteStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SYS_Country");
                 });
 
             modelBuilder.Entity("DAL.Models.Administration.SYS_Device", b =>
@@ -682,42 +649,6 @@ namespace DAL.Migrations
                     b.HasIndex("LookUpTypeId");
 
                     b.ToTable("SYS_LookUpValue");
-                });
-
-            modelBuilder.Entity("DAL.Models.Administration.SYS_MCAVCA", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("DeleteStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SYS_MCAVCA");
                 });
 
             modelBuilder.Entity("DAL.Models.Administration.SYS_Modules", b =>

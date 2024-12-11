@@ -3,7 +3,7 @@
 }
 @using UI.Resources
 
-<div class="modal-dialog">
+<div class="modal-dialog modal-xl">
     <form id="frnCompanyCreate">
         <input type="hidden" id="hdnId" value="" />
         <div class="modal-content">
@@ -16,44 +16,101 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    @* <div class="col-12 form-group">
-                    <label>@SharedResource.Poster_Name<span class="red-required">*</span></label>
-                    <input type="text" id="txtPosterName" class="form-control" placeholder="@SharedResource.Poster_Name" required />
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Name_of_Company<span class="red-required">*</span></label>
+                        <input type="text" id="txtNameofCompany" class="form-control" placeholder="@SharedResource.Name_of_Company" required />
                     </div>
-                    <div class="col-12 form-group">
-                    <label>@SharedResource.Type<span class="red-required">*</span></label>
-                    <select class="form-control" id="ddlType" required min=0></select>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Code<span class="red-required">*</span></label>
+                        <input type="text" id="txtCode" class="form-control" placeholder="@SharedResource.Code" required />
                     </div>
-                    <div class="col-12 form-group">
-                    <label>@SharedResource.Status<span class="red-required">*</span></label>
-                    <div class="form-group">
-                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                    <input type="checkbox" class="custom-control-input" id="chkStatus">
-                    <label class="custom-control-label" for="chkStatus"></label>
-                    </div>
-                    </div>
-                    </div> *@
 
-                    <div class="col-12 row form-group">
-                        <div class="col-6">
-                            <label for="imagefile">@SharedResource.Image</label>
-                            <input type="file" id="imagefile" name="imagefile" accept="image/*" onchange="UploadFileisValidImage('imagefile')">
-                            <input type="hidden" id="oldimage" value="" />
-                        </div>
-                        <div class="col-6">
-                            <img id="viewImage" style="height: 80%;width: 80%;" />
-                            <button type="button" title="Delete Image" class="btn btn-block btn-info btn-sm" id="deleteImageBtn"
-                                    style="display: none; margin-top: 13px; width: 55%;" onclick="deleteImage()">
-                                @SharedResource.Delete @SharedResource.Image
-                            </button>
-                        </div>
-
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Registration_Number<span class="red-required">*</span></label>
+                        <input type="text" id="txtRegistrationNumber" class="form-control" placeholder="@SharedResource.Registration_Number" required />
                     </div>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Registration_Date<span class="red-required">*</span></label>
+                        <div class="input-group date" id="txtRegistrationDate" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#txtRegistrationDate" />
+                            <div class="input-group-append" data-target="#txtRegistrationDate" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Telephone_Number</label>
+                        <input type="text" id="txtTelephoneNumber" class="form-control" placeholder="@SharedResource.Telephone_Number" required />
+                    </div>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Mobile_No<span class="red-required">*</span></label>
+                        <input type="text" id="txtMobileNumber" class="form-control" placeholder="@SharedResource.Mobile_No" required />
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Email<span class="red-required">*</span></label>
+                        <input type="text" id="txtEmail" class="form-control" placeholder="@SharedResource.Email" required />
+                    </div>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Postal_Code<span class="red-required"></span></label>
+                        <input type="text" id="txtPostalCode" class="form-control" placeholder="@SharedResource.Postal_Code" required />
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Locality<span class="red-required"></span></label>
+                        <select class="form-control" id="ddlLocality" required min=0></select>
+                    </div>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Country<span class="red-required"></span></label>
+                        <select class="form-control" id="ddlCountry" required min=0></select>
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.MCA_VCA<span class="red-required"></span></label>
+                        <select class="form-control" id="ddlMCAVCA" required min=0></select>
+                    </div>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Colour 1<span class="red-required"></span></label>
+                        <input type="text" id="txtColour1" class="form-control" placeholder="@SharedResource.Colour 1" required />
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Colour 2<span class="red-required"></span></label>
+                        <input type="text" id="txtColour2" class="form-control" placeholder="@SharedResource.Colour 2" required />
+                    </div>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Colour 3<span class="red-required"></span></label>
+                        <input type="text" id="txtColour3" class="form-control" placeholder="@SharedResource.Colour 3" required />
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Colour 4<span class="red-required"></span></label>
+                        <input type="text" id="txtColour4" class="form-control" placeholder="@SharedResource.Colour 4" required />
+                    </div>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Colour 5<span class="red-required"></span></label>
+                        <input type="text" id="txtColour5" class="form-control" placeholder="@SharedResource.Colour 5" required />
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <label for="imagefile">@SharedResource.Company_Icon</label>
+                        <input type="file" id="imagefile" name="imagefile" accept="image/*" onchange="UploadFileisValidImage('imagefile')">
+                        <input type="hidden" id="oldimage" value="" />
+                    </div>
+                    <div class="col-4 form-group">
+                        <img id="viewImage" style="max-height: 120px;max-width: 120px;" />
+                        <button type="button" title="Delete Image" class="btn btn-block btn-info btn-sm" id="deleteImageBtn"
+                                style="display: none; margin-top: 13px; width: 100px;" onclick="deleteImage()">
+                            @SharedResource.Delete @SharedResource.Image
+                        </button>
+                    </div>
+
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SavePoster();">@SharedResource.Save</button>
+                <button type="button" class="btn btn-primary" onclick="SaveCompany();">@SharedResource.Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
             </div>
         </div>

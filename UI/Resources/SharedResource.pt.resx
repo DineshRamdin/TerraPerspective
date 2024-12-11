@@ -189,14 +189,23 @@
   <data name="Code" xml:space="preserve">
     <value>Código</value>
   </data>
+  <data name="Colour" xml:space="preserve">
+    <value>Cor</value>
+  </data>
   <data name="Comment" xml:space="preserve">
     <value>Comentário</value>
   </data>
   <data name="Company" xml:space="preserve">
     <value>Empresa</value>
   </data>
+  <data name="Company Icon" xml:space="preserve">
+    <value>Ícone da empresa</value>
+  </data>
   <data name="Copy Matrix Tree" xml:space="preserve">
     <value>Copiar árvore matricial</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>País</value>
   </data>
   <data name="Create Matrix Tree" xml:space="preserve">
     <value>Criar árvore matricial</value>
@@ -309,6 +318,9 @@
   <data name="Is Testing" xml:space="preserve">
     <value>Está testando</value>
   </data>
+  <data name="Locality" xml:space="preserve">
+    <value>Localidade</value>
+  </data>
   <data name="Log" xml:space="preserve">
     <value>Registro</value>
   </data>
@@ -333,6 +345,9 @@
   <data name="Matrix Tree Manual" xml:space="preserve">
     <value>Manual da árvore matricial</value>
   </data>
+  <data name="MCA/VCA" xml:space="preserve">
+    <value>MCA/VCA</value>
+  </data>
   <data name="Menu" xml:space="preserve">
     <value>Menu</value>
   </data>
@@ -347,6 +362,9 @@
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
+  </data>
+  <data name="Name of Company" xml:space="preserve">
+    <value>Nome da Empresa</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Próxima</value>
@@ -402,6 +420,9 @@
   <data name="Please upload a valid file in one of the following formats: JPEG, or PNG." xml:space="preserve">
     <value>Faça upload de um arquivo válido em um dos seguintes formatos: JPEG ou PNG.</value>
   </data>
+  <data name="Postal Code" xml:space="preserve">
+    <value>Código postal</value>
+  </data>
   <data name="Poster" xml:space="preserve">
     <value>Poster</value>
   </data>
@@ -419,6 +440,12 @@
   </data>
   <data name="Purpose" xml:space="preserve">
     <value>Propósito</value>
+  </data>
+  <data name="Registration Date" xml:space="preserve">
+    <value>Data de registro</value>
+  </data>
+  <data name="Registration Number" xml:space="preserve">
+    <value>Número de registro</value>
   </data>
   <data name="Remarks" xml:space="preserve">
     <value>Observações</value>
@@ -468,6 +495,9 @@
   <data name="Search for a Zone..." xml:space="preserve">
     <value>Procure uma zona...</value>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>Selecione</value>
+  </data>
   <data name="Select Purpose" xml:space="preserve">
     <value>Selecione a finalidade</value>
   </data>
@@ -500,6 +530,9 @@
   </data>
   <data name="System Icon" xml:space="preserve">
     <value>Ícone do sistema</value>
+  </data>
+  <data name="Telephone Number" xml:space="preserve">
+    <value>Número de telefone</value>
   </data>
   <data name="Test Count" xml:space="preserve">
     <value>Contagem de testes</value>

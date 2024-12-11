@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PerspectiveContext))]
-    partial class PerspectiveContextModelSnapshot : ModelSnapshot
+    [Migration("20241211092011_NP_016")]
+    partial class NP_016
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,21 +285,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Colour1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour4")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour5")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CompanyIcon")
                         .HasColumnType("nvarchar(max)");
 
@@ -315,6 +303,21 @@ namespace DAL.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("Follow1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow5")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Locality")
                         .HasColumnType("bigint");

@@ -491,6 +491,9 @@ namespace DAL.Context
         public DbSet<SYS_SystemIcon> SYS_SystemIcon { get; set; }
         public DbSet<SYS_ZoneMatrix> SYS_ZoneMatrix { get; set; }
         public DbSet<SYS_Company> SYS_Company { get; set; }
+        public DbSet<SYS_Locality> SYS_Locality { get; set; }
+        public DbSet<SYS_Country> SYS_Country { get; set; }
+        public DbSet<SYS_MCAVCA> SYS_MCAVCA { get; set; }
 
     }
 }

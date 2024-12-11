@@ -13,7 +13,7 @@ namespace BL.Models.Administration
         public string? Code { get; set; }
         public string RegistrationNumber { get; set; } = string.Empty;
         public string NameofCompany { get; set; } = string.Empty;
-        public DateTime? RegistrationDate { get; set; }
+        public string? RegistrationDate { get; set; }
         public string? TelephoneNumber { get; set; }
         public string? MobileNumber { get; set; }
         public string? Email { get; set; } = string.Empty;
@@ -22,12 +22,15 @@ namespace BL.Models.Administration
         public string? PostalCode { get; set; }
         public long? MCAVCA { get; set; }
         public string? CompanyIcon { get; set; }
-        public string? Follow1 { get; set; }
-        public string? Follow2 { get; set; }
-        public string? Follow3 { get; set; }
-        public string? Follow4 { get; set; }
-        public string? Follow5 { get; set; }
+        public string? Colour1 { get; set; }
+        public string? Colour2 { get; set; }
+        public string? Colour3 { get; set; }
+        public string? Colour4 { get; set; }
+        public string? Colour5 { get; set; }
         public bool CompanyIconFlag { get; set; }
+        public string? LocalityName { get; set; }
+        public string? CountryName { get; set; }
+        public string? MCAVCAName { get; set; }
 
 
     }
