@@ -751,6 +751,11 @@
 			$("#txtExternalReference").val("");
 			$('#tree').jstree("destroy").empty();
 			$("#ZoneManagementTreeDropdown").empty();
+			// Unbind all event listeners attached to the element
+			$("#ZoneManagementTreeDropdown").off();
+
+			// Remove data associated with the element (if any)
+			$("#ZoneManagementTreeDropdown").removeData();
 		}
 
 		function CloseZoneManagement() {
