@@ -1,0 +1,188 @@
+﻿@{
+    ViewData["Title"] = "Locality";
+}
+
+@using UI.Resources
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Locality</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Locality</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="LocalityTable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddLocalityModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddLocality.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+    <script>
+        var GetAllLocalityUrl = '@Url.Action("GetAll", "Locality")';
+        var LocalityGetByIdUrl = '@Url.Action("GetById", "Locality")';
+        var CreateUpdateLocalityUrl = '@Url.Action("CreateUpdate", "Locality")';
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#liLocalitymenu').addClass('active');
+
+            GetAllLocality();
+        });
+
+        function GetAllLocality() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'name', title: '@SharedResource.Locality' },
+                { data: 'description', title: '@SharedResource.Description' },
+            ];
+
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+            };
+
+            initializeDataGrid('LocalityTable', 'openLocalityModal', GetAllLocalityUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+
+        }
+
+        function openLocalityModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: LocalityGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearLocalityModal();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4LocalityTitle").html("@SharedResource.Modify  @SharedResource.Locality");
+                        else
+                            $("#h4LocalityTitle").html("@SharedResource.Add  @SharedResource.Locality");
+
+                        $("#hdnId").val(response.data.id);
+                        $("#txtLocalityName").val(response.data.name);
+                        $("#txtDescription").val(response.data.description);
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddLocalityModal').modal('show');
+                $("#frnLocalityCreate").validate({}).resetForm();;
+            });
+
+
+        }
+
+        function ClearLocalityModal() {
+            $("#h4LocalityTitle").html("@SharedResource.Add  @SharedResource.Locality");
+            $("#hdnId").val(0);
+            $("#txtLocalityName").val("");
+            $("#txtDescription").val("");
+        }
+
+        function SaveLocality() {
+
+            let valid = formValidation(["txtLocalityName"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtLocalityName").val();
+                dataObject.Description = $("#txtDescription").val();
+
+                $.ajax({
+                    url: CreateUpdateLocalityUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddLocalityModal').modal('hide');
+                            GetAllLocality();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+        }
+
+    </script>
+}

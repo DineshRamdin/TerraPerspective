@@ -192,6 +192,15 @@ function renderDynamicMenu(data, langResource) {
         else if (grandParent.name == "Company") {
             MenuName = langResource.CompanyMenuLabel;
         }
+        else if (grandParent.name == "Locality") {
+            MenuName = langResource.LocalityMenuLabel;
+        }
+        else if (grandParent.name == "Country") {
+            MenuName = langResource.CountryMenuLabel;
+        }
+        else if (grandParent.name == "MCA/VCA") {
+            MenuName = langResource.MCAVCAMenuLabel;
+        }
         else {
             MenuName = grandParent.name;
         }
@@ -295,6 +304,15 @@ function renderDynamicMenu(data, langResource) {
                 else if (parent.name == "Company") {
                     SubMenuName = langResource.CompanyMenuLabel;
                 }
+                else if (parent.name == "Locality") {
+                    SubMenuName = langResource.LocalityMenuLabel;
+                }
+                else if (parent.name == "Country") {
+                    SubMenuName = langResource.CountryMenuLabel;
+                }
+                else if (parent.name == "MCA/VCA") {
+                    SubMenuName = langResource.MCAVCAMenuLabel;
+                }
                 else {
                     SubMenuName = parent.name;
                 }
@@ -389,6 +407,15 @@ function renderDynamicMenu(data, langResource) {
                         }
                         else if (child.name == "Company") {
                             ChildSubMenuName = langResource.CompanyMenuLabel;
+                        }
+                        else if (child.name == "Locality") {
+                            ChildSubMenuName = langResource.LocalityMenuLabel;
+                        }
+                        else if (child.name == "Country") {
+                            ChildSubMenuName = langResource.CountryMenuLabel;
+                        }
+                        else if (child.name == "MCA/VCA") {
+                            ChildSubMenuName = langResource.MCAVCAMenuLabel;
                         }
                         else {
                             ChildSubMenuName = child.name;
