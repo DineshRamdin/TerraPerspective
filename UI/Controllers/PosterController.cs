@@ -22,7 +22,6 @@ namespace UI.Controllers
             return View();
         }
 
-
         public IActionResult Preview(long Id)
         {
             BaseResponseDTO<List<PosterDTO>> dt = new BaseResponseDTO<List<PosterDTO>>();
@@ -40,17 +39,13 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<List<PosterDTO>> dt = new BaseResponseDTO<List<PosterDTO>>();
-
                 dt = service.GetAll();
-
                 return Ok(dt);
             }
             catch (Exception)
             {
                 return BadRequest();
             }
-
-
         }
 
         [HttpPost]
@@ -72,8 +67,6 @@ namespace UI.Controllers
             {
                 return BadRequest();
             }
-
-
         }
 
 
@@ -85,14 +78,10 @@ namespace UI.Controllers
                 BaseResponseDTO<List<DropDown>> List = new BaseResponseDTO<List<DropDown>>();
                 List = service.GetAllDropDownValues();
                 return Ok(List);
-
-
             }
             catch (Exception ex)
             {
-
                 return BadRequest();
-
             }
         }
 
@@ -118,8 +107,7 @@ namespace UI.Controllers
             {
                 return BadRequest();
             }
-
-
         }
+
     }
 }

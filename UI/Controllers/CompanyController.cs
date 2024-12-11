@@ -40,8 +40,26 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<List<CompanyDTO>> dt = new BaseResponseDTO<List<CompanyDTO>>();
+                dt = service.GetAll();
+                return Ok(dt);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
-               dt = service.GetAll();
+        [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<CompanyDTO>>> GetById(long Id)
+        {
+            try
+            {
+                BaseResponseDTO<CompanyDTO> dt = new BaseResponseDTO<CompanyDTO>();
+                dt.Data = new CompanyDTO();
+                if (Id > 0)
+                {
+                    dt = service.GetById(Id);
+                }
 
                 return Ok(dt);
             }
@@ -49,9 +67,48 @@ namespace UI.Controllers
             {
                 return BadRequest();
             }
-
-
         }
+
+        [HttpPost]
+        public ActionResult<BaseResponseDTO<List<DropDown>>> GetAllDropdownValues()
+        {
+            try
+            {
+                BaseResponseDTO<List<DropDown>> List = new BaseResponseDTO<List<DropDown>>();
+                List = service.GetAllDropDownValues();
+                return Ok(List);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<BaseResponseDTO<bool>>> CreateUpdate(CompanyDTO dto)
+        {
+            try
+            {
+                BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+
+                if (dto.Id == 0)
+                {
+                    dt = await service.SaveAsync(dto);
+                }
+                else
+                {
+                    dt = await service.UpdateAsync(dto);
+                }
+
+                return Ok(dt);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+
 
     }
 }

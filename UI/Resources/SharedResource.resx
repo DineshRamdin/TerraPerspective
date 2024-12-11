@@ -213,13 +213,29 @@
     <value>Code</value>
     <comment>Code</comment>
   </data>
+  <data name="Colour" xml:space="preserve">
+    <value>Colour</value>
+    <comment>Colour</comment>
+  </data>
   <data name="Comment" xml:space="preserve">
     <value>Comment</value>
     <comment>Comment</comment>
   </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+    <comment>Company</comment>
+  </data>
+  <data name="Company Icon" xml:space="preserve">
+    <value>Company Icon</value>
+    <comment>Company Icon</comment>
+  </data>
   <data name="Copy Matrix Tree" xml:space="preserve">
     <value>Copy Matrix Tree</value>
     <comment>Copy Matrix Tree</comment>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+    <comment>Country</comment>
   </data>
   <data name="Create Matrix Tree" xml:space="preserve">
     <value>Create Matrix Tree</value>
@@ -369,6 +385,10 @@
     <value>Is Testing</value>
     <comment>Is Testing</comment>
   </data>
+  <data name="Locality" xml:space="preserve">
+    <value>Locality</value>
+    <comment>Locality</comment>
+  </data>
   <data name="Log" xml:space="preserve">
     <value>Log</value>
     <comment>Log</comment>
@@ -401,6 +421,10 @@
     <value>Matrix Tree Manual</value>
     <comment>Matrix Tree Manual</comment>
   </data>
+  <data name="MCA/VCA" xml:space="preserve">
+    <value>MCA/VCA</value>
+    <comment>MCA/VCA</comment>
+  </data>
   <data name="Menu" xml:space="preserve">
     <value>Menu</value>
     <comment>Menu</comment>
@@ -420,6 +444,10 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
     <comment>Name</comment>
+  </data>
+  <data name="Name of Company" xml:space="preserve">
+    <value>Name of Company</value>
+    <comment>Name of Company</comment>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
@@ -493,6 +521,10 @@
     <value>Please upload a valid file in one of the following formats: JPEG, or PNG.</value>
     <comment>Please upload a valid file in one of the following formats: JPEG, or PNG.</comment>
   </data>
+  <data name="Postal Code" xml:space="preserve">
+    <value>Postal Code</value>
+    <comment>Postal Code</comment>
+  </data>
   <data name="Poster" xml:space="preserve">
     <value>Poster</value>
     <comment>Poster</comment>
@@ -516,6 +548,14 @@
   <data name="Purpose" xml:space="preserve">
     <value>Purpose</value>
     <comment>Purpose</comment>
+  </data>
+  <data name="Registration Date" xml:space="preserve">
+    <value>Registration Date</value>
+    <comment>Registration Date</comment>
+  </data>
+  <data name="Registration Number" xml:space="preserve">
+    <value>Registration Number</value>
+    <comment>Registration Number</comment>
   </data>
   <data name="Remarks" xml:space="preserve">
     <value>Remarks</value>
@@ -581,6 +621,10 @@
     <value>Search for a Zone...</value>
     <comment>Search for a Zone...</comment>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+    <comment>Select</comment>
+  </data>
   <data name="Select Purpose" xml:space="preserve">
     <value>Select Purpose</value>
     <comment>Select Purpose</comment>
@@ -624,6 +668,10 @@
   <data name="System Icon" xml:space="preserve">
     <value>System Icon</value>
     <comment>System Icon</comment>
+  </data>
+  <data name="Telephone Number" xml:space="preserve">
+    <value>Telephone Number</value>
+    <comment>Telephone Number</comment>
   </data>
   <data name="Test Count" xml:space="preserve">
     <value>Test Count</value>

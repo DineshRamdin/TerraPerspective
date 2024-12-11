@@ -1,0 +1,37 @@
+﻿@{
+	Layout = null;
+}
+
+@using UI.Resources
+
+<div class="modal-dialog">
+	<form id="frnCountryCreate">
+		<input type="hidden" id="hdnId" value="" />
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="h4CountryTitle">
+				</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-12 form-group">
+						<label>@SharedResource.Name<span class="red-required">*</span></label>
+						<input type="text" id="txtCountryName" class="form-control" placeholder="@SharedResource.Name" required />
+					</div>
+					<div class="col-12 form-group">
+						<label>@SharedResource.Description</label>
+						<textarea type="text" id="txtDescription" class="form-control" placeholder="@SharedResource.Description"> </textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="SaveCountry();">@SharedResource.Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</form>
+</div>

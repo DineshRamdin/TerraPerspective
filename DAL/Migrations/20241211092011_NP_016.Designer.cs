@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PerspectiveContext))]
-    partial class PerspectiveContextModelSnapshot : ModelSnapshot
+    [Migration("20241211092011_NP_016")]
+    partial class NP_016
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,21 +285,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Colour1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour4")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Colour5")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CompanyIcon")
                         .HasColumnType("nvarchar(max)");
 
@@ -315,6 +303,21 @@ namespace DAL.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("Follow1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Follow5")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Locality")
                         .HasColumnType("bigint");
@@ -809,73 +812,6 @@ namespace DAL.Migrations
                     b.ToTable("SYS_Poster");
                 });
 
-            modelBuilder.Entity("DAL.Models.Administration.SYS_Projects", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("AssignTo")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("DeleteStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsVisible")
-                        .HasColumnType("bit");
-
-                    b.Property<TimeOnly>("PlannedHours")
-                        .HasColumnType("time");
-
-                    b.Property<string>("ProjectDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("Status")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("StatusDetails")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignTo");
-
-                    b.ToTable("SYS_Projects");
-                });
-
             modelBuilder.Entity("DAL.Models.Administration.SYS_Reports", b =>
                 {
                     b.Property<long>("Id")
@@ -1090,55 +1026,6 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SYS_SystemIcon");
-                });
-
-            modelBuilder.Entity("DAL.Models.Administration.SYS_TableCodeConfigurations", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ConfigurationId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("DeleteStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("HasAddi")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Prefix")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TableName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SYS_TableCodeConfigurations");
                 });
 
             modelBuilder.Entity("DAL.Models.Administration.SYS_Testing", b =>
@@ -1404,9 +1291,6 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Company")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -1817,17 +1701,6 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("LookUpType");
-                });
-
-            modelBuilder.Entity("DAL.Models.Administration.SYS_Projects", b =>
-                {
-                    b.HasOne("DAL.Models.Administration.SYS_User", "User")
-                        .WithMany()
-                        .HasForeignKey("AssignTo")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DAL.Models.Administration.SYS_Resource", b =>

@@ -33,11 +33,11 @@ namespace DAL.Models.Administration
         public string? PostalCode { get; set; }
         public long? MCAVCA { get; set; }
         public string? CompanyIcon { get; set; }
-        public string? Follow1 { get; set; }
-        public string? Follow2 { get; set; }
-        public string? Follow3 { get; set; }
-        public string? Follow4 { get; set; }
-        public string? Follow5 { get; set; }
+        public string? Colour1 { get; set; }
+        public string? Colour2 { get; set; }
+        public string? Colour3 { get; set; }
+        public string? Colour4 { get; set; }
+        public string? Colour5 { get; set; }
 
 
     }
