@@ -196,6 +196,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign To.
+        /// </summary>
+        public static string Assign_To {
+            get {
+                return ResourceManager.GetString("Assign To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Carousel.
         /// </summary>
         public static string Carousel {
@@ -457,6 +466,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End Date.
+        /// </summary>
+        public static string End_Date {
+            get {
+                return ResourceManager.GetString("End Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to entries.
         /// </summary>
         public static string entries {
@@ -633,6 +651,15 @@ namespace UI.Resources {
         public static string Is_Testing {
             get {
                 return ResourceManager.GetString("Is Testing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Visible.
+        /// </summary>
+        public static string Is_Visible {
+            get {
+                return ResourceManager.GetString("Is Visible", resourceCulture);
             }
         }
         
@@ -853,6 +880,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Planned Hours.
+        /// </summary>
+        public static string Planned_Hours {
+            get {
+                return ResourceManager.GetString("Planned Hours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please Fill In Mandatory Fields.
         /// </summary>
         public static string Please_Fill_In_Mandatory_Fields {
@@ -957,6 +993,42 @@ namespace UI.Resources {
         public static string Profile_Image {
             get {
                 return ResourceManager.GetString("Profile Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Description.
+        /// </summary>
+        public static string Project_Description {
+            get {
+                return ResourceManager.GetString("Project Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Details.
+        /// </summary>
+        public static string Project_Details {
+            get {
+                return ResourceManager.GetString("Project Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Manager.
+        /// </summary>
+        public static string Project_Manager {
+            get {
+                return ResourceManager.GetString("Project Manager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Name.
+        /// </summary>
+        public static string Project_Name {
+            get {
+                return ResourceManager.GetString("Project Name", resourceCulture);
             }
         }
         
@@ -1123,6 +1195,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select AssignTo.
+        /// </summary>
+        public static string Select_AssignTo {
+            get {
+                return ResourceManager.GetString("Select AssignTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Purpose.
         /// </summary>
         public static string Select_Purpose {
@@ -1159,6 +1240,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Status.
+        /// </summary>
+        public static string Select_Status {
+            get {
+                return ResourceManager.GetString("Select Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Type.
         /// </summary>
         public static string Select_Type {
@@ -1186,11 +1276,29 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Date.
+        /// </summary>
+        public static string Start_Date {
+            get {
+                return ResourceManager.GetString("Start Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Details.
+        /// </summary>
+        public static string Status_Details {
+            get {
+                return ResourceManager.GetString("Status Details", resourceCulture);
             }
         }
         
@@ -1344,6 +1452,15 @@ namespace UI.Resources {
         public static string User_Matrix {
             get {
                 return ResourceManager.GetString("User Matrix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UserCode.
+        /// </summary>
+        public static string UserCode {
+            get {
+                return ResourceManager.GetString("UserCode", resourceCulture);
             }
         }
         

@@ -217,10 +217,6 @@
     <value>Comment</value>
     <comment>Comment</comment>
   </data>
-  <data name="Company" xml:space="preserve">
-    <value>Company</value>
-    <comment>Company</comment>
-  </data>
   <data name="Copy Matrix Tree" xml:space="preserve">
     <value>Copy Matrix Tree</value>
     <comment>Copy Matrix Tree</comment>
@@ -723,5 +719,48 @@
   </data>
   <data name="Projects" xml:space="preserve">
     <value>Projects</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+    <comment>Company</comment>
+  </data>
+  <data name="UserCode" xml:space="preserve">
+    <value>UserCode</value>
+  </data>
+  <data name="Project Name" xml:space="preserve">
+    <value>Project Name</value>
+  </data>
+  <data name="Project Details" xml:space="preserve">
+    <value>Project Details</value>
+  </data>
+  <data name="Project Description" xml:space="preserve">
+    <value>Project Description</value>
+  </data>
+  <data name="Assign To" xml:space="preserve">
+    <value>Assign To</value>
+  </data>
+  <data name="Planned Hours" xml:space="preserve">
+    <value>Planned Hours</value>
+  </data>
+  <data name="Status Details" xml:space="preserve">
+    <value>Status Details</value>
+  </data>
+  <data name="Start Date" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="End Date" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="Is Visible" xml:space="preserve">
+    <value>Is Visible</value>
+  </data>
+  <data name="Project Manager" xml:space="preserve">
+    <value>Project Manager</value>
+  </data>
+  <data name="Select Status" xml:space="preserve">
+    <value>Select Status</value>
+  </data>
+  <data name="Select AssignTo" xml:space="preserve">
+    <value>Select AssignTo</value>
   </data>
 </root>

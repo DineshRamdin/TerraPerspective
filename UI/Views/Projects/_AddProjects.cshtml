@@ -4,11 +4,11 @@
 @using UI.Resources
 
 <div class="modal-dialog">
-    <form id="frnUserCreate">
-        <input type="hidden" id="hdnuserId" value="" />
+    <form id="frnProjectsCreate">
+        <input type="hidden" id="hdnId" value="" />
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="h4UserTitle">
+                <h4 class="modal-title" id="h4ProjectsTitle">
                 </h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -17,49 +17,61 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12 form-group">
-                        <label>@SharedResource.Surname<span class="red-required">*</span></label>
-                        <input type="text" id="txtSurname" class="form-control" placeholder=@SharedResource.Surname required />
+                        <label>@SharedResource.UserCode<span class="red-required">*</span></label>
+                        <input type="text" id="txtCode" class="form-control" placeholder=@SharedResource.UserCode readonly />
                     </div>
                     <div class="col-12 form-group">
-                        <label>@SharedResource.Othername<span class="red-required">*</span></label>
-                        <input type="text" id="txtOthername" class="form-control" placeholder="@SharedResource.Othername" required />
+                        <label>@SharedResource.Project_Name<span class="red-required">*</span></label>
+                        <input type="text" id="txtProjectName" class="form-control" placeholder=@SharedResource.Project_Name required />
                     </div>
                     <div class="col-12 form-group">
-                        <label>@SharedResource.Email<span class="red-required">*</span></label>
-                        <input type="text" id="txtEmail" class="form-control" placeholder="@SharedResource.Email" required />
+                        <label>@SharedResource.Project_Details<span class="red-required">*</span></label>
+                        <textarea type="text" id="txtProjectDetails" class="form-control" placeholder="@SharedResource.Project_Details" required> </textarea>
                     </div>
                     <div class="col-12 form-group">
-                        <label>@SharedResource.Mobile_No<span class="red-required">*</span></label>
-                        <input type="text" id="txtMobile" class="form-control" placeholder="@SharedResource.Mobile_No" required />
+                        <label>@SharedResource.Project_Description<span class="red-required">*</span></label>
+                        <textarea type="text" id="txtProjectDescription" class="form-control" placeholder="@SharedResource.Project_Description" required> </textarea>
                     </div>
                     <div class="col-12 form-group">
-                        <label>@SharedResource.Role<span class="red-required">*</span></label>
-                        <select class="form-control" id="ddlRole" required></select>
+                        <label>@SharedResource.Assign_To<span class="red-required">*</span></label>
+                        <select class="form-control" id="ddlAssignTo" required></select>
                     </div>
-                    <div class="col-12 row form-group">
-                        <div class="col-6">
-                            <label for="profileimagefile">@SharedResource.Profile_Image</label>
-                            <input type="file" id="profileimagefile" name="profileimagefile" accept="image/*" onchange="UploadFileisValidImageFormarJPEGAndPNG('profileimagefile')">
-                            <input type="hidden" id="oldprofileimage" value="" />
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Planned_Hours<span class="red-required">*</span></label>
+                        <input type="time" id="txtPlannedHours" class="form-control" placeholder="@SharedResource.Planned_Hours" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Status<span class="red-required">*</span></label>
+                        <select class="form-control" id="ddlStatus" required></select>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Status_Details<span class="red-required">*</span></label>
+                        <textarea type="text" id="txtStatusDetails" class="form-control" placeholder="@SharedResource.Status_Details" required> </textarea>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Start_Date<span class="red-required">*</span></label>
+                        <input type="date" id="txtStartDate" class="form-control" placeholder="@SharedResource.Start_Date" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.End_Date<span class="red-required">*</span></label>
+                        <input type="date" id="txtEndDate" class="form-control" placeholder="@SharedResource.End_Date" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <div class="col-8">
+                            <label>@SharedResource.Is_Visible<span class="red-required">*</span></label>
                         </div>
-                        <div class="col-6">
-                            <img id="viewProfileImage" style="height: 80%;width: 80%;" />
+                        <div class="col-4">
+                            <input type="checkbox" id="chbIsVisible" class="form-control-sm" placeholder="@SharedResource.Is_Visible" required />
                         </div>
-
+                      
+                       
                     </div>
-                    <div class="col-12 row form-group">
-                        <div class="col-6">
-                            <label for="tree" class="mb-2 label-required"> @SharedResource.Matrix </label>
-                        </div>
-                    </div>
-                    <div id="UserTreeDropdown" class="dropdown dropdown-tree"></div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SaveUser();">@SharedResource.Save</button>
+                <button type="button" class="btn btn-primary" onclick="SaveProjects();">@SharedResource.Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
             </div>
         </div>
-        <!-- /.modal-content -->
     </form>
 </div>

@@ -51,8 +51,8 @@ namespace BL.Services.Common
 			string format = "";
 			try
 			{
-				//SYS_Company cl = context.SYS_Company.Where(x => x.Name == "Default").FirstOrDefault();
-				compid =0;
+				SYS_Company cl = context.SYS_Company.Where(x => x.NameofCompany == "Default").FirstOrDefault();
+				compid =Convert.ToInt32(cl.Id);
 				var usr = context.Users.Where(x => x.UserToken == Uid).FirstOrDefault();
 				if (usr != null)
 				{

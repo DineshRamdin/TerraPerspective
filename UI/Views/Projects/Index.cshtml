@@ -1,45 +1,45 @@
 ﻿@{
-	ViewData["Title"] = "Projects";
+    ViewData["Title"] = "Projects";
 }
 @using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-	<div class="container-fluid">
-		<div class="row mb-2">
-			<div class="col-sm-6">
-				<h1 class="m-0">@SharedResource.Projects</h1>
-			</div><!-- /.col -->
-			<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
-					<li class="breadcrumb-item active">@SharedResource.Projects</li>
-				</ol>
-			</div><!-- /.col -->
-		</div><!-- /.row -->
-	</div><!-- /.container-fluid -->
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Projects</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Projects</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-	<div class="container-fluid">
-		<div class="card card-solid">
-			<div class="card-body pb-0">
-				<div class="row">
-					<div class="col-10">
-					</div>
-					@*   <div class="col-2">
-					<button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
-					</div> *@
-				</div>
-				<div class="row">
-					<div class="col-12  mb-10">
-						<table id="ProjectsTable" class="table table-bordered table-striped"></table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                    @*   <div class="col-2">
+                    <button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+                    </div> *@
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="ProjectsTable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <div class="modal fade" id="AddProjectsModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -50,10 +50,9 @@
 {
 	<script>
 		var GetAllProjectsUrl = '@Url.Action("GetAll", "Projects")';
-		var PosterGetByIdUrl = '@Url.Action("GetById", "Projects")';
+		var ProjectsGetByIdUrl = '@Url.Action("GetById", "Projects")';
 		var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
-		var CreateUpdatePosterUrl = '@Url.Action("CreateUpdate", "Poster")';
-		var PosterPreviewUrl = '@Url.Action("Preview", "Poster")';
+		var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
@@ -65,8 +64,17 @@
 		function GetAllProjects() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: '@SharedResource.Poster_Name' },
-				{ data: 'typeName', title: '@SharedResource.Type' },
+				{ data: 'userCode', title: '@SharedResource.UserCode' },
+				{ data: 'projectName', title: '@SharedResource.Project_Name' },
+				{ data: 'projectDetails', title: '@SharedResource.Project_Details' },
+				{ data: 'projectDescription', title: '@SharedResource.Project_Description' },
+				{ data: 'projectManager', title: '@SharedResource.Project_Manager' },
+				{ data: 'status', title: '@SharedResource.Status' },
+				{ data: 'statusDetails', title: '@SharedResource.Status_Details' },
+				{ data: 'startDate', title: '@SharedResource.Start_Date' },
+				{ data: 'endDate', title: '@SharedResource.End_Date' },
+				{ data: 'plannedHours', title: '@SharedResource.Planned_Hours' },
+				{ data: 'isVisible', title: '@SharedResource.Is_Visible' },
 			];
 
 			var langResource = {
@@ -97,12 +105,8 @@
 				NextLabel: '@SharedResource.Next',
 			};
 
-			initializeDataGrid('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, columnList, false, true, true, false, true, 'PreviewPosterModal', true, null, langResource);
+			initializeDataGrid('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, columnList, false, true, true, false, false, null, true, null, langResource);
 
-		}
-
-		function PreviewPosterModal(id) {
-			window.open(PosterPreviewUrl + "?id=" + id, '_blank');
 		}
 
 		function openProjectsModal(id) {
@@ -110,7 +114,7 @@
 			dataObject.id = id;
 
 			$.ajax({
-				url: PosterGetByIdUrl,
+				url: ProjectsGetByIdUrl,
 				type: "POST",
 				data: dataObject,  // Send data if needed
 				beforeSend: function () {
@@ -119,25 +123,28 @@
 				},
 				success: function (response) {
 					if (response.data) {
-						$("#deleteImageBtn").hide();
 						if (response.data.id > 0)
-							$("#h4PosterTitle").html("@SharedResource.Modify  @SharedResource.Poster");
+							$("#h4ProjectsTitle").html("@SharedResource.Modify  @SharedResource.Projects");
 						else
-							$("#h4PosterTitle").html("@SharedResource.Add  @SharedResource.Poster");
-
+							$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
+						// console.data("Data : ", data);
+						// return;
 						$("#hdnId").val(response.data.id);
-						$("#txtPosterName").val(response.data.name);
-						$("#ddlType").val(response.data.type == null || response.data.type == 0 ? "" : response.data.type);
-						$('#chkStatus').prop('checked', response.data.status == null ? true : response.data.status);
+						$("#txtCode").val(response.data.userCode);
+						$("#txtProjectName").val(response.data.projectName);
+						$("#txtProjectDetails").val(response.data.projectDetails);
+						$("#txtProjectDescription").val(response.data.projectDescription);
+						$("#ddlAssignTo").val(response.data.assignTo == null || response.data.assignTo == 0 ? "" : response.data.assignTo);
+						$("#txtPlannedHours").val(response.data.plannedHours);
+						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
+						$("#txtStatusDetails").val(response.data.statusDetails);
+						const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
+						const formattedEndDate = formatDateToInput(response.data.endDate); // Convert to yyyy-MM-dd
 
-						if (response.data.posterImageBase64 != null && response.data.posterImageBase64 != "") {
-							$("#oldimage").val(response.data.posterImageBase64);
+						$("#txtStartDate").val(formattedStartDate);
+						$("#txtEndDate").val(formattedEndDate);
 
-							$("#viewImage").attr("src", "data:image/png;base64," + response.data.posterImageBase64);
-							$("#viewImage").css("display", "");
-							$("#deleteImageBtn").show();
-
-						}
+						$('#chbIsVisible').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
 					}
 					else {
 						toastr.error(response.errorMessage);
@@ -149,34 +156,43 @@
 					toastr.error("Error:" + error);
 				}
 			}).done(function () {
-				$('#AddPosterModal').modal('show');
-				$("#frnPosterCreate").validate({}).resetForm();;
+				$('#AddProjectsModal').modal('show');
+				$("#frnProjectsCreate").validate({}).resetForm();
 			});
 
 
 		}
 
-		function deleteImage() {
-			// Reset the file input and the hidden field
-			$('#imagefile').val("");
-			$("#imagefile").val(null);
-			$('#viewImage').attr('src', "");
-			$('#oldreportimage').val("");
-			$("#oldimage").val("");
-			$('#deleteImageBtn').hide();
+		function formatDateToInput(dateString) {
+			// Ensure the date is a valid Date object
+			const date = new Date(dateString);
+			if (isNaN(date.getTime())) {
+			    console.error("Invalid date:", dateString);
+			    return ""; // Return an empty string if the date is invalid
+			}
+
+			// Format the date as yyyy-MM-dd for input type="date"
+			const year = date.getFullYear();
+			const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+			const day = String(date.getDate()).padStart(2, '0');
+			return `${year}-${month}-${day}`;
 		}
 
+
 		function ClearProjectsModal() {
-			$("#h4PosterTitle").html("@SharedResource.Add  @SharedResource.Poster");
+			$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
 			$("#hdnId").val(0);
-			$("#txtPosterName").val("");
-			$("#ddlType").val("");
-			$('#chkStatus').prop('checked', true);
-			$("#txtMobile").val("");
-			$("#imagefile").val(null);
-			$("#oldimage").val("");
-			$("#viewImage").attr("src", "");
-			$("#viewImage").css("display", "none");
+			$("#txtCode").val("");
+			$("#txtProjectName").val("");
+			$("#txtProjectDetails").val("");
+			$("#txtProjectDescription").val("");
+			$("#ddlAssignTo").val("");
+			$("#txtPlannedHours").val("");
+			$("#ddlStatus").val("");
+			$("#txtStatusDetails").val("");
+			$("#txtStartDate").val("");
+			$("#txtEndDate").val("");
+			$("#chbIsVisible").prop('checked', false);
 		}
 
 		function GetDropdownData() {
@@ -186,15 +202,23 @@
 				async: false,
 				// data: dataObject,  // Send data if needed
 				beforeSend: function () {
-					$("#ddlType").html('');
+					$("#ddlAssignTo").html('');
+					$("#ddlStatus").html('');
 				},
 				success: function (response) {
 					if (response.data) {
 						$.each(response.data, function (key, value) {
-							if (value.title == "Type") {
-								$("#ddlType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
+							if (value.title == "User") {
+								$("#ddlAssignTo").append($("<option></option>").val('').html("@SharedResource.Select_AssignTo"));
 								$.each(value.items, function (itemskey, itemsvalue) {
-									$("#ddlType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+									$("#ddlAssignTo").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+
+							if (value.title == "Project Status") {
+								$("#ddlStatus").append($("<option></option>").val('').html("@SharedResource.Select_Status"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlStatus").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
 							}
 						});
@@ -208,28 +232,29 @@
 			});
 		}
 
-		async function SavePoster() {
+		 function SaveProjects() {
 
-			let valid = formValidation(["txtPosterName", "ddlType"]);
+			let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedHours", "ddlStatus", "txtStatusDetails", "txtStartDate", "txtEndDate"]);
 
 			if (valid) {
 				var dataObject = {};
+				
 				dataObject.Id = $("#hdnId").val();
-				dataObject.Name = $("#txtPosterName").val();
-				dataObject.Type = $("#ddlType").val();
-				dataObject.Status = $('#chkStatus').prop('checked');
+				dataObject.UserCode =$("#txtCode").val();
+				dataObject.ProjectName =$("#txtProjectName").val();
+				dataObject.ProjectDetails = $("#txtProjectDetails").val();
+				dataObject.ProjectDescription = $("#txtProjectDescription").val();
+				dataObject.AssignTo =$("#ddlAssignTo").val();
+				dataObject.PlannedHours =$("#txtPlannedHours").val();
+				dataObject.Status =$("#ddlStatus").val();
+				dataObject.StatusDetails =$("#txtStatusDetails").val();
+				dataObject.StartDate =$("#txtStartDate").val();
+				dataObject.EndDate =$("#txtEndDate").val();
+				dataObject.IsVisible = $('#chbIsVisible').prop('checked');
 
-				var FileData = await FiletoBase64string("imagefile");
-
-
-				if (FileData == "") {
-					FileData = $('#oldimage').val();
-				}
-
-				dataObject.PosterImageBase64 = FileData;
 
 				$.ajax({
-					url: CreateUpdatePosterUrl,
+					url: CreateUpdateProjectsUrl,
 					type: "POST",
 					data: dataObject,  // Send data if needed
 					beforeSend: function () {
@@ -238,8 +263,8 @@
 					success: function (response) {
 						if (response.data) {
 							toastr.success(response.errorMessage);
-							$('#AddPosterModal').modal('hide');
-							GetAllPoster();
+							$('#AddProjectsModal').modal('hide');
+							GetAllProjects();
 						}
 						else {
 							toastr.error(response.errorMessage);

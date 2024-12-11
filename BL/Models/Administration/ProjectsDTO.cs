@@ -21,7 +21,7 @@ namespace BL.Models.Administration
 		public string StartDate { get; set; }
 		public string EndDate { get; set; }
 		public string PlannedHours { get; set; }
-		public bool? IsVisible { get; set; }
+		public string IsVisible { get; set; }
 	}
 
 	public class ProjectsCRUDDTO

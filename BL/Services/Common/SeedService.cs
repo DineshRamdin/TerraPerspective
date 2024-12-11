@@ -145,7 +145,7 @@ namespace BL.Services.Common
 					context.SaveChanges();
 
 				}
-				string[] TblName = new string[] { "SYS_Projects" };
+				string[] TblName = new string[] { "SYS_Projects-PRO" };
 				Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
 				SYS_CodeConfiguration cc = context.SYS_CodeConfiguration.Where(x => x.Name == "Default").FirstOrDefault();
 				if (cc == null)
@@ -215,45 +215,45 @@ namespace BL.Services.Common
 					context.SYS_CodeConfiguration.Add(cc);
 					context.SaveChanges();
 				}
-				//SYS_Company cl = context.SYS_Company.Where(x => x.Name == "Default").FirstOrDefault();
-				//if (cl == null)
-				//{
-				//	cl = new SYS_Company()
-				//	{
-				//		ParentId = 1,
-				//		Name = "Default",
-				//		Value = "",
-				//		AdditionalValue = "",
-				//		Enable = true,
-				//		Comment = "Default if no Company Found",
-				//		CreatedBy = createdBy,
-				//		CreatedDate = DateTime.Now
+				SYS_Company cl = context.SYS_Company.Where(x => x.NameofCompany == "Default").FirstOrDefault();
+				if (cl == null)
+				{
+					cl = new SYS_Company()
+					{
+						NameofCompany = "Default",
+						RegistrationNumber ="123",
+						Code ="00",
+						RegistrationDate = DateTime.Now,
+						TelephoneNumber ="",
+						MobileNumber = "",
+						CreatedBy = createdBy,
+						CreatedDate = DateTime.Now
 
-				//	};
-				//	context.SYS_Company.Add(cl);
-				//	context.SaveChanges();
-				//}
-				//foreach (string name in TblName)
-				//{
-				//	string[] splt = name.Split('-');
-				//	SYS_TableCodeConfigurations tcc = context.SYS_TableCodeConfigurations.Where(x => x.TableName == splt[0] && x.CompanyId == cl.Id).FirstOrDefault();
-				//	if (tcc == null)
-				//	{
-				//		tcc = new SYS_TableCodeConfigurations()
-				//		{
-				//			TableName = splt[0],
-				//			Prefix = splt[1],
-				//			CompanyId = cl.Id,
-				//			ConfigurationId = cc.Id,
-				//			Comment = "Default Table Config",
-				//			CreatedBy = createdBy,
-				//			CreatedDate = DateTime.Now,
-				//			HasAddi = true
-				//		};
-				//		context.SYS_TableCodeConfigurations.Add(tcc);
-				//		context.SaveChanges();
-				//	}
-				//}
+					};
+					context.SYS_Company.Add(cl);
+					context.SaveChanges();
+				}
+				foreach (string name in TblName)
+				{
+					string[] splt = name.Split('-');
+					SYS_TableCodeConfigurations tcc = context.SYS_TableCodeConfigurations.Where(x => x.TableName == splt[0] && x.CompanyId == cl.Id).FirstOrDefault();
+					if (tcc == null)
+					{
+						tcc = new SYS_TableCodeConfigurations()
+						{
+							TableName = splt[0],
+							Prefix = splt[1],
+							CompanyId = Convert.ToInt32(cl.Id),
+							ConfigurationId = cc.Id,
+							Comment = "Default Table Config",
+							CreatedBy = createdBy,
+							CreatedDate = DateTime.Now,
+							HasAddi = true
+						};
+						context.SYS_TableCodeConfigurations.Add(tcc);
+						context.SaveChanges();
+					}
+				}
 			}
 			catch (Exception e)
 			{
@@ -521,7 +521,7 @@ namespace BL.Services.Common
 				context.SYS_Modules.Add(new SYS_Modules()
 				{
 					Name = "Projects",
-					Url = "Projects/index",
+					Url = "Projects/Index",
 					Order = 0,
 					Icon = "fas fa-chart-pie",
 					CreatedBy = Guid.Parse(user.Id),

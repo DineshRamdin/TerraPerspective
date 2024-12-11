@@ -3,6 +3,7 @@ using BL.Models.Administration;
 using BL.Models.Common;
 using BL.Services.Common;
 using DAL.Context;
+using DAL.Models;
 using DAL.Models.Administration;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -42,18 +43,20 @@ namespace BL.Services.Administration
 											   select new ProjectsDTO
 											   {
 												   Id = a.Id,
+												   UserCode=a.UserCode,
 												   ProjectName = a.ProjectName,
 												   ProjectDetails = a.ProjectDetails,
 												   ProjectDescription = a.ProjectDescription,
 												   ProjectManager = (from c in context.SYS_User
 																	 join d in context.Users on c.AId equals d.Id
 																	 where c.Id == a.User.Id
-																	 select d.UserName).FirstOrDefault(),
+																	 select d.Othername +' ' +d.Surname).FirstOrDefault(),
 												   PlannedHours = a.PlannedHours.ToString("HH:mm"),
-												   StartDate = a.StartDate.ToString("dd/mm/yyyy"),
-												   EndDate = a.EndDate.ToString("dd/mm/yyyy"),
+												   StartDate = a.StartDate.ToString("yyyy/MM/dd"),
+												   EndDate = a.EndDate.ToString("yyyy/MM/dd"),
 												   Status = a.Status,
-												   IsVisible = a.IsVisible,
+												   StatusDetails = a.StatusDetails,
+												   IsVisible = a.IsVisible == true ? "Yes" : "No",
 											   }).ToList();
 
 				dto.Data = result;
@@ -141,6 +144,23 @@ namespace BL.Services.Administration
 					Ddl.Add(Dd);
 				}
 
+				//User
+				ApplicationUser result = new ApplicationUser();
+				Dd = new DropDown();
+				Dd.title = "User";
+				Dd.items = new List<DropDownItem>();
+				List<SYS_User> User = context.SYS_User.Where(x => x.DeleteStatus == false).ToList();
+				foreach (SYS_User lt in User)
+				{
+					result = context.Users.Where(x => x.Id == lt.AId).FirstOrDefault();
+
+					DropDownItem Ddi = new DropDownItem();
+					Ddi.Id = lt.Id;
+					Ddi.text = result.Othername + ' ' +result.Surname;
+					Dd.items.Add(Ddi);
+				}
+				Ddl.Add(Dd);
+
 				dto.Data = Ddl;
 				dto.QryResult = queryResult.SUCEEDED;
 			}
@@ -172,13 +192,14 @@ namespace BL.Services.Administration
 						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
 					}
 				}
-				BaseDtoS = new GenerateCode().GCodeMain(UserToken, "NPF_SYS_Breed");
+				BaseDtoS = new GenerateCode().GCodeMain(UserToken, "SYS_Projects");
 				SYS_Projects dt = new SYS_Projects()
 				{
 					UserCode = BaseDtoS.Data,
 					ProjectName = dataToSave.ProjectName,
 					ProjectDetails = dataToSave.ProjectDetails,
 					ProjectDescription = dataToSave.ProjectDescription,
+					User=context.SYS_User.Where(x=>x.Id == dataToSave.AssignTo).FirstOrDefault(),
 					PlannedHours = dataToSave.PlannedHours,
 					StartDate = dataToSave.StartDate,
 					EndDate = dataToSave.EndDate,
@@ -202,7 +223,7 @@ namespace BL.Services.Administration
 			return BaseDto;
 		}
 
-		public async Task<BaseResponseDTO<bool>> UpdateAsync(ProjectsCRUDDTO dataToUpdate)
+		public BaseResponseDTO<bool> UpdateAsync(ProjectsCRUDDTO dataToUpdate)
 		{
 			BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
 			try
