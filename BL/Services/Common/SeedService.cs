@@ -145,7 +145,7 @@ namespace BL.Services.Common
 					context.SaveChanges();
 
 				}
-				string[] TblName = new string[] { "SYS_Projects-PRO" };
+				string[] TblName = new string[] { "SYS_Projects-PRO","SYS_Task-TASK" };
 				Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
 				SYS_CodeConfiguration cc = context.SYS_CodeConfiguration.Where(x => x.Name == "Default").FirstOrDefault();
 				if (cc == null)
@@ -513,15 +513,33 @@ namespace BL.Services.Common
                 });
                 context.SaveChanges();
             }
-            #endregion
+			#endregion
 
-			#region System Icon
+			#region Projects
 			if (!context.SYS_Modules.Any(x => x.Name == "Projects"))
 			{
 				context.SYS_Modules.Add(new SYS_Modules()
 				{
 					Name = "Projects",
 					Url = "Projects/Index",
+					Order = 0,
+					Icon = "fas fa-chart-pie",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region Task
+			if (!context.SYS_Modules.Any(x => x.Name == "Task"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Task",
+					Url = "Task/Index",
 					Order = 0,
 					Icon = "fas fa-chart-pie",
 					CreatedBy = Guid.Parse(user.Id),

@@ -26,7 +26,7 @@ namespace BL.Models.Administration
     {
         public long Id { get; set; }
         public string UserCode { get; set; }
-        public string Taskname { get; set; }
+        public string TaskName { get; set; }
         public string TaskDescription { get; set; }
         public long Project { get; set; }
         public long Status { get; set; }

@@ -204,6 +204,9 @@ function renderDynamicMenu(data, langResource) {
         else if (grandParent.name == "MCA/VCA") {
             MenuName = langResource.MCAVCAMenuLabel;
         }
+        else if (grandParent.name == "Task") {
+            MenuName = langResource.TaskMenuLabel;
+        }
         else {
             MenuName = grandParent.name;
         }

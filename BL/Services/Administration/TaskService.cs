@@ -80,7 +80,7 @@ namespace BL.Services.Administration
                           {
                               Id = a.Id,
                               UserCode = a.UserCode,
-                              Taskname = a.Taskname,
+                              TaskName = a.Taskname,
                               TaskDescription = a.TaskDescription,
                               Project = a.Projects.Id,
                               StartDate = a.StartDate,
@@ -187,7 +187,7 @@ namespace BL.Services.Administration
                 SYS_Task dt = new SYS_Task()
                 {
                     UserCode = BaseDtoS.Data,
-                    Taskname = dataToSave.Taskname,
+                    Taskname = dataToSave.TaskName,
                     TaskDescription = dataToSave.TaskDescription,
                     Projects = context.SYS_Projects.Where(x => x.Id == dataToSave.Project).FirstOrDefault(),
                     StartDate = dataToSave.StartDate,
@@ -217,13 +217,13 @@ namespace BL.Services.Administration
             BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
             try
             {
-                if (!context.SYS_LookUpValue.Any(x => x.Name.ToLower() == dataToUpdate.Taskname.ToLower() && x.DeleteStatus != true
+                if (!context.SYS_LookUpValue.Any(x => x.Name.ToLower() == dataToUpdate.TaskName.ToLower() && x.DeleteStatus != true
                 && x.Id != dataToUpdate.Id))
                 {
                     SYS_Task Sys_Task = context.SYS_Task.Where(x => x.Id == dataToUpdate.Id).FirstOrDefault();
 
                     Sys_Task.UserCode = dataToUpdate.UserCode;
-                    Sys_Task.Taskname = dataToUpdate.Taskname;
+                    Sys_Task.Taskname = dataToUpdate.TaskName;
                     Sys_Task.TaskDescription = dataToUpdate.TaskDescription;
                     Sys_Task.Projects = context.SYS_Projects.Where(x => x.Id == dataToUpdate.Project).FirstOrDefault();
                     Sys_Task.StartDate = dataToUpdate.StartDate;
