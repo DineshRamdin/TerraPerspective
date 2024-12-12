@@ -16,7 +16,7 @@ namespace BL.Models.Administration
 		public string ProjectDetails { get; set; }
 		public string ProjectDescription { get; set; }
 		public string ProjectManager { get; set; }
-		public long Status { get; set; }
+		public string Status { get; set; }
 		public string StatusDetails { get; set; }
 		public string StartDate { get; set; }
 		public string EndDate { get; set; }
