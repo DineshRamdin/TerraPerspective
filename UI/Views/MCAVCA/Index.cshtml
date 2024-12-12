@@ -1,0 +1,186 @@
+﻿@{
+    ViewData["Title"] = "MCA/VCA";
+}
+@using UI.Resources
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.MCA_VCA</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.MCA_VCA</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="MCAVCATable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddMCAVCAModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddMCAVCA.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+    <script>
+        var GetAllMCAVCAUrl = '@Url.Action("GetAll", "MCAVCA")';
+        var MCAVCAGetByIdUrl = '@Url.Action("GetById", "MCAVCA")';
+        var CreateUpdateMCAVCAUrl = '@Url.Action("CreateUpdate", "MCAVCA")';
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#liMCAVCAmenu').addClass('active');
+
+            GetAllMCAVCA();
+        });
+
+        function GetAllMCAVCA() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'name', title: '@SharedResource.MCA_VCA' },
+                { data: 'description', title: '@SharedResource.Description' },
+            ];
+
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+            };
+
+            initializeDataGrid('MCAVCATable', 'openMCAVCAModal', GetAllMCAVCAUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+
+        }
+
+        function openMCAVCAModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: MCAVCAGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearMCAVCAModal();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4MCAVCATitle").html("@SharedResource.Modify  @SharedResource.MCA_VCA");
+                        else
+                            $("#h4MCAVCATitle").html("@SharedResource.Add  @SharedResource.MCA_VCA");
+
+                        $("#hdnId").val(response.data.id);
+                        $("#txtMCAVCAName").val(response.data.name);
+                        $("#txtDescription").val(response.data.description);
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddMCAVCAModal').modal('show');
+                $("#frnMCAVCACreate").validate({}).resetForm();;
+            });
+        }
+
+        function ClearMCAVCAModal() {
+            $("#h4MCAVCATitle").html("@SharedResource.Add  @SharedResource.MCA_VCA");
+            $("#hdnId").val(0);
+            $("#txtMCAVCAName").val("");
+            $("#txtDescription").val("");
+        }
+
+        function SaveMCAVCA() {
+
+            let valid = formValidation(["txtMCAVCAName"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtMCAVCAName").val();
+                dataObject.Description = $("#txtDescription").val();
+
+                $.ajax({
+                    url: CreateUpdateMCAVCAUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddMCAVCAModal').modal('hide');
+                            GetAllMCAVCA();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+        }
+
+    </script>
+}
