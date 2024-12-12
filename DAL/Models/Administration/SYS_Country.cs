@@ -13,6 +13,9 @@ namespace DAL.Models.Administration
         public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-       
+        public string Currency { get; set; } = string.Empty;
+        public string Language { get; set; } = string.Empty;
+        public string TimeZone { get; set; } = string.Empty;
+
     }
 }

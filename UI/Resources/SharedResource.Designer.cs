@@ -385,6 +385,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        public static string Currency {
+            get {
+                return ResourceManager.GetString("Currency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cut Matrix Tree.
         /// </summary>
         public static string Cut_Matrix_Tree {
@@ -619,6 +628,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to General Information.
+        /// </summary>
+        public static string General_Information {
+            get {
+                return ResourceManager.GetString("General Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generated on.
         /// </summary>
         public static string Generated_on {
@@ -723,6 +741,15 @@ namespace UI.Resources {
         public static string Is_Visible {
             get {
                 return ResourceManager.GetString("Is Visible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
             }
         }
         
@@ -1641,6 +1668,15 @@ namespace UI.Resources {
         public static string The_file_size_exceeds_the_allowed_limit_of_2MB_ {
             get {
                 return ResourceManager.GetString("The file size exceeds the allowed limit of 2MB.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Zone.
+        /// </summary>
+        public static string Time_Zone {
+            get {
+                return ResourceManager.GetString("Time Zone", resourceCulture);
             }
         }
         

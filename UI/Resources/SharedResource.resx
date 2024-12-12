@@ -849,4 +849,20 @@
   <data name="Configuration Name" xml:space="preserve">
     <value>Configuration Name</value>
   </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Currency</value>
+    <comment>Currency</comment>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+    <comment>Language</comment>
+  </data>
+  <data name="Time Zone" xml:space="preserve">
+    <value>Time Zone</value>
+    <comment>Time Zone</comment>
+  </data>
+  <data name="General Information" xml:space="preserve">
+    <value>General Information</value>
+    <comment>General Information</comment>
+  </data>
 </root>

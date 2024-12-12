@@ -660,4 +660,16 @@
   <data name="Project Code" xml:space="preserve">
     <value>Código do Projeto</value>
   </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Moeda</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Linguagem</value>
+  </data>
+  <data name="Time Zone" xml:space="preserve">
+    <value>Fuso horário</value>
+  </data>
+  <data name="General Information" xml:space="preserve">
+    <value>Informações gerais</value>
+  </data>
 </root>

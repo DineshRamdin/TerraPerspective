@@ -50,6 +50,7 @@
         var GetAllCountryUrl = '@Url.Action("GetAll", "Country")';
         var CountryGetByIdUrl = '@Url.Action("GetById", "Country")';
         var CreateUpdateCountryUrl = '@Url.Action("CreateUpdate", "Country")';
+        var getTimeZoneDropDownUrl = '@Url.Action("getTimeZoneDropDown", "Country")';
 
         $(function () {
             $('.nav-link').removeClass('active');
@@ -63,6 +64,9 @@
                 { data: 'id', title: 'Id', visible: false },
                 { data: 'name', title: '@SharedResource.Country' },
                 { data: 'description', title: '@SharedResource.Description' },
+                { data: 'currency', title: '@SharedResource.Currency' },
+                { data: 'language', title: '@SharedResource.Language' },
+                { data: 'timeZone', title: '@SharedResource.Time_Zone' },
             ];
 
             var langResource = {
@@ -107,6 +111,7 @@
                 data: dataObject,  // Send data if needed
                 beforeSend: function () {
                     ClearCountryModal();
+                    GetDropdownData();
                 },
                 success: function (response) {
                     if (response.data) {
@@ -118,6 +123,10 @@
                         $("#hdnId").val(response.data.id);
                         $("#txtCountryName").val(response.data.name);
                         $("#txtDescription").val(response.data.description);
+                        $("#txtCurrency").val(response.data.currency);
+                        $("#txtLanguage").val(response.data.language);
+
+                        $("#ddlTimeZone").val(response.data.timeZone == null || response.data.timeZone == "" ? "" : response.data.timeZone);
                     }
                     else {
                         toastr.error(response.errorMessage);
@@ -131,6 +140,34 @@
             }).done(function () {
                 $('#AddCountryModal').modal('show');
                 $("#frnCountryCreate").validate({}).resetForm();;
+            });
+        }
+
+        function GetDropdownData() {
+            $.ajax({
+                url: getTimeZoneDropDownUrl,
+                type: "POST",
+                async: false,
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    $("#ddlTimeZone").html('');
+
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $.each(response.data, function (key, value) {
+                            $("#ddlTimeZone").append($("<option></option>").val('').html("@SharedResource.Select @SharedResource.Time_Zone"));
+                            $.each(value.items, function (itemskey, itemsvalue) {
+                                $("#ddlTimeZone").append($("<option></option>").val(itemsvalue.timeZoneId).html(itemsvalue.text));
+                            });
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    // toastr.error("Error:" + error);
+                }
+
             });
         }
 
@@ -150,6 +187,9 @@
                 dataObject.Id = $("#hdnId").val();
                 dataObject.Name = $("#txtCountryName").val();
                 dataObject.Description = $("#txtDescription").val();
+                dataObject.Currency = $("#txtCurrency").val();
+                dataObject.TimeZone = $("#ddlTimeZone").val();
+                dataObject.Language = $("#txtLanguage").val();
 
                 $.ajax({
                     url: CreateUpdateCountryUrl,

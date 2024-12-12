@@ -131,18 +131,18 @@ namespace BL.Services.Common
 
         }
 
-		public static void SeedTableCodeConfigurations(UserManager<ApplicationUser> userManager)
-		{
-			try
-			{
+        public static void SeedTableCodeConfigurations(UserManager<ApplicationUser> userManager)
+        {
+            try
+            {
 
-				PerspectiveContext context = new PerspectiveContext();
-				List<SYS_TableCodeConfigurations> LCconf = context.SYS_TableCodeConfigurations.Where(x => x.HasAddi == null).ToList();
-				foreach (SYS_TableCodeConfigurations Cconf in LCconf)
-				{
-					Cconf.HasAddi = false;
-					context.SYS_TableCodeConfigurations.Update(Cconf);
-					context.SaveChanges();
+                PerspectiveContext context = new PerspectiveContext();
+                List<SYS_TableCodeConfigurations> LCconf = context.SYS_TableCodeConfigurations.Where(x => x.HasAddi == null).ToList();
+                foreach (SYS_TableCodeConfigurations Cconf in LCconf)
+                {
+                    Cconf.HasAddi = false;
+                    context.SYS_TableCodeConfigurations.Update(Cconf);
+                    context.SaveChanges();
 
 				}
 				string[] TblName = new string[] { "SYS_Projects-PRO","SYS_Task-TASK" };
@@ -229,48 +229,48 @@ namespace BL.Services.Common
 						CreatedBy = createdBy,
 						CreatedDate = DateTime.Now
 
-					};
-					context.SYS_Company.Add(cl);
-					context.SaveChanges();
-				}
-				foreach (string name in TblName)
-				{
-					string[] splt = name.Split('-');
-					SYS_TableCodeConfigurations tcc = context.SYS_TableCodeConfigurations.Where(x => x.TableName == splt[0] && x.CompanyId == cl.Id).FirstOrDefault();
-					if (tcc == null)
-					{
-						tcc = new SYS_TableCodeConfigurations()
-						{
-							TableName = splt[0],
-							Prefix = splt[1],
-							CompanyId = Convert.ToInt32(cl.Id),
-							ConfigurationId = cc.Id,
-							Comment = "Default Table Config",
-							CreatedBy = createdBy,
-							CreatedDate = DateTime.Now,
-							HasAddi = true
-						};
-						context.SYS_TableCodeConfigurations.Add(tcc);
-						context.SaveChanges();
-					}
-				}
-			}
-			catch (Exception e)
-			{
+                    };
+                    context.SYS_Company.Add(cl);
+                    context.SaveChanges();
+                }
+                foreach (string name in TblName)
+                {
+                    string[] splt = name.Split('-');
+                    SYS_TableCodeConfigurations tcc = context.SYS_TableCodeConfigurations.Where(x => x.TableName == splt[0] && x.CompanyId == cl.Id).FirstOrDefault();
+                    if (tcc == null)
+                    {
+                        tcc = new SYS_TableCodeConfigurations()
+                        {
+                            TableName = splt[0],
+                            Prefix = splt[1],
+                            CompanyId = Convert.ToInt32(cl.Id),
+                            ConfigurationId = cc.Id,
+                            Comment = "Default Table Config",
+                            CreatedBy = createdBy,
+                            CreatedDate = DateTime.Now,
+                            HasAddi = true
+                        };
+                        context.SYS_TableCodeConfigurations.Add(tcc);
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
 
-			}
+            }
 
-		}
+        }
 
-		public static void SeedGlobalParam()
-		{
-			try
-			{
-				PerspectiveContext context = new PerspectiveContext();
-				
-				if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPServer"))
-				{
-					SYS_GlobalParam GP = new SYS_GlobalParam();
+        public static void SeedGlobalParam()
+        {
+            try
+            {
+                PerspectiveContext context = new PerspectiveContext();
+
+                if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPServer"))
+                {
+                    SYS_GlobalParam GP = new SYS_GlobalParam();
                     GP.Name = "SMTPServer";
                     GP.Value = "https://api.turbo-smtp.com/api/v2/mail/send";
                     context.SYS_GlobalParam.Add(GP);
@@ -314,26 +314,26 @@ namespace BL.Services.Common
                     context.SaveChanges();
                 }
 
-				if (!context.SYS_GlobalParam.Any(x => x.Name == "APIKey"))
-				{
-					SYS_GlobalParam GP = new SYS_GlobalParam();
-					GP.Name = "APIKey";
-					GP.Value = "33d576a46b99e58fb454d4270e1b05b3";
-					context.SYS_GlobalParam.Add(GP);
-					context.SaveChanges();
-				}
+                if (!context.SYS_GlobalParam.Any(x => x.Name == "APIKey"))
+                {
+                    SYS_GlobalParam GP = new SYS_GlobalParam();
+                    GP.Name = "APIKey";
+                    GP.Value = "33d576a46b99e58fb454d4270e1b05b3";
+                    context.SYS_GlobalParam.Add(GP);
+                    context.SaveChanges();
+                }
 
-				if (!context.SYS_GlobalParam.Any(x => x.Name == "UniqueCodeGenerator"))
-				{
-					SYS_GlobalParam GP = new SYS_GlobalParam();
-					GP.Name = "UniqueCodeGenerator";
-					GP.Value = "0";
-					context.SYS_GlobalParam.Add(GP);
-					context.SaveChanges();
-				}
-			}
-			catch (Exception e)
-			{
+                if (!context.SYS_GlobalParam.Any(x => x.Name == "UniqueCodeGenerator"))
+                {
+                    SYS_GlobalParam GP = new SYS_GlobalParam();
+                    GP.Name = "UniqueCodeGenerator";
+                    GP.Value = "0";
+                    context.SYS_GlobalParam.Add(GP);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
 
             }
 
@@ -492,6 +492,70 @@ namespace BL.Services.Common
 
         }
 
+        public static void SeedLocality()
+        {
+            try
+            {
+                PerspectiveContext context = new PerspectiveContext();
+
+                if (!context.SYS_Locality.Any(x => x.Name == "Default"))
+                {
+                    SYS_Locality GP = new SYS_Locality();
+                    GP.Name = "Default";
+                    GP.Description = "Default";
+                    context.SYS_Locality.Add(GP);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public static void SeedMCAVCA()
+        {
+            try
+            {
+                PerspectiveContext context = new PerspectiveContext();
+
+                if (!context.SYS_MCAVCA.Any(x => x.Name == "Default"))
+                {
+                    SYS_MCAVCA GP = new SYS_MCAVCA();
+                    GP.Name = "Default";
+                    GP.Description = "Default";
+                    context.SYS_MCAVCA.Add(GP);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+        public static void SeedCountry()
+        {
+            try
+            {
+                PerspectiveContext context = new PerspectiveContext();
+
+                if (!context.SYS_Country.Any(x => x.Name == "Default"))
+                {
+                    SYS_Country GP = new SYS_Country();
+                    GP.Name = "Default";
+                    GP.Description = "Default";
+                    context.SYS_Country.Add(GP);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+
         public static void SeedModules(UserManager<ApplicationUser> userManager)
         {
             PerspectiveContext context = new PerspectiveContext();
@@ -528,10 +592,10 @@ namespace BL.Services.Common
 					CreatedDate = DateTime.Now
 
 
-				});
-				context.SaveChanges();
-			}
-			#endregion
+                });
+                context.SaveChanges();
+            }
+            #endregion
 
 			#region Task
 			if (!context.SYS_Modules.Any(x => x.Name == "Task"))
@@ -767,8 +831,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "far fa-dot-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -785,8 +849,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "fas fa-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -818,6 +882,21 @@ namespace BL.Services.Common
                 context.SYS_Modules.Add(new SYS_Modules()
                 {
                     Name = "Access",
+                    Url = "",
+                    Order = 3,
+                    Icon = "fas fa-user-cog",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now,
+                    ParentId = context.SYS_Modules.Where(x => x.Name == "Administration").Select(x => x.Id).FirstOrDefault()
+                });
+                context.SaveChanges();
+            }
+
+            if (!context.SYS_Modules.Any(x => x.Name == "General Information"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "General Information",
                     Url = "",
                     Order = 3,
                     Icon = "fas fa-user-cog",
@@ -892,8 +971,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "fas fa-chart-pie",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                    ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -910,8 +989,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "fas fa-chart-pie",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -928,8 +1007,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "fas fa-chart-pie",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -964,8 +1043,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "far fa-dot-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -982,15 +1061,15 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "far fa-dot-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
             }
             #endregion
 
-            #region Country
+            #region MCA/VCA
             if (!context.SYS_Modules.Any(x => x.Name == "MCA/VCA"))
             {
                 context.SYS_Modules.Add(new SYS_Modules()
@@ -1000,8 +1079,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "far fa-dot-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                    ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -1101,16 +1180,19 @@ namespace BL.Services.Common
         }
 
 
-		public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             SeedRoles(roleManager);
             SeedUsers(userManager);
             SeedGlobalParam();
             SeedModules(userManager);
             SeedAcessRights(roleManager);
-			SeedAcessRightsN(roleManager);
-			SeedTableCodeConfigurations(userManager);
-			SeedGroupMatrix(userManager);
+            SeedAcessRightsN(roleManager);
+            SeedTableCodeConfigurations(userManager);
+            SeedGroupMatrix(userManager);
+            SeedLocality();
+            SeedMCAVCA();
+            SeedCountry();
 
         }
     }
