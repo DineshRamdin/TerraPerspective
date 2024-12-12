@@ -768,12 +768,8 @@
   <data name="Projects" xml:space="preserve">
     <value>Projects</value>
   </data>
-  <data name="Company" xml:space="preserve">
-    <value>Company</value>
-    <comment>Company</comment>
-  </data>
-  <data name="UserCode" xml:space="preserve">
-    <value>UserCode</value>
+  <data name="Task Code" xml:space="preserve">
+    <value>Task Code</value>
   </data>
   <data name="Project Name" xml:space="preserve">
     <value>Project Name</value>
@@ -810,5 +806,20 @@
   </data>
   <data name="Select AssignTo" xml:space="preserve">
     <value>Select AssignTo</value>
+  </data>
+  <data name="Task Name" xml:space="preserve">
+    <value>Task Name</value>
+  </data>
+  <data name="Task" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="Select Project" xml:space="preserve">
+    <value>Select Project</value>
+  </data>
+  <data name="Task Description" xml:space="preserve">
+    <value>Task Description</value>
+  </data>
+  <data name="Project Code" xml:space="preserve">
+    <value>Project Code</value>
   </data>
 </root>

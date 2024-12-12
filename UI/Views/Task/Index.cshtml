@@ -1,79 +1,77 @@
 ﻿@{
-    ViewData["Title"] = "Projects";
+	ViewData["Title"] = "Task";
 }
 @using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">@SharedResource.Projects</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
-                    <li class="breadcrumb-item active">@SharedResource.Projects</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Task</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Task</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-    <div class="container-fluid">
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="row">
-                    <div class="col-10">
-                    </div>
-                    @*   <div class="col-2">
-                    <button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
-                    </div> *@
-                </div>
-                <div class="row">
-                    <div class="col-12  mb-10">
-                        <table id="ProjectsTable" class="table table-bordered table-striped"></table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*   <div class="col-2">
+					<button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+					</div> *@
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="TaskTable" class="table table-bordered table-striped"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
-<div class="modal fade" id="AddProjectsModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<partial name="_AddProjects.cshtml" />
+<div class="modal fade" id="AddTaskModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddTask.cshtml" />
 </div>
 <!-- /.modal -->
 @section scripts
 {
 	<script>
-		var GetAllProjectsUrl = '@Url.Action("GetAll", "Projects")';
-		var ProjectsGetByIdUrl = '@Url.Action("GetById", "Projects")';
-		var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
-		var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
+		var GetAllTaskUrl = '@Url.Action("GetAll", "Task")';
+		var TaskGetByIdUrl = '@Url.Action("GetById", "Task")';
+		var getTaskDropDownUrl = '@Url.Action("GetAllDropdownValues", "Task")';
+		var CreateUpdateTaskUrl = '@Url.Action("CreateUpdate", "Task")';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
-			$('#liprojectsmenu').addClass('active');
+			$('#litaskmenu').addClass('active');
 
-			GetAllProjects();
+			GetAllTask();
 		});
 
-		function GetAllProjects() {
+		function GetAllTask() {
 			var columnList = [
 				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'userCode', title: '@SharedResource.Project_Code' },
+				{ data: 'userCode', title: '@SharedResource.Task_Code' },
+				{ data: 'taskname', title: '@SharedResource.Task_Name' },
+				{ data: 'taskDescription', title: '@SharedResource.Task_Description' },
 				{ data: 'projectName', title: '@SharedResource.Project_Name' },
-				{ data: 'projectDetails', title: '@SharedResource.Project_Details' },
-				{ data: 'projectDescription', title: '@SharedResource.Project_Description' },
-				{ data: 'projectManager', title: '@SharedResource.Project_Manager' },
 				{ data: 'status', title: '@SharedResource.Status' },
 				{ data: 'statusDetails', title: '@SharedResource.Status_Details' },
 				{ data: 'startDate', title: '@SharedResource.Start_Date' },
 				{ data: 'endDate', title: '@SharedResource.End_Date' },
-				{ data: 'plannedHours', title: '@SharedResource.Planned_Hours' },
 				{ data: 'isVisible', title: '@SharedResource.Is_Visible' },
 			];
 
@@ -105,37 +103,35 @@
 				NextLabel: '@SharedResource.Next',
 			};
 
-			initializeDataGrid('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+			initializeDataGrid('TaskTable', 'openTaskModal', GetAllTaskUrl, columnList, false, true, true, false, false, null, true, null, langResource);
 
 		}
 
-		function openProjectsModal(id) {
+		function openTaskModal(id) {
 			var dataObject = {};
 			dataObject.id = id;
 
 			$.ajax({
-				url: ProjectsGetByIdUrl,
+				url: TaskGetByIdUrl,
 				type: "POST",
 				data: dataObject,  // Send data if needed
 				beforeSend: function () {
-					ClearProjectsModal();
+					ClearTaskModal();
 					GetDropdownData();
 				},
 				success: function (response) {
 					if (response.data) {
 						if (response.data.id > 0)
-							$("#h4ProjectsTitle").html("@SharedResource.Modify  @SharedResource.Projects");
+							$("#h4TaskTitle").html("@SharedResource.Modify  @SharedResource.Task");
 						else
-							$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
+							$("#h4TaskTitle").html("@SharedResource.Add  @SharedResource.Task");
 						// console.data("Data : ", data);
 						// return;
 						$("#hdnId").val(response.data.id);
 						$("#txtCode").val(response.data.userCode);
-						$("#txtProjectName").val(response.data.projectName);
-						$("#txtProjectDetails").val(response.data.projectDetails);
-						$("#txtProjectDescription").val(response.data.projectDescription);
-						$("#ddlAssignTo").val(response.data.assignTo == null || response.data.assignTo == 0 ? "" : response.data.assignTo);
-						$("#txtPlannedHours").val(response.data.plannedHours);
+						$("#txtTaskName").val(response.data.taskName);
+						$("#txtTaskDescription").val(response.data.taskDescription);
+						$("#ddlProjects").val(response.data.project == null || response.data.project == 0 ? "" : response.data.project);
 						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
 						$("#txtStatusDetails").val(response.data.statusDetails);
 						const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
@@ -156,8 +152,8 @@
 					toastr.error("Error:" + error);
 				}
 			}).done(function () {
-				$('#AddProjectsModal').modal('show');
-				$("#frnProjectsCreate").validate({}).resetForm();
+				$('#AddTaskModal').modal('show');
+				$("#frnTaskCreate").validate({}).resetForm();
 			});
 
 
@@ -167,8 +163,8 @@
 			// Ensure the date is a valid Date object
 			const date = new Date(dateString);
 			if (isNaN(date.getTime())) {
-			    console.error("Invalid date:", dateString);
-			    return ""; // Return an empty string if the date is invalid
+				console.error("Invalid date:", dateString);
+				return ""; // Return an empty string if the date is invalid
 			}
 
 			// Format the date as yyyy-MM-dd for input type="date"
@@ -179,15 +175,13 @@
 		}
 
 
-		function ClearProjectsModal() {
-			$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
+		function ClearTaskModal() {
+			$("#h4TaskTitle").html("@SharedResource.Add  @SharedResource.Task");
 			$("#hdnId").val(0);
 			$("#txtCode").val("");
-			$("#txtProjectName").val("");
-			$("#txtProjectDetails").val("");
-			$("#txtProjectDescription").val("");
-			$("#ddlAssignTo").val("");
-			$("#txtPlannedHours").val("");
+			$("#txtTaskName").val("");
+			$("#txtTaskDescription").val("");
+			$("#ddlProjects").val("");
 			$("#ddlStatus").val("");
 			$("#txtStatusDetails").val("");
 			$("#txtStartDate").val("");
@@ -197,21 +191,21 @@
 
 		function GetDropdownData() {
 			$.ajax({
-				url: getProjectsDropDownUrl,
+				url: getTaskDropDownUrl,
 				type: "POST",
 				async: false,
 				// data: dataObject,  // Send data if needed
 				beforeSend: function () {
-					$("#ddlAssignTo").html('');
+					$("#ddlProjects").html('');
 					$("#ddlStatus").html('');
 				},
 				success: function (response) {
 					if (response.data) {
 						$.each(response.data, function (key, value) {
-							if (value.title == "User") {
-								$("#ddlAssignTo").append($("<option></option>").val('').html("@SharedResource.Select_AssignTo"));
+							if (value.title == "Projects") {
+								$("#ddlProjects").append($("<option></option>").val('').html("@SharedResource.Select_Project"));
 								$.each(value.items, function (itemskey, itemsvalue) {
-									$("#ddlAssignTo").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+									$("#ddlProjects").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
 							}
 
@@ -232,29 +226,27 @@
 			});
 		}
 
-		 function SaveProjects() {
+		function SaveTask() {
 
-			let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedHours", "ddlStatus", "txtStatusDetails", "txtStartDate", "txtEndDate"]);
+			let valid = formValidation(["txtTaskName", "txtTaskDescription", "ddlProjects", "ddlStatus", "txtStatusDetails", "txtStartDate", "txtEndDate"]);
 
 			if (valid) {
 				var dataObject = {};
-				
+
 				dataObject.Id = $("#hdnId").val();
-				dataObject.UserCode =$("#txtCode").val();
-				dataObject.ProjectName =$("#txtProjectName").val();
-				dataObject.ProjectDetails = $("#txtProjectDetails").val();
-				dataObject.ProjectDescription = $("#txtProjectDescription").val();
-				dataObject.AssignTo =$("#ddlAssignTo").val();
-				dataObject.PlannedHours =$("#txtPlannedHours").val();
-				dataObject.Status =$("#ddlStatus").val();
-				dataObject.StatusDetails =$("#txtStatusDetails").val();
-				dataObject.StartDate =$("#txtStartDate").val();
-				dataObject.EndDate =$("#txtEndDate").val();
+				dataObject.UserCode = $("#txtCode").val();
+				dataObject.Taskname = $("#txtTaskName").val();
+				dataObject.TaskDescription = $("#txtTaskDescription").val();
+				dataObject.Project = $("#ddlProjects").val();
+				dataObject.Status = $("#ddlStatus").val();
+				dataObject.StatusDetails = $("#txtStatusDetails").val();
+				dataObject.StartDate = $("#txtStartDate").val();
+				dataObject.EndDate = $("#txtEndDate").val();
 				dataObject.IsVisible = $('#chbIsVisible').prop('checked');
 
 
 				$.ajax({
-					url: CreateUpdateProjectsUrl,
+					url: CreateUpdateTaskUrl,
 					type: "POST",
 					data: dataObject,  // Send data if needed
 					beforeSend: function () {
@@ -263,8 +255,8 @@
 					success: function (response) {
 						if (response.data) {
 							toastr.success(response.errorMessage);
-							$('#AddProjectsModal').modal('hide');
-							GetAllProjects();
+							$('#AddTaskModal').modal('hide');
+							GetAllTask();
 						}
 						else {
 							toastr.error(response.errorMessage);

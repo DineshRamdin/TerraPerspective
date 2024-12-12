@@ -603,4 +603,61 @@
   <data name="Zone Matrix" xml:space="preserve">
     <value>Matrice de zones</value>
   </data>
+  <data name="Projects" xml:space="preserve">
+    <value>Projets</value>
+  </data>
+  <data name="Task Code" xml:space="preserve">
+    <value>Code de tâche</value>
+  </data>
+  <data name="Project Name" xml:space="preserve">
+    <value>Nom du projet</value>
+  </data>
+  <data name="Project Details" xml:space="preserve">
+    <value>Détails du projet</value>
+  </data>
+  <data name="Project Description" xml:space="preserve">
+    <value>Description du projet</value>
+  </data>
+  <data name="Assign To" xml:space="preserve">
+    <value>Attribuer à</value>
+  </data>
+  <data name="Planned Hours" xml:space="preserve">
+    <value>Heures planifiées</value>
+  </data>
+  <data name="Status Details" xml:space="preserve">
+    <value>Détails du statut</value>
+  </data>
+  <data name="Start Date" xml:space="preserve">
+    <value>Date de début</value>
+  </data>
+  <data name="End Date" xml:space="preserve">
+    <value>Date de fin</value>
+  </data>
+  <data name="Is Visible" xml:space="preserve">
+    <value>est visible</value>
+  </data>
+  <data name="Project Manager" xml:space="preserve">
+    <value>Chef de projet</value>
+  </data>
+  <data name="Select Status" xml:space="preserve">
+    <value>Sélectionnez le statut</value>
+  </data>
+  <data name="Select AssignTo" xml:space="preserve">
+    <value>Sélectionnez Attribuer à</value>
+  </data>
+  <data name="Task Name" xml:space="preserve">
+    <value>Nom de la tâche</value>
+  </data>
+  <data name="Task" xml:space="preserve">
+    <value>Tâche</value>
+  </data>
+  <data name="Select Project" xml:space="preserve">
+    <value>Sélectionnez un projet</value>
+  </data>
+  <data name="Task Description" xml:space="preserve">
+    <value>Description de la tâche</value>
+  </data>
+  <data name="Project Code" xml:space="preserve">
+    <value>Code du projet</value>
+  </data>
 </root>

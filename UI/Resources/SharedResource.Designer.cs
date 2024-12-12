@@ -682,20 +682,20 @@ namespace UI.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Locality.
-        /// </summary>
-        public static string Locality {
-            get {
-                return ResourceManager.GetString("Locality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Is Visible.
         /// </summary>
         public static string Is_Visible {
             get {
                 return ResourceManager.GetString("Is Visible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locality.
+        /// </summary>
+        public static string Locality {
+            get {
+                return ResourceManager.GetString("Locality", resourceCulture);
             }
         }
         
@@ -1060,6 +1060,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Code.
+        /// </summary>
+        public static string Project_Code {
+            get {
+                return ResourceManager.GetString("Project Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project Description.
         /// </summary>
         public static string Project_Description {
@@ -1294,6 +1303,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Project.
+        /// </summary>
+        public static string Select_Project {
+            get {
+                return ResourceManager.GetString("Select Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Purpose.
         /// </summary>
         public static string Select_Purpose {
@@ -1416,6 +1434,42 @@ namespace UI.Resources {
         public static string System_Icon {
             get {
                 return ResourceManager.GetString("System Icon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task.
+        /// </summary>
+        public static string Task {
+            get {
+                return ResourceManager.GetString("Task", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task Code.
+        /// </summary>
+        public static string Task_Code {
+            get {
+                return ResourceManager.GetString("Task Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task Description.
+        /// </summary>
+        public static string Task_Description {
+            get {
+                return ResourceManager.GetString("Task Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task Name.
+        /// </summary>
+        public static string Task_Name {
+            get {
+                return ResourceManager.GetString("Task Name", resourceCulture);
             }
         }
         
@@ -1551,15 +1605,6 @@ namespace UI.Resources {
         public static string User_Matrix {
             get {
                 return ResourceManager.GetString("User Matrix", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UserCode.
-        /// </summary>
-        public static string UserCode {
-            get {
-                return ResourceManager.GetString("UserCode", resourceCulture);
             }
         }
         

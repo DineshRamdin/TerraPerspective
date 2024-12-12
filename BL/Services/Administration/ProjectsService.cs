@@ -54,7 +54,7 @@ namespace BL.Services.Administration
 												   PlannedHours = a.PlannedHours.ToString("HH:mm"),
 												   StartDate = a.StartDate.ToString("yyyy/MM/dd"),
 												   EndDate = a.EndDate.ToString("yyyy/MM/dd"),
-												   Status = a.Status,
+												   Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
 												   StatusDetails = a.StatusDetails,
 												   IsVisible = a.IsVisible == true ? "Yes" : "No",
 											   }).ToList();
@@ -236,7 +236,8 @@ namespace BL.Services.Administration
 					Sys_Projects.UserCode = dataToUpdate.UserCode;
 					Sys_Projects.ProjectName = dataToUpdate.ProjectName;
 					Sys_Projects.ProjectDetails = string.IsNullOrEmpty(dataToUpdate.ProjectDetails) ? string.Empty : dataToUpdate.ProjectDetails;
-					Sys_Projects.ProjectDescription = dataToUpdate.ProjectDescription;
+					Sys_Projects.User = context.SYS_User.Where(x => x.Id == dataToUpdate.AssignTo).FirstOrDefault();
+                    Sys_Projects.ProjectDescription = dataToUpdate.ProjectDescription;
 					Sys_Projects.PlannedHours = dataToUpdate.PlannedHours;
 					Sys_Projects.StartDate = dataToUpdate.StartDate;
 					Sys_Projects.EndDate = dataToUpdate.EndDate;
@@ -252,7 +253,7 @@ namespace BL.Services.Administration
 				else
 				{
 					BaseDto.Data = false;
-					BaseDto.ErrorMessage = "LookUp Type Already Exist";
+					BaseDto.ErrorMessage = "Project Already Exist";
 					BaseDto.QryResult = queryResult.FAILED;
 				}
 			}
