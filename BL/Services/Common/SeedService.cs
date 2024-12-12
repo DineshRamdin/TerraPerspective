@@ -131,15 +131,146 @@ namespace BL.Services.Common
 
         }
 
-        public static void SeedGlobalParam()
-        {
-            try
-            {
-                PerspectiveContext context = new PerspectiveContext();
+		public static void SeedTableCodeConfigurations(UserManager<ApplicationUser> userManager)
+		{
+			try
+			{
 
-                if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPServer"))
-                {
-                    SYS_GlobalParam GP = new SYS_GlobalParam();
+				PerspectiveContext context = new PerspectiveContext();
+				List<SYS_TableCodeConfigurations> LCconf = context.SYS_TableCodeConfigurations.Where(x => x.HasAddi == null).ToList();
+				foreach (SYS_TableCodeConfigurations Cconf in LCconf)
+				{
+					Cconf.HasAddi = false;
+					context.SYS_TableCodeConfigurations.Update(Cconf);
+					context.SaveChanges();
+
+				}
+				string[] TblName = new string[] { "SYS_Projects-PRO" };
+				Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
+				SYS_CodeConfiguration cc = context.SYS_CodeConfiguration.Where(x => x.Name == "Default").FirstOrDefault();
+				if (cc == null)
+				{
+					cc = new SYS_CodeConfiguration()
+					{
+						Name = "Default",
+						Date = false,
+						Month = false,
+						Year = false,
+						UsePrefix = true,
+						PaddingNo = 0,
+						DateFormat = string.Empty,
+						YearFormat = string.Empty,
+						MonthFormat = string.Empty,
+						ResetConfig = string.Empty,
+						Comment = "Default if no config Found",
+						CreatedBy = createdBy,
+						CreatedDate = DateTime.Now
+					};
+					context.SYS_CodeConfiguration.Add(cc);
+					context.SaveChanges();
+				}
+				cc = new SYS_CodeConfiguration();
+				cc = context.SYS_CodeConfiguration.Where(x => x.Name == "Laboratory").FirstOrDefault();
+				if (cc == null)
+				{
+					cc = new SYS_CodeConfiguration()
+					{
+						Name = "Laboratory",
+						Date = false,
+						Month = false,
+						Year = true,
+						UsePrefix = true,
+						PaddingNo = 10,
+						DateFormat = string.Empty,
+						YearFormat = "yyyy",
+						MonthFormat = string.Empty,
+						ResetConfig = "Year",
+						Comment = "Default if no config Found",
+						CreatedBy = createdBy,
+						CreatedDate = DateTime.Now
+					};
+					context.SYS_CodeConfiguration.Add(cc);
+					context.SaveChanges();
+				}
+				cc = new SYS_CodeConfiguration();
+				cc = context.SYS_CodeConfiguration.Where(x => x.Name == "Schemes").FirstOrDefault();
+				if (cc == null)
+				{
+					cc = new SYS_CodeConfiguration()
+					{
+						Name = "Schemes",
+						Date = false,
+						Month = false,
+						Year = true,
+						UsePrefix = true,
+						PaddingNo = 10,
+						DateFormat = string.Empty,
+						YearFormat = "yyyy",
+						MonthFormat = string.Empty,
+						ResetConfig = "Year",
+						Comment = "Default if no config Found",
+						CreatedBy = createdBy,
+						CreatedDate = DateTime.Now
+					};
+					context.SYS_CodeConfiguration.Add(cc);
+					context.SaveChanges();
+				}
+				SYS_Company cl = context.SYS_Company.Where(x => x.NameofCompany == "Default").FirstOrDefault();
+				if (cl == null)
+				{
+					cl = new SYS_Company()
+					{
+						NameofCompany = "Default",
+						RegistrationNumber ="123",
+						Code ="00",
+						RegistrationDate = DateTime.Now,
+						TelephoneNumber ="",
+						MobileNumber = "",
+						CreatedBy = createdBy,
+						CreatedDate = DateTime.Now
+
+					};
+					context.SYS_Company.Add(cl);
+					context.SaveChanges();
+				}
+				foreach (string name in TblName)
+				{
+					string[] splt = name.Split('-');
+					SYS_TableCodeConfigurations tcc = context.SYS_TableCodeConfigurations.Where(x => x.TableName == splt[0] && x.CompanyId == cl.Id).FirstOrDefault();
+					if (tcc == null)
+					{
+						tcc = new SYS_TableCodeConfigurations()
+						{
+							TableName = splt[0],
+							Prefix = splt[1],
+							CompanyId = Convert.ToInt32(cl.Id),
+							ConfigurationId = cc.Id,
+							Comment = "Default Table Config",
+							CreatedBy = createdBy,
+							CreatedDate = DateTime.Now,
+							HasAddi = true
+						};
+						context.SYS_TableCodeConfigurations.Add(tcc);
+						context.SaveChanges();
+					}
+				}
+			}
+			catch (Exception e)
+			{
+
+			}
+
+		}
+
+		public static void SeedGlobalParam()
+		{
+			try
+			{
+				PerspectiveContext context = new PerspectiveContext();
+				
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "SMTPServer"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
                     GP.Name = "SMTPServer";
                     GP.Value = "https://api.turbo-smtp.com/api/v2/mail/send";
                     context.SYS_GlobalParam.Add(GP);
@@ -183,17 +314,26 @@ namespace BL.Services.Common
                     context.SaveChanges();
                 }
 
-                if (!context.SYS_GlobalParam.Any(x => x.Name == "APIKey"))
-                {
-                    SYS_GlobalParam GP = new SYS_GlobalParam();
-                    GP.Name = "APIKey";
-                    GP.Value = "33d576a46b99e58fb454d4270e1b05b3";
-                    context.SYS_GlobalParam.Add(GP);
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception e)
-            {
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "APIKey"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
+					GP.Name = "APIKey";
+					GP.Value = "33d576a46b99e58fb454d4270e1b05b3";
+					context.SYS_GlobalParam.Add(GP);
+					context.SaveChanges();
+				}
+
+				if (!context.SYS_GlobalParam.Any(x => x.Name == "UniqueCodeGenerator"))
+				{
+					SYS_GlobalParam GP = new SYS_GlobalParam();
+					GP.Name = "UniqueCodeGenerator";
+					GP.Value = "0";
+					context.SYS_GlobalParam.Add(GP);
+					context.SaveChanges();
+				}
+			}
+			catch (Exception e)
+			{
 
             }
 
@@ -375,17 +515,35 @@ namespace BL.Services.Common
             }
             #endregion
 
-            #region User
-            if (!context.SYS_Modules.Any(x => x.Name == "User"))
-            {
-                context.SYS_Modules.Add(new SYS_Modules()
-                {
-                    Name = "User",
-                    Url = "User/Index",
-                    Order = 0,
-                    Icon = "fas fa-user",
-                    CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
+			#region System Icon
+			if (!context.SYS_Modules.Any(x => x.Name == "Projects"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "Projects",
+					Url = "Projects/Index",
+					Order = 0,
+					Icon = "fas fa-chart-pie",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
+
+
+				});
+				context.SaveChanges();
+			}
+			#endregion
+
+			#region User
+			if (!context.SYS_Modules.Any(x => x.Name == "User"))
+			{
+				context.SYS_Modules.Add(new SYS_Modules()
+				{
+					Name = "User",
+					Url = "User/Index",
+					Order = 0,
+					Icon = "fas fa-user",
+					CreatedBy = Guid.Parse(user.Id),
+					CreatedDate = DateTime.Now
 
 
                 });
@@ -908,15 +1066,17 @@ namespace BL.Services.Common
 
         }
 
-        public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+
+		public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             SeedRoles(roleManager);
             SeedUsers(userManager);
             SeedGlobalParam();
             SeedModules(userManager);
             SeedAcessRights(roleManager);
-            SeedAcessRightsN(roleManager);
-            SeedGroupMatrix(userManager);
+			SeedAcessRightsN(roleManager);
+			SeedTableCodeConfigurations(userManager);
+			SeedGroupMatrix(userManager);
 
         }
     }

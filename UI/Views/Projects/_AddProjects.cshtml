@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+@using UI.Resources
+
+<div class="modal-dialog">
+    <form id="frnProjectsCreate">
+        <input type="hidden" id="hdnId" value="" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="h4ProjectsTitle">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.UserCode<span class="red-required">*</span></label>
+                        <input type="text" id="txtCode" class="form-control" placeholder=@SharedResource.UserCode readonly />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Project_Name<span class="red-required">*</span></label>
+                        <input type="text" id="txtProjectName" class="form-control" placeholder=@SharedResource.Project_Name required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Project_Details<span class="red-required">*</span></label>
+                        <textarea type="text" id="txtProjectDetails" class="form-control" placeholder="@SharedResource.Project_Details" required> </textarea>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Project_Description<span class="red-required">*</span></label>
+                        <textarea type="text" id="txtProjectDescription" class="form-control" placeholder="@SharedResource.Project_Description" required> </textarea>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Assign_To<span class="red-required">*</span></label>
+                        <select class="form-control" id="ddlAssignTo" required></select>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Planned_Hours<span class="red-required">*</span></label>
+                        <input type="time" id="txtPlannedHours" class="form-control" placeholder="@SharedResource.Planned_Hours" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Status<span class="red-required">*</span></label>
+                        <select class="form-control" id="ddlStatus" required></select>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Status_Details<span class="red-required">*</span></label>
+                        <textarea type="text" id="txtStatusDetails" class="form-control" placeholder="@SharedResource.Status_Details" required> </textarea>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Start_Date<span class="red-required">*</span></label>
+                        <input type="date" id="txtStartDate" class="form-control" placeholder="@SharedResource.Start_Date" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.End_Date<span class="red-required">*</span></label>
+                        <input type="date" id="txtEndDate" class="form-control" placeholder="@SharedResource.End_Date" required />
+                    </div>
+                    <div class="col-12 form-group">
+                        <div class="col-8">
+                            <label>@SharedResource.Is_Visible<span class="red-required">*</span></label>
+                        </div>
+                        <div class="col-4">
+                            <input type="checkbox" id="chbIsVisible" class="form-control-sm" placeholder="@SharedResource.Is_Visible" required />
+                        </div>
+                      
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SaveProjects();">@SharedResource.Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
+            </div>
+        </div>
+    </form>
+</div>

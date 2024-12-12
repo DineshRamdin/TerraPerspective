@@ -1,0 +1,288 @@
+﻿@{
+    ViewData["Title"] = "Projects";
+}
+@using UI.Resources
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Projects</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Projects</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                    @*   <div class="col-2">
+                    <button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+                    </div> *@
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="ProjectsTable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddProjectsModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddProjects.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllProjectsUrl = '@Url.Action("GetAll", "Projects")';
+		var ProjectsGetByIdUrl = '@Url.Action("GetById", "Projects")';
+		var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
+		var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liprojectsmenu').addClass('active');
+
+			GetAllProjects();
+		});
+
+		function GetAllProjects() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'userCode', title: '@SharedResource.UserCode' },
+				{ data: 'projectName', title: '@SharedResource.Project_Name' },
+				{ data: 'projectDetails', title: '@SharedResource.Project_Details' },
+				{ data: 'projectDescription', title: '@SharedResource.Project_Description' },
+				{ data: 'projectManager', title: '@SharedResource.Project_Manager' },
+				{ data: 'status', title: '@SharedResource.Status' },
+				{ data: 'statusDetails', title: '@SharedResource.Status_Details' },
+				{ data: 'startDate', title: '@SharedResource.Start_Date' },
+				{ data: 'endDate', title: '@SharedResource.End_Date' },
+				{ data: 'plannedHours', title: '@SharedResource.Planned_Hours' },
+				{ data: 'isVisible', title: '@SharedResource.Is_Visible' },
+			];
+
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel: '@SharedResource.Export_PDF',
+				ExportCSVLabel: '@SharedResource.Export_CSV',
+				ExportExcelLabel: '@SharedResource.Export_Excel',
+				ExcelLabel: '@SharedResource.Excel',
+				PDFLabel: '@SharedResource.PDF',
+				CSVLabel: '@SharedResource.CSV',
+				NodataavailableLabel: '@SharedResource.No_data_available',
+				SearchLabel: '@SharedResource.Search',
+				ShowingLabel: '@SharedResource.Showing',
+				EntriesLabel: '@SharedResource.entries',
+				FilteredfromLabel: '@SharedResource.filtered_from',
+				ViewLabel: '@SharedResource.View',
+				PreviewLabel: '@SharedResource.Preview',
+				DeleteLabel: '@SharedResource.Delete',
+				EditLabel: '@SharedResource.Edit',
+				ResetPasswordLabel: '@SharedResource.Reset_Password',
+				UserNameLabel: '@SharedResource.UserName',
+				DateLabel: '@SharedResource.Date',
+				PageLabel: '@SharedResource.Page',
+				OfLabel: '@SharedResource.of',
+				GeneratedonLabel: '@SharedResource.Generated_on',
+				PreviousLabel: '@SharedResource.Previous',
+				NextLabel: '@SharedResource.Next',
+			};
+
+			initializeDataGrid('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+
+		}
+
+		function openProjectsModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: ProjectsGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearProjectsModal();
+					GetDropdownData();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id > 0)
+							$("#h4ProjectsTitle").html("@SharedResource.Modify  @SharedResource.Projects");
+						else
+							$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
+						// console.data("Data : ", data);
+						// return;
+						$("#hdnId").val(response.data.id);
+						$("#txtCode").val(response.data.userCode);
+						$("#txtProjectName").val(response.data.projectName);
+						$("#txtProjectDetails").val(response.data.projectDetails);
+						$("#txtProjectDescription").val(response.data.projectDescription);
+						$("#ddlAssignTo").val(response.data.assignTo == null || response.data.assignTo == 0 ? "" : response.data.assignTo);
+						$("#txtPlannedHours").val(response.data.plannedHours);
+						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
+						$("#txtStatusDetails").val(response.data.statusDetails);
+						const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
+						const formattedEndDate = formatDateToInput(response.data.endDate); // Convert to yyyy-MM-dd
+
+						$("#txtStartDate").val(formattedStartDate);
+						$("#txtEndDate").val(formattedEndDate);
+
+						$('#chbIsVisible').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddProjectsModal').modal('show');
+				$("#frnProjectsCreate").validate({}).resetForm();
+			});
+
+
+		}
+
+		function formatDateToInput(dateString) {
+			// Ensure the date is a valid Date object
+			const date = new Date(dateString);
+			if (isNaN(date.getTime())) {
+			    console.error("Invalid date:", dateString);
+			    return ""; // Return an empty string if the date is invalid
+			}
+
+			// Format the date as yyyy-MM-dd for input type="date"
+			const year = date.getFullYear();
+			const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+			const day = String(date.getDate()).padStart(2, '0');
+			return `${year}-${month}-${day}`;
+		}
+
+
+		function ClearProjectsModal() {
+			$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
+			$("#hdnId").val(0);
+			$("#txtCode").val("");
+			$("#txtProjectName").val("");
+			$("#txtProjectDetails").val("");
+			$("#txtProjectDescription").val("");
+			$("#ddlAssignTo").val("");
+			$("#txtPlannedHours").val("");
+			$("#ddlStatus").val("");
+			$("#txtStatusDetails").val("");
+			$("#txtStartDate").val("");
+			$("#txtEndDate").val("");
+			$("#chbIsVisible").prop('checked', false);
+		}
+
+		function GetDropdownData() {
+			$.ajax({
+				url: getProjectsDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlAssignTo").html('');
+					$("#ddlStatus").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						$.each(response.data, function (key, value) {
+							if (value.title == "User") {
+								$("#ddlAssignTo").append($("<option></option>").val('').html("@SharedResource.Select_AssignTo"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlAssignTo").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+
+							if (value.title == "Project Status") {
+								$("#ddlStatus").append($("<option></option>").val('').html("@SharedResource.Select_Status"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlStatus").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
+
+			});
+		}
+
+		 function SaveProjects() {
+
+			let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedHours", "ddlStatus", "txtStatusDetails", "txtStartDate", "txtEndDate"]);
+
+			if (valid) {
+				var dataObject = {};
+				
+				dataObject.Id = $("#hdnId").val();
+				dataObject.UserCode =$("#txtCode").val();
+				dataObject.ProjectName =$("#txtProjectName").val();
+				dataObject.ProjectDetails = $("#txtProjectDetails").val();
+				dataObject.ProjectDescription = $("#txtProjectDescription").val();
+				dataObject.AssignTo =$("#ddlAssignTo").val();
+				dataObject.PlannedHours =$("#txtPlannedHours").val();
+				dataObject.Status =$("#ddlStatus").val();
+				dataObject.StatusDetails =$("#txtStatusDetails").val();
+				dataObject.StartDate =$("#txtStartDate").val();
+				dataObject.EndDate =$("#txtEndDate").val();
+				dataObject.IsVisible = $('#chbIsVisible').prop('checked');
+
+
+				$.ajax({
+					url: CreateUpdateProjectsUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddProjectsModal').modal('hide');
+							GetAllProjects();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			}
+		}
+
+	</script>
+}

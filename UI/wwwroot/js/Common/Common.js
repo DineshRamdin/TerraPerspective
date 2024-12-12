@@ -192,6 +192,9 @@ function renderDynamicMenu(data, langResource) {
         else if (grandParent.name == "Company") {
             MenuName = langResource.CompanyMenuLabel;
         }
+        else if (grandParent.name == "Projects") {
+            MenuName = langResource.ProjectsMenuLabel;
+        }
         else if (grandParent.name == "Locality") {
             MenuName = langResource.LocalityMenuLabel;
         }
