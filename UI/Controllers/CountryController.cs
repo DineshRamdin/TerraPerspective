@@ -3,6 +3,9 @@ using BL.Models.Common;
 using BL.Services.Administration;
 using DAL.Context;
 using DAL.Models;
+using DAL.Models.Administration;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Presentation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UI.Controllers.Common;
@@ -83,5 +86,42 @@ namespace UI.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost]
+        public ActionResult<BaseResponseDTO<List<DropDown>>> getTimeZoneDropDown()
+        {
+            try
+            {
+
+                BaseResponseDTO<List<DropDown>> dto = new BaseResponseDTO<List<DropDown>>();
+                List<DropDown> Ddl = new List<DropDown>();
+                DropDown Dd = new DropDown();
+
+                var timeZones = TimeZoneInfo.GetSystemTimeZones();
+
+                //Time Zone
+                Dd = new DropDown();
+                Dd.title = "Time Zone";
+                Dd.items = new List<DropDownItem>();
+
+                foreach (var timeZone in timeZones)
+                {
+                    DropDownItem Ddi = new DropDownItem();
+                    Ddi.TimeZoneId = timeZone.Id;
+                    Ddi.text = timeZone.DisplayName;
+                    Dd.items.Add(Ddi);
+                }
+
+                Ddl.Add(Dd);
+
+                dto.Data = Ddl;
+                return Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

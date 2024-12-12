@@ -831,8 +831,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "far fa-dot-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -849,8 +849,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "fas fa-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -882,6 +882,21 @@ namespace BL.Services.Common
                 context.SYS_Modules.Add(new SYS_Modules()
                 {
                     Name = "Access",
+                    Url = "",
+                    Order = 3,
+                    Icon = "fas fa-user-cog",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now,
+                    ParentId = context.SYS_Modules.Where(x => x.Name == "Administration").Select(x => x.Id).FirstOrDefault()
+                });
+                context.SaveChanges();
+            }
+
+            if (!context.SYS_Modules.Any(x => x.Name == "General Information"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "General Information",
                     Url = "",
                     Order = 3,
                     Icon = "fas fa-user-cog",
@@ -956,8 +971,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "fas fa-chart-pie",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                    ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -974,8 +989,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "fas fa-chart-pie",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -992,8 +1007,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "fas fa-chart-pie",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -1028,8 +1043,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "far fa-dot-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
@@ -1046,15 +1061,15 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "far fa-dot-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                     ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
             }
             #endregion
 
-            #region Country
+            #region MCA/VCA
             if (!context.SYS_Modules.Any(x => x.Name == "MCA/VCA"))
             {
                 context.SYS_Modules.Add(new SYS_Modules()
@@ -1064,8 +1079,8 @@ namespace BL.Services.Common
                     Order = 0,
                     Icon = "far fa-dot-circle",
                     CreatedBy = Guid.Parse(user.Id),
-                    CreatedDate = DateTime.Now
-
+                    CreatedDate = DateTime.Now,
+                    ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
 
                 });
                 context.SaveChanges();
