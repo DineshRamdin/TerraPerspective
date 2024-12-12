@@ -176,23 +176,23 @@ namespace BL.Services.Common
 							}
 							return "1";
 						}
-						//case "NPF_DIR_NAA":
-						//	{
-						//		var dt = context.NPF_DIR_NAA.OrderByDescending(y => y.Id).FirstOrDefault();
-						//		if (dt != null)
-						//		{
-						//			if (Isreset)
-						//			{
-						//				return  Generator(Code, dt.Code, dt.CreatedDate, reset);
-						//			}
-						//			else
-						//			{
-						//				string Num = ( GetNumber(dt.Code)).Remove(0, Code.Length);
-						//				return (Convert.ToInt32(Num) + 1).ToString();
-						//			}
-						//		}
-						//		return "1";
-						//	}
+					case "SYS_Task":
+						{
+							var dt = context.SYS_Task.OrderByDescending(y => y.Id).FirstOrDefault();
+							if (dt != null)
+							{
+								if (Isreset)
+								{
+									return Generator(Code, dt.UserCode, dt.CreatedDate, reset);
+								}
+								else
+								{
+									string Num = (GetNumber(dt.UserCode)).Remove(0, Code.Length);
+									return (Convert.ToInt32(Num) + 1).ToString();
+								}
+							}
+							return "1";
+						}
 
 				}
 

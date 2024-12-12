@@ -606,8 +606,8 @@
   <data name="Projects" xml:space="preserve">
     <value>Projetos</value>
   </data>
-  <data name="UserCode" xml:space="preserve">
-    <value>Código do usuário</value>
+  <data name="Task Code" xml:space="preserve">
+    <value>Código de Tarefa</value>
   </data>
   <data name="Project Name" xml:space="preserve">
     <value>Nome do Projeto</value>
@@ -656,5 +656,8 @@
   </data>
   <data name="Task Description" xml:space="preserve">
     <value>Descrição da tarefa</value>
+  </data>
+  <data name="Project Code" xml:space="preserve">
+    <value>Código do Projeto</value>
   </data>
 </root>

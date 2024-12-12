@@ -768,8 +768,8 @@
   <data name="Projects" xml:space="preserve">
     <value>Projects</value>
   </data>
-  <data name="UserCode" xml:space="preserve">
-    <value>UserCode</value>
+  <data name="Task Code" xml:space="preserve">
+    <value>Task Code</value>
   </data>
   <data name="Project Name" xml:space="preserve">
     <value>Project Name</value>
@@ -818,5 +818,8 @@
   </data>
   <data name="Task Description" xml:space="preserve">
     <value>Task Description</value>
+  </data>
+  <data name="Project Code" xml:space="preserve">
+    <value>Project Code</value>
   </data>
 </root>

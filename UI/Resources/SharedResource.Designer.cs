@@ -1060,6 +1060,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Code.
+        /// </summary>
+        public static string Project_Code {
+            get {
+                return ResourceManager.GetString("Project Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project Description.
         /// </summary>
         public static string Project_Description {
@@ -1438,6 +1447,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Task Code.
+        /// </summary>
+        public static string Task_Code {
+            get {
+                return ResourceManager.GetString("Task Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Task Description.
         /// </summary>
         public static string Task_Description {
@@ -1587,15 +1605,6 @@ namespace UI.Resources {
         public static string User_Matrix {
             get {
                 return ResourceManager.GetString("User Matrix", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UserCode.
-        /// </summary>
-        public static string UserCode {
-            get {
-                return ResourceManager.GetString("UserCode", resourceCulture);
             }
         }
         
