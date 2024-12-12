@@ -1008,6 +1008,22 @@ namespace BL.Services.Common
             }
             #endregion
 
+            #region Table Code Configuration
+            if (!context.SYS_Modules.Any(x => x.Name == "Table Code Configuration"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "Table Code Configuration",
+                    Url = "TableCodeConfiguration/index",
+                    Order = 0,
+                    Icon = "fas fa-cog",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now
+                });
+                context.SaveChanges();
+            }
+            #endregion
+
             List<SYS_Modules> dtl = context.SYS_Modules.Where(x => x.DisplayName == null).ToList();
             if (dtl.Count > 0)
             {

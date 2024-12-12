@@ -322,6 +322,33 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company Name.
+        /// </summary>
+        public static string Company_Name {
+            get {
+                return ResourceManager.GetString("Company Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration.
+        /// </summary>
+        public static string Configuration {
+            get {
+                return ResourceManager.GetString("Configuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration Name.
+        /// </summary>
+        public static string Configuration_Name {
+            get {
+                return ResourceManager.GetString("Configuration Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Matrix Tree.
         /// </summary>
         public static string Copy_Matrix_Tree {
@@ -615,6 +642,15 @@ namespace UI.Resources {
         public static string Global_Param {
             get {
                 return ResourceManager.GetString("Global Param", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HasAddi.
+        /// </summary>
+        public static string HasAddi {
+            get {
+                return ResourceManager.GetString("HasAddi", resourceCulture);
             }
         }
         
@@ -1033,6 +1069,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prefix.
+        /// </summary>
+        public static string Prefix {
+            get {
+                return ResourceManager.GetString("Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
         public static string Preview {
@@ -1303,6 +1348,24 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Company.
+        /// </summary>
+        public static string Select_Company {
+            get {
+                return ResourceManager.GetString("Select Company", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Configuration.
+        /// </summary>
+        public static string Select_Configuration {
+            get {
+                return ResourceManager.GetString("Select Configuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Project.
         /// </summary>
         public static string Select_Project {
@@ -1434,6 +1497,24 @@ namespace UI.Resources {
         public static string System_Icon {
             get {
                 return ResourceManager.GetString("System Icon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table Code Configuration.
+        /// </summary>
+        public static string Table_Code_Configuration {
+            get {
+                return ResourceManager.GetString("Table Code Configuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table Name.
+        /// </summary>
+        public static string Table_Name {
+            get {
+                return ResourceManager.GetString("Table Name", resourceCulture);
             }
         }
         

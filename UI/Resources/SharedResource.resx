@@ -822,4 +822,31 @@
   <data name="Project Code" xml:space="preserve">
     <value>Project Code</value>
   </data>
+  <data name="Table Code Configuration" xml:space="preserve">
+    <value>Table Code Configuration</value>
+  </data>
+  <data name="Table Name" xml:space="preserve">
+    <value>Table Name</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="HasAddi" xml:space="preserve">
+    <value>HasAddi</value>
+  </data>
+  <data name="Select Company" xml:space="preserve">
+    <value>Select Company</value>
+  </data>
+  <data name="Select Configuration" xml:space="preserve">
+    <value>Select Configuration</value>
+  </data>
+  <data name="Company Name" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="Configuration Name" xml:space="preserve">
+    <value>Configuration Name</value>
+  </data>
 </root>
