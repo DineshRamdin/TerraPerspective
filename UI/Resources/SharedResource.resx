@@ -865,4 +865,7 @@
     <value>General Information</value>
     <comment>General Information</comment>
   </data>
+  <data name="ProjectView" xml:space="preserve">
+    <value>Project View</value>
+  </data>
 </root>

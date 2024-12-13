@@ -672,4 +672,7 @@
   <data name="General Information" xml:space="preserve">
     <value>Informations générales</value>
   </data>
+  <data name="ProjectView" xml:space="preserve">
+    <value>Vue du projet</value>
+  </data>
 </root>
