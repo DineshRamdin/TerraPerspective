@@ -33,7 +33,7 @@ namespace BL.Services.Administration
             queryResult = new QueryResult();
         }
 
-        public BaseResponseDTO<List<ZoneManagementDTO>> GetAll()
+        public BaseResponseDTO<List<ZoneManagementDTO>> GetAll(string Email)
         {
             BaseResponseDTO<List<ZoneManagementDTO>> dto = new BaseResponseDTO<List<ZoneManagementDTO>>();
             ZoneManagementDTO user = new ZoneManagementDTO();
@@ -43,25 +43,23 @@ namespace BL.Services.Administration
             try
             {
                 string sQryResult = queryResult.FAILED;
-				IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-				string claimsPrincipal = null;
-                string UserGuidId = "";
-				if (httpContextAccessor.HttpContext != null)
-				{
-					claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
-					UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
-					if (claimsPrincipal == null)
-					{
-						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
-					}
-				}
-				else
-				{
-					claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
-				}
-				string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
+
+				//IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+				//string claimsPrincipal = null;
+				//string UserGuidId = "";
+				//if (httpContextAccessor.HttpContext != null)
+				//{
+				//	claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+				//	UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
+				//}
+				//else
+				//{
+				//	claimsPrincipal = "admin@gmail.com";
+				//}
+
+				string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
 				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
-				if (claimsPrincipal != "admin@gmail.com")
+				if (Email != "admin@gmail.com")
 				{
 					List<ZoneManagementDTO> result = (from zm in context.SYS_ZoneMatrix
 													  join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
@@ -79,7 +77,7 @@ namespace BL.Services.Administration
 													  })
 								.Union(
 									context.SYS_ZoneManagement
-										.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
+										.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == AID.ToLower())
 										.Select(a => new
 										{
 											a.Id,

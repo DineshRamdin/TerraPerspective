@@ -31,7 +31,9 @@ namespace UI.Controllers.Common
                 var httpContext = context.HttpContext;
                 bool auth = httpContext.User.Identity.IsAuthenticated;
                 var User = httpContext.User.Identity.Name;
-                ISession session = HttpContext.Session;
+                //bool auth = true;
+
+				ISession session = HttpContext.Session;
                 string OTT = session.GetString("OTT");
                 string Username = session.GetString("Username");
                 ApplicationUser usr = _Dbcontext.Users.Where(x => x.UserName == User).FirstOrDefault();
