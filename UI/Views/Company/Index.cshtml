@@ -1,0 +1,351 @@
+﻿@{
+    ViewData["Title"] = "Company";
+}
+@using UI.Resources
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Company</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Company</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="CompanyTable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddCompanyModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddCompany.cshtml" />
+</div>
+
+@section scripts
+{
+    <script>
+        var GetAllCompanyUrl = '@Url.Action("GetAll", "Company")';
+        var CompanyPreviewUrl = '@Url.Action("Preview", "Company")';
+        var CompanyGetByIdUrl = '@Url.Action("GetById", "Company")';
+        var CreateUpdateCompanyUrl = '@Url.Action("CreateUpdate", "Company")';
+        var getCompanyDropDownUrl = '@Url.Action("GetAllDropdownValues", "Company")';
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#lipostermenu').addClass('active');
+
+            $('#txtRegistrationDate').datetimepicker({
+                format: 'DD/MMM/YYYY' // Format as 'day/month/abbreviated month name/year'
+            });
+
+            GetAllCompany();
+        });
+
+        function GetAllCompany() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'nameofCompany', title: '@SharedResource.Company' },
+                { data: 'code', title: '@SharedResource.Code' },
+                { data: 'registrationNumber', title: '@SharedResource.Registration_Number' },
+                { data: 'registrationDate', title: '@SharedResource.Registration_Date' },
+                //{ data: 'telephoneNumber', title: '@SharedResource.Telephone_Number' },
+                { data: 'mobileNumber', title: '@SharedResource.Mobile_No' },
+                { data: 'email', title: '@SharedResource.Email' },
+                { data: 'localityName', title: '@SharedResource.Locality @SharedResource.Name' },
+                { data: 'countryName', title: '@SharedResource.Country @SharedResource.Name' },
+                { data: 'mcavcaName', title: '@SharedResource.MCA_VCA' },
+                { data: 'postalCode', title: '@SharedResource.Postal_Code' },
+
+            ];
+
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+            };
+
+            initializeDataGrid('CompanyTable', 'openCompanyModal', GetAllCompanyUrl, columnList, false, true, true, false, true, 'PreviewCompanyModal', true, null, langResource);
+
+
+        }
+        function PreviewCompanyModal(id) {
+            window.open(CompanyPreviewUrl + "?id=" + id, '_blank');
+        }
+
+        function openCompanyModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: CompanyGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearCompanyModal();
+                    GetDropdownData();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        //console.log("Data", response.data)
+
+                        $("#deleteImageBtn").hide();
+                        if (response.data.id > 0)
+                            $("#h4CompanyTitle").html("@SharedResource.Modify  @SharedResource.Company");
+                        else
+                            $("#h4CompanyTitle").html("@SharedResource.Add  @SharedResource.Company");
+
+                        $("#hdnId").val(response.data.id);
+
+                        $("#txtNameofCompany").val(response.data.nameofCompany);
+                        $("#txtCode").val(response.data.code);
+                        $("#txtRegistrationNumber").val(response.data.registrationNumber);
+                        //$("#txtRegistrationDate").val(response.data.registrationDate);
+                        $("#txtTelephoneNumber").val(response.data.telephoneNumber);
+                        $("#txtMobileNumber").val(response.data.mobileNumber);
+                        $("#txtEmail").val(response.data.email);
+
+                        $("#txtPostalCode").val(response.data.postalCode);
+                        $("#txtColour1").val(response.data.colour1);
+                        $("#txtColour2").val(response.data.colour2);
+                        $("#txtColour3").val(response.data.colour3);
+                        $("#txtColour4").val(response.data.colour4);
+                        $("#txtColour5").val(response.data.colour5);
+
+
+                        $('#txtRegistrationDate').datetimepicker('date', response.data.registrationDate);
+
+                        $("#ddlLocality").val(response.data.locality == null || response.data.locality == 0 ? "" : response.data.locality);
+                        $("#ddlCountry").val(response.data.country == null || response.data.country == 0 ? "" : response.data.country);
+                        $("#ddlMCAVCA").val(response.data.mcavca == null || response.data.mcavca == 0 ? "" : response.data.mcavca);
+
+                        if (response.data.companyIcon != null && response.data.companyIcon != "") {
+                            $("#oldimage").val(response.data.companyIcon);
+
+                            $("#viewImage").attr("src", "data:image/png;base64," + response.data.companyIcon);
+                            $("#viewImage").css("display", "");
+                            $("#deleteImageBtn").show();
+
+                        }
+
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddCompanyModal').modal('show');
+                $("#frnCompanyCreate").validate({}).resetForm();;
+            });
+        }
+
+        function deleteImage() {
+            // Reset the file input and the hidden field
+            $('#imagefile').val("");
+            $("#imagefile").val(null);
+            $('#viewImage').attr('src', "");
+            $('#oldreportimage').val("");
+            $("#oldimage").val("");
+            $('#deleteImageBtn').hide();
+        }
+
+        function ClearCompanyModal() {
+            $("#h4CompanyTitle").html("@SharedResource.Add  @SharedResource.Company");
+            $("#hdnId").val(0);
+
+            $("#txtNameofCompany").val("");
+            $("#txtCode").val("");
+            $("#txtRegistrationNumber").val("");
+            $("#txtRegistrationDate").val("");
+            $("#txtTelephoneNumber").val("");
+            $("#txtMobileNumber").val("");
+            $("#txtEmail").val("");
+            $("#txtPostalCode").val("");
+            $("#txtColour1").val("");
+            $("#txtColour2").val("");
+            $("#txtColour3").val("");
+            $("#txtColour4").val("");
+            $("#txtColour5").val("");
+
+            $("#ddlLocality").val("");
+            $("#ddlCountry").val("");
+            $("#ddlMCAVCA").val("");
+
+            $("#imagefile").val(null);
+            $("#oldimage").val("");
+            $("#viewImage").attr("src", "");
+            $("#viewImage").css("display", "none");
+        }
+
+        function GetDropdownData() {
+            $.ajax({
+                url: getCompanyDropDownUrl,
+                type: "POST",
+                async: false,
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    $("#ddlLocality").html('');
+                    $("#ddlCountry").html('');
+                    $("#ddlMCAVCA").html('');
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $.each(response.data, function (key, value) {
+                            if (value.title == "Locality") {
+                                $("#ddlLocality").append($("<option></option>").val('').html("@SharedResource.Select @SharedResource.Locality"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlLocality").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
+                            if (value.title == "Country") {
+                                $("#ddlCountry").append($("<option></option>").val('').html("@SharedResource.Select @SharedResource.Country"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlCountry").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
+                            if (value.title == "MCAVCA") {
+                                $("#ddlMCAVCA").append($("<option></option>").val('').html("@SharedResource.Select @SharedResource.MCA_VCA"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlMCAVCA").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    // toastr.error("Error:" + error);
+                }
+
+            });
+        }
+
+        async function SaveCompany() {
+
+            let RegistrationDate = $('#txtRegistrationDate').datetimepicker('date');
+            var RegDate = moment(RegistrationDate).format('DD/MMM/YYYY');
+
+            if (RegDate == "Invalid date") {
+                RegDate = " - ";
+            }
+
+            let valid = formValidation(["txtNameofCompany", "txtCode", "txtRegistrationNumber", "txtMobileNumber", "txtEmail", "ddlLocality", "ddlCountry", "ddlMCAVCA"]);
+
+            if (valid) {
+
+
+                var dataObject = {};
+
+                dataObject.RegistrationDate = RegDate;
+
+                dataObject.Id = $("#hdnId").val();
+                dataObject.NameofCompany = $("#txtNameofCompany").val();
+                dataObject.Code = $("#txtCode").val();
+                dataObject.RegistrationNumber = $("#txtRegistrationNumber").val();
+                dataObject.TelephoneNumber = $("#txtTelephoneNumber").val();
+                dataObject.MobileNumber = $("#txtMobileNumber").val();
+                dataObject.Email = $("#txtEmail").val();
+                dataObject.PostalCode = $("#txtPostalCode").val();
+
+                dataObject.Colour1 = $("#txtColour1").val();
+                dataObject.Colour2 = $("#txtColour2").val();
+                dataObject.Colour3 = $("#txtColour3").val();
+                dataObject.Colour4 = $("#txtColour4").val();
+                dataObject.Colour5 = $("#txtColour5").val();
+
+                dataObject.Locality = $("#ddlLocality").val();
+                dataObject.Country = $("#ddlCountry").val();
+                dataObject.MCAVCA = $("#ddlMCAVCA").val();
+
+                var FileData = await FiletoBase64string("imagefile");
+
+                if (FileData == "") {
+                    FileData = $('#oldimage').val();
+                }
+
+                dataObject.CompanyIcon = FileData;
+
+
+                $.ajax({
+                    url: CreateUpdateCompanyUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddCompanyModal').modal('hide');
+                            GetAllCompany();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+        }
+
+
+
+    </script>
+}

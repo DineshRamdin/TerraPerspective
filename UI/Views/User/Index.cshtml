@@ -281,6 +281,11 @@
 			$("#viewProfileImage").css("display", "none");
 			$('#tree').jstree("destroy").empty();
 			$("#UserTreeDropdown").empty();
+			// Unbind all event listeners attached to the element
+			$("#UserTreeDropdown").off();
+
+			// Remove data associated with the element (if any)
+			$("#UserTreeDropdown").removeData();
 		}
 
 		function GetDropdownData() {

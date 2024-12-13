@@ -16,7 +16,7 @@ namespace BL.Models.Common
     {
 
         public long Id { get; set; }
-
+        public string TimeZoneId { get; set; }
         public string text { get; set; }
         public string Additional { get; set; } = String.Empty;
         public string Type { get; set; } = String.Empty;

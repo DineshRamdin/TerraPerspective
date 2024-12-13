@@ -1,0 +1,280 @@
+﻿@{
+	ViewData["Title"] = "Task";
+}
+@using UI.Resources
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Task</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Task</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*   <div class="col-2">
+					<button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+					</div> *@
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="TaskTable" class="table table-bordered table-striped"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddTaskModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddTask.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllTaskUrl = '@Url.Action("GetAll", "Task")';
+		var TaskGetByIdUrl = '@Url.Action("GetById", "Task")';
+		var getTaskDropDownUrl = '@Url.Action("GetAllDropdownValues", "Task")';
+		var CreateUpdateTaskUrl = '@Url.Action("CreateUpdate", "Task")';
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#litaskmenu').addClass('active');
+
+			GetAllTask();
+		});
+
+		function GetAllTask() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'userCode', title: '@SharedResource.Task_Code' },
+				{ data: 'taskname', title: '@SharedResource.Task_Name' },
+				{ data: 'taskDescription', title: '@SharedResource.Task_Description' },
+				{ data: 'projectName', title: '@SharedResource.Project_Name' },
+				{ data: 'status', title: '@SharedResource.Status' },
+				{ data: 'statusDetails', title: '@SharedResource.Status_Details' },
+				{ data: 'startDate', title: '@SharedResource.Start_Date' },
+				{ data: 'endDate', title: '@SharedResource.End_Date' },
+				{ data: 'isVisible', title: '@SharedResource.Is_Visible' },
+			];
+
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel: '@SharedResource.Export_PDF',
+				ExportCSVLabel: '@SharedResource.Export_CSV',
+				ExportExcelLabel: '@SharedResource.Export_Excel',
+				ExcelLabel: '@SharedResource.Excel',
+				PDFLabel: '@SharedResource.PDF',
+				CSVLabel: '@SharedResource.CSV',
+				NodataavailableLabel: '@SharedResource.No_data_available',
+				SearchLabel: '@SharedResource.Search',
+				ShowingLabel: '@SharedResource.Showing',
+				EntriesLabel: '@SharedResource.entries',
+				FilteredfromLabel: '@SharedResource.filtered_from',
+				ViewLabel: '@SharedResource.View',
+				PreviewLabel: '@SharedResource.Preview',
+				DeleteLabel: '@SharedResource.Delete',
+				EditLabel: '@SharedResource.Edit',
+				ResetPasswordLabel: '@SharedResource.Reset_Password',
+				UserNameLabel: '@SharedResource.UserName',
+				DateLabel: '@SharedResource.Date',
+				PageLabel: '@SharedResource.Page',
+				OfLabel: '@SharedResource.of',
+				GeneratedonLabel: '@SharedResource.Generated_on',
+				PreviousLabel: '@SharedResource.Previous',
+				NextLabel: '@SharedResource.Next',
+			};
+
+			initializeDataGrid('TaskTable', 'openTaskModal', GetAllTaskUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+
+		}
+
+		function openTaskModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: TaskGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearTaskModal();
+					GetDropdownData();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id > 0)
+							$("#h4TaskTitle").html("@SharedResource.Modify  @SharedResource.Task");
+						else
+							$("#h4TaskTitle").html("@SharedResource.Add  @SharedResource.Task");
+						// console.data("Data : ", data);
+						// return;
+						$("#hdnId").val(response.data.id);
+						$("#txtCode").val(response.data.userCode);
+						$("#txtTaskName").val(response.data.taskName);
+						$("#txtTaskDescription").val(response.data.taskDescription);
+						$("#ddlProjects").val(response.data.project == null || response.data.project == 0 ? "" : response.data.project);
+						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
+						$("#txtStatusDetails").val(response.data.statusDetails);
+						const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
+						const formattedEndDate = formatDateToInput(response.data.endDate); // Convert to yyyy-MM-dd
+
+						$("#txtStartDate").val(formattedStartDate);
+						$("#txtEndDate").val(formattedEndDate);
+
+						$('#chbIsVisible').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddTaskModal').modal('show');
+				$("#frnTaskCreate").validate({}).resetForm();
+			});
+
+
+		}
+
+		function formatDateToInput(dateString) {
+			// Ensure the date is a valid Date object
+			const date = new Date(dateString);
+			if (isNaN(date.getTime())) {
+				console.error("Invalid date:", dateString);
+				return ""; // Return an empty string if the date is invalid
+			}
+
+			// Format the date as yyyy-MM-dd for input type="date"
+			const year = date.getFullYear();
+			const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+			const day = String(date.getDate()).padStart(2, '0');
+			return `${year}-${month}-${day}`;
+		}
+
+
+		function ClearTaskModal() {
+			$("#h4TaskTitle").html("@SharedResource.Add  @SharedResource.Task");
+			$("#hdnId").val(0);
+			$("#txtCode").val("");
+			$("#txtTaskName").val("");
+			$("#txtTaskDescription").val("");
+			$("#ddlProjects").val("");
+			$("#ddlStatus").val("");
+			$("#txtStatusDetails").val("");
+			$("#txtStartDate").val("");
+			$("#txtEndDate").val("");
+			$("#chbIsVisible").prop('checked', false);
+		}
+
+		function GetDropdownData() {
+			$.ajax({
+				url: getTaskDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlProjects").html('');
+					$("#ddlStatus").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						$.each(response.data, function (key, value) {
+							if (value.title == "Projects") {
+								$("#ddlProjects").append($("<option></option>").val('').html("@SharedResource.Select_Project"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlProjects").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+
+							if (value.title == "Project Status") {
+								$("#ddlStatus").append($("<option></option>").val('').html("@SharedResource.Select_Status"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlStatus").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
+
+			});
+		}
+
+		function SaveTask() {
+
+			let valid = formValidation(["txtTaskName", "txtTaskDescription", "ddlProjects", "ddlStatus", "txtStatusDetails", "txtStartDate", "txtEndDate"]);
+
+			if (valid) {
+				var dataObject = {};
+
+				dataObject.Id = $("#hdnId").val();
+				dataObject.UserCode = $("#txtCode").val();
+				dataObject.Taskname = $("#txtTaskName").val();
+				dataObject.TaskDescription = $("#txtTaskDescription").val();
+				dataObject.Project = $("#ddlProjects").val();
+				dataObject.Status = $("#ddlStatus").val();
+				dataObject.StatusDetails = $("#txtStatusDetails").val();
+				dataObject.StartDate = $("#txtStartDate").val();
+				dataObject.EndDate = $("#txtEndDate").val();
+				dataObject.IsVisible = $('#chbIsVisible').prop('checked');
+
+
+				$.ajax({
+					url: CreateUpdateTaskUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddTaskModal').modal('hide');
+							GetAllTask();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			}
+		}
+
+	</script>
+}

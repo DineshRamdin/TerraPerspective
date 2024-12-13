@@ -1,0 +1,226 @@
+﻿@{
+    ViewData["Title"] = "Country";
+}
+
+@using UI.Resources
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Country</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Country</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="CountryTable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddCountryModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddCountry.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+    <script>
+        var GetAllCountryUrl = '@Url.Action("GetAll", "Country")';
+        var CountryGetByIdUrl = '@Url.Action("GetById", "Country")';
+        var CreateUpdateCountryUrl = '@Url.Action("CreateUpdate", "Country")';
+        var getTimeZoneDropDownUrl = '@Url.Action("getTimeZoneDropDown", "Country")';
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#liCountrymenu').addClass('active');
+
+            GetAllCountry();
+        });
+
+        function GetAllCountry() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'name', title: '@SharedResource.Country' },
+                { data: 'description', title: '@SharedResource.Description' },
+                { data: 'currency', title: '@SharedResource.Currency' },
+                { data: 'language', title: '@SharedResource.Language' },
+                { data: 'timeZone', title: '@SharedResource.Time_Zone' },
+            ];
+
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+            };
+
+            initializeDataGrid('CountryTable', 'openCountryModal', GetAllCountryUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+
+        }
+
+        function openCountryModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: CountryGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearCountryModal();
+                    GetDropdownData();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4CountryTitle").html("@SharedResource.Modify  @SharedResource.Country");
+                        else
+                            $("#h4CountryTitle").html("@SharedResource.Add  @SharedResource.Country");
+
+                        $("#hdnId").val(response.data.id);
+                        $("#txtCountryName").val(response.data.name);
+                        $("#txtDescription").val(response.data.description);
+                        $("#txtCurrency").val(response.data.currency);
+                        $("#txtLanguage").val(response.data.language);
+
+                        $("#ddlTimeZone").val(response.data.timeZone == null || response.data.timeZone == "" ? "" : response.data.timeZone);
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddCountryModal').modal('show');
+                $("#frnCountryCreate").validate({}).resetForm();;
+            });
+        }
+
+        function GetDropdownData() {
+            $.ajax({
+                url: getTimeZoneDropDownUrl,
+                type: "POST",
+                async: false,
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    $("#ddlTimeZone").html('');
+
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $.each(response.data, function (key, value) {
+                            $("#ddlTimeZone").append($("<option></option>").val('').html("@SharedResource.Select @SharedResource.Time_Zone"));
+                            $.each(value.items, function (itemskey, itemsvalue) {
+                                $("#ddlTimeZone").append($("<option></option>").val(itemsvalue.timeZoneId).html(itemsvalue.text));
+                            });
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    // toastr.error("Error:" + error);
+                }
+
+            });
+        }
+
+        function ClearCountryModal() {
+            $("#h4CountryTitle").html("@SharedResource.Add  @SharedResource.Country");
+            $("#hdnId").val(0);
+            $("#txtCountryName").val("");
+            $("#txtDescription").val("");
+        }
+
+        function SaveCountry() {
+
+            let valid = formValidation(["txtCountryName"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtCountryName").val();
+                dataObject.Description = $("#txtDescription").val();
+                dataObject.Currency = $("#txtCurrency").val();
+                dataObject.TimeZone = $("#ddlTimeZone").val();
+                dataObject.Language = $("#txtLanguage").val();
+
+                $.ajax({
+                    url: CreateUpdateCountryUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddCountryModal').modal('hide');
+                            GetAllCountry();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+        }
+
+    </script>
+}

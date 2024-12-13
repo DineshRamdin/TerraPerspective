@@ -32,8 +32,9 @@ namespace DAL.Models
         public DateTime? UpdatedDate { get; set; }
 
         public Boolean DeleteStatus { get; set; }
+		public int Company { get; set; } = 0;
 
-        [NotMapped]
+		[NotMapped]
         public bool Logout { get; set; }
 
         [NotMapped]

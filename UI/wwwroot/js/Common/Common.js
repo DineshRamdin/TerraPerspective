@@ -189,6 +189,27 @@ function renderDynamicMenu(data, langResource) {
         else if (grandParent.name == "Zone Management") {
             MenuName = langResource.ZoneManagementMenuLabel;
         }
+        else if (grandParent.name == "Company") {
+            MenuName = langResource.CompanyMenuLabel;
+        }
+        else if (grandParent.name == "Projects") {
+            MenuName = langResource.ProjectsMenuLabel;
+        }
+        else if (grandParent.name == "Locality") {
+            MenuName = langResource.LocalityMenuLabel;
+        }
+        else if (grandParent.name == "Country") {
+            MenuName = langResource.CountryMenuLabel;
+        }
+        else if (grandParent.name == "MCA/VCA") {
+            MenuName = langResource.MCAVCAMenuLabel;
+        }
+        else if (grandParent.name == "Task") {
+            MenuName = langResource.TaskMenuLabel;
+        }
+        else if (grandParent.name == "Table Code Configuration") {
+            MenuName = langResource.TableCodeConfigurationMenuLabel;
+        }
         else {
             MenuName = grandParent.name;
         }
@@ -289,6 +310,18 @@ function renderDynamicMenu(data, langResource) {
                 else if (parent.name == "Zone Management") {
                     SubMenuName = langResource.ZoneManagementMenuLabel;
                 }
+                else if (parent.name == "Company") {
+                    SubMenuName = langResource.CompanyMenuLabel;
+                }
+                else if (parent.name == "Locality") {
+                    SubMenuName = langResource.LocalityMenuLabel;
+                }
+                else if (parent.name == "Country") {
+                    SubMenuName = langResource.CountryMenuLabel;
+                }
+                else if (parent.name == "MCA/VCA") {
+                    SubMenuName = langResource.MCAVCAMenuLabel;
+                }
                 else {
                     SubMenuName = parent.name;
                 }
@@ -380,6 +413,18 @@ function renderDynamicMenu(data, langResource) {
                         }
                         else if (child.name == "Zone Management") {
                             ChildSubMenuName = langResource.ZoneManagementMenuLabel;
+                        }
+                        else if (child.name == "Company") {
+                            ChildSubMenuName = langResource.CompanyMenuLabel;
+                        }
+                        else if (child.name == "Locality") {
+                            ChildSubMenuName = langResource.LocalityMenuLabel;
+                        }
+                        else if (child.name == "Country") {
+                            ChildSubMenuName = langResource.CountryMenuLabel;
+                        }
+                        else if (child.name == "MCA/VCA") {
+                            ChildSubMenuName = langResource.MCAVCAMenuLabel;
                         }
                         else {
                             ChildSubMenuName = child.name;

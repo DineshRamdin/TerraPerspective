@@ -107,6 +107,12 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                                             }
                                             //else if (=="PosterTable")
                                         }
+                                        else if (tableID == "CompanyTable") {
+                                            if (full.companyIconFlag == true) {
+                                                btn += preview
+                                            }
+                                            //else if (=="PosterTable")
+                                        }
                                         else if (tableID == "ZoneManagementTable") {
                                             if (full.folder != null && full.folder != "") {
                                                 btn += '| <a href="#" onclick="' + onclickPreview + '(\'' + full.folder + '\')" title="' + langResource.PreviewLabel + '"><i class="fa fa-folder-open text-secondary ms-1"></i></a> ';//preview
@@ -593,7 +599,7 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
     if ($('#' + tableID).length > 0) { //check if table exists
 
         var dataRowCount = $('#' + tableID + ' tbody tr').length;
-       
+
         var errorMessageColumnIndex = -1;
         // if (tableID == "FileViewTable") {
         $('#' + tableID + ' th').each(function (index) {
