@@ -67,7 +67,19 @@
                 header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'month,agendaWeek,agendaDay,listMonth'
+                    right: 'year,month,agendaWeek,agendaDay,listMonth'
+                },
+                views: {
+                    year: {
+                        type: 'basic',  // Use basic view for year layout
+                        duration: { years: 1 },  // Set the duration to one year
+                        buttonText: 'Year'  // Button text for the year view
+                    }
+                },
+                viewRender: function (view) {
+                    // Replace any incorrect characters
+                    var title = view.title.replace('â€“', '-');
+                    $('.fc-center h2').text(title); // Manually update the title
                 },
                 weekNumbers: true,
                 eventLimit: true, // allow "more" link when too many events
@@ -75,14 +87,13 @@
                 eventRender: function (event, element) {
                     // Add a click event handler to the event title (label)
                     element.find('.fc-content').on('click', function (e) {
-                        console.log("13", event)
                         // alert('Clicked on event: ' + event.title + '\nDescription: ' + event.description);
                         // Create popup content
-                        const popupContent = `
-                                    <strong>${event.title}</strong><br>
-                                    Start: ${moment(event.start).format('YYYY-MM-DD HH:mm')}<br>
-                                    ${event.description ? `Details: ${event.description}` : ''}
-                                    `;
+                        var popupContent = "<strong>Task Name : </strong>" + event.title + "<br>";
+                        popupContent += "<strong>Project Name : </strong>" + event.projectName + "<br>";
+                        if (event.description) {
+                            popupContent += "<strong>Details: </strong>" + event.description + "<br>";
+                        }
 
                         // Display the popup near the clicked title
                         $('#popup').html(popupContent)
@@ -92,8 +103,28 @@
                             })
                             .fadeIn();
                     });
+
+                    element.find('.fc-content').on('mouseenter', function (e) {
+                        // Create popup content
+                        var popupContent = "<strong>Task Name : </strong>" + event.title + "<br>";
+                        popupContent += "<strong>Project Name : </strong>" + event.projectName + "<br>";
+                        if (event.description) {
+                            popupContent += "<strong>Details: </strong>" + event.description + "<br>";
+                        }
+
+                        // Display the popup near the hovered title
+                        $('#popup').html(popupContent)
+                            .css({
+                                top: e.pageY + 10 + 'px',
+                                left: e.pageX + 10 + 'px'
+                            })
+                            .fadeIn();
+                    }).on('mouseleave', function () {
+                        // Hide the popup when mouse leaves
+                        $('#popup').fadeOut();
+                    });
                 }
-               
+
             });
             $(document).on('click', function (e) {
                 if (!$(e.target).closest('.fc-event, #popup').length) {

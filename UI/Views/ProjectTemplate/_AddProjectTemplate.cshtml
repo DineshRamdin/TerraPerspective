@@ -4,7 +4,7 @@
 
 @using UI.Resources
 
-<div class="modal-dialog">
+<div class="modal-dialog modal-lg">
     <form id="frnProjectTemplateCreate">
         <input type="hidden" id="hdnId" value="" />
         <div class="modal-content">
@@ -17,16 +17,26 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 form-group">
+                    <div class="col-6 form-group">
                         <label>@SharedResource.Project_Template @SharedResource.Name<span class="red-required">*</span></label>
                         <input type="text" id="txtProjectTemplateName" class="form-control" placeholder="@SharedResource.Project_Template @SharedResource.Name" required />
                     </div>
                     <div class="col-12 row form-group">
-                        <div class="col-6">
-                            <label>@SharedResource.Task_Name</label>
+                        <div class="col-4">
+                            <label>@SharedResource.Task_Name <span class="red-required">*</span></label>
                             <input type="text" id="txtTaskName" class="form-control" placeholder="@SharedResource.Task_Name" required />
                         </div>
-                        <div class="col-6">
+                        <div class="col-3">
+                            <label>@SharedResource.Duration <span class="red-required">*</span></label>
+                            <input type="text" id="txtDuration" class="form-control" placeholder="@SharedResource.Duration" min="1" />
+
+                        </div>
+                        <div class="col-3">
+                            <label>@SharedResource.Sequence <span class="red-required">*</span></label>
+                            <input type="text" id="txtSequence" class="form-control" placeholder="@SharedResource.Sequence" min="1" />
+
+                        </div>
+                        <div class="col-2">
                             <button type="button" class="btn btn-primary" onclick="SaveTaskName();" style="margin-top: 30px;">@SharedResource.Add</button>
                         </div>
 

@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PerspectiveContext))]
-    partial class PerspectiveContextModelSnapshot : ModelSnapshot
+    [Migration("20241216110607_NP_028")]
+    partial class NP_028
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -992,9 +995,6 @@ namespace DAL.Migrations
                     b.Property<TimeOnly>("PlannedHours")
                         .HasColumnType("time");
 
-                    b.Property<string>("ProjectColorCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ProjectDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1005,9 +1005,6 @@ namespace DAL.Migrations
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("ProjectTemplateId")
-                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -1032,8 +1029,6 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AssignTo");
-
-                    b.HasIndex("ProjectTemplateId");
 
                     b.ToTable("SYS_Projects");
                 });
@@ -2088,12 +2083,6 @@ namespace DAL.Migrations
                         .HasForeignKey("AssignTo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DAL.Models.Administration.SYS_ProjectTemplate", "ProjectTemplate")
-                        .WithMany()
-                        .HasForeignKey("ProjectTemplateId");
-
-                    b.Navigation("ProjectTemplate");
 
                     b.Navigation("User");
                 });
