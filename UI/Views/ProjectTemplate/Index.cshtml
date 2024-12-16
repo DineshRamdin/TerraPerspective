@@ -206,14 +206,14 @@
                     $("#txtHeaderName").val('');
                 }
                 else {
-                    toastr.warning("@SharedResource.Header_Name_already_Added");
+                    toastr.warning("Header_Name_already_Added");
                     $("#txtHeaderName").val('');
                 }
 
                 GetAllHeaderName();
             }
             else {
-                toastr.warning("@SharedResource.Please_Enter_Header_Name");
+                toastr.warning("Please_Enter_Header_Name");
             }
         }
 
@@ -221,7 +221,7 @@
 
             var columnList = [
                 { data: 'id', title: 'Id', visible: false },
-                { data: 'headerName', title: '@SharedResource.Header_Name' },
+                { data: 'headerName', title: '@SharedResource.Task_Name' },
             ];
 
             if (!$("#GridHeaderName").data("jsGrid")) {
@@ -235,7 +235,7 @@
                     data: HeaderNameData,
 
                     fields: [
-                        { name: "headerName", type: "text", width: 150, title: "@SharedResource.Header_Name" },
+                        { name: "headerName", type: "text", width: 150, title: "@SharedResource.Task_Name" },
                     ],
                     gridview: true,
                 });

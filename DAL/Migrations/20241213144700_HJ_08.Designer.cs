@@ -4,6 +4,7 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PerspectiveContext))]
-    partial class PerspectiveContextModelSnapshot : ModelSnapshot
+    [Migration("20241213144700_HJ_08")]
+    partial class HJ_08
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -891,72 +894,6 @@ namespace DAL.Migrations
                     b.ToTable("SYS_Poster");
                 });
 
-            modelBuilder.Entity("DAL.Models.Administration.SYS_ProjectTemplate", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("DeleteStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProjectTemplateName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SYS_ProjectTemplate");
-                });
-
-            modelBuilder.Entity("DAL.Models.Administration.SYS_ProjectTemplateMapping", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("DeleteStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("HeaderName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("ProjectTemplateID")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SYS_ProjectTemplateMapping");
-                });
-
             modelBuilder.Entity("DAL.Models.Administration.SYS_Projects", b =>
                 {
                     b.Property<long>("Id")
@@ -1346,9 +1283,6 @@ namespace DAL.Migrations
                     b.Property<bool?>("IsVisible")
                         .HasColumnType("bit");
 
-                    b.Property<long?>("ParentTask")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("Project")
                         .HasColumnType("bigint");
 
@@ -1381,8 +1315,6 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentTask");
 
                     b.HasIndex("Project");
 
@@ -2091,10 +2023,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Administration.SYS_Task", b =>
                 {
-                    b.HasOne("DAL.Models.Administration.SYS_Task", "Task")
-                        .WithMany()
-                        .HasForeignKey("ParentTask");
-
                     b.HasOne("DAL.Models.Administration.SYS_Projects", "Projects")
                         .WithMany()
                         .HasForeignKey("Project")
@@ -2102,8 +2030,6 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Projects");
-
-                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("DAL.Models.Administration.SYS_UserDetails", b =>

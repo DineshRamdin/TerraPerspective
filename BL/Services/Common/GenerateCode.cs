@@ -49,6 +49,7 @@ namespace BL.Services.Common
 			string pref = "";
 			string value = "";
 			string format = "";
+			string hasAdding = "";
 			try
 			{
 				SYS_Company cl = context.SYS_Company.Where(x => x.NameofCompany == "Default").FirstOrDefault();
@@ -76,12 +77,16 @@ namespace BL.Services.Common
 									 b.UsePrefix,
 									 b.PaddingNo,
 									 IsReset = b.Reset == null ? false : Convert.ToBoolean(b.Reset),
-									 b.ResetConfig
+									 b.ResetConfig,
+									 a.HasAddi
 								 }
 								 ).FirstOrDefault();
 				if (tblconfig != null)
 				{
-
+					if (tblconfig.HasAddi == true)
+					{
+						hasAdding = "#";
+					}
 					if (tblconfig.UsePrefix == true)
 					{
 						pref = tblconfig.Prefix;
@@ -145,7 +150,7 @@ namespace BL.Services.Common
 			{
 				code = (new GenerateCode().GCode()).ToString();
 			}
-			baseResponseDTO.Data = pref + code;
+			baseResponseDTO.Data = hasAdding + pref + code;
 			return baseResponseDTO;
 
 		}

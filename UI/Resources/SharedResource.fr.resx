@@ -672,16 +672,10 @@
   <data name="General Information" xml:space="preserve">
     <value>Informations générales</value>
   </data>
+  <data name="ProjectView" xml:space="preserve">
+    <value>Vue du projet</value>
+  </data>
   <data name="Project Template" xml:space="preserve">
     <value>Modèle de projet</value>
-  </data>
-  <data name="Header Name" xml:space="preserve">
-    <value>Nom de l'en-tête</value>
-  </data>
-  <data name="Header Name already Added" xml:space="preserve">
-    <value>Nom d'en-tête déjà ajouté</value>
-  </data>
-  <data name="Please Enter Header Name" xml:space="preserve">
-    <value>Veuillez saisir le nom de l'en-tête</value>
   </data>
 </root>

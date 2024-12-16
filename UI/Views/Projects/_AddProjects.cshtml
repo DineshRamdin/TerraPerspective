@@ -3,6 +3,16 @@
 }
 @using UI.Resources
 
+<style>
+    label {
+        margin-bottom: 0; /* Prevents extra spacing under the label */
+    }
+
+    input[type="checkbox"] {
+        margin: 0; /* Removes any unwanted margin */
+    }
+</style>
+
 <div class="modal-dialog">
     <form id="frnProjectsCreate">
         <input type="hidden" id="hdnId" value="" />
@@ -56,15 +66,16 @@
                         <label>@SharedResource.End_Date<span class="red-required">*</span></label>
                         <input type="date" id="txtEndDate" class="form-control" placeholder="@SharedResource.End_Date" required />
                     </div>
+                    <div class="col-12 row form-group">
+                        <div class="col-3 d-flex align-items-center">
+                            <label for="chbIsVisible" class="mr-2">@SharedResource.Is_Visible</label>
+                            <input type="checkbox" id="chbIsVisible" class="form-control-sm" />
+                        </div>
+                    </div>
+
                     <div class="col-12 form-group">
-                        <div class="col-8">
-                            <label>@SharedResource.Is_Visible<span class="red-required">*</span></label>
-                        </div>
-                        <div class="col-4">
-                            <input type="checkbox" id="chbIsVisible" class="form-control-sm" placeholder="@SharedResource.Is_Visible" required />
-                        </div>
-                      
-                       
+                        <label for="tree" class="mb-2 label-required">@SharedResource.Project_Matrix</label>
+                        <div id="ProjectTreeDropdown" class="dropdown dropdown-tree"></div>
                     </div>
                 </div>
             </div>

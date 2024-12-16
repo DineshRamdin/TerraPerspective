@@ -38,5 +38,6 @@ namespace BL.Models.Administration
 		public DateTime EndDate { get; set; }
 		public TimeOnly PlannedHours { get; set; }
 		public Nullable<bool> IsVisible { get; set; }
+		public List<long> ProjectMatrix { get; set; } = new List<long>();
 	}
 }

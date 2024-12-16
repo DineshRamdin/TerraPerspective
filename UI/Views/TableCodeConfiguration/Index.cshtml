@@ -1,0 +1,265 @@
+﻿@{
+	ViewData["Title"] = "Table Code Configuration";
+}
+@using UI.Resources
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Table_Code_Configuration</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Table_Code_Configuration</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*   <div class="col-2">
+					<button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+					</div> *@
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="TableCodeConfigurationTable" class="table table-bordered table-striped"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddTableCodeConfigurationModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddTableCodeConfiguration.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllTableCodeConfigurationUrl = '@Url.Action("GetAll", "TableCodeConfiguration")';
+		var TableCodeConfigurationGetByIdUrl = '@Url.Action("GetById", "TableCodeConfiguration")';
+		var getTableCodeConfigurationDropDownUrl = '@Url.Action("GetAllDropdownValues", "TableCodeConfiguration")';
+		var CreateUpdateTableCodeConfigurationUrl = '@Url.Action("CreateUpdate", "TableCodeConfiguration")';
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liTableCodeConfigurationmenu').addClass('active');
+
+			GetAllTableCodeConfiguration();
+		});
+
+		function GetAllTableCodeConfiguration() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'tableName', title: '@SharedResource.Table_Name' },
+				{ data: 'prefix', title: '@SharedResource.Prefix' },
+				{ data: 'companyName', title: '@SharedResource.Company_Name' },
+				{ data: 'configurationName', title: '@SharedResource.Configuration_Name' },
+				{ data: 'hasAddi', title: '@SharedResource.HasAddi' },
+				{ data: 'comment', title: '@SharedResource.Comment' },
+			];
+
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel: '@SharedResource.Export_PDF',
+				ExportCSVLabel: '@SharedResource.Export_CSV',
+				ExportExcelLabel: '@SharedResource.Export_Excel',
+				ExcelLabel: '@SharedResource.Excel',
+				PDFLabel: '@SharedResource.PDF',
+				CSVLabel: '@SharedResource.CSV',
+				NodataavailableLabel: '@SharedResource.No_data_available',
+				SearchLabel: '@SharedResource.Search',
+				ShowingLabel: '@SharedResource.Showing',
+				EntriesLabel: '@SharedResource.entries',
+				FilteredfromLabel: '@SharedResource.filtered_from',
+				ViewLabel: '@SharedResource.View',
+				PreviewLabel: '@SharedResource.Preview',
+				DeleteLabel: '@SharedResource.Delete',
+				EditLabel: '@SharedResource.Edit',
+				ResetPasswordLabel: '@SharedResource.Reset_Password',
+				UserNameLabel: '@SharedResource.UserName',
+				DateLabel: '@SharedResource.Date',
+				PageLabel: '@SharedResource.Page',
+				OfLabel: '@SharedResource.of',
+				GeneratedonLabel: '@SharedResource.Generated_on',
+				PreviousLabel: '@SharedResource.Previous',
+				NextLabel: '@SharedResource.Next',
+			};
+
+			initializeDataGrid('TableCodeConfigurationTable', 'openTableCodeConfigurationModal', GetAllTableCodeConfigurationUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+
+		}
+
+		function openTableCodeConfigurationModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: TableCodeConfigurationGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearTableCodeConfigurationModal();
+					GetDropdownData();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id > 0)
+							$("#h4TableCodeConfigurationTitle").html("@SharedResource.Modify  @SharedResource.Table_Code_Configuration");
+						else
+							$("#h4TableCodeConfigurationTitle").html("@SharedResource.Add  @SharedResource.Table_Code_Configuration");
+						// console.data("Data : ", data);
+						// return;
+						$("#hdnId").val(response.data.id);
+						$("#txtTableName").val(response.data.tableName);
+						$("#txtPrefix").val(response.data.prefix);
+						$("#ddlCompany").val(response.data.companyId == null || response.data.companyId == 0 ? "" : response.data.companyId);
+						$("#ddlConfiguration").val(response.data.configurationId == null || response.data.configurationId == 0 ? "" : response.data.configurationId);
+						$("#txtComment").val(response.data.comment);
+
+						$('#chbHasAddi').prop('checked', response.data.hasAddi == null ? false : response.data.hasAddi);
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddTableCodeConfigurationModal').modal('show');
+				$("#frnTableCodeConfigurationCreate").validate({}).resetForm();
+			});
+
+
+		}
+
+		function formatDateToInput(dateString) {
+			// Ensure the date is a valid Date object
+			const date = new Date(dateString);
+			if (isNaN(date.getTime())) {
+				console.error("Invalid date:", dateString);
+				return ""; // Return an empty string if the date is invalid
+			}
+
+			// Format the date as yyyy-MM-dd for input type="date"
+			const year = date.getFullYear();
+			const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+			const day = String(date.getDate()).padStart(2, '0');
+			return `${year}-${month}-${day}`;
+		}
+
+
+		function ClearTableCodeConfigurationModal() {
+			$("#h4TableCodeConfigurationTitle").html("@SharedResource.Add  @SharedResource.Table_Code_Configuration");
+			$("#hdnId").val(0);
+			$("#txtTableName").val("");
+			$("#txtPrefix").val("");
+			$("#ddlCompany").val("");
+			$("#ddlConfiguration").val("");
+			$("#txtComment").val("");
+
+			$('#chbHasAddi').prop('checked', false);
+		}
+
+		function GetDropdownData() {
+			$.ajax({
+				url: getTableCodeConfigurationDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlCompany").html('');
+					$("#ddlConfiguration").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						$.each(response.data, function (key, value) {
+							if (value.title == "Company") {
+								$("#ddlCompany").append($("<option></option>").val('').html("@SharedResource.Select_Company"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlCompany").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+
+							if (value.title == "Configuration") {
+								$("#ddlConfiguration").append($("<option></option>").val('').html("@SharedResource.Select_Configuration"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlConfiguration").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
+
+			});
+		}
+
+		function SaveTableCodeConfiguration() {
+
+			let valid = formValidation(["txtTableName", "txtPrefix", "ddlCompany", "ddlConfiguration", "txtComment"]);
+
+			if (valid) {
+				var dataObject = {};
+
+				dataObject.Id = $("#hdnId").val();
+				dataObject.TableName = $("#txtTableName").val();
+				dataObject.Prefix = $("#txtPrefix").val();
+				dataObject.CompanyId = $("#ddlCompany").val();
+				dataObject.ConfigurationId = $("#ddlConfiguration").val();
+				dataObject.Comment = $("#txtComment").val();
+				dataObject.HasAddi = $('#chbHasAddi').prop('checked');
+
+				$.ajax({
+					url: CreateUpdateTableCodeConfigurationUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddTableCodeConfigurationModal').modal('hide');
+							GetAllTableCodeConfiguration();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			}
+		}
+
+	</script>
+}

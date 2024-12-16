@@ -68,6 +68,7 @@
 				{ data: 'taskname', title: '@SharedResource.Task_Name' },
 				{ data: 'taskDescription', title: '@SharedResource.Task_Description' },
 				{ data: 'projectName', title: '@SharedResource.Project_Name' },
+				{ data: 'parentTaskName', title: '@SharedResource.Parent_Task' },
 				{ data: 'status', title: '@SharedResource.Status' },
 				{ data: 'statusDetails', title: '@SharedResource.Status_Details' },
 				{ data: 'startDate', title: '@SharedResource.Start_Date' },
@@ -132,6 +133,7 @@
 						$("#txtTaskName").val(response.data.taskName);
 						$("#txtTaskDescription").val(response.data.taskDescription);
 						$("#ddlProjects").val(response.data.project == null || response.data.project == 0 ? "" : response.data.project);
+						$("#ddlParentTask").val(response.data.parentTask == null || response.data.parentTask == 0 ? "" : response.data.parentTask);
 						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
 						$("#txtStatusDetails").val(response.data.statusDetails);
 						const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
@@ -182,6 +184,7 @@
 			$("#txtTaskName").val("");
 			$("#txtTaskDescription").val("");
 			$("#ddlProjects").val("");
+			$("#ddlParentTask").val("");
 			$("#ddlStatus").val("");
 			$("#txtStatusDetails").val("");
 			$("#txtStartDate").val("");
@@ -198,6 +201,7 @@
 				beforeSend: function () {
 					$("#ddlProjects").html('');
 					$("#ddlStatus").html('');
+					$("#ddlParentTask").html('');
 				},
 				success: function (response) {
 					if (response.data) {
@@ -213,6 +217,13 @@
 								$("#ddlStatus").append($("<option></option>").val('').html("@SharedResource.Select_Status"));
 								$.each(value.items, function (itemskey, itemsvalue) {
 									$("#ddlStatus").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
+
+							if (value.title == "ParentTask") {
+								$("#ddlParentTask").append($("<option></option>").val('').html("@SharedResource.Select_Status"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlParentTask").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
 							}
 						});
@@ -238,6 +249,7 @@
 				dataObject.Taskname = $("#txtTaskName").val();
 				dataObject.TaskDescription = $("#txtTaskDescription").val();
 				dataObject.Project = $("#ddlProjects").val();
+				dataObject.ParentTask = $("#ddlParentTask").val();
 				dataObject.Status = $("#ddlStatus").val();
 				dataObject.StatusDetails = $("#txtStatusDetails").val();
 				dataObject.StartDate = $("#txtStartDate").val();

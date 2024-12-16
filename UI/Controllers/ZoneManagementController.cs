@@ -47,7 +47,10 @@ namespace UI.Controllers
             {
                 BaseResponseDTO<List<ZoneManagementDTO>> dt = new BaseResponseDTO<List<ZoneManagementDTO>>();
 
-                dt = service.GetAll();
+				ISession session = HttpContext.Session;
+				string Email = HttpContext.Session.GetString("Username");
+
+				dt = service.GetAll(Email);
 
                 return Ok(dt);
             }

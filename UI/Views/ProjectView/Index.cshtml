@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Project View";
+}
+@using UI.Resources
+
+<link rel="stylesheet" href="https://fullcalendar.io/releases/fullcalendar/3.10.0/fullcalendar.min.css">
+
+<style>
+    #calendar {
+        max-width: 900px;
+        margin: 40px auto;
+    }
+</style>
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.ProjectView</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.ProjectView</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <div id='calendar'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts
+{
+    <script src="https://fullcalendar.io/releases/fullcalendar/3.10.0/fullcalendar.min.js"></script>
+
+    <script>
+        $(function () {
+
+            $('#calendar').fullCalendar({
+                themeSystem: 'bootstrap3',
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay,listMonth'
+                },
+                weekNumbers: true,
+                eventLimit: true, // allow "more" link when too many events
+                events: 'https://fullcalendar.io/demo-events.json'
+            });
+
+        });
+    </script>
+}

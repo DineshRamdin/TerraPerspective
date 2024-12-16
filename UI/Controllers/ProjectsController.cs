@@ -14,11 +14,14 @@ namespace UI.Controllers
 	{
 		#region constructor
 		public ProjectsService ProjectsService;
+		public MatrixService _MatrixService;
 
-		public ProjectsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext)
+
+        public ProjectsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext)
 		: base(userManager, signInManager, rolemanager, Dbcontext)
 		{
 			ProjectsService = new ProjectsService();
+			_MatrixService = new MatrixService();
 		}
 		#endregion
 
@@ -68,8 +71,34 @@ namespace UI.Controllers
 
 		}
 
+        [HttpPost]
+        public ActionResult<BaseResponseDTO<List<OutputNode>>> GetTree(long Id)
+        {
+            try
+            {
+                BaseResponseDTO<List<OutputNode>> tree = new BaseResponseDTO<List<OutputNode>>();
+                if (Id == 0)
+                {
+                    tree = _MatrixService.GetTreeDropdown();
+                }
+                else
+                {
 
-		[HttpPost]
+                    tree = ProjectsService.GetTreeDropDownProject(Id);
+                }
+                return Ok(tree);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+
+            }
+        }
+
+        [HttpPost]
 		public ActionResult<BaseResponseDTO<List<DropDown>>> GetAllDropdownValues()
 		{
 			try
@@ -98,10 +127,18 @@ namespace UI.Controllers
 				if (dto.Id == 0)
 				{
 					dt = ProjectsService.SaveAsync(dto);
+					if (dt.Data == true)
+					{
+						dt = _MatrixService.SaveProjectM(dto.ProjectMatrix, Convert.ToInt64(dt.ExtData));
+					}
 				}
 				else
 				{
 					dt = ProjectsService.UpdateAsync(dto);
+					if (dt.Data == true)
+					{
+						dt = _MatrixService.UpdateProjectM(dto.ProjectMatrix, Convert.ToInt64(dt.ExtData));
+					}
 				}
 
 				return Ok(dt);

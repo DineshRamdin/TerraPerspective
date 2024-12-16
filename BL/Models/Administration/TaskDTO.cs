@@ -15,6 +15,7 @@ namespace BL.Models.Administration
         public string Taskname { get; set; }
         public string TaskDescription { get; set; }
         public string ProjectName { get; set; }
+        public string ParentTaskName { get; set; }
         public string Status { get; set; }
         public string StatusDetails { get; set; }
         public string StartDate { get; set; }
@@ -29,6 +30,7 @@ namespace BL.Models.Administration
         public string TaskName { get; set; }
         public string TaskDescription { get; set; }
         public long Project { get; set; }
+        public long? ParentTask { get; set; }
         public long Status { get; set; }
         public string StatusDetails { get; set; }
         public DateTime StartDate { get; set; }

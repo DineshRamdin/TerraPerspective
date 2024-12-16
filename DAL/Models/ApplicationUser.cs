@@ -49,8 +49,7 @@ namespace DAL.Models
         [NotMapped]
         public string GlobalParamValue { get; set; }
 
-        
-    }
+	}
 
 	public class TunnelApplicationUser
 	{
