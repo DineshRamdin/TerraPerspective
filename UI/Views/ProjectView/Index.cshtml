@@ -3,13 +3,22 @@
 }
 @using UI.Resources
 
-<link rel="stylesheet" href="https://fullcalendar.io/releases/fullcalendar/3.10.0/fullcalendar.min.css">
-
 <style>
     #calendar {
         max-width: 900px;
         margin: 40px auto;
     }
+
+    #popup {
+        display: none;
+        position: absolute;
+        z-index: 1000;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
 </style>
 
 <!-- Content Header (Page header) -->
@@ -44,15 +53,17 @@
     </div>
 </section>
 
+<div id="popup"></div>
+
+
 @section scripts
 {
-    <script src="https://fullcalendar.io/releases/fullcalendar/3.10.0/fullcalendar.min.js"></script>
-
     <script>
+        var GetEventforDatesUrl = '@Url.Action("GetEventforDates", "ProjectView")';
         $(function () {
 
             $('#calendar').fullCalendar({
-                themeSystem: 'bootstrap3',
+                themeSystem: 'bootstrap4',
                 header: {
                     left: 'prev,next today',
                     center: 'title',
@@ -60,9 +71,35 @@
                 },
                 weekNumbers: true,
                 eventLimit: true, // allow "more" link when too many events
-                events: 'https://fullcalendar.io/demo-events.json'
-            });
+                events: GetEventforDatesUrl,
+                eventRender: function (event, element) {
+                    // Add a click event handler to the event title (label)
+                    element.find('.fc-content').on('click', function (e) {
+                        console.log("13", event)
+                        // alert('Clicked on event: ' + event.title + '\nDescription: ' + event.description);
+                        // Create popup content
+                        const popupContent = `
+                                    <strong>${event.title}</strong><br>
+                                    Start: ${moment(event.start).format('YYYY-MM-DD HH:mm')}<br>
+                                    ${event.description ? `Details: ${event.description}` : ''}
+                                    `;
 
+                        // Display the popup near the clicked title
+                        $('#popup').html(popupContent)
+                            .css({
+                                top: e.pageY + 10 + 'px',
+                                left: e.pageX + 10 + 'px'
+                            })
+                            .fadeIn();
+                    });
+                }
+               
+            });
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.fc-event, #popup').length) {
+                    $('#popup').fadeOut();
+                }
+            });
         });
     </script>
 }

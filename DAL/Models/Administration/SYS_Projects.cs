@@ -20,6 +20,10 @@ namespace DAL.Models.Administration
 		[ForeignKey("AssignTo")]
 		public virtual SYS_User User { get; set; }
 
+		[ForeignKey("ProjectTemplateId")]
+		public virtual SYS_ProjectTemplate? ProjectTemplate { get; set; }
+		public string? ProjectColorCode { get; set; }
+
 		public TimeOnly PlannedHours { get; set; }
 
 		public long Status { get; set; }

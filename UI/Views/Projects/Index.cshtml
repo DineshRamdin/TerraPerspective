@@ -164,7 +164,9 @@
 						$("#ddlAssignTo").val(response.data.assignTo == null || response.data.assignTo == 0 ? "" : response.data.assignTo);
 						$("#txtPlannedHours").val(response.data.plannedHours);
 						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
+						$("#ddlProjectTemplate").val(response.data.projectTemplateId == null || response.data.projectTemplateId == 0 ? "" : response.data.projectTemplateId);
 						$("#txtStatusDetails").val(response.data.statusDetails);
+						$("#txtProjectColorCode").val(response.data.projectColorCode == null || response.data.projectColorCode == 0 ? "" : response.data.projectColorCode);
 						const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
 						const formattedEndDate = formatDateToInput(response.data.endDate); // Convert to yyyy-MM-dd
 
@@ -183,7 +185,7 @@
 									data = response.data;
 									// console.log("data : ", data);
 									var options = {
-										title: "@SharedResource.Zone_Matrix",
+										title: "@SharedResource.Project_Matrix",
 										data: data,
 										maxHeight: 300,
 										closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
@@ -247,7 +249,9 @@
 			$("#ddlAssignTo").val("");
 			$("#txtPlannedHours").val("");
 			$("#ddlStatus").val("");
+			$("#ddlProjectTemplate").val("");
 			$("#txtStatusDetails").val("");
+			$("#txtProjectColorCode").val("");
 			$("#txtStartDate").val("");
 			$("#txtEndDate").val("");
 			$("#chbIsVisible").prop('checked', false);
@@ -268,6 +272,7 @@
 				beforeSend: function () {
 					$("#ddlAssignTo").html('');
 					$("#ddlStatus").html('');
+					$("#ddlProjectTemplate").html('');
 				},
 				success: function (response) {
 					if (response.data) {
@@ -285,6 +290,13 @@
 									$("#ddlStatus").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
 								});
 							}
+
+							if (value.title == "Project Template") {
+								$("#ddlProjectTemplate").append($("<option></option>").val('').html("@SharedResource.Select_Project_Template"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlProjectTemplate").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+							}
 						});
 					}
 				},
@@ -298,7 +310,7 @@
 
 		 function SaveProjects() {
 
-			let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedHours", "ddlStatus", "txtStatusDetails", "txtStartDate", "txtEndDate"]);
+			let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedHours", "ddlStatus", "txtStatusDetails", "txtProjectColorCode", "txtStartDate", "txtEndDate"]);
 
 			if (valid) {
 				var dataObject = {};
@@ -319,7 +331,9 @@
 				dataObject.AssignTo =$("#ddlAssignTo").val();
 				dataObject.PlannedHours =$("#txtPlannedHours").val();
 				dataObject.Status =$("#ddlStatus").val();
+				dataObject.ProjectTemplateId = $("#ddlProjectTemplate").val();
 				dataObject.StatusDetails =$("#txtStatusDetails").val();
+				dataObject.ProjectColorCode = $("#txtProjectColorCode").val();
 				dataObject.StartDate =$("#txtStartDate").val();
 				dataObject.EndDate =$("#txtEndDate").val();
 				dataObject.IsVisible = $('#chbIsVisible').prop('checked');

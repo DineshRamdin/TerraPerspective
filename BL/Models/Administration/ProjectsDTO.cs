@@ -34,6 +34,8 @@ namespace BL.Models.Administration
 		public long AssignTo { get; set; }
 		public long Status { get; set; }
 		public string StatusDetails { get; set; }
+		public long ProjectTemplateId { get; set; }
+		public string ProjectColorCode { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public TimeOnly PlannedHours { get; set; }

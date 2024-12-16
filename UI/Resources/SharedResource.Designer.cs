@@ -1222,6 +1222,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project ColorCode.
+        /// </summary>
+        public static string Project_ColorCode {
+            get {
+                return ResourceManager.GetString("Project ColorCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project Description.
         /// </summary>
         public static string Project_Description {
@@ -1528,6 +1537,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Project Template.
+        /// </summary>
+        public static string Select_Project_Template {
+            get {
+                return ResourceManager.GetString("Select Project Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Purpose.
         /// </summary>
         public static string Select_Purpose {
@@ -1726,7 +1744,7 @@ namespace UI.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Task Name already Added.
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string Task_Name_already_Added {
             get {
