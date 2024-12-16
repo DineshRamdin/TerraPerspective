@@ -1,4 +1,6 @@
-﻿using BL.Services.Administration;
+﻿using BL.Models.Administration;
+using BL.Models.Common;
+using BL.Services.Administration;
 using DAL.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
@@ -10,12 +12,14 @@ namespace UI.Controllers
     public class ProjectViewController : BaseController
     {
         #region constructor
-        public ProjectsService ProjectsService;
+        public ProjectsService projectsService;
+        public TaskService taskService;
 
         public ProjectViewController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext)
         : base(userManager, signInManager, rolemanager, Dbcontext)
         {
-            ProjectsService = new ProjectsService();
+            projectsService = new ProjectsService();
+            taskService = new TaskService();
         }
         #endregion
 
@@ -23,5 +27,13 @@ namespace UI.Controllers
         {
             return View();
         }
+
+        public IActionResult GetEventforDates(DateTime start, DateTime End)
+        {
+            BaseResponseDTO<List<ProjectViewEventDTO>> dt = new BaseResponseDTO<List<ProjectViewEventDTO>>();
+            dt = taskService.GetProjectViewEvent(start, End); 
+            return Json(dt.Data);
+        }
+
     }
 }

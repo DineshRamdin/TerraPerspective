@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.EntityFrameworkCore;
 
 namespace BL.Services.Administration
 {
@@ -37,25 +39,25 @@ namespace BL.Services.Administration
 
                 string sQryResult = queryResult.FAILED;
                 List<TaskDTO> result = (from a in context.SYS_Task
-                                            where a.DeleteStatus == false
-                                            select new TaskDTO
-                                            {
-                                                Id = a.Id,
-                                                UserCode = a.UserCode,
-                                                Taskname = a.Taskname,
-                                                TaskDescription = a.TaskDescription,
-                                                ProjectName = (from c in context.SYS_Projects
-                                                                  where c.Id == a.Projects.Id
-                                                                  select c.ProjectName).FirstOrDefault(),
-                                                ParentTaskName= (from c in context.SYS_Task
-																 where c.Id == a.Task.Id
-																 select c.Taskname).FirstOrDefault(),
-												StartDate = a.StartDate.ToString("yyyy/MM/dd"),
-                                                EndDate = a.EndDate.ToString("yyyy/MM/dd"),
-                                                Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
-                                                StatusDetails = a.StatusDetails,
-                                                IsVisible = a.IsVisible == true ? "Yes" : "No",
-                                            }).ToList();
+                                        where a.DeleteStatus == false
+                                        select new TaskDTO
+                                        {
+                                            Id = a.Id,
+                                            UserCode = a.UserCode,
+                                            Taskname = a.Taskname,
+                                            TaskDescription = a.TaskDescription,
+                                            ProjectName = (from c in context.SYS_Projects
+                                                           where c.Id == a.Projects.Id
+                                                           select c.ProjectName).FirstOrDefault(),
+                                            ParentTaskName = (from c in context.SYS_Task
+                                                              where c.Id == a.Task.Id
+                                                              select c.Taskname).FirstOrDefault(),
+                                            StartDate = a.StartDate.ToString("yyyy/MM/dd"),
+                                            EndDate = a.EndDate.ToString("yyyy/MM/dd"),
+                                            Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
+                                            StatusDetails = a.StatusDetails,
+                                            IsVisible = a.IsVisible == true ? "Yes" : "No",
+                                        }).ToList();
 
                 dto.Data = result;
                 dto.QryResult = queryResult.SUCEEDED;
@@ -271,6 +273,60 @@ namespace BL.Services.Administration
                 BaseDto.QryResult = queryResult.FAILED;
             }
             return BaseDto;
+        }
+
+        public BaseResponseDTO<List<ProjectViewEventDTO>> GetProjectViewEvent(DateTime startDate, DateTime endDate)
+        {
+            BaseResponseDTO<List<ProjectViewEventDTO>> dto = new BaseResponseDTO<List<ProjectViewEventDTO>>();
+
+            QueryResult queryResult = new QueryResult();
+            string errorMsg = "No Data Found";
+
+            try
+            {
+
+                string sQryResult = queryResult.FAILED;
+                List<ProjectViewEventDTO> result = (from a in context.SYS_Task
+                                                    where a.DeleteStatus == false
+                                                    &&
+                               (
+                                   a.StartDate.Date >= startDate.Date &&
+                                   a.StartDate.Date <= endDate.Date ||
+
+                                   a.EndDate.Date >= startDate.Date &&
+                                   a.EndDate.Date <= endDate.Date ||
+
+                                   startDate.Date >= a.StartDate.Date &&
+                                   startDate.Date <= a.EndDate.Date ||
+
+                                   endDate.Date >= a.StartDate.Date &&
+                                   endDate.Date <= a.EndDate.Date
+                               )
+                                                    select new ProjectViewEventDTO
+                                                    {
+
+                                                        Title = a.Taskname,
+                                                        Description = a.TaskDescription,
+                                                        //ProjectName = (from c in context.SYS_Projects
+                                                        //               where c.Id == a.Projects.Id
+                                                        //               select c.ProjectName).FirstOrDefault(),
+                                                        Start = a.StartDate.ToString("yyyy-MM-dd"),
+                                                        End = a.EndDate.ToString("yyyy-MM-dd"),
+                                                        Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
+                                                    }).ToList();
+
+                dto.Data = result;
+                dto.QryResult = queryResult.SUCEEDED;
+
+            }
+            catch (Exception ex)
+            {
+                dto.Data = new List<ProjectViewEventDTO>();
+                dto.ErrorMessage = errorMsg;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+
+            return dto;
         }
     }
 }
