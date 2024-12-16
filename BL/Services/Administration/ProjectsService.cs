@@ -177,6 +177,8 @@ namespace BL.Services.Administration
 							  Status = a.Status,
 							  StatusDetails = a.StatusDetails,
 							  IsVisible = a.IsVisible,
+							  ProjectTemplateId=(a.ProjectTemplate == null)? 0 : a.ProjectTemplate.Id,
+							  ProjectColorCode=(string.IsNullOrEmpty(a.ProjectColorCode))? "" : a.ProjectColorCode,
 						  }).FirstOrDefault();
 
 				if (result == null)
@@ -243,7 +245,22 @@ namespace BL.Services.Administration
 				}
 				Ddl.Add(Dd);
 
-				dto.Data = Ddl;
+                //ProjectTemplate
+                Dd = new DropDown();
+                Dd.title = "Project Template";
+                Dd.items = new List<DropDownItem>();
+                List<SYS_ProjectTemplate> SYS_ProjectTemplate = context.SYS_ProjectTemplate.Where(x => x.DeleteStatus == false).ToList();
+                foreach (SYS_ProjectTemplate lt in SYS_ProjectTemplate)
+                {
+                    DropDownItem Ddi = new DropDownItem();
+                    Ddi.Id = lt.Id;
+                    Ddi.text = lt.ProjectTemplateName;
+                    Dd.items.Add(Ddi);
+                }
+                Ddl.Add(Dd);
+
+
+                dto.Data = Ddl;
 				dto.QryResult = queryResult.SUCEEDED;
 			}
 			catch (Exception ex)
@@ -287,6 +304,8 @@ namespace BL.Services.Administration
 					EndDate = dataToSave.EndDate,
 					Status = dataToSave.Status,
 					StatusDetails = dataToSave.StatusDetails,
+					ProjectColorCode = dataToSave.ProjectColorCode,
+					ProjectTemplate= context.SYS_ProjectTemplate.Where(x => x.Id == dataToSave.ProjectTemplateId).FirstOrDefault(),
 					IsVisible = dataToSave.IsVisible,
 				};
 				context.SYS_Projects.Add(dt);
@@ -325,6 +344,8 @@ namespace BL.Services.Administration
 					Sys_Projects.EndDate = dataToUpdate.EndDate;
 					Sys_Projects.Status = dataToUpdate.Status;
 					Sys_Projects.StatusDetails = dataToUpdate.StatusDetails;
+					Sys_Projects.ProjectColorCode = dataToUpdate.ProjectColorCode;
+					Sys_Projects.ProjectTemplate= context.SYS_ProjectTemplate.Where(x => x.Id == dataToUpdate.ProjectTemplateId).FirstOrDefault();
 					Sys_Projects.IsVisible = dataToUpdate.IsVisible;
 					context.SYS_Projects.Update(Sys_Projects);
 					context.SaveChanges();
