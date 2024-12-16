@@ -310,9 +310,84 @@ namespace BL.Services.Administration
 				};
 				context.SYS_Projects.Add(dt);
 				context.SaveChanges();
+
+				List<SYS_ProjectTemplateMapping> templateMapping = context.SYS_ProjectTemplateMapping.Where(x => x.ProjectTemplateID == dataToSave.ProjectTemplateId).ToList();
+
+				if (templateMapping.Count > 0)
+				{
+					foreach (var item in templateMapping)
+					{
+						BaseResponseDTO<string> BaseDtoTS = new BaseResponseDTO<string>();
+						BaseDtoTS = new GenerateCode().GCodeMain(UserToken, "SYS_Task");
+						TaskCRUDDTO taskCRUDDTO = new TaskCRUDDTO()
+						{
+							UserCode = BaseDtoTS.Data,
+							TaskName = item.TaskName,
+							TaskDescription = item.TaskName,
+							Project = dt.Id,
+							ParentTask = 0,
+							StartDate = dt.StartDate,
+							EndDate = dt.EndDate,
+							Status = dt.Status,
+							StatusDetails = context.SYS_LookUpValue.Where(x => x.Id == dt.Status).FirstOrDefault().Name,
+							IsVisible = dt.IsVisible,
+						};
+
+						SaveTaskAsync(taskCRUDDTO);
+					}
+				}
+
 				BaseDto.ExtData = dt.Id.ToString();
 				BaseDto.Data = true;
 				BaseDto.ErrorMessage = "Project Added Successfully";
+				BaseDto.QryResult = queryResult.SUCEEDED;
+			}
+			catch (Exception ex)
+			{
+				BaseDto.Data = false;
+				BaseDto.ErrorMessage = "Error Adding Record";
+				BaseDto.QryResult = queryResult.FAILED;
+			}
+			return BaseDto;
+		}
+
+		public BaseResponseDTO<bool> SaveTaskAsync(TaskCRUDDTO dataToSave)
+		{
+			BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
+			BaseResponseDTO<string> BaseDtoS = new BaseResponseDTO<string>();
+			try
+			{
+				IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+				string claimsPrincipal = null;
+				string UserToken = "";
+				if (httpContextAccessor.HttpContext != null)
+				{
+					claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+					UserToken = httpContextAccessor.HttpContext.Session.GetString("OTT");
+					if (claimsPrincipal == null)
+					{
+						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+					}
+				}
+				BaseDtoS = new GenerateCode().GCodeMain(UserToken, "SYS_Task");
+				SYS_Task dt = new SYS_Task()
+				{
+					UserCode = BaseDtoS.Data,
+					Taskname = dataToSave.TaskName,
+					TaskDescription = dataToSave.TaskDescription,
+					Projects = context.SYS_Projects.Where(x => x.Id == dataToSave.Project).FirstOrDefault(),
+					Task = context.SYS_Task.Where(x => x.Id == dataToSave.ParentTask).FirstOrDefault(),
+					StartDate = dataToSave.StartDate,
+					EndDate = dataToSave.EndDate,
+					Status = dataToSave.Status,
+					StatusDetails = dataToSave.StatusDetails,
+					IsVisible = dataToSave.IsVisible,
+				};
+				context.SYS_Task.Add(dt);
+				context.SaveChanges();
+				BaseDto.ExtData = dt.Id.ToString();
+				BaseDto.Data = true;
+				BaseDto.ErrorMessage = "Task Added Successfully";
 				BaseDto.QryResult = queryResult.SUCEEDED;
 			}
 			catch (Exception ex)
