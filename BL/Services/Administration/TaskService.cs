@@ -47,7 +47,10 @@ namespace BL.Services.Administration
                                                 ProjectName = (from c in context.SYS_Projects
                                                                   where c.Id == a.Projects.Id
                                                                   select c.ProjectName).FirstOrDefault(),
-                                                StartDate = a.StartDate.ToString("yyyy/MM/dd"),
+                                                ParentTaskName= (from c in context.SYS_Task
+																 where c.Id == a.Task.Id
+																 select c.Taskname).FirstOrDefault(),
+												StartDate = a.StartDate.ToString("yyyy/MM/dd"),
                                                 EndDate = a.EndDate.ToString("yyyy/MM/dd"),
                                                 Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
                                                 StatusDetails = a.StatusDetails,
@@ -83,6 +86,7 @@ namespace BL.Services.Administration
                               TaskName = a.Taskname,
                               TaskDescription = a.TaskDescription,
                               Project = a.Projects.Id,
+                              ParentTask = a.Task.Id,
                               StartDate = a.StartDate,
                               EndDate = a.EndDate,
                               Status = a.Status,
@@ -152,6 +156,20 @@ namespace BL.Services.Administration
                 }
                 Ddl.Add(Dd);
 
+                //Parenttask
+                Dd = new DropDown();
+                Dd.title = "ParentTask";
+                Dd.items = new List<DropDownItem>();
+                List<SYS_Task> Task = context.SYS_Task.Where(x => x.DeleteStatus == false).ToList();
+                foreach (SYS_Task lt in Task)
+                {
+                    DropDownItem Ddi = new DropDownItem();
+                    Ddi.Id = lt.Id;
+                    Ddi.text = lt.Taskname;
+                    Dd.items.Add(Ddi);
+                }
+                Ddl.Add(Dd);
+
                 dto.Data = Ddl;
                 dto.QryResult = queryResult.SUCEEDED;
             }
@@ -190,6 +208,7 @@ namespace BL.Services.Administration
                     Taskname = dataToSave.TaskName,
                     TaskDescription = dataToSave.TaskDescription,
                     Projects = context.SYS_Projects.Where(x => x.Id == dataToSave.Project).FirstOrDefault(),
+                    Task = context.SYS_Task.Where(x => x.Id == dataToSave.ParentTask).FirstOrDefault(),
                     StartDate = dataToSave.StartDate,
                     EndDate = dataToSave.EndDate,
                     Status = dataToSave.Status,
@@ -226,6 +245,7 @@ namespace BL.Services.Administration
                     Sys_Task.Taskname = dataToUpdate.TaskName;
                     Sys_Task.TaskDescription = dataToUpdate.TaskDescription;
                     Sys_Task.Projects = context.SYS_Projects.Where(x => x.Id == dataToUpdate.Project).FirstOrDefault();
+                    Sys_Task.Task = context.SYS_Task.Where(x => x.Id == dataToUpdate.ParentTask).FirstOrDefault();
                     Sys_Task.StartDate = dataToUpdate.StartDate;
                     Sys_Task.EndDate = dataToUpdate.EndDate;
                     Sys_Task.Status = dataToUpdate.Status;

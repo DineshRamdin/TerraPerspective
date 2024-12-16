@@ -901,4 +901,7 @@
   <data name="ProjectView" xml:space="preserve">
     <value>Project View</value>
   </data>
+  <data name="Parent Task" xml:space="preserve">
+    <value>Parent Task</value>
+  </data>
 </root>

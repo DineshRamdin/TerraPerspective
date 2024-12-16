@@ -30,6 +30,10 @@
                         <input type="text" id="txtCode" class="form-control" placeholder=@SharedResource.Task_Code readonly />
                     </div>
                     <div class="col-12 form-group">
+                        <label>@SharedResource.Parent_Task<span class="red-required">*</span></label>
+                        <select class="form-control" id="ddlParentTask" required></select>
+                    </div>
+                    <div class="col-12 form-group">
                         <label>@SharedResource.Task_Name<span class="red-required">*</span></label>
                         <input type="text" id="txtTaskName" class="form-control" placeholder=@SharedResource.Task_Name required />
                     </div>

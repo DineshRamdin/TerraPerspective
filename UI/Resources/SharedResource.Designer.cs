@@ -1015,6 +1015,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parent Task.
+        /// </summary>
+        public static string Parent_Task {
+            get {
+                return ResourceManager.GetString("Parent Task", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {

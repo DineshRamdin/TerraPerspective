@@ -17,7 +17,9 @@ namespace DAL.Models.Administration
         public string TaskDescription { get; set; }
         [ForeignKey("Project")]
         public virtual SYS_Projects Projects { get; set; }
-        public long Status { get; set; }
+		[ForeignKey("ParentTask")]
+		public virtual SYS_Task? Task { get; set; }
+		public long Status { get; set; }
         public string StatusDetails { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
