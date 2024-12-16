@@ -898,4 +898,7 @@
   <data name="Project Matrix" xml:space="preserve">
     <value>Project Matrix</value>
   </data>
+  <data name="ProjectView" xml:space="preserve">
+    <value>Project View</value>
+  </data>
 </root>

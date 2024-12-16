@@ -1240,6 +1240,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project View.
+        /// </summary>
+        public static string ProjectView {
+            get {
+                return ResourceManager.GetString("ProjectView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Purpose.
         /// </summary>
         public static string Purpose {
