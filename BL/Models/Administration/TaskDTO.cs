@@ -47,6 +47,8 @@ namespace BL.Models.Administration
         public string Url { get; set; }
         public string Description { get; set; }
         public string Status { get; set; }
+        public string ProjectName { get; set; }
+        public string color { get; set; }
     }
 
 }
