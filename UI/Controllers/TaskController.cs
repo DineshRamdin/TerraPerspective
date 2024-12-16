@@ -32,8 +32,9 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<List<TaskDTO>> dt = new BaseResponseDTO<List<TaskDTO>>();
-
-                dt = TaskService.GetAll();
+				ISession session = HttpContext.Session;
+				string Email = HttpContext.Session.GetString("Username");
+				dt = TaskService.GetAll(Email);
 
                 return Ok(dt);
             }

@@ -49,64 +49,67 @@ namespace BL.Services.Administration
 												join gu in context.SYS_GroupMatrixUser on pm.IID equals gu.IID
 												join prj in context.SYS_Projects on pm.IID equals prj.Id
 												where prj.DeleteStatus == false && gu.IID == UsrId
-														 select new
-														 {
-															 prj.Id,
-															 prj.UserCode,
-															 prj.ProjectName,
-															 prj.ProjectDetails,
-															 prj.ProjectDescription,
-															 prj.User,
-															 prj.Status,
-															 prj.StatusDetails,
-															 prj.StartDate,
-															 prj.EndDate,
-															 prj.PlannedHours,
-															 prj.IsVisible,
-															 prj.CreatedBy,
-															 prj.CreatedDate
-														 })
-						.Union(
-							context.SYS_Projects
-								.Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
-								.Select(p => new
-								{
-									p.Id,
-									p.UserCode,
-									p.ProjectName,
-									p.ProjectDetails,
-									p.ProjectDescription,
-									p.User,
-									p.Status,
-									p.StatusDetails,
-									p.StartDate,
-									p.EndDate,
-									p.PlannedHours,
-									p.IsVisible,
-									p.CreatedBy,
-									p.CreatedDate
-								})
-						)
-						.AsEnumerable() // Move to client-side processing
-						.Select(x => new ProjectsDTO
-						{
-							Id = x.Id,
-							UserCode = x.UserCode,
-							ProjectName = x.ProjectName,
-							ProjectDetails = x.ProjectDetails,
-							ProjectDescription = x.ProjectDescription,
-							ProjectManager = (from c in context.SYS_User
-											  join d in context.Users on c.AId equals d.Id
-											  where c.Id == x.User.Id
-											  select d.Othername + ' ' + d.Surname).FirstOrDefault(),
-							PlannedHours = x.PlannedHours.ToString("HH:mm"),
-							StartDate = x.StartDate.ToString("yyyy/MM/dd"),
-							EndDate = x.EndDate.ToString("yyyy/MM/dd"),
-							Status = context.SYS_LookUpValue.Where(x => x.Id == x.Id).FirstOrDefault().Name,
-							StatusDetails = x.StatusDetails,
-							IsVisible = x.IsVisible == true ? "Yes" : "No",
-						})
-						.ToList();
+												select new
+												{
+													prj.Id,
+													prj.UserCode,
+													prj.ProjectName,
+													prj.ProjectDetails,
+													prj.ProjectDescription,
+													prj.User,
+													prj.Status,
+													prj.StatusDetails,
+													prj.StartDate,
+													prj.EndDate,
+													prj.PlannedHours,
+													prj.IsVisible,
+													prj.CreatedBy,
+													prj.CreatedDate
+												})
+							.Union(
+								context.SYS_Projects
+									.Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
+									.Select(p => new
+									{
+										p.Id,
+										p.UserCode,
+										p.ProjectName,
+										p.ProjectDetails,
+										p.ProjectDescription,
+										p.User,
+										p.Status,
+										p.StatusDetails,
+										p.StartDate,
+										p.EndDate,
+										p.PlannedHours,
+										p.IsVisible,
+										p.CreatedBy,
+										p.CreatedDate,
+									})
+							)
+							.AsEnumerable() // Move to client-side processing
+							.Select(x => new ProjectsDTO
+							{
+								Id = x.Id,
+								UserCode = x.UserCode,
+								ProjectName = x.ProjectName,
+								ProjectDetails = x.ProjectDetails,
+								ProjectDescription = x.ProjectDescription,
+								ProjectManager = (from c in context.SYS_User
+												  join d in context.Users on c.AId equals d.Id
+												  where c.Id == x.User.Id
+												  select d.Othername + ' ' + d.Surname).FirstOrDefault(),
+								PlannedHours = x.PlannedHours.ToString(@"hh\:mm"), // Adjust format for TimeSpan
+								StartDate = x.StartDate.ToString("yyyy/MM/dd"),
+								EndDate = x.EndDate.ToString("yyyy/MM/dd"),
+								Status = context.SYS_LookUpValue
+											 .Where(lv => lv.Id == x.Status) // Use a different lambda variable
+											 .FirstOrDefault()?.Name, // Use null-safe navigation
+								StatusDetails = x.StatusDetails,
+								IsVisible = x.IsVisible == true ? "Yes" : "No",
+							})
+							.ToList();
+
 
 
 

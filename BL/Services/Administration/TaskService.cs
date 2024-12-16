@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.EntityFrameworkCore;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.InkML;
 
 namespace BL.Services.Administration
 {
@@ -27,7 +29,7 @@ namespace BL.Services.Administration
             queryResult = new QueryResult();
         }
 
-        public BaseResponseDTO<List<TaskDTO>> GetAll()
+        public BaseResponseDTO<List<TaskDTO>> GetAll(string Email)
         {
             BaseResponseDTO<List<TaskDTO>> dto = new BaseResponseDTO<List<TaskDTO>>();
             TaskDTO user = new TaskDTO();
@@ -38,28 +40,99 @@ namespace BL.Services.Administration
             {
 
                 string sQryResult = queryResult.FAILED;
-                List<TaskDTO> result = (from a in context.SYS_Task
-                                        where a.DeleteStatus == false
-                                        select new TaskDTO
-                                        {
-                                            Id = a.Id,
-                                            UserCode = a.UserCode,
-                                            Taskname = a.Taskname,
-                                            TaskDescription = a.TaskDescription,
-                                            ProjectName = (from c in context.SYS_Projects
-                                                           where c.Id == a.Projects.Id
-                                                           select c.ProjectName).FirstOrDefault(),
-                                            ParentTaskName = (from c in context.SYS_Task
-                                                              where c.Id == a.Task.Id
-                                                              select c.Taskname).FirstOrDefault(),
-                                            StartDate = a.StartDate.ToString("yyyy/MM/dd"),
-                                            EndDate = a.EndDate.ToString("yyyy/MM/dd"),
-                                            Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
-                                            StatusDetails = a.StatusDetails,
-                                            IsVisible = a.IsVisible == true ? "Yes" : "No",
-                                        }).ToList();
+				string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
+				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+				if (Email != "admin@gmail.com")
+				{
+					List<TaskDTO> result = (from prj in context.SYS_Projects
+											join ts in context.SYS_Task on prj.Id equals ts.Projects.Id // Assuming it's ProjectId, not Id
+											join pm in context.SYS_ProjectsMatrix on prj.Id equals pm.IID
+											join gu in context.SYS_GroupMatrixUser on pm.IID equals gu.IID
+											where ts.DeleteStatus == false && gu.IID == UsrId
+											select new
+												{
+                                                    ts.Id,
+													ts.UserCode,
+													ts.Taskname,
+													ts.TaskDescription,
+													ts.Projects,
+													ts.Task,
+													ts.StartDate,
+													ts.EndDate,
+													ts.Status,
+													ts.StatusDetails,
+													ts.IsVisible
+												})
+						.Union(
+							context.SYS_Task
+								.Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
+								.Select(p => new
+								{
+									p.Id,
+									p.UserCode,
+									p.Taskname,
+									p.TaskDescription,
+									p.Projects,
+									p.Task,
+									p.StartDate,
+									p.EndDate,
+									p.Status,
+									p.StatusDetails,
+									p.IsVisible
+								})
+						)
+						.AsEnumerable() // Move to client-side processing
+						.Select(x => new TaskDTO
+						{
+							Id = x.Id,
+							UserCode = x.UserCode,
+							Taskname = x.Taskname,
+							TaskDescription = x.TaskDescription,
+							ProjectName = (from c in context.SYS_Projects
+										   where c.Id == x.Projects.Id
+										   select c.ProjectName).FirstOrDefault(),
+							ParentTaskName = (x.Task == null) ? "" :(from c in context.SYS_Task
+											  where c.Id == x.Task.Id select c.Taskname).FirstOrDefault(),
+							StartDate = x.StartDate.ToString("yyyy/MM/dd"),
+							EndDate = x.EndDate.ToString("yyyy/MM/dd"),
+							Status = context.SYS_LookUpValue
+											 .Where(lv => lv.Id == x.Status) // Use a different lambda variable
+											 .FirstOrDefault()?.Name, // Use null-safe navigation
+							StatusDetails = x.StatusDetails,
+							IsVisible = x.IsVisible == true ? "Yes" : "No",
+						})
+						.ToList();
 
-                dto.Data = result;
+
+
+					dto.Data = result;
+				}
+                else
+                {
+					List<TaskDTO> result = (from a in context.SYS_Task
+											where a.DeleteStatus == false
+											select new TaskDTO
+											{
+												Id = a.Id,
+												UserCode = a.UserCode,
+												Taskname = a.Taskname,
+												TaskDescription = a.TaskDescription,
+												ProjectName = (from c in context.SYS_Projects
+															   where c.Id == a.Projects.Id
+															   select c.ProjectName).FirstOrDefault(),
+												ParentTaskName = (from c in context.SYS_Task
+																  where c.Id == a.Task.Id
+																  select c.Taskname).FirstOrDefault(),
+												StartDate = a.StartDate.ToString("yyyy/MM/dd"),
+												EndDate = a.EndDate.ToString("yyyy/MM/dd"),
+												Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
+												StatusDetails = a.StatusDetails,
+												IsVisible = a.IsVisible == true ? "Yes" : "No",
+											}).ToList();
+
+					dto.Data = result;
+				}
+				
                 dto.QryResult = queryResult.SUCEEDED;
 
             }

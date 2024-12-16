@@ -48,4 +48,5 @@ namespace BL.Models.Administration
         public string Description { get; set; }
         public string Status { get; set; }
     }
+
 }
