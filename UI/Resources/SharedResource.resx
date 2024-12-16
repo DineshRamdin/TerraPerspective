@@ -916,4 +916,20 @@
     <value>Task Name already Added</value>
     <comment>Task Name already Added</comment>
   </data>
+  <data name="Sequence" xml:space="preserve">
+    <value>Sequence</value>
+    <comment>Sequence</comment>
+  </data>
+  <data name="Please Enter Duration" xml:space="preserve">
+    <value>Please Enter Duration</value>
+    <comment>Please Enter Duration</comment>
+  </data>
+  <data name="Please Enter Sequence" xml:space="preserve">
+    <value>Please Enter Sequence</value>
+    <comment>Please Enter Sequence</comment>
+  </data>
+  <data name="Sequence already Added" xml:space="preserve">
+    <value>Sequence already Added</value>
+    <comment>Sequence already Added</comment>
+  </data>
 </root>

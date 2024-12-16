@@ -3,8 +3,6 @@
 }
 @using UI.Resources
 
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
-
 <style>
     .ck-editor__editable {
         min-height: 400px; /* Set minimum height */
@@ -194,27 +192,65 @@
 
         var TaskNameData = [];
         function SaveTaskName() {
-            if ($("#txtTaskName").val() != "") {
+
+            // let valid = formValidation(["txtTaskName", "txtSequence", "txtDuration"]);
+
+            let valid = false;
+            // if (valid) {
+            if ($("#txtTaskName").val() == "") {
+                toastr.warning("@SharedResource.Please_Enter_Task_Name");
+            }
+            else if ($("#txtDuration").val() == "") {
+                toastr.warning("@SharedResource.Please_Enter_Duration");
+            }
+            else if ($("#txtSequence").val() == "") {
+                toastr.warning("@SharedResource.Please_Enter_Sequence");
+            }
+            else {
+
+                //if ($("#txtTaskName").val() != "") {
+
                 let newTaskName = $("#txtTaskName").val().toLowerCase();
+                let newSequence = $("#txtSequence").val();
+                let newDuration = $("#txtDuration").val();
 
                 if (!TaskNameData.some(obj => obj['taskName'].toLowerCase() === newTaskName)) {
-                    TaskNameData.push({
-                        id: 0,
-                        taskName: $("#txtTaskName").val()
-                    });
+                    //if (!TaskNameData.some(obj => obj['sequence'] === newSequence)) {
+                    if (!TaskNameData.some(obj => String(obj['sequence']) === newSequence)) {
+                        TaskNameData.push({
+                            id: 0,
+                            taskName: $("#txtTaskName").val(),
+                            duration: $("#txtDuration").val(),
+                            sequence: $("#txtSequence").val()
+                        });
 
-                    $("#txtTaskName").val('');
+                        $("#txtTaskName").val('');
+                        $("#txtDuration").val('');
+                        $("#txtSequence").val('');
+                    }
+                    else {
+                        toastr.warning("@SharedResource.Sequence_already_Added");
+                        $("#txtSequence").val('');
+                    }
                 }
                 else {
                     toastr.warning("@SharedResource.Task_Name_already_Added");
                     $("#txtTaskName").val('');
+                    $("#txtDuration").val('');
+                    $("#txtSequence").val('');
                 }
 
                 GetAllTaskName();
+                // }
+                // else {
+                //     toastr.warning("@SharedResource.Please_Enter_Task_Name");
+                // }
             }
-            else {
-                toastr.warning("@SharedResource.Please_Enter_Task_Name");
-            }
+            // }
+            // else {
+            //     toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            // }
+
         }
 
         function GetAllTaskName() {
@@ -222,6 +258,8 @@
             var columnList = [
                 { data: 'id', title: 'Id', visible: false },
                 { data: 'taskName', title: '@SharedResource.Task_Name' },
+                { data: 'duration', title: '@SharedResource.Duration' },
+                { data: 'sequence', title: '@SharedResource.Sequence' },
             ];
 
             if (!$("#GridTaskName").data("jsGrid")) {
@@ -236,6 +274,8 @@
 
                     fields: [
                         { name: "taskName", type: "text", width: 150, title: "@SharedResource.Task_Name" },
+                        { name: "duration", type: "text", width: 150, title: "@SharedResource.Duration" },
+                        { name: "sequence", type: "text", width: 150, title: "@SharedResource.Sequence" },
                     ],
                     gridview: true,
                 });

@@ -184,6 +184,8 @@ namespace BL.Services.Administration
                             SYS_ProjectTemplateMapping dt1 = new SYS_ProjectTemplateMapping()
                             {
                                 TaskName = item.TaskName,
+                                Duration = item.Duration,
+                                Sequence = item.Sequence,
                                 ProjectTemplateID = Id,
                             };
                             context.SYS_ProjectTemplateMapping.Add(dt1);
@@ -224,6 +226,8 @@ namespace BL.Services.Administration
                               Id = a.Id,
                               ProjectTemplateID = a.ProjectTemplateID,
                               TaskName = a.TaskName,
+                              Duration = a.Duration,
+                              Sequence = a.Sequence,
 
                           }).ToList();
                 dto.Data = result;

@@ -684,4 +684,16 @@
   <data name="Task Name already Added" xml:space="preserve">
     <value>Nome da tarefa já adicionado</value>
   </data>
+  <data name="Sequence" xml:space="preserve">
+    <value>Sequência</value>
+  </data>
+  <data name="Please Enter Duration" xml:space="preserve">
+    <value>Insira a duração</value>
+  </data>
+  <data name="Please Enter Sequence" xml:space="preserve">
+    <value>Por favor insira a sequência</value>
+  </data>
+  <data name="Sequence already Added" xml:space="preserve">
+    <value>Sequência já adicionada</value>
+  </data>
 </root>

@@ -1060,6 +1060,24 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Enter Duration.
+        /// </summary>
+        public static string Please_Enter_Duration {
+            get {
+                return ResourceManager.GetString("Please Enter Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please Enter Sequence.
+        /// </summary>
+        public static string Please_Enter_Sequence {
+            get {
+                return ResourceManager.GetString("Please Enter Sequence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please Enter Task Name.
         /// </summary>
         public static string Please_Enter_Task_Name {
@@ -1560,6 +1578,24 @@ namespace UI.Resources {
         public static string Select_Type {
             get {
                 return ResourceManager.GetString("Select Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sequence.
+        /// </summary>
+        public static string Sequence {
+            get {
+                return ResourceManager.GetString("Sequence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sequence already Added.
+        /// </summary>
+        public static string Sequence_already_Added {
+            get {
+                return ResourceManager.GetString("Sequence already Added", resourceCulture);
             }
         }
         

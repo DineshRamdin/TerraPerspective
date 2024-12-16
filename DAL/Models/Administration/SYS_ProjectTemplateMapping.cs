@@ -14,6 +14,8 @@ namespace DAL.Models.Administration
         public long Id { get; set; }
         public long ProjectTemplateID { get; set; }
         public string? TaskName { get; set; }
+        public int Duration { get; set; }
+        public int Sequence { get; set; }
 
     }
 }
