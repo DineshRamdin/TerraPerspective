@@ -1,0 +1,275 @@
+﻿@{
+    ViewData["Title"] = "Project Template";
+}
+@using UI.Resources
+
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+
+<style>
+    .ck-editor__editable {
+        min-height: 400px; /* Set minimum height */
+        max-height: 500px; /* Set maximum height if needed */
+    }
+</style>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Project_Template</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Project_Template</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="ProjectTemplateTable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="AddProjectTemplateModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <partial name="_AddProjectTemplate.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+    <script>
+
+        var GetAllProjectTemplateUrl = '@Url.Action("GetAll", "ProjectTemplate")';
+        var ProjectTemplateGetByIdUrl = '@Url.Action("GetById", "ProjectTemplate")';
+        var CreateUpdateProjectTemplateUrl = '@Url.Action("CreateUpdate", "ProjectTemplate")';
+        var ProjectTemplateChildDataByParentIdUrl = '@Url.Action("ProjectTemplateChildDataByParentId", "ProjectTemplate")';
+
+
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#liProjectTemplateAmenu').addClass('active');
+
+            GetAllProjectTemplate();
+        });
+
+        function GetAllProjectTemplate() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'projectTemplateName', title: '@SharedResource.Project_Template @SharedResource.Name' },
+
+            ];
+
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+            };
+
+            initializeDataGrid('ProjectTemplateTable', 'openProjectTemplateModal', GetAllProjectTemplateUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+
+        }
+
+        function openProjectTemplateModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
+
+            $.ajax({
+                url: ProjectTemplateGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearProjectTemplateModal();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4ProjectTemplateTitle").html("@SharedResource.Modify  @SharedResource.Project_Template");
+                        else
+                            $("#h4ProjectTemplateTitle").html("@SharedResource.Add  @SharedResource.Project_Template");
+
+                        $("#hdnId").val(response.data.id);
+                        $("#txtProjectTemplateName").val(response.data.projectTemplateName);
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddProjectTemplateModal').modal('show');
+                $("#frnProjectTemplateCreate").validate({}).resetForm();
+                GetChildData();
+            });
+        }
+
+        function ClearProjectTemplateModal() {
+            $("#h4ProjectTemplateTitle").html("@SharedResource.Add  @SharedResource.Project_Template");
+            $("#hdnId").val(0);
+            $("#txtProjectTemplateName").val("");
+        }
+
+        function SaveProjectTemplate() {
+
+            let valid = formValidation(["txtProjectTemplateName"]);
+
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.ProjectTemplateName = $("#txtProjectTemplateName").val();
+                dataObject.ProjectTemplateData = TaskNameData;
+
+                $.ajax({
+                    url: CreateUpdateProjectTemplateUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddProjectTemplateModal').modal('hide');
+                            GetAllProjectTemplate();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+
+        }
+
+        var TaskNameData = [];
+        function SaveTaskName() {
+            if ($("#txtTaskName").val() != "") {
+                let newTaskName = $("#txtTaskName").val().toLowerCase();
+
+                if (!TaskNameData.some(obj => obj['taskName'].toLowerCase() === newTaskName)) {
+                    TaskNameData.push({
+                        id: 0,
+                        taskName: $("#txtTaskName").val()
+                    });
+
+                    $("#txtTaskName").val('');
+                }
+                else {
+                    toastr.warning("@SharedResource.Task_Name_already_Added");
+                    $("#txtTaskName").val('');
+                }
+
+                GetAllTaskName();
+            }
+            else {
+                toastr.warning("@SharedResource.Please_Enter_Task_Name");
+            }
+        }
+
+        function GetAllTaskName() {
+
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'taskName', title: '@SharedResource.Task_Name' },
+            ];
+
+            if (!$("#GridTaskName").data("jsGrid")) {
+                $("#GridTaskName").jsGrid({
+                    height: "auto",
+                    width: "100%",
+
+                    sorting: true,
+                    paging: true,
+
+                    data: TaskNameData,
+
+                    fields: [
+                        { name: "taskName", type: "text", width: 150, title: "@SharedResource.Task_Name" },
+                    ],
+                    gridview: true,
+                });
+            }
+            else {
+                $("#GridTaskName").jsGrid("refresh"); // Force a refresh
+            }
+
+        }
+        function GetChildData() {
+            var dataObject = {};
+            dataObject.Id = $("#hdnId").val();
+
+            $.ajax({
+                url: ProjectTemplateChildDataByParentIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    TaskNameData = [];
+                },
+                success: function (response) {
+                    if (response.data) {
+                        TaskNameData = response.data;
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                GetAllTaskName();
+            });
+        }
+
+    </script>
+}

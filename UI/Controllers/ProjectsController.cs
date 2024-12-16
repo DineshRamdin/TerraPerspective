@@ -36,8 +36,9 @@ namespace UI.Controllers
 			try
 			{
 				BaseResponseDTO<List<ProjectsDTO>> dt = new BaseResponseDTO<List<ProjectsDTO>>();
-
-				dt = ProjectsService.GetAll();
+				ISession session = HttpContext.Session;
+				string Email = HttpContext.Session.GetString("Username");
+				dt = ProjectsService.GetAll(Email);
 
 				return Ok(dt);
 			}

@@ -501,6 +501,8 @@ namespace DAL.Context
         public DbSet<SYS_MCAVCA> SYS_MCAVCA { get; set; }
         public DbSet<SYS_Task> SYS_Task { get; set; }
         public DbSet<SYS_ProjectsMatrix> SYS_ProjectsMatrix { get; set; }
+        public DbSet<SYS_ProjectTemplate> SYS_ProjectTemplate { get; set; }
+        public DbSet<SYS_ProjectTemplateMapping> SYS_ProjectTemplateMapping { get; set; }
 
-	}
+    }
 }

@@ -116,13 +116,15 @@ namespace UI.Controllers
 
 			}
 		}
-		public ActionResult<BaseResponseDTO<bool>> createUpdateAR(MainARDTO dataToSave)
+
+		[HttpPost]
+		public ActionResult<BaseResponseDTO<bool>> createUpdateAR([FromBody] MainARDTO GridData)
 		{
 			try
 			{
 				ISession session = HttpContext.Session;
 				string Token = HttpContext.Session.GetString("OTT");
-				return Ok(_AccessRightsService.SaveUpdateAR(dataToSave,Token));
+				return Ok(_AccessRightsService.SaveUpdateAR(GridData, Token));
 			}
 			catch (Exception ex)
 			{

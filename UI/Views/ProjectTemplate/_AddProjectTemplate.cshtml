@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+}
+
+@using UI.Resources
+
+<div class="modal-dialog">
+    <form id="frnProjectTemplateCreate">
+        <input type="hidden" id="hdnId" value="" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="h4ProjectTemplateTitle">
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 form-group">
+                        <label>@SharedResource.Project_Template @SharedResource.Name<span class="red-required">*</span></label>
+                        <input type="text" id="txtProjectTemplateName" class="form-control" placeholder="@SharedResource.Project_Template @SharedResource.Name" required />
+                    </div>
+                    <div class="col-12 row form-group">
+                        <div class="col-6">
+                            <label>@SharedResource.Task_Name</label>
+                            <input type="text" id="txtTaskName" class="form-control" placeholder="@SharedResource.Task_Name" required />
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-primary" onclick="SaveTaskName();" style="margin-top: 30px;">@SharedResource.Add</button>
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 form-group">
+                        <div id="GridTaskName"></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SaveProjectTemplate();">@SharedResource.Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@SharedResource.Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </form>
+</div>
