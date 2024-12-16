@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="~/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
     <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css">
 
     <!-- jsGrid -->
     <link rel="stylesheet" href="~/plugins/jsgrid/jsgrid.min.css">
@@ -40,6 +41,7 @@
 
     @* JSTREE *@
     <link href="~/lib/jstree-3.3.16/dist/themes/default/style.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
 
     @* <style>
     /* Apply the smaller button and dropdown styles */
@@ -147,6 +149,11 @@
 
     @* JSTREE *@
     <script src="~/lib/jstree-3.3.16/dist/jstree.min.js"></script>
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <!-- Summernote -->
+    <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/dist/js/demo.js"></script>
 
     <script>
         var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';
@@ -202,6 +209,8 @@
                 TaskMenuLabel: '@SharedResource.Task',
                 TableCodeConfigurationMenuLabel: '@SharedResource.Table_Code_Configuration',
                 CodeConfigurationMenuLabel: '@SharedResource.Code_Configuration',
+                GeneralInformationMenuLabel: '@SharedResource.General_Information',
+                ProjectTemplateMenuLabel: '@SharedResource.Project_Template',
             };
 
             // Load the menu on page load

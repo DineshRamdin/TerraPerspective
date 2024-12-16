@@ -1073,6 +1073,24 @@ namespace BL.Services.Common
             }
             #endregion
 
+            #region Project Template
+            if (!context.SYS_Modules.Any(x => x.Name == "Project Template"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "Project Template",
+                    Url = "ProjectTemplate/index",
+                    Order = 0,
+                    Icon = "far fa-dot-circle",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now,
+                    ParentId = context.SYS_Modules.Where(x => x.Name == "General Information").Select(x => x.Id).FirstOrDefault()
+
+                });
+                context.SaveChanges();
+            }
+            #endregion
+
             List<SYS_Modules> dtl = context.SYS_Modules.Where(x => x.DisplayName == null).ToList();
             if (dtl.Count > 0)
             {

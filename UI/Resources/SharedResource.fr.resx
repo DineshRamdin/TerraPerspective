@@ -675,4 +675,13 @@
   <data name="ProjectView" xml:space="preserve">
     <value>Vue du projet</value>
   </data>
+  <data name="Project Template" xml:space="preserve">
+    <value>Modèle de projet</value>
+  </data>
+  <data name="Please Enter Task Name" xml:space="preserve">
+    <value>Veuillez saisir le nom de la tâche</value>
+  </data>
+  <data name="Task Name already Added" xml:space="preserve">
+    <value>Nom de la tâche déjà ajouté</value>
+  </data>
 </root>
