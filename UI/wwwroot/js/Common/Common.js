@@ -207,6 +207,12 @@ function renderDynamicMenu(data, langResource) {
         else if (grandParent.name == "Task") {
             MenuName = langResource.TaskMenuLabel;
         }
+        else if (grandParent.name == "General Information") {
+            MenuName = langResource.GeneralInformationMenuLabel;
+        }
+        else if (grandParent.name == "Project Template") {
+            MenuName = langResource.ProjectTemplateMenuLabel;
+        }
         else {
             MenuName = grandParent.name;
         }
@@ -319,6 +325,12 @@ function renderDynamicMenu(data, langResource) {
                 else if (parent.name == "MCA/VCA") {
                     SubMenuName = langResource.MCAVCAMenuLabel;
                 }
+                else if (parent.name == "General Information") {
+                    SubMenuName = langResource.GeneralInformationMenuLabel;
+                }
+                else if (parent.name == "Project Template") {
+                    SubMenuName = langResource.ProjectTemplateMenuLabel;
+                }
                 else {
                     SubMenuName = parent.name;
                 }
@@ -422,6 +434,12 @@ function renderDynamicMenu(data, langResource) {
                         }
                         else if (child.name == "MCA/VCA") {
                             ChildSubMenuName = langResource.MCAVCAMenuLabel;
+                        }
+                        else if (child.name == "General Information") {
+                            ChildSubMenuName = langResource.GeneralInformationMenuLabel;
+                        }
+                        else if (child.name == "Project Template") {
+                            ChildSubMenuName = langResource.ProjectTemplateMenuLabel;
                         }
                         else {
                             ChildSubMenuName = child.name;

@@ -672,4 +672,16 @@
   <data name="General Information" xml:space="preserve">
     <value>Informações gerais</value>
   </data>
+  <data name="Project Template" xml:space="preserve">
+    <value>Modelo de projeto</value>
+  </data>
+  <data name="Header Name" xml:space="preserve">
+    <value>Nome do cabeçalho</value>
+  </data>
+  <data name="Header Name already Added" xml:space="preserve">
+    <value>Nome do cabeçalho já adicionado</value>
+  </data>
+  <data name="Please Enter Header Name" xml:space="preserve">
+    <value>Insira o nome do cabeçalho</value>
+  </data>
 </root>

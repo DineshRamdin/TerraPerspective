@@ -838,4 +838,20 @@
     <value>General Information</value>
     <comment>General Information</comment>
   </data>
+  <data name="Project Template" xml:space="preserve">
+    <value>Project Template</value>
+    <comment>Project Template</comment>
+  </data>
+  <data name="Header Name" xml:space="preserve">
+    <value>Header Name</value>
+    <comment>Header Name</comment>
+  </data>
+  <data name="Header Name already Added" xml:space="preserve">
+    <value>Header Name already Added</value>
+    <comment>Header Name already Added</comment>
+  </data>
+  <data name="Please Enter Header Name" xml:space="preserve">
+    <value>Please Enter Header Name</value>
+    <comment>Please Enter Header Name</comment>
+  </data>
 </root>

@@ -637,6 +637,24 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Header Name.
+        /// </summary>
+        public static string Header_Name {
+            get {
+                return ResourceManager.GetString("Header Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Header Name already Added.
+        /// </summary>
+        public static string Header_Name_already_Added {
+            get {
+                return ResourceManager.GetString("Header Name already Added", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string Home {
@@ -970,6 +988,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Enter Header Name.
+        /// </summary>
+        public static string Please_Enter_Header_Name {
+            get {
+                return ResourceManager.GetString("Please Enter Header Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please Fill In Mandatory Fields.
         /// </summary>
         public static string Please_Fill_In_Mandatory_Fields {
@@ -1128,6 +1155,15 @@ namespace UI.Resources {
         public static string Project_Name {
             get {
                 return ResourceManager.GetString("Project Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Template.
+        /// </summary>
+        public static string Project_Template {
+            get {
+                return ResourceManager.GetString("Project Template", resourceCulture);
             }
         }
         
