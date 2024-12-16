@@ -304,7 +304,9 @@
 				$.ajax({
 					url: createUpdateARURL,
 					type: "POST",
-					data: { "MainARDTO": GridData },  // Send data if needed
+					data: JSON.stringify(GridData), // Serialize the data
+					contentType: "application/json; charset=utf-8", // Indicate JSON format
+					dataType: "json", // Expect JSON response
 					beforeSend: function () {
 
 					},

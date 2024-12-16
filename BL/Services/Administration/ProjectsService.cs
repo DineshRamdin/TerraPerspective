@@ -5,6 +5,7 @@ using BL.Services.Common;
 using DAL.Context;
 using DAL.Models;
 using DAL.Models.Administration;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,7 @@ namespace BL.Services.Administration
 			queryResult = new QueryResult();
 		}
 
-		public BaseResponseDTO<List<ProjectsDTO>> GetAll()
+		public BaseResponseDTO<List<ProjectsDTO>> GetAll(string Email)
 		{
 			BaseResponseDTO<List<ProjectsDTO>> dto = new BaseResponseDTO<List<ProjectsDTO>>();
 			ProjectsDTO user = new ProjectsDTO();
@@ -40,28 +41,104 @@ namespace BL.Services.Administration
 			{
 
 				string sQryResult = queryResult.FAILED;
-				List<ProjectsDTO> result = (from a in context.SYS_Projects
-											   where a.DeleteStatus == false
-											   select new ProjectsDTO
-											   {
-												   Id = a.Id,
-												   UserCode=a.UserCode,
-												   ProjectName = a.ProjectName,
-												   ProjectDetails = a.ProjectDetails,
-												   ProjectDescription = a.ProjectDescription,
-												   ProjectManager = (from c in context.SYS_User
-																	 join d in context.Users on c.AId equals d.Id
-																	 where c.Id == a.User.Id
-																	 select d.Othername +' ' +d.Surname).FirstOrDefault(),
-												   PlannedHours = a.PlannedHours.ToString("HH:mm"),
-												   StartDate = a.StartDate.ToString("yyyy/MM/dd"),
-												   EndDate = a.EndDate.ToString("yyyy/MM/dd"),
-												   Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
-												   StatusDetails = a.StatusDetails,
-												   IsVisible = a.IsVisible == true ? "Yes" : "No",
-											   }).ToList();
+				string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
+				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+				if (Email != "admin@gmail.com")
+				{
+					List<ProjectsDTO> result = (from pm in context.SYS_ProjectsMatrix
+												join gu in context.SYS_GroupMatrixUser on pm.IID equals gu.IID
+												join prj in context.SYS_Projects on pm.IID equals prj.Id
+												where prj.DeleteStatus == false && gu.IID == UsrId
+														 select new
+														 {
+															 prj.Id,
+															 prj.UserCode,
+															 prj.ProjectName,
+															 prj.ProjectDetails,
+															 prj.ProjectDescription,
+															 prj.User,
+															 prj.Status,
+															 prj.StatusDetails,
+															 prj.StartDate,
+															 prj.EndDate,
+															 prj.PlannedHours,
+															 prj.IsVisible,
+															 prj.CreatedBy,
+															 prj.CreatedDate
+														 })
+						.Union(
+							context.SYS_Projects
+								.Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
+								.Select(p => new
+								{
+									p.Id,
+									p.UserCode,
+									p.ProjectName,
+									p.ProjectDetails,
+									p.ProjectDescription,
+									p.User,
+									p.Status,
+									p.StatusDetails,
+									p.StartDate,
+									p.EndDate,
+									p.PlannedHours,
+									p.IsVisible,
+									p.CreatedBy,
+									p.CreatedDate
+								})
+						)
+						.AsEnumerable() // Move to client-side processing
+						.Select(x => new ProjectsDTO
+						{
+							Id = x.Id,
+							UserCode = x.UserCode,
+							ProjectName = x.ProjectName,
+							ProjectDetails = x.ProjectDetails,
+							ProjectDescription = x.ProjectDescription,
+							ProjectManager = (from c in context.SYS_User
+											  join d in context.Users on c.AId equals d.Id
+											  where c.Id == x.User.Id
+											  select d.Othername + ' ' + d.Surname).FirstOrDefault(),
+							PlannedHours = x.PlannedHours.ToString("HH:mm"),
+							StartDate = x.StartDate.ToString("yyyy/MM/dd"),
+							EndDate = x.EndDate.ToString("yyyy/MM/dd"),
+							Status = context.SYS_LookUpValue.Where(x => x.Id == x.Id).FirstOrDefault().Name,
+							StatusDetails = x.StatusDetails,
+							IsVisible = x.IsVisible == true ? "Yes" : "No",
+						})
+						.ToList();
 
-				dto.Data = result;
+
+
+					dto.Data = result;
+				}
+				else
+				{
+					List<ProjectsDTO> result = (from a in context.SYS_Projects
+												where a.DeleteStatus == false
+												select new ProjectsDTO
+												{
+													Id = a.Id,
+													UserCode = a.UserCode,
+													ProjectName = a.ProjectName,
+													ProjectDetails = a.ProjectDetails,
+													ProjectDescription = a.ProjectDescription,
+													ProjectManager = (from c in context.SYS_User
+																	  join d in context.Users on c.AId equals d.Id
+																	  where c.Id == a.User.Id
+																	  select d.Othername + ' ' + d.Surname).FirstOrDefault(),
+													PlannedHours = a.PlannedHours.ToString("HH:mm"),
+													StartDate = a.StartDate.ToString("yyyy/MM/dd"),
+													EndDate = a.EndDate.ToString("yyyy/MM/dd"),
+													Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
+													StatusDetails = a.StatusDetails,
+													IsVisible = a.IsVisible == true ? "Yes" : "No",
+												}).ToList();
+
+					dto.Data = result;
+				}
+				
+
 				dto.QryResult = queryResult.SUCEEDED;
 
 			}
@@ -249,6 +326,7 @@ namespace BL.Services.Administration
 					context.SYS_Projects.Update(Sys_Projects);
 					context.SaveChanges();
 					BaseDto.Data = true;
+					BaseDto.ExtData = Sys_Projects.Id.ToString();
 					BaseDto.ErrorMessage = "Project update Successfully";
 					BaseDto.QryResult = queryResult.SUCEEDED;
 				}
