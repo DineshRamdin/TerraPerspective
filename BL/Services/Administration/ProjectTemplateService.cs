@@ -144,13 +144,13 @@ namespace BL.Services.Administration
                     SaveAndUpdateChildTable(dataToUpdate, DSS.Id);
 
                     BaseDto.Data = true;
-                    BaseDto.ErrorMessage = "Company update Successfully";
+                    BaseDto.ErrorMessage = "Project Template update Successfully";
                     BaseDto.QryResult = queryResult.SUCEEDED;
                 }
                 else
                 {
                     BaseDto.Data = false;
-                    BaseDto.ErrorMessage = "Company Already Exist";
+                    BaseDto.ErrorMessage = "Project Template Already Exist";
                     BaseDto.QryResult = queryResult.FAILED;
                 }
             }
@@ -183,7 +183,7 @@ namespace BL.Services.Administration
                         {
                             SYS_ProjectTemplateMapping dt1 = new SYS_ProjectTemplateMapping()
                             {
-                                HeaderName = item.HeaderName,
+                                TaskName = item.TaskName,
                                 ProjectTemplateID = Id,
                             };
                             context.SYS_ProjectTemplateMapping.Add(dt1);
@@ -223,7 +223,7 @@ namespace BL.Services.Administration
                           {
                               Id = a.Id,
                               ProjectTemplateID = a.ProjectTemplateID,
-                              HeaderName = a.HeaderName,
+                              TaskName = a.TaskName,
 
                           }).ToList();
                 dto.Data = result;

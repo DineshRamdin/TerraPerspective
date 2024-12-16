@@ -908,4 +908,12 @@
     <value>Project Template</value>
     <comment>Project Template</comment>
   </data>
+  <data name="Please Enter Task Name" xml:space="preserve">
+    <value>Please Enter Task Name</value>
+    <comment>Please Enter Task Name</comment>
+  </data>
+  <data name="Task Name already Added" xml:space="preserve">
+    <value>Task Name already Added</value>
+    <comment>Task Name already Added</comment>
+  </data>
 </root>

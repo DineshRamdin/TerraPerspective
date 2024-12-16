@@ -13,7 +13,7 @@ namespace DAL.Models.Administration
         [Key]
         public long Id { get; set; }
         public long ProjectTemplateID { get; set; }
-        public string? HeaderName { get; set; }
+        public string? TaskName { get; set; }
 
     }
 }

@@ -158,7 +158,7 @@
                 var dataObject = {};
                 dataObject.Id = $("#hdnId").val();
                 dataObject.ProjectTemplateName = $("#txtProjectTemplateName").val();
-                dataObject.ProjectTemplateData = HeaderNameData;
+                dataObject.ProjectTemplateData = TaskNameData;
 
                 $.ajax({
                     url: CreateUpdateProjectTemplateUrl,
@@ -192,56 +192,56 @@
 
         }
 
-        var HeaderNameData = [];
-        function SaveHeaderName() {
-            if ($("#txtHeaderName").val() != "") {
-                let newHeaderName = $("#txtHeaderName").val().toLowerCase();
+        var TaskNameData = [];
+        function SaveTaskName() {
+            if ($("#txtTaskName").val() != "") {
+                let newTaskName = $("#txtTaskName").val().toLowerCase();
 
-                if (!HeaderNameData.some(obj => obj['headerName'].toLowerCase() === newHeaderName)) {
-                    HeaderNameData.push({
+                if (!TaskNameData.some(obj => obj['taskName'].toLowerCase() === newTaskName)) {
+                    TaskNameData.push({
                         id: 0,
-                        headerName: $("#txtHeaderName").val()
+                        taskName: $("#txtTaskName").val()
                     });
 
-                    $("#txtHeaderName").val('');
+                    $("#txtTaskName").val('');
                 }
                 else {
-                    toastr.warning("Header_Name_already_Added");
-                    $("#txtHeaderName").val('');
+                    toastr.warning("@SharedResource.Task_Name_already_Added");
+                    $("#txtTaskName").val('');
                 }
 
-                GetAllHeaderName();
+                GetAllTaskName();
             }
             else {
-                toastr.warning("Please_Enter_Header_Name");
+                toastr.warning("@SharedResource.Please_Enter_Task_Name");
             }
         }
 
-        function GetAllHeaderName() {
+        function GetAllTaskName() {
 
             var columnList = [
                 { data: 'id', title: 'Id', visible: false },
-                { data: 'headerName', title: '@SharedResource.Task_Name' },
+                { data: 'taskName', title: '@SharedResource.Task_Name' },
             ];
 
-            if (!$("#GridHeaderName").data("jsGrid")) {
-                $("#GridHeaderName").jsGrid({
+            if (!$("#GridTaskName").data("jsGrid")) {
+                $("#GridTaskName").jsGrid({
                     height: "auto",
                     width: "100%",
 
                     sorting: true,
                     paging: true,
 
-                    data: HeaderNameData,
+                    data: TaskNameData,
 
                     fields: [
-                        { name: "headerName", type: "text", width: 150, title: "@SharedResource.Task_Name" },
+                        { name: "taskName", type: "text", width: 150, title: "@SharedResource.Task_Name" },
                     ],
                     gridview: true,
                 });
             }
             else {
-                $("#GridHeaderName").jsGrid("refresh"); // Force a refresh
+                $("#GridTaskName").jsGrid("refresh"); // Force a refresh
             }
 
         }
@@ -254,11 +254,11 @@
                 type: "POST",
                 data: dataObject,  // Send data if needed
                 beforeSend: function () {
-                    HeaderNameData = [];
+                    TaskNameData = [];
                 },
                 success: function (response) {
                     if (response.data) {
-                        HeaderNameData = response.data;
+                        TaskNameData = response.data;
                     }
                     // Handle success (e.g., update UI with response data)
                 },
@@ -267,7 +267,7 @@
                     toastr.error("Error:" + error);
                 }
             }).done(function () {
-                GetAllHeaderName();
+                GetAllTaskName();
             });
         }
 

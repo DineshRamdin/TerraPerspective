@@ -1060,6 +1060,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Enter Task Name.
+        /// </summary>
+        public static string Please_Enter_Task_Name {
+            get {
+                return ResourceManager.GetString("Please Enter Task Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please Fill In Mandatory Fields.
         /// </summary>
         public static string Please_Fill_In_Mandatory_Fields {
@@ -1677,6 +1686,15 @@ namespace UI.Resources {
         public static string Task_Name {
             get {
                 return ResourceManager.GetString("Task Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task Name already Added.
+        /// </summary>
+        public static string Task_Name_already_Added {
+            get {
+                return ResourceManager.GetString("Task Name already Added", resourceCulture);
             }
         }
         
