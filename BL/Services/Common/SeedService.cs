@@ -169,52 +169,6 @@ namespace BL.Services.Common
 					context.SYS_CodeConfiguration.Add(cc);
 					context.SaveChanges();
 				}
-				cc = new SYS_CodeConfiguration();
-				cc = context.SYS_CodeConfiguration.Where(x => x.Name == "Laboratory").FirstOrDefault();
-				if (cc == null)
-				{
-					cc = new SYS_CodeConfiguration()
-					{
-						Name = "Laboratory",
-						Date = false,
-						Month = false,
-						Year = true,
-						UsePrefix = true,
-						PaddingNo = 10,
-						DateFormat = string.Empty,
-						YearFormat = "yyyy",
-						MonthFormat = string.Empty,
-						ResetConfig = "Year",
-						Comment = "Default if no config Found",
-						CreatedBy = createdBy,
-						CreatedDate = DateTime.Now
-					};
-					context.SYS_CodeConfiguration.Add(cc);
-					context.SaveChanges();
-				}
-				cc = new SYS_CodeConfiguration();
-				cc = context.SYS_CodeConfiguration.Where(x => x.Name == "Schemes").FirstOrDefault();
-				if (cc == null)
-				{
-					cc = new SYS_CodeConfiguration()
-					{
-						Name = "Schemes",
-						Date = false,
-						Month = false,
-						Year = true,
-						UsePrefix = true,
-						PaddingNo = 10,
-						DateFormat = string.Empty,
-						YearFormat = "yyyy",
-						MonthFormat = string.Empty,
-						ResetConfig = "Year",
-						Comment = "Default if no config Found",
-						CreatedBy = createdBy,
-						CreatedDate = DateTime.Now
-					};
-					context.SYS_CodeConfiguration.Add(cc);
-					context.SaveChanges();
-				}
 				SYS_Company cl = context.SYS_Company.Where(x => x.NameofCompany == "Default").FirstOrDefault();
 				if (cl == null)
 				{
@@ -1094,6 +1048,22 @@ namespace BL.Services.Common
                 {
                     Name = "Table Code Configuration",
                     Url = "TableCodeConfiguration/index",
+                    Order = 0,
+                    Icon = "fas fa-cog",
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedDate = DateTime.Now
+                });
+                context.SaveChanges();
+            }
+            #endregion
+
+            #region Code Configuration
+            if (!context.SYS_Modules.Any(x => x.Name == "Code Configuration"))
+            {
+                context.SYS_Modules.Add(new SYS_Modules()
+                {
+                    Name = "Code Configuration",
+                    Url = "CodeConfiguration/index",
                     Order = 0,
                     Icon = "fas fa-cog",
                     CreatedBy = Guid.Parse(user.Id),

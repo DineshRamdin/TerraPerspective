@@ -1,0 +1,236 @@
+﻿@{
+	ViewData["Title"] = "Code Configuration";
+}
+@using UI.Resources
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Code_Configuration</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Code_Configuration</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+					@*   <div class="col-2">
+					<button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+					</div> *@
+				</div>
+				<div class="row">
+					<div class="col-12  mb-10">
+						<table id="CodeConfigurationTable" class="table table-bordered table-striped"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="modal fade" id="AddCodeConfigurationModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<partial name="_AddCodeConfiguration.cshtml" />
+</div>
+<!-- /.modal -->
+@section scripts
+{
+	<script>
+		var GetAllCodeConfigurationUrl = '@Url.Action("GetAll", "CodeConfiguration")';
+		var CodeConfigurationGetByIdUrl = '@Url.Action("GetById", "CodeConfiguration")';
+		var CreateUpdateCodeConfigurationUrl = '@Url.Action("CreateUpdate", "CodeConfiguration")';
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liCodeConfigurationmenu').addClass('active');
+
+			GetAllCodeConfiguration();
+		});
+
+		function GetAllCodeConfiguration() {
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'name', title: '@SharedResource.Name' },
+				{ data: 'date', title: '@SharedResource.Date' },
+				{ data: 'dateFormat', title: '@SharedResource.Date_Format' },
+				{ data: 'month', title: '@SharedResource.Month' },
+				{ data: 'monthFormat', title: '@SharedResource.Month_Format' },
+				{ data: 'year', title: '@SharedResource.Year' },
+				{ data: 'yearFormat', title: '@SharedResource.Year_Format' },
+				{ data: 'usePrefix', title: '@SharedResource.UsePrefix' },
+				{ data: 'reset', title: '@SharedResource.Reset' },
+				{ data: 'resetConfig', title: '@SharedResource.Reset_Config' },
+				{ data: 'paddingNo', title: '@SharedResource.Padding_No' },
+				{ data: 'comment', title: '@SharedResource.Comment' },
+			];
+
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel: '@SharedResource.Export_PDF',
+				ExportCSVLabel: '@SharedResource.Export_CSV',
+				ExportExcelLabel: '@SharedResource.Export_Excel',
+				ExcelLabel: '@SharedResource.Excel',
+				PDFLabel: '@SharedResource.PDF',
+				CSVLabel: '@SharedResource.CSV',
+				NodataavailableLabel: '@SharedResource.No_data_available',
+				SearchLabel: '@SharedResource.Search',
+				ShowingLabel: '@SharedResource.Showing',
+				EntriesLabel: '@SharedResource.entries',
+				FilteredfromLabel: '@SharedResource.filtered_from',
+				ViewLabel: '@SharedResource.View',
+				PreviewLabel: '@SharedResource.Preview',
+				DeleteLabel: '@SharedResource.Delete',
+				EditLabel: '@SharedResource.Edit',
+				ResetPasswordLabel: '@SharedResource.Reset_Password',
+				UserNameLabel: '@SharedResource.UserName',
+				DateLabel: '@SharedResource.Date',
+				PageLabel: '@SharedResource.Page',
+				OfLabel: '@SharedResource.of',
+				GeneratedonLabel: '@SharedResource.Generated_on',
+				PreviousLabel: '@SharedResource.Previous',
+				NextLabel: '@SharedResource.Next',
+			};
+
+			initializeDataGrid('CodeConfigurationTable', 'openCodeConfigurationModal', GetAllCodeConfigurationUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+
+		}
+
+		function openCodeConfigurationModal(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			$.ajax({
+				url: CodeConfigurationGetByIdUrl,
+				type: "POST",
+				data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					ClearCodeConfigurationModal();
+				},
+				success: function (response) {
+					if (response.data) {
+						if (response.data.id > 0)
+							$("#h4CodeConfigurationTitle").html("@SharedResource.Modify  @SharedResource.Code_Configuration");
+						else
+							$("#h4CodeConfigurationTitle").html("@SharedResource.Add  @SharedResource.Code_Configuration");
+						// console.data("Data : ", data);
+						// return;
+						$("#hdnId").val(response.data.id);
+						$("#txtName").val(response.data.name);
+						$("#txtDateFormate").val(response.data.dateFormat);
+						$("#txtMonthFormate").val(response.data.monthFormat);
+						$("#txtYearFormate").val(response.data.yearFormat);
+						$("#txtReserConfig").val(response.data.resetConfig);
+						$("#txtPaddingNo").val(response.data.paddingNo);
+						$("#txtComment").val(response.data.comment);
+
+						$('#chbDate').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+						$('#chbMonth').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+						$('#chbYear').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+						$('#chbUsePrefix').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+						$('#chbReset').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+				$('#AddCodeConfigurationModal').modal('show');
+				$("#frnCodeConfigurationCreate").validate({}).resetForm();
+			});
+
+
+		}
+
+		function ClearCodeConfigurationModal() {
+			$("#h4CodeConfigurationTitle").html("@SharedResource.Add  @SharedResource.Code_Configuration");
+			$("#hdnId").val("0");
+			$("#txtName").val("");
+			$("#txtDateFormate").val("");
+			$("#txtMonthFormate").val("");
+			$("#txtYearFormate").val("");
+			$("#txtReserConfig").val("");
+			$("#txtPaddingNo").val("");
+			$("#txtComment").val("");
+
+			$('#chbDate').prop('checked', false);
+			$('#chbMonth').prop('checked',false);
+			$('#chbYear').prop('checked', false);
+			$('#chbUsePrefix').prop('checked', false);
+			$('#chbReset').prop('checked', false);
+		}
+
+
+		function SaveCodeConfiguration() {
+
+			let valid = formValidation(["txtName", "txtPaddingNo"]);
+
+			if (valid) {
+				var dataObject = {};
+
+				dataObject.Id =$("#hdnId").val();
+				dataObject.Name =$("#txtName").val();
+				dataObject.DateFormat =$("#txtDateFormate").val();
+				dataObject.MonthFormat =$("#txtMonthFormate").val();
+				dataObject.YearFormat =$("#txtYearFormate").val();
+				dataObject.ResetConfig = $("#txtReserConfig").val();
+				dataObject.PaddingNo = $("#txtPaddingNo").val();
+				dataObject.Comment = $("#txtComment").val();
+				dataObject.Date =$('#chbDate').prop('checked');
+				dataObject.Month =$('#chbMonth').prop('checked');
+				dataObject.Year =$('#chbYear').prop('checked');
+				dataObject.UsePrefix =$('#chbUsePrefix').prop('checked');
+				dataObject.Reset =$('#chbReset').prop('checked');
+
+				$.ajax({
+					url: CreateUpdateCodeConfigurationUrl,
+					type: "POST",
+					data: dataObject,  // Send data if needed
+					beforeSend: function () {
+
+					},
+					success: function (response) {
+						if (response.data) {
+							toastr.success(response.errorMessage);
+							$('#AddCodeConfigurationModal').modal('hide');
+							GetAllCodeConfiguration();
+						}
+						else {
+							toastr.error(response.errorMessage);
+						}
+						// Handle success (e.g., update UI with response data)
+					},
+					error: function (error) {
+						console.log("Error:", error);
+						toastr.error("Error:" + error);
+					}
+				}).done(function () {
+
+				});
+			}
+			else {
+				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			}
+		}
+
+	</script>
+}

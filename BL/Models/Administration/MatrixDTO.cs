@@ -24,7 +24,15 @@ namespace BL.Models.Administration
             public List<long> IDS { get; set; } = new List<long>();
             public List<long> ParentIDS { get; set; } = new List<long>();
         }
-	}
+
+        public class ProjectMatrixDTO
+        {
+            public long PID { get; set; }
+            public string PAUID { get; set; }
+            public List<long> IDS { get; set; } = new List<long>();
+            public List<long> ParentIDS { get; set; } = new List<long>();
+        }
+    }
 
 	public class MatrixListDTO
 	{

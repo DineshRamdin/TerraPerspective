@@ -299,11 +299,12 @@
 				var rolename = $("#txtRole").val();
 				GridData.roleName = rolename;
 				GridData.roleId = $("#hdnAccessRoleId").val() == "" ? null : $("#hdnAccessRoleId").val();
+				console.log(GridData);
 
 				$.ajax({
 					url: createUpdateARURL,
 					type: "POST",
-					data: GridData,  // Send data if needed
+					data: { "MainARDTO": GridData },  // Send data if needed
 					beforeSend: function () {
 
 					},

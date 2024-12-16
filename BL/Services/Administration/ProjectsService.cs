@@ -8,11 +8,13 @@ using DAL.Models.Administration;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
+using NetTopologySuite.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BL.Models.Administration.MatrixDTO;
 
 namespace BL.Services.Administration
 {
@@ -265,5 +267,196 @@ namespace BL.Services.Administration
 			}
 			return BaseDto;
 		}
-	}
+
+        public static UserMatrixDTO sGetMatrixUserByUserID()
+        {
+            UserMatrixDTO dt = new UserMatrixDTO();
+            PerspectiveContext context = new PerspectiveContext();
+            try
+            {
+                IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+                string claimsPrincipal = null;
+                if (httpContextAccessor.HttpContext != null)
+                {
+                    claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+                    if (claimsPrincipal == null)
+                    {
+                        claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+                    }
+                }
+                else
+                {
+                    claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+                }
+                string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
+                long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+                //ml = (from a in context.NPF_SYS_GroupMatrixUser
+                //      join b in context.NPF_SYS_GroupMatrix on a.GMID equals b.GMID
+                //      where a.IID == UsrId select a.GMID).ToList();
+                List<MatrixListDTO> MLL = (from a in context.SYS_GroupMatrixUser
+                                           join b in context.SYS_GroupMatrix on a.GMID equals b.GMID
+                                           where a.IID == UsrId && a.DeleteStatus == false && b.DeleteStatus == false
+                                           select new MatrixListDTO()
+                                           {
+                                               GMID = a.GMID,
+                                               GMDescription = b.GMDescription
+                                           }).ToList();
+                List<MatrixListDTO> ML = new List<MatrixListDTO>();
+                ML.AddRange(MLL);
+                foreach (MatrixListDTO m in MLL)
+                {
+                    ML.AddRange(GetMatrixChild(m.GMID));
+                }
+                dt.ParentIDS = MLL.Select(y => y.GMID).ToList();
+                dt.UID = UsrId;
+                dt.AUID = AID;
+                dt.IDS = ML.Select(y => y.GMID).ToList();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return dt;
+        }
+
+        public static List<MatrixListDTO> GetMatrixChild(long GMID)
+        {
+            List<MatrixListDTO> ml = new List<MatrixListDTO>();
+            List<MatrixListDTO> MLL = new List<MatrixListDTO>();
+            PerspectiveContext context = new PerspectiveContext();
+            try
+            {
+                ml = (from a in context.SYS_GroupMatrix
+                      where a.ParentGMID == GMID && a.DeleteStatus == false
+                      select new MatrixListDTO()
+                      {
+                          GMID = a.GMID,
+                          GMDescription = a.GMDescription
+                      }).ToList();
+                if (ml.Count > 0)
+                {
+                    MLL.AddRange(ml);
+                    foreach (MatrixListDTO m in ml)
+                    {
+                        MLL.AddRange(GetMatrixChild(m.GMID));
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return MLL;
+        }
+
+        public static ProjectMatrixDTO sGetMatrixZoneByProjectID(long Id)
+        {
+            ProjectMatrixDTO dt = new ProjectMatrixDTO();
+            PerspectiveContext context = new PerspectiveContext();
+            try
+            {
+                List<MatrixListDTO> MLL = (from a in context.SYS_ProjectsMatrix
+                                           join b in context.SYS_GroupMatrix on a.GMID equals b.GMID
+                                           where a.IID == Id && a.DeleteStatus == false && b.DeleteStatus == false
+                                           select new MatrixListDTO()
+                                           {
+                                               GMID = a.GMID,
+                                               GMDescription = b.GMDescription
+                                           }).ToList();
+                List<MatrixListDTO> ML = new List<MatrixListDTO>();
+                ML.AddRange(MLL);
+                foreach (MatrixListDTO m in MLL)
+                {
+                    ML.AddRange(GetMatrixChild(m.GMID));
+                }
+
+                dt.ParentIDS = MLL.Select(y => y.GMID).ToList();
+                dt.PID = Id;
+                dt.PAUID = new GeoJsonWriter().Write(context.SYS_Projects.Where(x => x.Id == Id).Select(x => x.User.Id).FirstOrDefault());
+
+                dt.IDS = ML.Select(y => y.GMID).ToList();
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return dt;
+        }
+
+        public BaseResponseDTO<List<OutputNode>> GetTreeDropDownProject(long Id)
+        {
+            BaseResponseDTO<List<OutputNode>> BaseDto = new BaseResponseDTO<List<OutputNode>>();
+            List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
+            List<CRUDMatrix> ml = new List<CRUDMatrix>();
+            List<OutputNode> outputNodes = new List<OutputNode>();
+            PerspectiveContext context = new PerspectiveContext();
+            try
+            {
+                UserMatrixDTO UM = sGetMatrixUserByUserID();
+                ProjectMatrixDTO UMId = sGetMatrixZoneByProjectID(Id);
+
+                mlRoot = (from a in context.SYS_GroupMatrix
+                          where UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+                          select new CRUDMatrix()
+                          {
+                              id = a.GMID.ToString(),
+                              text = a.GMDescription,
+                              parent = "#",
+                              state = new state()
+                              {
+                                  Checked = false,
+                                  Opened = true
+                              }
+                          }).ToList();
+                ml = (from a in context.SYS_GroupMatrix
+                      where UM.IDS.Contains(a.GMID) && !UM.ParentIDS.Contains(a.GMID) && a.DeleteStatus == false
+                      select new CRUDMatrix()
+                      {
+                          id = a.GMID.ToString(),
+                          text = a.GMDescription,
+                          parent = a.ParentGMID.ToString(),
+                      }).ToList();
+                ml.AddRange(mlRoot);
+                foreach (long gmid in UMId.ParentIDS)
+                {
+                    ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
+                }
+                var nodeMap = ml.ToDictionary(node => node.id, node => new OutputNode
+                {
+                    Title = node.text,
+                    Checked = node.state.Checked,
+                    Href = $"#{node.id}",
+                    DataAttrs = new List<DataAttr>
+                    {
+                        new DataAttr { Title = "value", Data = node.id }
+                    }
+                });
+
+                foreach (var node in ml)
+                {
+                    if (node.parent != "#")
+                    {
+                        nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+                    }
+                }
+
+                outputNodes = nodeMap.Values
+                    .Where(node => ml.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
+                    .ToList();
+                BaseDto.Data = outputNodes;
+                BaseDto.QryResult = new QueryResult().SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                BaseDto.Data = outputNodes;
+                BaseDto.ErrorMessage = "An Error Occured";
+                BaseDto.QryResult = new QueryResult().FAILED;
+            }
+            return BaseDto;
+        }
+    }
 }

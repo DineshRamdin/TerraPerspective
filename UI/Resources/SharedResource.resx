@@ -865,4 +865,37 @@
     <value>General Information</value>
     <comment>General Information</comment>
   </data>
+  <data name="Code Configuration" xml:space="preserve">
+    <value>Code Configuration</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="UsePrefix" xml:space="preserve">
+    <value>UsePrefix</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Date Format" xml:space="preserve">
+    <value>Date Format</value>
+  </data>
+  <data name="Month Format" xml:space="preserve">
+    <value>Month Format</value>
+  </data>
+  <data name="Year Format" xml:space="preserve">
+    <value>Year Format</value>
+  </data>
+  <data name="Reset Config" xml:space="preserve">
+    <value>Reset Config</value>
+  </data>
+  <data name="Padding No" xml:space="preserve">
+    <value>Padding No</value>
+  </data>
+  <data name="Project Matrix" xml:space="preserve">
+    <value>Project Matrix</value>
+  </data>
 </root>

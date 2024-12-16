@@ -190,7 +190,7 @@ namespace BL.Services.Common
             return BaseDto;
         }
 
-		public BaseResponseDTO<List<OutputNode>> GetTreeDropdown()
+        public BaseResponseDTO<List<OutputNode>> GetTreeDropdown()
 		{
 			BaseResponseDTO<List<OutputNode>> BaseDto = new BaseResponseDTO<List<OutputNode>>();
 			List<CRUDMatrix> mlRoot = new List<CRUDMatrix>();
@@ -832,6 +832,88 @@ namespace BL.Services.Common
 				BaseResponseDTO.Data = true;
 				BaseResponseDTO.QryResult = new QueryResult().SUCEEDED;
 				BaseResponseDTO.ErrorMessage = "Zone Management Data update Successfully";
+			}
+			catch (Exception ex)
+			{
+				BaseResponseDTO.Data = false;
+				BaseResponseDTO.ErrorMessage = "Error Saving Matrix";
+				BaseResponseDTO.QryResult = new QueryResult().FAILED;
+			}
+			return BaseResponseDTO;
+		}
+
+		public BaseResponseDTO<bool> SaveProjectM(List<long> Ids, long ProjectId)
+		{
+			PerspectiveContext context = new PerspectiveContext();
+			BaseResponseDTO<bool> BaseResponseDTO = new BaseResponseDTO<bool>();
+			BaseResponseDTO.Data = false;
+			try
+			{
+				//long SysUId = context.SYS_User.Where(x => x.AId == Id).FirstOrDefault().Id;
+				foreach (long Id in Ids)
+				{
+					SYS_ProjectsMatrix gm = new SYS_ProjectsMatrix()
+					{
+						IID = ProjectId,
+						GMID = Id
+					};
+					context.SYS_ProjectsMatrix.Add(gm);
+					context.SaveChanges();
+				}
+				BaseResponseDTO.Data = true;
+				BaseResponseDTO.QryResult = new QueryResult().SUCEEDED;
+				BaseResponseDTO.ErrorMessage = "Project Data save Successfully";
+			}
+			catch (Exception ex)
+			{
+				BaseResponseDTO.Data = false;
+				BaseResponseDTO.ErrorMessage = "Error Saving Matrix";
+				BaseResponseDTO.QryResult = new QueryResult().FAILED;
+			}
+			return BaseResponseDTO;
+		}
+		public BaseResponseDTO<bool> UpdateProjectM(List<long> Ids, long ProjectId)
+		{
+			PerspectiveContext context = new PerspectiveContext();
+			BaseResponseDTO<bool> BaseResponseDTO = new BaseResponseDTO<bool>();
+			BaseResponseDTO.Data = false;
+			try
+			{
+				//long SysUId = context.SYS_User.Where(x => x.AId == AUID).FirstOrDefault().Id;
+				List<long> GmUL = context.SYS_ProjectsMatrix.Where(x => x.IID == ProjectId && x.DeleteStatus == false).Select(y => y.GMID).ToList();
+				foreach (long Id in Ids)
+				{
+					if (!GmUL.Contains(Id))
+					{
+						SYS_ProjectsMatrix gm = new SYS_ProjectsMatrix()
+						{
+							IID = ProjectId,
+							GMID = Id
+						};
+						context.SYS_ProjectsMatrix.Add(gm);
+						context.SaveChanges();
+
+					}
+					else
+					{
+						GmUL.RemoveAll(x => x == Id);
+					}
+
+				}
+				foreach (long Id in GmUL)
+				{
+					SYS_ProjectsMatrix gm = context.SYS_ProjectsMatrix.Where(x => x.GMID == Id && x.IID == Id && x.DeleteStatus == false).FirstOrDefault();
+					if (gm != null)
+					{
+						gm.DeleteStatus = true;
+						context.SYS_ProjectsMatrix.Update(gm);
+						context.SaveChanges();
+					}
+
+				}
+				BaseResponseDTO.Data = true;
+				BaseResponseDTO.QryResult = new QueryResult().SUCEEDED;
+				BaseResponseDTO.ErrorMessage = "Project Data update Successfully";
 			}
 			catch (Exception ex)
 			{

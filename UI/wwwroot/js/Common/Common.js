@@ -210,6 +210,9 @@ function renderDynamicMenu(data, langResource) {
         else if (grandParent.name == "Table Code Configuration") {
             MenuName = langResource.TableCodeConfigurationMenuLabel;
         }
+        else if (grandParent.name == "Code Configuration") {
+            MenuName = langResource.CodeConfigurationMenuLabel;
+        }
         else {
             MenuName = grandParent.name;
         }

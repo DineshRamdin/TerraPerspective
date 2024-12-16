@@ -2,7 +2,26 @@
     ViewData["Title"] = "Projects";
 }
 @using UI.Resources
+<link href="~/plugins/dropdowntree/dropdowntree.css" rel="stylesheet" />
+<style>
 
+	/* Ensure checkboxes inside the dropdown are visible */
+	.checkbox {
+		margin-right: 10px;
+		display: inline-block;
+	}
+
+	/* Style for the dropdown items */
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		padding: 5px;
+	}
+
+		.dropdown-item label {
+			cursor: pointer;
+		}
+</style>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -48,17 +67,25 @@
 <!-- /.modal -->
 @section scripts
 {
+	<script src="~/plugins/dropdowntree/dropdowntree.js"></script>
 	<script>
 		var GetAllProjectsUrl = '@Url.Action("GetAll", "Projects")';
 		var ProjectsGetByIdUrl = '@Url.Action("GetById", "Projects")';
 		var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
 		var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
+		var GetProjectMatrixTree = '@Url.Action("GetTree", "Projects")';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
 			$('#liprojectsmenu').addClass('active');
 
 			GetAllProjects();
+
+			$('#ProjectTreeDropdown').on('change', function () {
+				// Assuming the plugin has a method to get selected values
+				var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
+				console.log('Selected Values: ', selectedValues);
+			});
 		});
 
 		function GetAllProjects() {
@@ -145,6 +172,37 @@
 						$("#txtEndDate").val(formattedEndDate);
 
 						$('#chbIsVisible').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+
+						// Fetch data from the server and initialize the tree
+						$.ajax({
+							url: GetProjectMatrixTree, // API endpoint to fetch the matrix data
+							type: "POST",
+							data: dataObject,
+							success: function (response) {
+								if (response && response.data) {
+									data = response.data;
+									// console.log("data : ", data);
+									var options = {
+										title: "@SharedResource.Zone_Matrix",
+										data: data,
+										maxHeight: 300,
+										closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+										openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+										multiSelect: true,
+										selectChildren: true,
+									}
+
+									$("#ProjectTreeDropdown").DropDownTree(options);
+
+									//initializeTreeView(data);
+								} else {
+									console.error("@SharedResource.Failed_to_fetch_tree_data_");
+								}
+							},
+							error: function () {
+								console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
+							}
+						});
 					}
 					else {
 						toastr.error(response.errorMessage);
@@ -193,6 +251,12 @@
 			$("#txtStartDate").val("");
 			$("#txtEndDate").val("");
 			$("#chbIsVisible").prop('checked', false);
+			$("#ProjectManagementTreeDropdown").empty();
+			// Unbind all event listeners attached to the element
+			$("#ProjectManagementTreeDropdown").off();
+
+			// Remove data associated with the element (if any)
+			$("#ProjectManagementTreeDropdown").removeData();
 		}
 
 		function GetDropdownData() {
@@ -238,7 +302,15 @@
 
 			if (valid) {
 				var dataObject = {};
-				
+				var treeDropDownData = $("#ZoneManagementTreeDropdown").init.prototype.GetSelected();
+
+				//get tree selected ids
+				var selectedIds = []
+				if (treeDropDownData.length > 0) {
+					selectedIds = treeDropDownData.map(function (datum) {
+						return parseInt(datum);
+					});
+				}
 				dataObject.Id = $("#hdnId").val();
 				dataObject.UserCode =$("#txtCode").val();
 				dataObject.ProjectName =$("#txtProjectName").val();
@@ -251,7 +323,7 @@
 				dataObject.StartDate =$("#txtStartDate").val();
 				dataObject.EndDate =$("#txtEndDate").val();
 				dataObject.IsVisible = $('#chbIsVisible').prop('checked');
-
+				dataObject.ProjectMatrix = selectedIds;
 
 				$.ajax({
 					url: CreateUpdateProjectsUrl,

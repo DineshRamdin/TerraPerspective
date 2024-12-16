@@ -286,6 +286,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Code Configuration.
+        /// </summary>
+        public static string Code_Configuration {
+            get {
+                return ResourceManager.GetString("Code Configuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Colour.
         /// </summary>
         public static string Colour {
@@ -417,6 +426,15 @@ namespace UI.Resources {
         public static string Date {
             get {
                 return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Format.
+        /// </summary>
+        public static string Date_Format {
+            get {
+                return ResourceManager.GetString("Date Format", resourceCulture);
             }
         }
         
@@ -880,6 +898,24 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Month.
+        /// </summary>
+        public static string Month {
+            get {
+                return ResourceManager.GetString("Month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month Format.
+        /// </summary>
+        public static string Month_Format {
+            get {
+                return ResourceManager.GetString("Month Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {
@@ -957,6 +993,15 @@ namespace UI.Resources {
         public static string Othername {
             get {
                 return ResourceManager.GetString("Othername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Padding No.
+        /// </summary>
+        public static string Padding_No {
+            get {
+                return ResourceManager.GetString("Padding No", resourceCulture);
             }
         }
         
@@ -1168,6 +1213,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Matrix.
+        /// </summary>
+        public static string Project_Matrix {
+            get {
+                return ResourceManager.GetString("Project Matrix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project Name.
         /// </summary>
         public static string Project_Name {
@@ -1245,6 +1299,24 @@ namespace UI.Resources {
         public static string Report_Image {
             get {
                 return ResourceManager.GetString("Report Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Config.
+        /// </summary>
+        public static string Reset_Config {
+            get {
+                return ResourceManager.GetString("Reset Config", resourceCulture);
             }
         }
         
@@ -1708,6 +1780,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UsePrefix.
+        /// </summary>
+        public static string UsePrefix {
+            get {
+                return ResourceManager.GetString("UsePrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User.
         /// </summary>
         public static string User {
@@ -1767,6 +1848,24 @@ namespace UI.Resources {
         public static string Visitor {
             get {
                 return ResourceManager.GetString("Visitor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string Year {
+            get {
+                return ResourceManager.GetString("Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year Format.
+        /// </summary>
+        public static string Year_Format {
+            get {
+                return ResourceManager.GetString("Year Format", resourceCulture);
             }
         }
         

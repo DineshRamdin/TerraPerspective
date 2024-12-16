@@ -500,6 +500,7 @@ namespace DAL.Context
         public DbSet<SYS_Country> SYS_Country { get; set; }
         public DbSet<SYS_MCAVCA> SYS_MCAVCA { get; set; }
         public DbSet<SYS_Task> SYS_Task { get; set; }
+        public DbSet<SYS_ProjectsMatrix> SYS_ProjectsMatrix { get; set; }
 
 	}
 }
