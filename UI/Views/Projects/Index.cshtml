@@ -100,7 +100,7 @@
 				{ data: 'statusDetails', title: '@SharedResource.Status_Details' },
 				{ data: 'startDate', title: '@SharedResource.Start_Date' },
 				{ data: 'endDate', title: '@SharedResource.End_Date' },
-				{ data: 'plannedHours', title: '@SharedResource.Planned_Hours' },
+				{ data: 'plannedDay', title: '@SharedResource.Planned_Day' },
 				{ data: 'isVisible', title: '@SharedResource.Is_Visible' },
 			];
 
@@ -162,7 +162,7 @@
 						$("#txtProjectDetails").val(response.data.projectDetails);
 						$("#txtProjectDescription").val(response.data.projectDescription);
 						$("#ddlAssignTo").val(response.data.assignTo == null || response.data.assignTo == 0 ? "" : response.data.assignTo);
-						$("#txtPlannedHours").val(response.data.plannedHours);
+						$("#txtPlannedDay").val(response.data.plannedDay);
 						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
 						$("#ddlProjectTemplate").val(response.data.projectTemplateId == null || response.data.projectTemplateId == 0 ? "" : response.data.projectTemplateId);
 						$("#txtStatusDetails").val(response.data.statusDetails);
@@ -247,7 +247,7 @@
 			$("#txtProjectDetails").val("");
 			$("#txtProjectDescription").val("");
 			$("#ddlAssignTo").val("");
-			$("#txtPlannedHours").val("");
+			$("#txtPlannedDay").val("");
 			$("#ddlStatus").val("");
 			$("#ddlProjectTemplate").val("");
 			$("#txtStatusDetails").val("");
@@ -310,7 +310,7 @@
 
 		 function SaveProjects() {
 
-			let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedHours", "ddlStatus", "txtStatusDetails", "txtProjectColorCode", "txtStartDate", "txtEndDate"]);
+			let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedDay", "ddlStatus", "txtStatusDetails", "txtProjectColorCode", "txtStartDate", "txtEndDate"]);
 
 			if (valid) {
 				var dataObject = {};
@@ -329,7 +329,7 @@
 				dataObject.ProjectDetails = $("#txtProjectDetails").val();
 				dataObject.ProjectDescription = $("#txtProjectDescription").val();
 				dataObject.AssignTo =$("#ddlAssignTo").val();
-				dataObject.PlannedHours =$("#txtPlannedHours").val();
+				dataObject.PlannedDay = $("#txtPlannedDay").val();
 				dataObject.Status =$("#ddlStatus").val();
 				dataObject.ProjectTemplateId = $("#ddlProjectTemplate").val();
 				dataObject.StatusDetails =$("#txtStatusDetails").val();

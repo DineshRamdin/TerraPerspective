@@ -20,7 +20,7 @@ namespace BL.Models.Administration
 		public string StatusDetails { get; set; }
 		public string StartDate { get; set; }
 		public string EndDate { get; set; }
-		public string PlannedHours { get; set; }
+		public int? PlannedDay { get; set; }
 		public string IsVisible { get; set; }
 	}
 
@@ -38,7 +38,7 @@ namespace BL.Models.Administration
 		public string ProjectColorCode { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
-		public TimeOnly PlannedHours { get; set; }
+		public int? PlannedDay { get; set; }
 		public Nullable<bool> IsVisible { get; set; }
 		public List<long> ProjectMatrix { get; set; } = new List<long>();
 	}

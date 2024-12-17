@@ -1051,11 +1051,20 @@ namespace UI.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Planned Hours.
+        ///   Looks up a localized string similar to Percentage.
         /// </summary>
-        public static string Planned_Hours {
+        public static string Percentage {
             get {
-                return ResourceManager.GetString("Planned Hours", resourceCulture);
+                return ResourceManager.GetString("Percentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Planned Day.
+        /// </summary>
+        public static string Planned_Day {
+            get {
+                return ResourceManager.GetString("Planned Day", resourceCulture);
             }
         }
         
@@ -1744,7 +1753,7 @@ namespace UI.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Task Name already Added.
         /// </summary>
         public static string Task_Name_already_Added {
             get {

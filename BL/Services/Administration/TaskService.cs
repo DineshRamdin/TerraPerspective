@@ -60,7 +60,7 @@ namespace BL.Services.Administration
                                                 ts.StartDate,
                                                 ts.EndDate,
                                                 ts.Status,
-                                                ts.StatusDetails,
+                                                ts.Percentage,
                                                 ts.IsVisible
                                             })
                         .Union(
@@ -77,7 +77,7 @@ namespace BL.Services.Administration
                                     p.StartDate,
                                     p.EndDate,
                                     p.Status,
-                                    p.StatusDetails,
+                                    p.Percentage,
                                     p.IsVisible
                                 })
                         )
@@ -99,7 +99,7 @@ namespace BL.Services.Administration
                             Status = context.SYS_LookUpValue
                                              .Where(lv => lv.Id == x.Status) // Use a different lambda variable
                                              .FirstOrDefault()?.Name, // Use null-safe navigation
-                            StatusDetails = x.StatusDetails,
+                            Percentage = x.Percentage,
                             IsVisible = x.IsVisible == true ? "Yes" : "No",
                         })
                         .ToList();
@@ -127,7 +127,7 @@ namespace BL.Services.Administration
                                                 StartDate = a.StartDate.ToString("yyyy/MM/dd"),
                                                 EndDate = a.EndDate.ToString("yyyy/MM/dd"),
                                                 Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
-                                                StatusDetails = a.StatusDetails,
+                                                Percentage = a.Percentage,
                                                 IsVisible = a.IsVisible == true ? "Yes" : "No",
                                             }).ToList();
 
@@ -166,7 +166,7 @@ namespace BL.Services.Administration
                               StartDate = a.StartDate,
                               EndDate = a.EndDate,
                               Status = a.Status,
-                              StatusDetails = a.StatusDetails,
+                              Percentage = a.Percentage,
                               IsVisible = a.IsVisible,
                           }).FirstOrDefault();
 
@@ -288,7 +288,7 @@ namespace BL.Services.Administration
                     StartDate = dataToSave.StartDate,
                     EndDate = dataToSave.EndDate,
                     Status = dataToSave.Status,
-                    StatusDetails = dataToSave.StatusDetails,
+                    Percentage = dataToSave.Percentage,
                     IsVisible = dataToSave.IsVisible,
                 };
                 context.SYS_Task.Add(dt);
@@ -325,7 +325,7 @@ namespace BL.Services.Administration
                     Sys_Task.StartDate = dataToUpdate.StartDate;
                     Sys_Task.EndDate = dataToUpdate.EndDate;
                     Sys_Task.Status = dataToUpdate.Status;
-                    Sys_Task.StatusDetails = dataToUpdate.StatusDetails;
+                    Sys_Task.Percentage = dataToUpdate.Percentage;
                     Sys_Task.IsVisible = dataToUpdate.IsVisible;
                     context.SYS_Task.Update(Sys_Task);
                     context.SaveChanges();
@@ -395,7 +395,7 @@ namespace BL.Services.Administration
                                                             ts.StartDate,
                                                             ts.EndDate,
                                                             ts.Status,
-                                                            ts.StatusDetails,
+                                                            ts.Percentage,
                                                             ts.IsVisible
                                                         })
                         .Union(
@@ -412,7 +412,7 @@ namespace BL.Services.Administration
                                     p.StartDate,
                                     p.EndDate,
                                     p.Status,
-                                    p.StatusDetails,
+                                    p.Percentage,
                                     p.IsVisible
                                 })
                         )

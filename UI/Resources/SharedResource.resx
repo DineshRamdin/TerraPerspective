@@ -783,8 +783,8 @@
   <data name="Assign To" xml:space="preserve">
     <value>Assign To</value>
   </data>
-  <data name="Planned Hours" xml:space="preserve">
-    <value>Planned Hours</value>
+  <data name="Planned Day" xml:space="preserve">
+    <value>Planned Day</value>
   </data>
   <data name="Status Details" xml:space="preserve">
     <value>Status Details</value>
@@ -908,10 +908,10 @@
     <value>Project Template</value>
   </data>
   <data name="Please Enter Task Name" xml:space="preserve">
-    <value />
+    <value>Please Enter Task Name</value>
   </data>
   <data name="Task Name already Added" xml:space="preserve">
-    <value />
+    <value>Task Name already Added</value>
   </data>
   <data name="Select Project Template" xml:space="preserve">
     <value>Select Project Template</value>
@@ -934,5 +934,8 @@
   <data name="Sequence already Added" xml:space="preserve">
     <value>Sequence already Added</value>
     <comment>Sequence already Added</comment>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>Percentage</value>
   </data>
 </root>

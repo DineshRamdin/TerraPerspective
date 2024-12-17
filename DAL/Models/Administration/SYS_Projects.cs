@@ -24,7 +24,7 @@ namespace DAL.Models.Administration
 		public virtual SYS_ProjectTemplate? ProjectTemplate { get; set; }
 		public string? ProjectColorCode { get; set; }
 
-		public TimeOnly PlannedHours { get; set; }
+		public int? PlannedDay { get; set; }
 
 		public long Status { get; set; }
 		public string StatusDetails { get; set; }
