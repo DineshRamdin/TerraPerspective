@@ -30,8 +30,11 @@ namespace UI.Controllers
 
         public IActionResult GetEventforDates(DateTime start, DateTime End)
         {
+            ISession session = HttpContext.Session;
+            string Email = HttpContext.Session.GetString("Username");
+
             BaseResponseDTO<List<ProjectViewEventDTO>> dt = new BaseResponseDTO<List<ProjectViewEventDTO>>();
-            dt = taskService.GetProjectViewEvent(start, End); 
+            dt = taskService.GetProjectViewEvent(start, End, Email); 
             return Json(dt.Data);
         }
 
