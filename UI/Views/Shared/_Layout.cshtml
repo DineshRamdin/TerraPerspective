@@ -44,7 +44,28 @@
     <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
 
     <link href="~/plugins/fullcalendar-3.10.0/fullcalendar.min.css" rel="stylesheet" />
+    <style>
+        .nav-item .nav-treeview {
+            padding: .6rem 1.5rem;
+        }
 
+        .table td, .table th {
+            padding: .35rem;
+        }
+
+        .form-control {
+            border: 1px solid #818181;
+        }
+
+            .form-control:focus {
+                border-color: #007bff;
+            }
+
+        h4 {
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+    </style>
     @* <style>
     /* Apply the smaller button and dropdown styles */
     .dataTables_filter input {
@@ -104,15 +125,20 @@
             All rights reserved.
         </footer>
     </div>
+
+
     <div class="modal fade" id="ChangePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <partial name="_ChangePassword.cshtml" />
     </div>
+
+
     <!-- jQuery -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/js/adminlte.min.js"></script>
+
     <script src="~/plugins/toastr/toastr.min.js"></script>
     <script src="~/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/plugins/jquery-validation/additional-methods.min.js"></script>
@@ -147,10 +173,6 @@
 
     <script src="~/plugins/fullcalendar-3.10.0/fullcalendar.min.js"></script>
 
-    @* <!-- Include JS Tree JS -->
-    <script src="~/plugins/jstree/3.3.12/jstree.min.js"></script> *@
-
-
     @* JSTREE *@
     <script src="~/lib/jstree-3.3.16/dist/jstree.min.js"></script>
     <script src="~/dist/js/adminlte.min.js"></script>
@@ -158,6 +180,7 @@
     <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/dist/js/demo.js"></script>
+
 
     <script>
         var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';
@@ -243,5 +266,6 @@
 
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
