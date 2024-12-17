@@ -345,7 +345,10 @@ function renderDynamicMenu(data, langResource) {
                             <li class="nav-item">
                                 <a href="${parent.url ? '/' + parent.url : '#'}" class="nav-link">
                                     <i class="${parent.icon || 'far fa-circle nav-icon'}"></i>
-                                    <p>${SubMenuName}</p>
+                                    <p>
+                                ${SubMenuName}
+                                ${parent.child.length ? '<i class="fas fa-angle-right right" style="right: 2.4rem;"></i>' : ''}
+                            </p>
                                 </a>
                         `;
 
@@ -478,6 +481,8 @@ function renderDynamicMenu(data, langResource) {
     // Initialize toggle behavior
     initMenuToggle();
 }
+
+
 
 function initMenuToggle() {
     $(".nav-item > a").click(function (e) {
