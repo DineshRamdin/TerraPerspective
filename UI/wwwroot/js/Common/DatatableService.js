@@ -132,7 +132,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                         columns: columnList, //column list
                         buttons: [
                             {
-                                text: '<i class="fa fa-plus me-2"></i> ' + langResource.AddNewLabel, // Add New',
+                                text: '<i class="fa fa-plus me-2"></i>  &nbsp;' + langResource.AddNewLabel, // Add New',
                                 className: 'btn btn-sm btn-primary custom-class addbtn',
                                 action: function (e, dt, node, config) {
                                     // Replace this with your custom action
@@ -455,6 +455,8 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
                     $('.dt-scroll-headInner table thead').addClass('custom-table');
                     $('.dataTables_filter').css('float', 'inline-start');
                     $('.dataTables_paginate').css('margin-top', '-30px');
+
+                    $('.dataTables_filter label input').css('height', '32px');
 
                     if (response.data == "") {
                         $('#' + tableID + '_previous').css('display', 'none');
@@ -1099,6 +1101,7 @@ function initializeDataGridNested(tableID, columnList, childColumns, dataToShow 
         $('.dt-scroll-headInner table thead').addClass('custom-table');
         $('.dataTables_filter').css('float', 'inline-start');
         $('.dataTables_paginate').css('margin-top', '-30px');
+        $('.dataTables_filter label input').css('height', '32px');
     }
 }
 
@@ -1448,6 +1451,7 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
         $('.dt-scroll-headInner table thead').addClass('custom-table');
         $('.dataTables_filter').css('float', 'inline-start');
         $('.dataTables_paginate').css('margin-top', '-30px');
+        $('.dataTables_filter label input').css('height', '32px');
 
         if (showExcel) {
             $('.clsDownload').removeClass('d-none');

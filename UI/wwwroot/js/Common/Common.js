@@ -483,7 +483,6 @@ function renderDynamicMenu(data, langResource) {
 }
 
 
-
 function initMenuToggle() {
     $(".nav-item > a").click(function (e) {
         const submenu = $(this).next(".nav-treeview");
