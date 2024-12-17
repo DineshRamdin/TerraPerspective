@@ -312,7 +312,7 @@ namespace BL.Services.Administration
 				context.SYS_Projects.Add(dt);
 				context.SaveChanges();
 
-				List<SYS_ProjectTemplateMapping> templateMapping = context.SYS_ProjectTemplateMapping.Where(x => x.ProjectTemplateID == dataToSave.ProjectTemplateId).ToList();
+				List<SYS_ProjectTemplateMapping> templateMapping = context.SYS_ProjectTemplateMapping.Where(x => x.ProjectTemplateID == dataToSave.ProjectTemplateId).OrderBy(x=>x.Sequence).ToList();
 
 				if (templateMapping.Count > 0)
 				{
@@ -603,7 +603,11 @@ namespace BL.Services.Administration
                 {
                     ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
                 }
-                var nodeMap = ml.ToDictionary(node => node.id, node => new OutputNode
+				List<CRUDMatrix> mlf = new List<CRUDMatrix>();
+				mlf = ml.Where(x => x.state.Checked == true).ToList();
+
+
+				var nodeMap = mlf.ToDictionary(node => node.id, node => new OutputNode
                 {
                     Title = node.text,
                     Checked = node.state.Checked,
@@ -614,7 +618,7 @@ namespace BL.Services.Administration
                     }
                 });
 
-                foreach (var node in ml)
+                foreach (var node in mlf)
                 {
                     if (node.parent != "#")
                     {
@@ -623,7 +627,7 @@ namespace BL.Services.Administration
                 }
 
                 outputNodes = nodeMap.Values
-                    .Where(node => ml.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
+                    .Where(node => mlf.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
                     .ToList();
                 BaseDto.Data = outputNodes;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
