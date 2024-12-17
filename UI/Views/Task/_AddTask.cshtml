@@ -50,8 +50,9 @@
                         <select class="form-control" id="ddlStatus" required></select>
                     </div>
                     <div class="col-12 form-group">
-                        <label>@SharedResource.Status_Details<span class="red-required">*</span></label>
-                        <textarea type="text" id="txtStatusDetails" class="form-control" placeholder="@SharedResource.Status_Details" required> </textarea>
+                        <label>@SharedResource.Percentage<span class="red-required">*</span></label>
+                        @* <textarea type="text" id="txtStatusDetails" class="form-control" placeholder="@SharedResource.Status_Details" required> </textarea> *@
+                        <input type="number" id="txtPercentage" class="form-control" name="percentage" min="0" max="100" placeholder="Enter a number" required />
                     </div>
                     <div class="col-12 form-group">
                         <label>@SharedResource.Start_Date<span class="red-required">*</span></label>

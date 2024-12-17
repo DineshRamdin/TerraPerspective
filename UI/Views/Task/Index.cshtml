@@ -3,6 +3,29 @@
 }
 @using UI.Resources
 
+<style>
+	table {
+		width: 100%;
+		border: 1px solid #ddd;
+		font-family: Arial, sans-serif;
+	}
+
+	th, td {
+		padding: 8px;
+		text-align: left;
+	}
+
+		td div {
+			border-radius: 4px;
+			overflow: hidden;
+		}
+
+			td div > div {
+				border-radius: 4px;
+				line-height: 20px;
+			}
+</style>
+
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
@@ -70,7 +93,7 @@
 				{ data: 'projectName', title: '@SharedResource.Project_Name' },
 				{ data: 'parentTaskName', title: '@SharedResource.Parent_Task' },
 				{ data: 'status', title: '@SharedResource.Status' },
-				{ data: 'statusDetails', title: '@SharedResource.Status_Details' },
+				{ data: 'percentage', title: '@SharedResource.Percentage' },
 				{ data: 'startDate', title: '@SharedResource.Start_Date' },
 				{ data: 'endDate', title: '@SharedResource.End_Date' },
 				{ data: 'isVisible', title: '@SharedResource.Is_Visible' },
@@ -104,7 +127,7 @@
 				NextLabel: '@SharedResource.Next',
 			};
 
-			initializeDataGrid('TaskTable', 'openTaskModal', GetAllTaskUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+			initializeDataGridForTask('TaskTable', 'openTaskModal', GetAllTaskUrl, columnList, false, true, true, false, false, null, true, null, langResource);
 
 		}
 
@@ -135,7 +158,7 @@
 						$("#ddlProjects").val(response.data.project == null || response.data.project == 0 ? "" : response.data.project);
 						$("#ddlParentTask").val(response.data.parentTask == null || response.data.parentTask == 0 ? "" : response.data.parentTask);
 						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
-						$("#txtStatusDetails").val(response.data.statusDetails);
+						$("#txtPercentage").val(response.data.percentage);
 						const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
 						const formattedEndDate = formatDateToInput(response.data.endDate); // Convert to yyyy-MM-dd
 
@@ -186,7 +209,7 @@
 			$("#ddlProjects").val("");
 			$("#ddlParentTask").val("");
 			$("#ddlStatus").val("");
-			$("#txtStatusDetails").val("");
+			$("#txtPercentage").val("");
 			$("#txtStartDate").val("");
 			$("#txtEndDate").val("");
 			$("#chbIsVisible").prop('checked', false);
@@ -239,7 +262,7 @@
 
 		function SaveTask() {
 
-			let valid = formValidation(["txtTaskName", "txtTaskDescription", "ddlProjects", "ddlStatus", "txtStatusDetails", "txtStartDate", "txtEndDate"]);
+			let valid = formValidation(["txtTaskName", "txtTaskDescription", "ddlProjects", "ddlStatus", "txtPercentage", "txtStartDate", "txtEndDate"]);
 
 			if (valid) {
 				var dataObject = {};
@@ -251,7 +274,7 @@
 				dataObject.Project = $("#ddlProjects").val();
 				dataObject.ParentTask = $("#ddlParentTask").val();
 				dataObject.Status = $("#ddlStatus").val();
-				dataObject.StatusDetails = $("#txtStatusDetails").val();
+				dataObject.Percentage = $("#txtPercentage").val();
 				dataObject.StartDate = $("#txtStartDate").val();
 				dataObject.EndDate = $("#txtEndDate").val();
 				dataObject.IsVisible = $('#chbIsVisible').prop('checked');

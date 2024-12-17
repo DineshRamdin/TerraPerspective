@@ -20,7 +20,7 @@ namespace DAL.Models.Administration
 		[ForeignKey("ParentTask")]
 		public virtual SYS_Task? Task { get; set; }
 		public long Status { get; set; }
-        public string StatusDetails { get; set; }
+        public int? Percentage { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool? IsVisible { get; set; }

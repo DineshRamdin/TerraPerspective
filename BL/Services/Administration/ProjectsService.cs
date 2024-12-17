@@ -61,7 +61,7 @@ namespace BL.Services.Administration
 													prj.StatusDetails,
 													prj.StartDate,
 													prj.EndDate,
-													prj.PlannedHours,
+													prj.PlannedDay,
 													prj.IsVisible,
 													prj.CreatedBy,
 													prj.CreatedDate
@@ -81,7 +81,7 @@ namespace BL.Services.Administration
 										p.StatusDetails,
 										p.StartDate,
 										p.EndDate,
-										p.PlannedHours,
+										p.PlannedDay,
 										p.IsVisible,
 										p.CreatedBy,
 										p.CreatedDate,
@@ -99,7 +99,8 @@ namespace BL.Services.Administration
 												  join d in context.Users on c.AId equals d.Id
 												  where c.Id == x.User.Id
 												  select d.Othername + ' ' + d.Surname).FirstOrDefault(),
-								PlannedHours = x.PlannedHours.ToString(@"hh\:mm"), // Adjust format for TimeSpan
+								
+								PlannedDay= x.PlannedDay,
 								StartDate = x.StartDate.ToString("yyyy/MM/dd"),
 								EndDate = x.EndDate.ToString("yyyy/MM/dd"),
 								Status = context.SYS_LookUpValue
@@ -130,7 +131,7 @@ namespace BL.Services.Administration
 																	  join d in context.Users on c.AId equals d.Id
 																	  where c.Id == a.User.Id
 																	  select d.Othername + ' ' + d.Surname).FirstOrDefault(),
-													PlannedHours = a.PlannedHours.ToString("HH:mm"),
+													PlannedDay = a.PlannedDay,
 													StartDate = a.StartDate.ToString("yyyy/MM/dd"),
 													EndDate = a.EndDate.ToString("yyyy/MM/dd"),
 													Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
@@ -171,7 +172,7 @@ namespace BL.Services.Administration
 							  ProjectDetails = a.ProjectDetails,
 							  ProjectDescription = a.ProjectDescription,
 							  AssignTo = a.User.Id,
-							  PlannedHours = a.PlannedHours,
+							  PlannedDay = a.PlannedDay,
 							  StartDate = a.StartDate,
 							  EndDate = a.EndDate,
 							  Status = a.Status,
@@ -299,7 +300,7 @@ namespace BL.Services.Administration
 					ProjectDetails = dataToSave.ProjectDetails,
 					ProjectDescription = dataToSave.ProjectDescription,
 					User=context.SYS_User.Where(x=>x.Id == dataToSave.AssignTo).FirstOrDefault(),
-					PlannedHours = dataToSave.PlannedHours,
+					PlannedDay = dataToSave.PlannedDay,
 					StartDate = dataToSave.StartDate,
 					EndDate = dataToSave.EndDate,
 					Status = dataToSave.Status,
@@ -329,7 +330,7 @@ namespace BL.Services.Administration
 							StartDate = dt.StartDate,
 							EndDate = dt.EndDate,
 							Status = dt.Status,
-							StatusDetails = context.SYS_LookUpValue.Where(x => x.Id == dt.Status).FirstOrDefault().Name,
+							Percentage = 0,
 							IsVisible = dt.IsVisible,
 						};
 
@@ -380,7 +381,7 @@ namespace BL.Services.Administration
 					StartDate = dataToSave.StartDate,
 					EndDate = dataToSave.EndDate,
 					Status = dataToSave.Status,
-					StatusDetails = dataToSave.StatusDetails,
+					Percentage = dataToSave.Percentage,
 					IsVisible = dataToSave.IsVisible,
 				};
 				context.SYS_Task.Add(dt);
@@ -414,7 +415,7 @@ namespace BL.Services.Administration
 					Sys_Projects.ProjectDetails = string.IsNullOrEmpty(dataToUpdate.ProjectDetails) ? string.Empty : dataToUpdate.ProjectDetails;
 					Sys_Projects.User = context.SYS_User.Where(x => x.Id == dataToUpdate.AssignTo).FirstOrDefault();
                     Sys_Projects.ProjectDescription = dataToUpdate.ProjectDescription;
-					Sys_Projects.PlannedHours = dataToUpdate.PlannedHours;
+					Sys_Projects.PlannedDay = dataToUpdate.PlannedDay;
 					Sys_Projects.StartDate = dataToUpdate.StartDate;
 					Sys_Projects.EndDate = dataToUpdate.EndDate;
 					Sys_Projects.Status = dataToUpdate.Status;

@@ -621,8 +621,8 @@
   <data name="Assign To" xml:space="preserve">
     <value>Atribuir a</value>
   </data>
-  <data name="Planned Hours" xml:space="preserve">
-    <value>Horas planejadas</value>
+  <data name="Planned Day" xml:space="preserve">
+    <value>Dia planejado</value>
   </data>
   <data name="Status Details" xml:space="preserve">
     <value>Detalhes do status</value>
@@ -695,5 +695,9 @@
   </data>
   <data name="Sequence already Added" xml:space="preserve">
     <value>Sequência já adicionada</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Percentage" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>
