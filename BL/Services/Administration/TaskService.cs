@@ -189,7 +189,7 @@ namespace BL.Services.Administration
             return dto;
         }
 
-        public BaseResponseDTO<List<DropDown>> GetAllDropDownValues()
+        public BaseResponseDTO<List<DropDown>> GetAllDropDownValues(string Email)
         {
             BaseResponseDTO<List<DropDown>> dto = new BaseResponseDTO<List<DropDown>>();
             List<DropDown> Ddl = new List<DropDown>();
@@ -222,7 +222,8 @@ namespace BL.Services.Administration
                 Dd = new DropDown();
                 Dd.title = "Projects";
                 Dd.items = new List<DropDownItem>();
-                List<SYS_Projects> projects = context.SYS_Projects.Where(x => x.DeleteStatus == false).ToList();
+				
+				List<SYS_Projects> projects = GetProjects(Email);
                 foreach (SYS_Projects lt in projects)
                 {
                     DropDownItem Ddi = new DropDownItem();
@@ -236,7 +237,7 @@ namespace BL.Services.Administration
                 Dd = new DropDown();
                 Dd.title = "ParentTask";
                 Dd.items = new List<DropDownItem>();
-                List<SYS_Task> Task = context.SYS_Task.Where(x => x.DeleteStatus == false).ToList();
+                List<SYS_Task> Task = GetTasks(Email);
                 foreach (SYS_Task lt in Task)
                 {
                     DropDownItem Ddi = new DropDownItem();
@@ -258,6 +259,101 @@ namespace BL.Services.Administration
             }
             return dto;
         }
+
+        public List<SYS_Projects> GetProjects(string Email)
+        {
+            List<SYS_Projects> SYS_Projects =new List<SYS_Projects>();
+			string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
+			long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+			if (Email != "admin@gmail.com")
+			{
+				SYS_Projects = (from pm in context.SYS_ProjectsMatrix
+											join gu in context.SYS_GroupMatrixUser on pm.IID equals gu.IID
+											join prj in context.SYS_Projects on pm.IID equals prj.Id
+											where prj.DeleteStatus == false && gu.IID == UsrId
+											select new
+											{
+												prj.Id,
+												prj.ProjectName
+											})
+						.Union(
+							context.SYS_Projects
+								.Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
+								.Select(p => new
+								{
+									p.Id,
+									p.ProjectName
+								})
+						)
+						.AsEnumerable() // Move to client-side processing
+						.Select(x => new SYS_Projects
+						{
+							Id = x.Id,
+							ProjectName = x.ProjectName,
+						})
+						.ToList();
+			}
+			else
+			{
+				SYS_Projects = (from a in context.SYS_Projects
+											where a.DeleteStatus == false
+											select new SYS_Projects
+											{
+												Id = a.Id,
+												ProjectName = a.ProjectName,
+											}).ToList();
+			}
+            return SYS_Projects;
+		}
+
+        public List<SYS_Task> GetTasks(string Email)
+        {
+            List<SYS_Task> sYS_Tasks = new List<SYS_Task>();
+
+			string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
+			long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+			if (Email != "admin@gmail.com")
+			{
+				sYS_Tasks = (from prj in context.SYS_Projects
+										join ts in context.SYS_Task on prj.Id equals ts.Projects.Id // Assuming it's ProjectId, not Id
+										join pm in context.SYS_ProjectsMatrix on prj.Id equals pm.IID
+										join gu in context.SYS_GroupMatrixUser on pm.IID equals gu.IID
+										where ts.DeleteStatus == false && gu.IID == UsrId
+										select new
+										{
+											ts.Id,
+											ts.Taskname,
+										})
+					.Union(
+						context.SYS_Task
+							.Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
+							.Select(p => new
+							{
+								p.Id,
+								p.Taskname,
+							})
+					)
+					.AsEnumerable() // Move to client-side processing
+					.Select(x => new SYS_Task
+					{
+						Id = x.Id,
+						Taskname = x.Taskname,
+					})
+					.ToList();
+			}
+			else
+			{
+				sYS_Tasks = (from a in context.SYS_Task
+										where a.DeleteStatus == false
+										select new SYS_Task
+										{
+											Id = a.Id,
+											Taskname = a.Taskname,
+										}).ToList();
+			}
+
+            return sYS_Tasks;
+		}
 
         public BaseResponseDTO<bool> SaveAsync(TaskCRUDDTO dataToSave)
         {

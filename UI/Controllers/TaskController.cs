@@ -75,7 +75,9 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<List<DropDown>> List = new BaseResponseDTO<List<DropDown>>();
-                List = TaskService.GetAllDropDownValues();
+				ISession session = HttpContext.Session;
+				string Email = HttpContext.Session.GetString("Username");
+				List = TaskService.GetAllDropDownValues(Email);
                 return Ok(List);
 
 

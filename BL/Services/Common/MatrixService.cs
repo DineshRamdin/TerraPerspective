@@ -377,8 +377,10 @@ namespace BL.Services.Common
 				{
 					ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
 				}
-				
-				var nodeMap = ml.ToDictionary(node => node.id, node => new OutputNode
+				List<CRUDMatrix> mlf = new List<CRUDMatrix>();
+				mlf = ml.Where(x => x.state.Checked == true).ToList();
+
+				var nodeMap = mlf.ToDictionary(node => node.id, node => new OutputNode
 				{
 					Title = node.text,
 					Checked = node.state.Checked,
@@ -389,7 +391,7 @@ namespace BL.Services.Common
 					}
 				});
 
-				foreach (var node in ml)
+				foreach (var node in mlf)
 				{
 					if (node.parent != "#")
 					{
@@ -398,7 +400,7 @@ namespace BL.Services.Common
 				}
 
 				outputNodes = nodeMap.Values
-					.Where(node => ml.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
+					.Where(node => mlf.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
 					.ToList();
 				
 				BaseDto.Data = outputNodes;
