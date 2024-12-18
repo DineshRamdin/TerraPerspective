@@ -60,8 +60,10 @@
 
 
         $(function () {
-            $('.nav-link').removeClass('active');
-            $('#liProjectTemplateAmenu').addClass('active');
+            $('.nav-link').removeClass('active').removeClass("menu-open");
+            // $('.nav-link').removeClass('active');
+            $('#liProjectTemplatemenu').addClass('active');
+            $('#liProjectTemplatemenu').parents('li').parents('li').addClass('menu-open');
 
             GetAllProjectTemplate();
         });

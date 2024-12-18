@@ -53,8 +53,10 @@
         var getTimeZoneDropDownUrl = '@Url.Action("getTimeZoneDropDown", "Country")';
 
         $(function () {
-            $('.nav-link').removeClass('active');
+            //$('.nav-link').removeClass('active');
+            $('.nav-link').removeClass('active').removeClass("menu-open");
             $('#liCountrymenu').addClass('active');
+            $('#liCountrymenu').parents('li').parents('li').addClass('menu-open');
 
             GetAllCountry();
         });

@@ -52,8 +52,11 @@
         var CreateUpdateLocalityUrl = '@Url.Action("CreateUpdate", "Locality")';
 
         $(function () {
-            $('.nav-link').removeClass('active');
+            // $('.nav-link').removeClass('active');
+            // $('#liLocalitymenu').addClass('active');
+            $('.nav-link').removeClass('active').removeClass("menu-open");
             $('#liLocalitymenu').addClass('active');
+            $('#liLocalitymenu').parents('li').parents('li').addClass('menu-open');
 
             GetAllLocality();
         });

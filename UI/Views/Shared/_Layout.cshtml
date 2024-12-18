@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css"> *@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/adminlte.min.css">
+
     <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
     @* <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"> *@
@@ -27,7 +28,7 @@
     <!-- jsGrid -->
     <link rel="stylesheet" href="~/plugins/jsgrid/jsgrid.min.css">
     <link rel="stylesheet" href="~/plugins/jsgrid/jsgrid-theme.min.css">
-    <script src="~/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
 
     <link rel="stylesheet" href="~/plugins/daterangepicker/daterangepicker.css">
     <!-- Tempusdominus Bootstrap 4 -->
@@ -41,7 +42,7 @@
 
     @* JSTREE *@
     <link href="~/lib/jstree-3.3.16/dist/themes/default/style.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    @*  <link rel="stylesheet" href="~/dist/css/adminlte.min.css"> *@
 
     <link href="~/plugins/fullcalendar-3.10.0/fullcalendar.min.css" rel="stylesheet" />
     <style>
@@ -74,9 +75,12 @@
             padding-right: 15px;
         }
 
-        .nav-treeview {
-            display: none;
-        }
+        /*
+                                                                                                        .nav-treeview {
+                                                                                                            display: none;
+                                                                                                        }
+                                                                                                        */
+
     </style>
     @* <style>
     /* Apply the smaller button and dropdown styles */
@@ -111,10 +115,7 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-        @*   <!-- Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="~/image/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-        </div> *@
+
 
         @{
             await Html.RenderPartialAsync("~/Views/Shared/_Navbar.cshtml");
@@ -143,14 +144,13 @@
         <partial name="_ChangePassword.cshtml" />
     </div>
 
-
     <!-- jQuery -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
+
     <!-- Bootstrap 4 -->
     <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/js/adminlte.min.js"></script>
-
     <script src="~/plugins/toastr/toastr.min.js"></script>
     <script src="~/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/plugins/jquery-validation/additional-methods.min.js"></script>
@@ -182,8 +182,9 @@
     <script src="~/plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap Switch -->
     <script src="~/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-
     <script src="~/plugins/fullcalendar-3.10.0/fullcalendar.min.js"></script>
+
+
 
     @* JSTREE *@
     <script src="~/lib/jstree-3.3.16/dist/jstree.min.js"></script>
@@ -192,7 +193,7 @@
     <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/dist/js/demo.js"></script>
-
+    <script src="~/dist/js/adminlte.js"></script>
 
     <script>
         var ChangeUserPasswordUrl = '@Url.Action("ChangeUserPassword", "User")';

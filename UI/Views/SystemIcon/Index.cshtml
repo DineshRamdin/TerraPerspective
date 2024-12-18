@@ -55,8 +55,12 @@
 
 
 		$(function () {
-			$('.nav-link').removeClass('active');
+			// $('.nav-link').removeClass('active');
+			// $('#liSystemIconmenu').addClass('active');
+
+			$('.nav-link').removeClass('active').removeClass("menu-open");
 			$('#liSystemIconmenu').addClass('active');
+			$('#liSystemIconmenu').parents('li').parents('li').addClass('menu-open');
 
 			GetAllSystemIcon();
 		});

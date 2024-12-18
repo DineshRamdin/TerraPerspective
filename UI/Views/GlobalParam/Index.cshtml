@@ -53,9 +53,10 @@
 
 
 		$(function () {
-			$('.nav-link').removeClass('active');
-			$('#liglobalParammenu').addClass('active');
-
+			//$('.nav-link').removeClass('active');
+			$('.nav-link').removeClass('active').removeClass("menu-open");
+			$('#liGlobalParammenu').addClass('active');
+			$('#liGlobalParammenu').parents('li').parents('li').addClass('menu-open');
 			GetAllGlobalParam();
 		});
 

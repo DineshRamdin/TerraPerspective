@@ -54,8 +54,12 @@
 		var CreateUpdateLookUpTypeUrl = '@Url.Action("CreateUpdate", "LookUpType")';
 
 		$(function () {
-			$('.nav-link').removeClass('active');
+			// $('.nav-link').removeClass('active');
+			// $('#liLookUpTypemenu').addClass('active');
+
+			$('.nav-link').removeClass('active').removeClass("menu-open");
 			$('#liLookUpTypemenu').addClass('active');
+			$('#liLookUpTypemenu').parents('li').parents('li').addClass('menu-open');
 
 			GetAllLookUpType();
 		});
