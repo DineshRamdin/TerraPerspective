@@ -240,7 +240,7 @@ function renderDynamicMenu(data, langResource) {
 
         // Check for submenus
         if (grandParent.subMenu.length > 0) {
-            let parentHtml = '<ul class="nav nav-treeview">';
+            let parentHtml = '<ul class="nav nav-treeview" style="display: none;">';
 
             grandParent.subMenu.forEach(parent => {
 
@@ -354,7 +354,7 @@ function renderDynamicMenu(data, langResource) {
 
                 // Check for child menus
                 if (parent.child.length > 0) {
-                    parentHtml += '<ul class="nav nav-treeview">';
+                    parentHtml += '<ul class="nav nav-treeview" style="display: none;">';
 
                     parent.child.forEach(child => {
 
@@ -480,8 +480,8 @@ function renderDynamicMenu(data, langResource) {
 
     // Initialize toggle behavior
     initMenuToggle();
-}
 
+}
 
 function initMenuToggle() {
     $(".nav-item > a").click(function (e) {
@@ -495,6 +495,8 @@ function initMenuToggle() {
 
     initChildMenuToggle();
 }
+
+
 
 function initChildMenuToggle() {
     $(".nav-item > a").click(function (e) {
