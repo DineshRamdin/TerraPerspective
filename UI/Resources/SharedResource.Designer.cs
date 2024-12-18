@@ -1114,6 +1114,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Parent Task.
+        /// </summary>
+        public static string Please_Parent_Task {
+            get {
+                return ResourceManager.GetString("Please Parent Task", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please Select File.
         /// </summary>
         public static string Please_Select_File {

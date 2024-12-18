@@ -700,4 +700,7 @@
   <data name="Percentage" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Please Parent Task" xml:space="preserve">
+    <value>S'il vous plaît, tâche parentale</value>
+  </data>
 </root>
