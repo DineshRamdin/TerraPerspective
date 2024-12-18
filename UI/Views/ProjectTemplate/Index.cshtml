@@ -206,6 +206,9 @@
             else if ($("#txtSequence").val() == "") {
                 toastr.warning("@SharedResource.Please_Enter_Sequence");
             }
+            else if ($("#ddlParentTask").val() == "") {
+                toastr.warning("@SharedResource.Please_Parent_Task");
+            }
             else {
 
                 //if ($("#txtTaskName").val() != "") {
@@ -213,6 +216,7 @@
                 let newTaskName = $("#txtTaskName").val().toLowerCase();
                 let newSequence = $("#txtSequence").val();
                 let newDuration = $("#txtDuration").val();
+                let newParentTask = $("#ddlParentTask").val();
 
                 if (!TaskNameData.some(obj => obj['taskName'].toLowerCase() === newTaskName)) {
                     //if (!TaskNameData.some(obj => obj['sequence'] === newSequence)) {
@@ -221,12 +225,14 @@
                             id: 0,
                             taskName: $("#txtTaskName").val(),
                             duration: $("#txtDuration").val(),
-                            sequence: $("#txtSequence").val()
+                            sequence: $("#txtSequence").val(),
+                            parenttask: $("#ddlParentTask").val()
                         });
 
                         $("#txtTaskName").val('');
                         $("#txtDuration").val('');
                         $("#txtSequence").val('');
+                        $("#ddlParentTask").val('');
                     }
                     else {
                         toastr.warning("@SharedResource.Sequence_already_Added");
@@ -238,6 +244,7 @@
                     $("#txtTaskName").val('');
                     $("#txtDuration").val('');
                     $("#txtSequence").val('');
+                    $("#ddlParentTask").val('');
                 }
 
                 GetAllTaskName();
@@ -260,6 +267,7 @@
                 { data: 'taskName', title: '@SharedResource.Task_Name' },
                 { data: 'duration', title: '@SharedResource.Duration' },
                 { data: 'sequence', title: '@SharedResource.Sequence' },
+                { data: 'parenttask', title: '@SharedResource.Parent_Task' },
             ];
 
             if (!$("#GridTaskName").data("jsGrid")) {
@@ -276,6 +284,7 @@
                         { name: "taskName", type: "text", width: 150, title: "@SharedResource.Task_Name" },
                         { name: "duration", type: "text", width: 150, title: "@SharedResource.Duration" },
                         { name: "sequence", type: "text", width: 150, title: "@SharedResource.Sequence" },
+                        { name: "parenttask", type: "text", width: 150, title: "@SharedResource.Parent_Task" },
                     ],
                     gridview: true,
                 });

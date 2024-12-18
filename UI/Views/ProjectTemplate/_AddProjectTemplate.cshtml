@@ -22,19 +22,23 @@
                         <input type="text" id="txtProjectTemplateName" class="form-control" placeholder="@SharedResource.Project_Template @SharedResource.Name" required />
                     </div>
                     <div class="col-12 row form-group">
-                        <div class="col-4">
+                        <div class="col-3">
                             <label>@SharedResource.Task_Name <span class="red-required">*</span></label>
                             <input type="text" id="txtTaskName" class="form-control" placeholder="@SharedResource.Task_Name" required />
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <label>@SharedResource.Duration <span class="red-required">*</span></label>
                             <input type="text" id="txtDuration" class="form-control" placeholder="@SharedResource.Duration" min="1" />
 
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <label>@SharedResource.Sequence <span class="red-required">*</span></label>
                             <input type="text" id="txtSequence" class="form-control" placeholder="@SharedResource.Sequence" min="1" />
 
+                        </div>
+                        <div class="col-3 form-group">
+                            <label>@SharedResource.Parent_Task</span></label>
+                            <select class="form-control" id="ddlParentTask"></select>
                         </div>
                         <div class="col-2">
                             <button type="button" class="btn btn-primary" onclick="SaveTaskName();" style="margin-top: 30px;">@SharedResource.Add</button>
