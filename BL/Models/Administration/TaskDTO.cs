@@ -57,6 +57,7 @@ namespace BL.Models.Administration
 		public string Taskname { get; set; }
 		public string ProjectName { get; set; }
 		public string ParentTaskName { get; set; }
+		public string Status { get; set; }
 		public int? Percentage { get; set; }
 	}
 

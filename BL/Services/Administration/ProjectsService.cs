@@ -320,6 +320,14 @@ namespace BL.Services.Administration
 				{
 					foreach (var item in templateMapping)
 					{
+						long TaskId = 0;
+
+                        if (item.ParentTask > 0)
+						{
+							string taskName = context.SYS_ProjectTemplateMapping.Where(a => a.Sequence == item.ParentTask && a.ProjectTemplateID == item.ProjectTemplateID).Select(a => a.TaskName).FirstOrDefault();
+							TaskId = context.SYS_Task.Where(a => a.Taskname.ToLower() == taskName.ToLower() && a.Projects.Id == dt.Id).FirstOrDefault().Id;
+                        }
+
 						BaseResponseDTO<string> BaseDtoTS = new BaseResponseDTO<string>();
 						BaseDtoTS = new GenerateCode().GCodeMain(UserToken, "SYS_Task");
 						TaskCRUDDTO taskCRUDDTO = new TaskCRUDDTO()
@@ -328,9 +336,9 @@ namespace BL.Services.Administration
 							TaskName = item.TaskName,
 							TaskDescription = item.TaskName,
 							Project = dt.Id,
-							ParentTask = item.ParentTask,
+							ParentTask = TaskId,
 							StartDate = dt.StartDate,
-							EndDate = dt.EndDate,
+							EndDate = dt.StartDate.AddDays(item.Duration),
 							Status = dt.Status,
 							Percentage = 0,
 							IsVisible = dt.IsVisible,
@@ -669,7 +677,8 @@ namespace BL.Services.Administration
 												ts.Taskname,
 												ts.Projects,
 												ts.Task,
-												ts.Percentage
+												ts.Percentage,
+												ts.Status
 											})
 						.Union(
 							context.SYS_Task
@@ -681,6 +690,7 @@ namespace BL.Services.Administration
 									p.Projects,
 									p.Task,
 									p.Percentage,
+									p.Status
 								})
 						)
 						.AsEnumerable() // Move to client-side processing
@@ -695,6 +705,7 @@ namespace BL.Services.Administration
 																	  where c.Id == x.Task.Id
 																	  select c.Taskname).FirstOrDefault(),
 							Percentage = x.Percentage,
+							Status=context.SYS_LookUpValue.Where(a=>a.Id==x.Status).FirstOrDefault().Name
 						})
 						.ToList();
 
@@ -717,7 +728,8 @@ namespace BL.Services.Administration
 																  where c.Id == a.Task.Id
 																  select c.Taskname).FirstOrDefault(),
 												Percentage = a.Percentage,
-											}).ToList();
+                                                Status = context.SYS_LookUpValue.Where(x=>x.Id==a.Status).FirstOrDefault().Name
+                                            }).ToList();
 
 					dto.Data = result;
 				}

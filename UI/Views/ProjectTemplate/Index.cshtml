@@ -66,6 +66,11 @@
             $('#liProjectTemplatemenu').parents('li').parents('li').addClass('menu-open');
 
             GetAllProjectTemplate();
+
+            document.getElementById('TaskAdd').addEventListener('click', function () {
+                
+            });
+
         });
 
         function GetAllProjectTemplate() {
@@ -231,6 +236,23 @@
                             parenttask: $("#ddlParentTask").val()
                         });
 
+                        const taskNameInput = document.getElementById('txtTaskName'); // Input field for Task Name
+                        const SequenceInput = document.getElementById('txtSequence'); // Input field for Task Name
+                        const parentTaskDropdown = document.getElementById('ddlParentTask'); // Parent Task dropdown
+
+                        if (taskNameInput.value) {
+                            // Create a new option element
+                            const newOption = document.createElement('option');
+                            newOption.value = SequenceInput.value;
+                            newOption.textContent = taskNameInput.value;
+
+                            // Add it to the dropdown
+                            parentTaskDropdown.appendChild(newOption);
+
+                            // Optionally, reset the input field
+                            taskNameInput.value = '';
+                        }
+
                         $("#txtTaskName").val('');
                         $("#txtDuration").val('');
                         $("#txtSequence").val('');
@@ -269,7 +291,7 @@
                 { data: 'taskName', title: '@SharedResource.Task_Name' },
                 { data: 'duration', title: '@SharedResource.Duration' },
                 { data: 'sequence', title: '@SharedResource.Sequence' },
-                { data: 'parenttask', title: '@SharedResource.Parent_Task' },
+                { data: 'parentTask', title: '@SharedResource.Parent_Task' },
             ];
 
             if (!$("#GridTaskName").data("jsGrid")) {
@@ -286,7 +308,7 @@
                         { name: "taskName", type: "text", width: 150, title: "@SharedResource.Task_Name" },
                         { name: "duration", type: "text", width: 150, title: "@SharedResource.Duration" },
                         { name: "sequence", type: "text", width: 150, title: "@SharedResource.Sequence" },
-                        { name: "parenttask", type: "text", width: 150, title: "@SharedResource.Parent_Task" },
+                        { name: "parentTask", type: "text", width: 150, title: "@SharedResource.Parent_Task" },
                     ],
                     gridview: true,
                 });

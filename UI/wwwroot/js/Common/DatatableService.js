@@ -1076,12 +1076,32 @@ function initializeDataGridForTask(tableID, onclickPartial, url, columnList, sho
                                 render: function (data, type, full, meta) {
                                         if (data === null) {
                                             data = "0";
-                                        }
+                                    }
+
+                                    // Determine the color based on task status
+                                    let status = full.status; // Assuming the status is available in the `full` object
+                                    let color;
+
+                                    // Assign colors based on the status
+                                    switch (status) {
+                                        case "Late":
+                                            color = "red";
+                                            break;
+                                        case "On track with concern":
+                                            color = "orange";
+                                            break;
+                                        case "On Time":
+                                            color = "green";
+                                            break;
+                                        default:
+                                            color = "grey"; // Default color for unknown status
+                                            break;
+                                    }
                                         // Generate the progress bar dynamically
                                         return `
                                             <div style="width: 100%; position: relative; height: 20px;border: 1px solid #ddd; border-radius: 4px;">
                                                 <div style="
-                                                    background-color: red;
+                                                    background-color: ${color};
                                                     width: ${data}%;
                                                     height: 100%;
                                                     display: flex;
@@ -1607,11 +1627,31 @@ function initializeDataGridForProjectWiseTask(tableID, onclickPartial, url, colu
                                     if (data === null) {
                                         data = "0";
                                     }
+
+                                    // Determine the color based on task status
+                                    let status = full.status; // Assuming the status is available in the `full` object
+                                    let color;
+
+                                    // Assign colors based on the status
+                                    switch (status) {
+                                        case "Late":
+                                            color = "red";
+                                            break;
+                                        case "On track with concern":
+                                            color = "orange";
+                                            break;
+                                        case "On Time":
+                                            color = "green";
+                                            break;
+                                        default:
+                                            color = "grey"; // Default color for unknown status
+                                            break;
+                                    }
                                     // Generate the progress bar dynamically
                                     return `
                                             <div style="width: 100%; position: relative; height: 20px;border: 1px solid #ddd; border-radius: 4px;">
                                                 <div style="
-                                                    background-color: red;
+                                                    background-color: ${color};
                                                     width: ${data}%;
                                                     height: 100%;
                                                     display: flex;
