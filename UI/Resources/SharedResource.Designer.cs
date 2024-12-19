@@ -295,6 +295,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color.
+        /// </summary>
+        public static string Color {
+            get {
+                return ResourceManager.GetString("Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Colour.
         /// </summary>
         public static string Colour {
@@ -628,6 +637,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fill Color.
+        /// </summary>
+        public static string Fill_Color {
+            get {
+                return ResourceManager.GetString("Fill Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to filtered from.
         /// </summary>
         public static string filtered_from {
@@ -768,6 +786,15 @@ namespace UI.Resources {
         public static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Width.
+        /// </summary>
+        public static string Line_Width {
+            get {
+                return ResourceManager.GetString("Line Width", resourceCulture);
             }
         }
         
@@ -1866,6 +1893,15 @@ namespace UI.Resources {
         public static string Time_Zone {
             get {
                 return ResourceManager.GetString("Time Zone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transparancy.
+        /// </summary>
+        public static string Transparancy {
+            get {
+                return ResourceManager.GetString("Transparancy", resourceCulture);
             }
         }
         

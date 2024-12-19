@@ -942,4 +942,16 @@
     <value>Please Parent Task</value>
     <comment>Please Parent Task</comment>
   </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="Fill Color" xml:space="preserve">
+    <value>Fill Color</value>
+  </data>
+  <data name="Transparancy" xml:space="preserve">
+    <value>Transparancy</value>
+  </data>
+  <data name="Line Width" xml:space="preserve">
+    <value>Line Width</value>
+  </data>
 </root>

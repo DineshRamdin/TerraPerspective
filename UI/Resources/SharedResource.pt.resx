@@ -703,4 +703,16 @@
   <data name="Please Parent Task" xml:space="preserve">
     <value>Por favor, tarefa pai</value>
   </data>
+  <data name="Color" xml:space="preserve">
+    <value>Cor</value>
+  </data>
+  <data name="Fill Color" xml:space="preserve">
+    <value>Cor de preenchimento</value>
+  </data>
+  <data name="Transparancy" xml:space="preserve">
+    <value>Transparência</value>
+  </data>
+  <data name="Line Width" xml:space="preserve">
+    <value>Largura da linha</value>
+  </data>
 </root>

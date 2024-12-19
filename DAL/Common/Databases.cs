@@ -68,4 +68,10 @@ namespace DAL.Common
 		ResearchLiveStockTM = 6,
 	}
 
+    public enum LineWidth
+    {
+        LineWidth1 = 1,
+        LineWidth2 = 2,
+        LineWidth3 = 3,        
+    }
 }
