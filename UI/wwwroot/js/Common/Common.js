@@ -233,10 +233,7 @@ function renderDynamicMenu(data, langResource) {
                                 ${MenuName}
                                 ${grandParent.subMenu.length ? '<i class="fas fa-angle-right right"></i>' : ''}
                             </p>
-                        </a>
-                `;
-
-
+                        </a>`;
 
 
         // Check for submenus
@@ -352,8 +349,7 @@ function renderDynamicMenu(data, langResource) {
                                 ${SubMenuName}
                                 ${parent.child.length ? '<i class="fas fa-angle-right right" style="right: 2.4rem;"></i>' : ''}
                             </p>
-                                </a>
-                        `;
+                                </a>`;
 
                 // Check for child menus
                 if (parent.child.length > 0) {
@@ -465,8 +461,7 @@ function renderDynamicMenu(data, langResource) {
                                             <i class="${child.icon || 'far fa-dot-circle nav-icon'}"></i>
                                             <p>${ChildSubMenuName}</p>
                                         </a>
-                                    </li>
-                                `;
+                                    </li>`;
                     });
 
                     parentHtml += '</ul>'; // Close child menu
@@ -493,7 +488,6 @@ function removeSpecialCharacters(str) {
 }
 
 function initMenuToggle() {
-
     $(".nav-item > a").click(function (e) {
         const submenu = $(this).next(".nav-treeview");
 
@@ -515,6 +509,7 @@ function initMenuToggle() {
 
         // If the current item has a submenu, open it
         const submenu = $(this).next(".nav-treeview");
+
         if (submenu.length) {
             $(this).parent().addClass("menu-open");
             submenu.slideDown();
@@ -526,7 +521,6 @@ function initMenuToggle() {
 
 }
 
-
 function initChildMenuToggle() {
     $(".nav-item > a").click(function (e) {
         const child = $(this).next(".nav-treeview");
@@ -536,7 +530,6 @@ function initChildMenuToggle() {
             $(this).find(".right").toggleClass("fa-angle-right fa-angle-down");
         }
     });
-
 
 }
 

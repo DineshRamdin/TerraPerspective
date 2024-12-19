@@ -151,5 +151,25 @@ namespace UI.Controllers
 
 
 		}
+
+		[HttpPost]
+		public ActionResult<BaseResponseDTO<List<TaskViewDTO>>> GetAllProjectTask(long ProjectId)
+		{
+			try
+			{
+				BaseResponseDTO<List<TaskViewDTO>> dt = new BaseResponseDTO<List<TaskViewDTO>>();
+				ISession session = HttpContext.Session;
+				string Email = HttpContext.Session.GetString("Username");
+				dt = ProjectsService.GetAllTaskByProject(Email,ProjectId);
+
+				return Ok(dt);
+			}
+			catch (Exception)
+			{
+				return BadRequest();
+			}
+
+
+		}
 	}
 }

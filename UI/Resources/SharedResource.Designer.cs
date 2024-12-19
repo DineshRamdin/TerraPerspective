@@ -1276,6 +1276,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Dashboard.
+        /// </summary>
+        public static string Project_Dashboard {
+            get {
+                return ResourceManager.GetString("Project Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project Description.
         /// </summary>
         public static string Project_Description {
@@ -1992,6 +2001,15 @@ namespace UI.Resources {
         public static string View_Name {
             get {
                 return ResourceManager.GetString("View Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Task.
+        /// </summary>
+        public static string View_Task {
+            get {
+                return ResourceManager.GetString("View Task", resourceCulture);
             }
         }
         
