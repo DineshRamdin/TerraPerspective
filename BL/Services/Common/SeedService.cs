@@ -1,7 +1,10 @@
-﻿using DAL.Common;
+﻿using BL.Models.Administration;
+using BL.Models.Common;
+using DAL.Common;
 using DAL.Context;
 using DAL.Models;
 using DAL.Models.Administration;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -451,12 +454,14 @@ namespace BL.Services.Common
             try
             {
                 PerspectiveContext context = new PerspectiveContext();
-
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
                 if (!context.SYS_Locality.Any(x => x.Name == "Default"))
                 {
                     SYS_Locality GP = new SYS_Locality();
                     GP.Name = "Default";
                     GP.Description = "Default";
+                    GP.CreatedBy = createdBy;
+                    GP.CreatedDate = DateTime.Now;
                     context.SYS_Locality.Add(GP);
                     context.SaveChanges();
                 }
@@ -472,12 +477,14 @@ namespace BL.Services.Common
             try
             {
                 PerspectiveContext context = new PerspectiveContext();
-
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
                 if (!context.SYS_MCAVCA.Any(x => x.Name == "Default"))
                 {
                     SYS_MCAVCA GP = new SYS_MCAVCA();
                     GP.Name = "Default";
                     GP.Description = "Default";
+                    GP.CreatedBy = createdBy;
+                    GP.CreatedDate = DateTime.Now;
                     context.SYS_MCAVCA.Add(GP);
                     context.SaveChanges();
                 }
@@ -493,12 +500,14 @@ namespace BL.Services.Common
             try
             {
                 PerspectiveContext context = new PerspectiveContext();
-
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
                 if (!context.SYS_Country.Any(x => x.Name == "Default"))
                 {
                     SYS_Country GP = new SYS_Country();
                     GP.Name = "Default";
                     GP.Description = "Default";
+                    GP.CreatedBy = createdBy;
+                    GP.CreatedDate = DateTime.Now;
                     context.SYS_Country.Add(GP);
                     context.SaveChanges();
                 }
@@ -509,6 +518,115 @@ namespace BL.Services.Common
             }
 
         }
+
+        public static void SeedPoster()
+        {
+            try
+            {
+
+
+                PerspectiveContext context = new PerspectiveContext();
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
+                int LType = 1;
+                if (!context.SYS_Poster.Any(x => x.Name == "Default"))
+                {
+                    SYS_Poster GP = new SYS_Poster();
+                    GP.Name = "Default";
+                    GP.Status = true;
+                    GP.CreatedBy = createdBy;
+                    GP.CreatedDate = DateTime.Now;
+                    context.SYS_Poster.Add(GP);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+        public static void SeedCarousel()
+        {
+            try
+            {
+                PerspectiveContext context = new PerspectiveContext();
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
+             
+                if (!context.SYS_Carousel.Any(x => x.Name == "Default"))
+                {
+                    SYS_Carousel GP = new SYS_Carousel();
+                    GP.Name = "Default";
+                    GP.Duration = 0;
+                    GP.CreatedBy = createdBy;
+                    GP.CreatedDate = DateTime.Now;
+                    context.SYS_Carousel.Add(GP);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+
+        public static void SeedProjectsStatus()
+        {
+            try
+            {
+                PerspectiveContext context = new PerspectiveContext();
+                Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
+
+                if (!context.SYS_LookUpType.Any(x => x.Name == "Project Status"))
+                {
+                    SYS_LookUpType GP = new SYS_LookUpType();
+                    GP.Name = "Project Status";
+                    GP.Description = "Project Status";
+                    GP.CreatedBy = createdBy;
+                    GP.CreatedDate = DateTime.Now;
+                    context.SYS_LookUpType.Add(GP);
+                    context.SaveChanges();
+
+
+                    string[] values = new string[] { "Project Status" };
+                    var Ltl = context.SYS_LookUpType.Where(x => values.Contains(x.Name) && x.DeleteStatus == false).FirstOrDefault();
+
+                    var LtlValue = context.SYS_LookUpValue.Where(x => x.LookUpType.Id == Ltl.Id && x.DeleteStatus == false).FirstOrDefault();
+
+
+                    if (Ltl.Id > 0)
+                    {
+                        if (LtlValue == null)
+                        {
+                            // SYS_LookUpValue GP = new SYS_LookUpValue();
+                            LookUpValueCRUDDTO dataToSave = new LookUpValueCRUDDTO();
+                            dataToSave.LookUpType = Ltl.Id;
+                            dataToSave.Name = Ltl.Name;
+                            dataToSave.Description = Ltl.Description;
+
+                            SYS_LookUpValue DSS = new SYS_LookUpValue()
+                            {
+                                Name = "Pending",
+                                Description = "Pending",
+                                LookUpType = context.SYS_LookUpType.Where(x => x.Id == dataToSave.LookUpType).FirstOrDefault(),
+                                CreatedBy = createdBy,
+                                CreatedDate = DateTime.Now,
+                            };
+                            context.SYS_LookUpValue.Add(DSS);
+                            context.SaveChanges();
+
+                        }
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+
+            }
+
+        }
+
 
         public static void SeedModules(UserManager<ApplicationUser> userManager)
         {
@@ -1200,7 +1318,9 @@ namespace BL.Services.Common
             SeedLocality();
             SeedMCAVCA();
             SeedCountry();
-
+            SeedProjectsStatus();
+            SeedPoster();
+            SeedCarousel();
         }
     }
 }
