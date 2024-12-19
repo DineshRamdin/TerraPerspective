@@ -328,7 +328,7 @@ namespace BL.Services.Administration
 							TaskName = item.TaskName,
 							TaskDescription = item.TaskName,
 							Project = dt.Id,
-							ParentTask = 0,
+							ParentTask = item.ParentTask,
 							StartDate = dt.StartDate,
 							EndDate = dt.EndDate,
 							Status = dt.Status,
