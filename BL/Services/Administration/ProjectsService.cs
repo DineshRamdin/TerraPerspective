@@ -705,7 +705,7 @@ namespace BL.Services.Administration
 				else
 				{
 					List<TaskViewDTO> result = (from a in context.SYS_Task
-											where a.DeleteStatus == false
+											where a.DeleteStatus == false && a.Projects.Id == ProjectId
 											select new TaskViewDTO
 											{
 												Id = a.Id,
@@ -791,8 +791,8 @@ namespace BL.Services.Administration
             }
             else
             {
-				List<string> TaskNames = context.SYS_Task.Where(a => a.DeleteStatus == false).Select(a => a.Taskname).ToList();
-				List<int?> TaskPercentage = context.SYS_Task.Where(a => a.DeleteStatus == false).Select(a => (a.Percentage == null) ? 0 : a.Percentage).ToList();
+				List<string> TaskNames = context.SYS_Task.Where(a => a.DeleteStatus == false && a.Projects.Id==ProjectId).Select(a => a.Taskname).ToList();
+				List<int?> TaskPercentage = context.SYS_Task.Where(a => a.DeleteStatus == false && a.Projects.Id == ProjectId).Select(a => (a.Percentage == null) ? 0 : a.Percentage).ToList();
                 taskDeatilsForPieChart.TaskName = JsonConvert.SerializeObject(TaskNames);
                 taskDeatilsForPieChart.TaskPercentage = JsonConvert.SerializeObject(TaskPercentage);
             }

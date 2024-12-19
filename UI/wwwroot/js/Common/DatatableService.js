@@ -633,7 +633,7 @@ function initializeDataGridForProject(tableID, onclickPartial, url,ViewTaskProje
                                     if (tableID == "ProjectsTable") {
 
                                         // Append the ID dynamically using JavaScript
-                                        btn += '| <a class="btn btn-sm btn-primary custom-class" role="button" href="' + ViewTaskProjectUrl.replace("__ID__", full.id) + '" title="' + langResource.ViewTaskLabel + '"><span>View Task</span></a> ';
+                                        btn += '| <a href="' + ViewTaskProjectUrl.replace("__ID__", full.id) + '" title="' + langResource.ViewTaskLabel + '"><i class="fa fa-eye text-secondary ms-1"></i></a> ';
                                     }
                                     data = '<div class="text-nowrap">' + btn + '</div>';
                                     return data;
