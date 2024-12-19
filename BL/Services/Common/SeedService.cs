@@ -606,14 +606,38 @@ namespace BL.Services.Common
 
                             SYS_LookUpValue DSS = new SYS_LookUpValue()
                             {
-                                Name = "Pending",
-                                Description = "Pending",
+                                Name = "Late",
+                                Description = "Late",
                                 LookUpType = context.SYS_LookUpType.Where(x => x.Id == dataToSave.LookUpType).FirstOrDefault(),
                                 CreatedBy = createdBy,
                                 CreatedDate = DateTime.Now,
                             };
                             context.SYS_LookUpValue.Add(DSS);
                             context.SaveChanges();
+
+                            SYS_LookUpValue DSS1 = new SYS_LookUpValue()
+                            {
+                                Name = "On Time",
+                                Description = "On Time",
+                                LookUpType = context.SYS_LookUpType.Where(x => x.Id == dataToSave.LookUpType).FirstOrDefault(),
+                                CreatedBy = createdBy,
+                                CreatedDate = DateTime.Now,
+                            };
+                            context.SYS_LookUpValue.Add(DSS1);
+                            context.SaveChanges();
+
+
+                            SYS_LookUpValue DSS2 = new SYS_LookUpValue()
+                            {
+                                Name = "On Track With Concern",
+                                Description = "On Track With Concern",
+                                LookUpType = context.SYS_LookUpType.Where(x => x.Id == dataToSave.LookUpType).FirstOrDefault(),
+                                CreatedBy = createdBy,
+                                CreatedDate = DateTime.Now,
+                            };
+                            context.SYS_LookUpValue.Add(DSS2);
+                            context.SaveChanges();
+
 
                         }
                     }
