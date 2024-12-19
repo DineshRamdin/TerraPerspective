@@ -74,6 +74,7 @@
 		var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
 		var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
 		var GetProjectMatrixTree = '@Url.Action("GetTree", "Projects")';
+		var GetProjectDashBoard = '@Url.Action("Index", "ProjectDashboard", new { Id = "__ID__" })';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
@@ -130,9 +131,10 @@
 				GeneratedonLabel: '@SharedResource.Generated_on',
 				PreviousLabel: '@SharedResource.Previous',
 				NextLabel: '@SharedResource.Next',
+				ViewTaskLabel: '@SharedResource.View_Task'
 			};
 
-			initializeDataGrid('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+			initializeDataGridForProject('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, GetProjectDashBoard, columnList, false, true, true, false, false, null, true, null, langResource);
 
 		}
 
