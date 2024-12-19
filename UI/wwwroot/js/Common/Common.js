@@ -223,24 +223,22 @@ function renderDynamicMenu(data, langResource) {
             MenuName = grandParent.name;
         }
 
+        var IDText = "li" + removeSpecialCharacters(grandParent.name) + "menu";
         // Build grandparent menu item
         let grandParentHtml = `
                     <li class="nav-item">
-                        <a href="${grandParent.url ? '/' + grandParent.url : '#'}" class="nav-link">
+                        <a href="${grandParent.url ? '/' + grandParent.url : '#'}" class="nav-link" id="${IDText}">
                             <i class="nav-icon ${grandParent.icon}"></i>
                             <p>                           
                                 ${MenuName}
                                 ${grandParent.subMenu.length ? '<i class="fas fa-angle-right right"></i>' : ''}
                             </p>
-                        </a>
-                `;
-
-
+                        </a>`;
 
 
         // Check for submenus
         if (grandParent.subMenu.length > 0) {
-            let parentHtml = '<ul class="nav nav-treeview">';
+            let parentHtml = '<ul class="nav nav-treeview" style="display: none;">';
 
             grandParent.subMenu.forEach(parent => {
 
@@ -341,20 +339,21 @@ function renderDynamicMenu(data, langResource) {
                     SubMenuName = parent.name;
                 }
 
+                var IDTextSub = "li" + removeSpecialCharacters(parent.name) + "menu";
+
                 parentHtml += `
-                            <li class="nav-item">
-                                <a href="${parent.url ? '/' + parent.url : '#'}" class="nav-link">
+                            <li class="nav-item ${parent.child.length ? 'childSubMenu' : ''}" >
+                                <a href="${parent.url ? '/' + parent.url : '#'}" class="nav-link" id="${IDTextSub}">
                                     <i class="${parent.icon || 'far fa-circle nav-icon'}"></i>
                                     <p>
                                 ${SubMenuName}
                                 ${parent.child.length ? '<i class="fas fa-angle-right right" style="right: 2.4rem;"></i>' : ''}
                             </p>
-                                </a>
-                        `;
+                                </a>`;
 
                 // Check for child menus
                 if (parent.child.length > 0) {
-                    parentHtml += '<ul class="nav nav-treeview">';
+                    parentHtml += '<ul class="nav nav-treeview" style="display: none;">';
 
                     parent.child.forEach(child => {
 
@@ -454,14 +453,15 @@ function renderDynamicMenu(data, langResource) {
                             ChildSubMenuName = child.name;
                         }
 
+                        var IDTextSubMenu = "li" + removeSpecialCharacters(child.name) + "menu";
+
                         parentHtml += `
                                     <li class="nav-item">
-                                        <a href="${child.url ? '/' + child.url : '#'}" class="nav-link">
+                                        <a href="${child.url ? '/' + child.url : '#'}" class="nav-link" id="${IDTextSubMenu}">
                                             <i class="${child.icon || 'far fa-dot-circle nav-icon'}"></i>
                                             <p>${ChildSubMenuName}</p>
                                         </a>
-                                    </li>
-                                `;
+                                    </li>`;
                     });
 
                     parentHtml += '</ul>'; // Close child menu
@@ -480,12 +480,18 @@ function renderDynamicMenu(data, langResource) {
 
     // Initialize toggle behavior
     initMenuToggle();
+
 }
 
+function removeSpecialCharacters(str) {
+    return str.replace(/[^a-zA-Z0-9]/g, ''); // Removes anything that's not a letter or number
+}
 
 function initMenuToggle() {
     $(".nav-item > a").click(function (e) {
         const submenu = $(this).next(".nav-treeview");
+
+        //$(this).closest(".nav-link").addClass("active");
         if (submenu.length) {
             e.preventDefault();
             submenu.slideToggle();
@@ -493,7 +499,26 @@ function initMenuToggle() {
         }
     });
 
+    $(".nav-link").click(function () {
+        // Remove active and menu-open classes from all items
+        $(".nav-link").removeClass("active");
+        $(".nav-item").removeClass("menu-open");
+
+        // Add active class to the clicked item
+        $(this).addClass("active");
+
+        // If the current item has a submenu, open it
+        const submenu = $(this).next(".nav-treeview");
+
+        if (submenu.length) {
+            $(this).parent().addClass("menu-open");
+            submenu.slideDown();
+        }
+
+    });
+
     initChildMenuToggle();
+
 }
 
 function initChildMenuToggle() {
@@ -505,6 +530,7 @@ function initChildMenuToggle() {
             $(this).find(".right").toggleClass("fa-angle-right fa-angle-down");
         }
     });
+
 }
 
 

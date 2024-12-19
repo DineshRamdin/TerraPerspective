@@ -1,335 +1,335 @@
 ﻿@{
-	ViewData["Title"] = "Testing";
+    ViewData["Title"] = "Testing";
 }
 @using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-	<div class="container-fluid">
-		<div class="row mb-2">
-			<div class="col-sm-6">
-				<h1 class="m-0">@SharedResource.Testing</h1>
-			</div><!-- /.col -->
-			<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
-					<li class="breadcrumb-item active">@SharedResource.Testing</li>
-				</ol>
-			</div><!-- /.col -->
-		</div><!-- /.row -->
-	</div><!-- /.container-fluid -->
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Testing</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Testing</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-	<div class="container-fluid">
-		<div class="card card-solid">
-			<div class="card-body pb-0">
-				@* <div class="row">
-					<div class="col-10">
-					</div>
-				</div> *@
-				<div class="row">
-					<div class="col-12 mb-10">
-						<table id="TestingTable" class="table table-bordered table-striped"></table>
-						@* <table id="TestingTable" class="table table-bordered table-striped dataTable dtr-inline"></table> *@
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                @* <div class="row">
+                <div class="col-10">
+                </div>
+                </div> *@
+                <div class="row">
+                    <div class="col-12 mb-10">
+                        <table id="TestingTable" class="table table-bordered table-striped"></table>
+                        @* <table id="TestingTable" class="table table-bordered table-striped dataTable dtr-inline"></table> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <div class="modal fade" id="AddTestingModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<partial name="_AddTesting.cshtml" />
+    <partial name="_AddTesting.cshtml" />
 </div>
 <!-- /.modal -->
 @section scripts
 {
 
-	<script>
-		var GetAllTestingUrl = '@Url.Action("GetAll", "Testing")';
-		var getTestingDropDownUrl = '@Url.Action("GetAllDropdownValues", "Testing")';
-		var TestingGetByIdUrl = '@Url.Action("GetById", "Testing")';
-		var CreateUpdateTestingUrl = '@Url.Action("CreateUpdate", "Testing")';
-		var TestingDeleteUrl = '@Url.Action("TestingDelete", "Testing")';
+    <script>
+        var GetAllTestingUrl = '@Url.Action("GetAll", "Testing")';
+        var getTestingDropDownUrl = '@Url.Action("GetAllDropdownValues", "Testing")';
+        var TestingGetByIdUrl = '@Url.Action("GetById", "Testing")';
+        var CreateUpdateTestingUrl = '@Url.Action("CreateUpdate", "Testing")';
+        var TestingDeleteUrl = '@Url.Action("TestingDelete", "Testing")';
 
-		$(function () {
-			//$('#txtTestingDate').datetimepicker({format: 'L'});
+        $(function () {
+            //$('#txtTestingDate').datetimepicker({format: 'L'});
 
-			$('.nav-link').removeClass('active');
-			$('#liTestingmenu').addClass('active');
+            //$('.nav-link').removeClass('active');
+            $('.nav-link').removeClass('active').removeClass("menu-open");
+            $('#liTestingmenu').addClass('active');
+            $('#liTestingmenu').parents('li').parents('li').addClass('menu-open');
 
-			GetAllTesting();
-			//$('#txtTestingDate').datetimepicker({format: 'DD/MMM/YYYY'});
-			$('#txtTestingDate').datetimepicker({
-				format: 'DD/MMM/YYYY' // Format as 'day/month/abbreviated month name/year'
-			});
-
-
-			$("input[data-bootstrap-switch]").each(function(){
-				 $(this).bootstrapSwitch('state', $(this).prop('checked'));
-			})
-
-		});
-
-		function GetAllTesting()
-		{
-			var columnList = [
-				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'testingName', title: '@SharedResource.Testing_Name' },
-				{ data: 'testingType', title: '@SharedResource.Testing_Type' },
-				{ data: 'testingDate', title: '@SharedResource.Testing_Date' },
-				{ data: 'testingCode', title: '@SharedResource.Testing_Code' },
-				{ data: 'description', title: '@SharedResource.Description' },
-
-			];
-
-			var langResource = {
-				AddNewLabel: '@SharedResource.Add_New',
-				ExportLabel: '@SharedResource.Export',
-				ExportPDFLabel:'@SharedResource.Export_PDF',
-				ExportCSVLabel:'@SharedResource.Export_CSV',
-				ExportExcelLabel:'@SharedResource.Export_Excel',
-				ExcelLabel:'@SharedResource.Excel',
-				PDFLabel:'@SharedResource.PDF',
-				CSVLabel:'@SharedResource.CSV',
-				NodataavailableLabel :'@SharedResource.No_data_available',
-				SearchLabel :'@SharedResource.Search',
-				ShowingLabel :'@SharedResource.Showing',
-				EntriesLabel :'@SharedResource.entries',
-				FilteredfromLabel :'@SharedResource.filtered_from',
-				ViewLabel :'@SharedResource.View',
-				PreviewLabel :'@SharedResource.Preview',
-				DeleteLabel :'@SharedResource.Delete',
-				EditLabel :'@SharedResource.Edit',
-				ResetPasswordLabel :'@SharedResource.Reset_Password',
-				UserNameLabel :'@SharedResource.UserName',
-				DateLabel :'@SharedResource.Date',
-				PageLabel :'@SharedResource.Page',
-				OfLabel :'@SharedResource.of',
-				GeneratedonLabel :'@SharedResource.Generated_on',
-				PreviousLabel :'@SharedResource.Previous',
-				NextLabel :'@SharedResource.Next',
-			};
-
-			initializeDataGrid('TestingTable', 'openTestingModal', GetAllTestingUrl, columnList, true,true,true,false,false,null,true,'TestingDelete',langResource);
-
-		}
-
-		 function openTestingModal(id) {
-			var dataObject = {};
-			dataObject.id = id;
-
-			$.ajax({
-				url: TestingGetByIdUrl,
-				type: "POST",
-				data: dataObject,  // Send data if needed
-				beforeSend: function () {
-					ClearTestingModal();
-					GetDropdownData();
-				},
-				success: function (response) {
-					//console.log(response.data)
-					if (response.data) {
-						if (response.data.id > 0)
-							$("#h4TestingTitle").html("@SharedResource.Modify  @SharedResource.Testing");
-						else
-							$("#h4TestingTitle").html("@SharedResource.Add  @SharedResource.Testing");
+            GetAllTesting();
+            //$('#txtTestingDate').datetimepicker({format: 'DD/MMM/YYYY'});
+            $('#txtTestingDate').datetimepicker({
+                format: 'DD/MMM/YYYY' // Format as 'day/month/abbreviated month name/year'
+            });
 
 
-						$("#hdnId").val(response.data.id);
-						$("#txtTestingName").val(response.data.testingName);
-						$('#txtTestingCode').val(response.data.testingCode);
-						$("#ddlTestingType").val(response.data.testingType == 0 ? "" : response.data.testingType);
-						//$('#txtTestingDate').val(response.data.testingDate);
-						$('#txtDescription').val(response.data.description);
+            $("input[data-bootstrap-switch]").each(function () {
+                $(this).bootstrapSwitch('state', $(this).prop('checked'));
+            })
 
-						$('#IsTestingChk').prop('checked', response.data.isTesting == null ? true : response.data.isTesting);
+        });
 
-						if(response.data.isTestYes == true){
-							$('#IsTestYesRD').prop('checked', true);
-							$('#IsTestNoRD').prop('checked', false);
-						}
-						else{
-							$('#IsTestYesRD').prop('checked', false);
-							$('#IsTestNoRD').prop('checked', true);
-						}
+        function GetAllTesting() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'testingName', title: '@SharedResource.Testing_Name' },
+                { data: 'testingType', title: '@SharedResource.Testing_Type' },
+                { data: 'testingDate', title: '@SharedResource.Testing_Date' },
+                { data: 'testingCode', title: '@SharedResource.Testing_Code' },
+                { data: 'description', title: '@SharedResource.Description' },
 
-						if (response.data.isTestCount == true) {
-							$('#IsTestCountchk').bootstrapSwitch('state', true);  // Use the bootstrap-switch method to set state
-						} else {
-							$('#IsTestCountchk').bootstrapSwitch('state', false);  // Use the bootstrap-switch method to set state
-						}
+            ];
 
-						//$('#txtTestingDate').datetimepicker('date', '01/Dec/2024');
-						$('#txtTestingDate').datetimepicker('date',response.data.testingDate);
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+            };
 
-						if (response.data.testingImagebase64 != null && response.data.testingImagebase64 != "") {
-							$("#oldtestingimage").val(response.data.testingImagebase64);
+            initializeDataGrid('TestingTable', 'openTestingModal', GetAllTestingUrl, columnList, true, true, true, false, false, null, true, 'TestingDelete', langResource);
 
-							$("#viewTestingImage").attr("src", "data:image/png;base64," + response.data.testingImagebase64);
-							$("#viewTestingImage").css("display", "");
+        }
 
-						}
+        function openTestingModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
 
-					}
-					else {
-						toastr.error(response.errorMessage);
-					}
-					// Handle success (e.g., update UI with response data)
-				},
-				error: function (error) {
-					console.log("Error:", error);
-					toastr.error("Error:" + error);
-				}
-			}).done(function () {
-				$('#AddTestingModal').modal('show');
-				$("#frnTestingCreate").validate({}).resetForm();
+            $.ajax({
+                url: TestingGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearTestingModal();
+                    GetDropdownData();
+                },
+                success: function (response) {
+                    //console.log(response.data)
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4TestingTitle").html("@SharedResource.Modify  @SharedResource.Testing");
+                        else
+                            $("#h4TestingTitle").html("@SharedResource.Add  @SharedResource.Testing");
 
 
-				// $('#txtTestingDate').datetimepicker({format: 'DD/MMM/YYYY'});
-			});
-		}
+                        $("#hdnId").val(response.data.id);
+                        $("#txtTestingName").val(response.data.testingName);
+                        $('#txtTestingCode').val(response.data.testingCode);
+                        $("#ddlTestingType").val(response.data.testingType == 0 ? "" : response.data.testingType);
+                        //$('#txtTestingDate').val(response.data.testingDate);
+                        $('#txtDescription').val(response.data.description);
 
-		 function ClearTestingModal() {
-			$("#h4TestingTitle").html("@SharedResource.Add  @SharedResource.Testing");
-			$("#hdnId").val("0");
-			$("#txtTestingName").val("");
-			$('#txtTestingCode').val("");
-			$("#ddlTestingType").val("");
-			$('#txtTestingDate').val("");
-			$('#txtDescription').val("");
-			$("#testingimagefile").val(null);
-			$("#oldtestingimage").val("");
-			$("#viewTestingImage").attr("src", "");
-			$("#viewTestingImage").css("display", "none");
-		}
+                        $('#IsTestingChk').prop('checked', response.data.isTesting == null ? true : response.data.isTesting);
 
-		function GetDropdownData() {
-			$.ajax({
-				url: getTestingDropDownUrl,
-				type: "POST",
-				async: false,
-				// data: dataObject,  // Send data if needed
-				beforeSend: function () {
-					$("#ddlTestingType").html('');
-				},
-				success: function (response) {
-					if (response.data) {
-						$.each(response.data, function (key, value) {
+                        if (response.data.isTestYes == true) {
+                            $('#IsTestYesRD').prop('checked', true);
+                            $('#IsTestNoRD').prop('checked', false);
+                        }
+                        else {
+                            $('#IsTestYesRD').prop('checked', false);
+                            $('#IsTestNoRD').prop('checked', true);
+                        }
 
-							if (value.title == "Testing") {
-								$("#ddlTestingType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
-								$.each(value.items, function (itemskey, itemsvalue) {
-									$("#ddlTestingType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-								});
-							}
-						});
-					}
-				},
-				error: function (error) {
-					console.log("Error:", error);
-					// toastr.error("Error:" + error);
-				}
+                        if (response.data.isTestCount == true) {
+                            $('#IsTestCountchk').bootstrapSwitch('state', true);  // Use the bootstrap-switch method to set state
+                        } else {
+                            $('#IsTestCountchk').bootstrapSwitch('state', false);  // Use the bootstrap-switch method to set state
+                        }
 
-			});
-		}
+                        //$('#txtTestingDate').datetimepicker('date', '01/Dec/2024');
+                        $('#txtTestingDate').datetimepicker('date', response.data.testingDate);
 
-		async function SaveTesting() {
+                        if (response.data.testingImagebase64 != null && response.data.testingImagebase64 != "") {
+                            $("#oldtestingimage").val(response.data.testingImagebase64);
 
-			 let testingDate = $('#txtTestingDate').datetimepicker('date');
-			 var testingDa = moment(testingDate).format('DD/MMM/YYYY');
+                            $("#viewTestingImage").attr("src", "data:image/png;base64," + response.data.testingImagebase64);
+                            $("#viewTestingImage").css("display", "");
 
-			 if(testingDa == "Invalid date")
-			 {
-				testingDa = " - ";
-			 }
+                        }
 
-			let valid = formValidation(["txtTestingName", "txtTestingCode", "ddlTestingType", "txtDescription"]);
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddTestingModal').modal('show');
+                $("#frnTestingCreate").validate({}).resetForm();
 
-			if (valid) {
-				var dataObject = {};
-				dataObject.Id = $("#hdnId").val();
-				dataObject.TestingName = $("#txtTestingName").val();
-				dataObject.TestingCode = $('#txtTestingCode').val();
-				dataObject.TestingType = $('#ddlTestingType').val();
-				//dataObject.TestingDate = $('#txtTestingDate').val();
-				dataObject.Description = $('#txtDescription').val();
-				dataObject.IsTesting   = $('#IsTestingChk').prop('checked');
-				dataObject.IsTestCount = $('#IsTestCountchk').prop('checked');
-				dataObject.IsTestYes   = $('#IsTestYesRD').prop('checked');
 
-				dataObject.TestingDate = testingDa;
+                // $('#txtTestingDate').datetimepicker({format: 'DD/MMM/YYYY'});
+            });
+        }
 
-				var FileData = await FiletoBase64string("testingimagefile");
+        function ClearTestingModal() {
+            $("#h4TestingTitle").html("@SharedResource.Add  @SharedResource.Testing");
+            $("#hdnId").val("0");
+            $("#txtTestingName").val("");
+            $('#txtTestingCode').val("");
+            $("#ddlTestingType").val("");
+            $('#txtTestingDate').val("");
+            $('#txtDescription').val("");
+            $("#testingimagefile").val(null);
+            $("#oldtestingimage").val("");
+            $("#viewTestingImage").attr("src", "");
+            $("#viewTestingImage").css("display", "none");
+        }
 
-				if (FileData == "") {
-					FileData = $('#oldtestingimage').val();
-				}
+        function GetDropdownData() {
+            $.ajax({
+                url: getTestingDropDownUrl,
+                type: "POST",
+                async: false,
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    $("#ddlTestingType").html('');
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $.each(response.data, function (key, value) {
 
-				dataObject.TestingImagebase64 = FileData;
+                            if (value.title == "Testing") {
+                                $("#ddlTestingType").append($("<option></option>").val('').html("@SharedResource.Select_Type"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlTestingType").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    // toastr.error("Error:" + error);
+                }
 
-				$.ajax({
-					url: CreateUpdateTestingUrl,
-					type: "POST",
-					data: dataObject,  // Send data if needed
-					beforeSend: function () {
+            });
+        }
 
-					},
-					success: function (response) {
-						if (response.data) {
-							toastr.success(response.errorMessage);
-							$('#AddTestingModal').modal('hide');
-							GetAllTesting();
-						}
-						else {
-							toastr.error(response.errorMessage);
-						}
-						// Handle success (e.g., update UI with response data)
-					},
-					error: function (error) {
-						console.log("Error:", error);
-						toastr.error("Error:" + error);
-					}
-				}).done(function () {
+        async function SaveTesting() {
 
-				});
-			}
-			else {
-				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
-			}
+            let testingDate = $('#txtTestingDate').datetimepicker('date');
+            var testingDa = moment(testingDate).format('DD/MMM/YYYY');
 
-		}
+            if (testingDa == "Invalid date") {
+                testingDa = " - ";
+            }
 
-		function TestingDelete(id){
-			var dataObject = {};
-			dataObject.id = id;
-			$.ajax({
-				url: TestingDeleteUrl,
-				type: "POST",
-				data: dataObject,  // Send data if needed
-				beforeSend: function () {
+            let valid = formValidation(["txtTestingName", "txtTestingCode", "ddlTestingType", "txtDescription"]);
 
-				},
-				success: function (response) {
-					if (response.data) {
-						toastr.success(response.errorMessage);
-						GetAllTesting();
-					}
-					else {
-						toastr.error(response.errorMessage);
-					}
-					// Handle success (e.g., update UI with response data)
-				},
-				error: function (error) {
-					console.log("Error:", error);
-					toastr.error("Error:" + error);
-				}
-			}).done(function () {
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.TestingName = $("#txtTestingName").val();
+                dataObject.TestingCode = $('#txtTestingCode').val();
+                dataObject.TestingType = $('#ddlTestingType').val();
+                //dataObject.TestingDate = $('#txtTestingDate').val();
+                dataObject.Description = $('#txtDescription').val();
+                dataObject.IsTesting = $('#IsTestingChk').prop('checked');
+                dataObject.IsTestCount = $('#IsTestCountchk').prop('checked');
+                dataObject.IsTestYes = $('#IsTestYesRD').prop('checked');
 
-			});
-		}
+                dataObject.TestingDate = testingDa;
 
-	</script>
+                var FileData = await FiletoBase64string("testingimagefile");
+
+                if (FileData == "") {
+                    FileData = $('#oldtestingimage').val();
+                }
+
+                dataObject.TestingImagebase64 = FileData;
+
+                $.ajax({
+                    url: CreateUpdateTestingUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddTestingModal').modal('hide');
+                            GetAllTesting();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+
+        }
+
+        function TestingDelete(id) {
+            var dataObject = {};
+            dataObject.id = id;
+            $.ajax({
+                url: TestingDeleteUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    if (response.data) {
+                        toastr.success(response.errorMessage);
+                        GetAllTesting();
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+
+            });
+        }
+
+    </script>
 }

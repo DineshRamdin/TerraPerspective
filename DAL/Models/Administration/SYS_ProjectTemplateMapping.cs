@@ -16,6 +16,7 @@ namespace DAL.Models.Administration
         public string? TaskName { get; set; }
         public int Duration { get; set; }
         public int Sequence { get; set; }
+        public long? ParentTask { get; set; }
 
     }
 }

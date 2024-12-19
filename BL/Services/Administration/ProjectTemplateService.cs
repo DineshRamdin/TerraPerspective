@@ -187,6 +187,7 @@ namespace BL.Services.Administration
                                 Duration = item.Duration,
                                 Sequence = item.Sequence,
                                 ProjectTemplateID = Id,
+                                ParentTask=item.ParentTask,
                             };
                             context.SYS_ProjectTemplateMapping.Add(dt1);
                             context.SaveChanges();
@@ -228,6 +229,7 @@ namespace BL.Services.Administration
                               TaskName = a.TaskName,
                               Duration = a.Duration,
                               Sequence = a.Sequence,
+                              ParentTask=a.ParentTask,
 
                           }).ToList();
                 dto.Data = result;

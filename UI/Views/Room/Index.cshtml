@@ -1,196 +1,196 @@
 ﻿@{
-	ViewData["Title"] = "Room";
+    ViewData["Title"] = "Room";
 }
 @using UI.Resources
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
-	<div class="container-fluid">
-		<div class="row mb-2">
-			<div class="col-sm-6">
-				<h1 class="m-0">@SharedResource.Room</h1>
-			</div><!-- /.col -->
-			<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
-					<li class="breadcrumb-item active">@SharedResource.Room</li>
-				</ol>
-			</div><!-- /.col -->
-		</div><!-- /.row -->
-	</div><!-- /.container-fluid -->
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Room</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Room</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
 <section class="content">
-	<div class="container-fluid">
-		<div class="card card-solid">
-			<div class="card-body pb-0">
-				<div class="row">
-					<div class="col-10">
-					</div>
-					@* <div class="col-2">
-                        <button type="button" class="btn btn-block btn-primary mb-3" onclick="openRoomModal(0)">Add</button>
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+                    </div>
+                    @* <div class="col-2">
+                    <button type="button" class="btn btn-block btn-primary mb-3" onclick="openRoomModal(0)">Add</button>
                     </div> *@
-				</div>
-				<div class="row">
-					<div class="col-12  mb-10">
-						<table id="RoomTable" class="table table-bordered table-striped"></table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+                <div class="row">
+                    <div class="col-12  mb-10">
+                        <table id="RoomTable" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 
 <div class="modal fade" id="AddRoomModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<partial name="_AddRoom.cshtml" />
+    <partial name="_AddRoom.cshtml" />
 </div>
 
 @section scripts
 {
-	<script>
-		var GetAllRoomUrl = '@Url.Action("GetAll", "Room")';
-		var RoomGetByIdUrl = '@Url.Action("GetById", "Room")';
-		var CreateUpdateRoomUrl = '@Url.Action("CreateUpdate", "Room")';
+    <script>
+        var GetAllRoomUrl = '@Url.Action("GetAll", "Room")';
+        var RoomGetByIdUrl = '@Url.Action("GetById", "Room")';
+        var CreateUpdateRoomUrl = '@Url.Action("CreateUpdate", "Room")';
 
-		$(function () {
-			$('.nav-link').removeClass('active').removeClass("menu-open");
-			$('#liRoommenu').addClass('active');
-			$('#liRoommenu').parents('li').parents('li').addClass('menu-open');
+        $(function () {
+            $('.nav-link').removeClass('active').removeClass("menu-open");
+            $('#liRoommenu').addClass('active');
+            $('#liRoommenu').parents('li').parents('li').addClass('menu-open');
 
-			GetAllRoom();
-		});
+            GetAllRoom();
+        });
 
-		function GetAllRoom() {
-			var columnList = [
-				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'name', title: '@SharedResource.Room_Name' },
-				{ data: 'type', title: '@SharedResource.Room_Type' },
-				{ data: 'location', title: '@SharedResource.Room_Location' },
-			];
+        function GetAllRoom() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'name', title: '@SharedResource.Room_Name' },
+                { data: 'type', title: '@SharedResource.Room_Type' },
+                { data: 'location', title: '@SharedResource.Room_Location' },
+            ];
 
-			var langResource = {
-				AddNewLabel: '@SharedResource.Add_New',
-				ExportLabel: '@SharedResource.Export',
-				ExportPDFLabel:'@SharedResource.Export_PDF',
-				ExportCSVLabel:'@SharedResource.Export_CSV',
-				ExportExcelLabel:'@SharedResource.Export_Excel',
-				ExcelLabel:'@SharedResource.Excel',
-				PDFLabel:'@SharedResource.PDF',
-				CSVLabel:'@SharedResource.CSV',
-				NodataavailableLabel :'@SharedResource.No_data_available',
-				SearchLabel :'@SharedResource.Search',
-				ShowingLabel :'@SharedResource.Showing',
-				EntriesLabel :'@SharedResource.entries',
-				FilteredfromLabel :'@SharedResource.filtered_from',
-				ViewLabel :'@SharedResource.View',
-				PreviewLabel :'@SharedResource.Preview',
-				DeleteLabel :'@SharedResource.Delete',
-				EditLabel :'@SharedResource.Edit',
-				ResetPasswordLabel :'@SharedResource.Reset_Password',
-				UserNameLabel :'@SharedResource.UserName',
-				DateLabel :'@SharedResource.Date',
-				PageLabel :'@SharedResource.Page',
-				OfLabel :'@SharedResource.of',
-				GeneratedonLabel :'@SharedResource.Generated_on',
-				PreviousLabel :'@SharedResource.Previous',
-				NextLabel :'@SharedResource.Next',
-			};
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+            };
 
-			initializeDataGrid('RoomTable', 'openRoomModal', GetAllRoomUrl, columnList, false,true,true,false,false, null,true,null,langResource);
+            initializeDataGrid('RoomTable', 'openRoomModal', GetAllRoomUrl, columnList, false, true, true, false, false, null, true, null, langResource);
 
-		}
+        }
 
-		function openRoomModal(id) {
-			var dataObject = {};
-			dataObject.id = id;
+        function openRoomModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
 
-			$.ajax({
-				url: RoomGetByIdUrl,
-				type: "POST",
-				data: dataObject,  // Send data if needed
-				beforeSend: function () {
-					ClearRoomModal();
-				},
-				success: function (response) {
-					if (response.data) {
-						if (response.data.id > 0)
-							$("#h4RoomTitle").html("@SharedResource.Modify  @SharedResource.Room");
-						else
-							$("#h4RoomTitle").html("@SharedResource.Add  @SharedResource.Room");
+            $.ajax({
+                url: RoomGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearRoomModal();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4RoomTitle").html("@SharedResource.Modify  @SharedResource.Room");
+                        else
+                            $("#h4RoomTitle").html("@SharedResource.Add  @SharedResource.Room");
 
-						$("#hdnId").val(response.data.id);
-						$("#txtRoomName").val(response.data.name);
-						$("#txtRoomType").val(response.data.type);
-						$("#txtRoomLocation").val(response.data.location);
-					}
-					else {
-						toastr.error(response.errorMessage);
-					}
-					// Handle success (e.g., update UI with response data)
-				},
-				error: function (error) {
-					console.log("Error:", error);
-					toastr.error("Error:" + error);
-				}
-			}).done(function () {
-				$('#AddRoomModal').modal('show');
-				$("#frnRoomCreate").validate({}).resetForm();;
-			});
+                        $("#hdnId").val(response.data.id);
+                        $("#txtRoomName").val(response.data.name);
+                        $("#txtRoomType").val(response.data.type);
+                        $("#txtRoomLocation").val(response.data.location);
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                $('#AddRoomModal').modal('show');
+                $("#frnRoomCreate").validate({}).resetForm();;
+            });
 
 
-		}
+        }
 
-		function ClearRoomModal() {
-			$("#h4RoomTitle").html("@SharedResource.Add  @SharedResource.Room");
-			$("#hdnId").val(0);
-			$("#txtRoomName").val("");
-			$("#txtRoomType").val("");
-			$("#txtRoomLocation").val("");
-		}
+        function ClearRoomModal() {
+            $("#h4RoomTitle").html("@SharedResource.Add  @SharedResource.Room");
+            $("#hdnId").val(0);
+            $("#txtRoomName").val("");
+            $("#txtRoomType").val("");
+            $("#txtRoomLocation").val("");
+        }
 
-		async function SaveRoom() {
+        async function SaveRoom() {
 
-			let valid = formValidation(["txtRoomName","txtRoomType", "txtRoomLocation"]);
+            let valid = formValidation(["txtRoomName", "txtRoomType", "txtRoomLocation"]);
 
-			if (valid) {
-				var dataObject = {};
-				dataObject.Id = $("#hdnId").val();
-				dataObject.Name = $("#txtRoomName").val();
-				dataObject.Type = $("#txtRoomType").val();
-				dataObject.Location = $("#txtRoomLocation").val();
+            if (valid) {
+                var dataObject = {};
+                dataObject.Id = $("#hdnId").val();
+                dataObject.Name = $("#txtRoomName").val();
+                dataObject.Type = $("#txtRoomType").val();
+                dataObject.Location = $("#txtRoomLocation").val();
 
-				$.ajax({
-					url: CreateUpdateRoomUrl,
-					type: "POST",
-					data: dataObject,  // Send data if needed
-					beforeSend: function () {
+                $.ajax({
+                    url: CreateUpdateRoomUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
 
-					},
-					success: function (response) {
-						if (response.data) {
-							toastr.success(response.errorMessage);
-							$('#AddRoomModal').modal('hide');
-							GetAllRoom();
-						}
-						else {
-							toastr.error(response.errorMessage);
-						}
-						// Handle success (e.g., update UI with response data)
-					},
-					error: function (error) {
-						console.log("Error:", error);
-						toastr.error("Error:" + error);
-					}
-				}).done(function () {
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddRoomModal').modal('hide');
+                            GetAllRoom();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
 
-				});
-			}
-			else {
-				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
-			}
-		}
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+        }
 
-	</script>
+    </script>
 }

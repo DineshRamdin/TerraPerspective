@@ -943,6 +943,9 @@ namespace DAL.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
+                    b.Property<long?>("ParentTask")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("ProjectTemplateID")
                         .HasColumnType("bigint");
 

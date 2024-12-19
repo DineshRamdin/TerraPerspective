@@ -52,8 +52,12 @@
         var CreateUpdateMCAVCAUrl = '@Url.Action("CreateUpdate", "MCAVCA")';
 
         $(function () {
-            $('.nav-link').removeClass('active');
+            // $('.nav-link').removeClass('active');
+            // $('#liMCAVCAmenu').addClass('active');
+
+            $('.nav-link').removeClass('active').removeClass("menu-open");
             $('#liMCAVCAmenu').addClass('active');
+            $('#liMCAVCAmenu').parents('li').parents('li').addClass('menu-open');
 
             GetAllMCAVCA();
         });
