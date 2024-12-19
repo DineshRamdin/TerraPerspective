@@ -61,7 +61,7 @@ namespace BL.Services.Administration
 			{
 				Guid Mid = Guid.Parse(Id);
 				result = (from a in context.SYS_Modules
-						  where a.Id == Mid
+						  where a.Id == Mid && a.DeleteStatus == false
 						  select new SideMenuDTO()
 						  {
 							  Id = a.Id,

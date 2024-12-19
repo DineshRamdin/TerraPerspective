@@ -551,7 +551,7 @@ namespace BL.Services.Common
             {
                 PerspectiveContext context = new PerspectiveContext();
                 Guid createdBy = Guid.Parse(context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault());
-             
+
                 if (!context.SYS_Carousel.Any(x => x.Name == "Default"))
                 {
                     SYS_Carousel GP = new SYS_Carousel();
@@ -1321,6 +1321,7 @@ namespace BL.Services.Common
             SeedProjectsStatus();
             SeedPoster();
             SeedCarousel();
+
         }
     }
 }
