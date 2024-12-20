@@ -22,6 +22,7 @@ namespace BL.Models.Administration
 		public string EndDate { get; set; }
 		public int? PlannedDay { get; set; }
 		public string IsVisible { get; set; }
+		public double Progress { get; set; }
 	}
 
 	public class ProjectsCRUDDTO

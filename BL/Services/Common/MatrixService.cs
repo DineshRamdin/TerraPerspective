@@ -395,14 +395,27 @@ namespace BL.Services.Common
 				{
 					if (node.parent != "#")
 					{
-						nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+						if (node.parent != "#" && nodeMap.ContainsKey(node.parent))
+						{
+							nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+						}
 					}
 				}
 
-				outputNodes = nodeMap.Values
+				if (mlf.Any(n => n.parent.Contains("#")))
+				{
+					// Filter the outputNodes to include only nodes with valid parents or no parents
+					outputNodes = nodeMap.Values
 					.Where(node => mlf.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
 					.ToList();
-				
+				}
+				else
+				{
+					// Filter the outputNodes to include only nodes with valid parents or no parents
+					outputNodes = nodeMap.Values
+						.Where(node => mlf.All(n => n.parent != "#"))
+						.ToList();
+				}
 				BaseDto.Data = outputNodes;
 				BaseDto.QryResult = new QueryResult().SUCEEDED;
 			}

@@ -5,6 +5,32 @@
 <link href="~/plugins/dropdowntree/dropdowntree.css" rel="stylesheet" />
 <style>
 
+	.progress-bar-container {
+		width: 100%;
+		background-color: #e0e0e0;
+		border-radius: 5px;
+		overflow: hidden;
+		position: relative;
+		height: 20px;
+	}
+
+	.progress-bar {
+		height: 100%;
+		background-color: #4caf50;
+		width: 0;
+		transition: width 0.5s ease-in-out;
+	}
+
+	.progress-text {
+		position: absolute;
+		width: 100%;
+		text-align: center;
+		top: 0;
+		line-height: 20px;
+		font-size: 12px;
+		color: #fff;
+	}
+
 	/* Ensure checkboxes inside the dropdown are visible */
 	.checkbox {
 		margin-right: 10px;
@@ -21,6 +47,11 @@
 		.dropdown-item label {
 			cursor: pointer;
 		}
+	/* Separator after the first item */
+	.dropdown-menu li:not(:first-child) {
+		border-top: 1px solid #e0e0e0; /* Light gray separator */
+		margin-top: 5px;
+	}
 </style>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -102,6 +133,7 @@
 				{ data: 'startDate', title: '@SharedResource.Start_Date' },
 				{ data: 'endDate', title: '@SharedResource.End_Date' },
 				{ data: 'plannedDay', title: '@SharedResource.Planned_Day' },
+				{ data: 'progress', title: '@SharedResource.Progress' },
 				{ data: 'isVisible', title: '@SharedResource.Is_Visible' },
 			];
 
