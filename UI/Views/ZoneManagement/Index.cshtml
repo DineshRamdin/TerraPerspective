@@ -515,6 +515,14 @@
 
                     // Add the GeoJSON polygon to the map
                     var layer = L.geoJSON(geoJsonData, {
+
+                        style: {
+                            color: item.color, // Border color
+                            fillColor: item.fillColor, // Fill color
+                            fillOpacity: item.transparancy / 100, // Transparency
+                            weight: item.lineWidth // Line width
+                        },
+
                         onEachFeature: function (feature, layer) {
                             layer.on('click', function (e) {
                                 // Customize the label content as needed

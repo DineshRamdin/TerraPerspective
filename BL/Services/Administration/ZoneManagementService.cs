@@ -74,6 +74,10 @@ namespace BL.Services.Administration
                                                           zmn.Type,
                                                           zmn.Folder,
                                                           zmn.ExternalReference,
+                                                          zmn.Color,
+                                                          zmn.FillColor,
+                                                          zmn.Transparancy,                                                          
+                                                          zmn.LineWidth,
                                                           //zmn.GeomColumn
                                                       })
                                 .Union(
@@ -86,6 +90,10 @@ namespace BL.Services.Administration
                                             a.Type,
                                             a.Folder,
                                             a.ExternalReference,
+                                            a.Color,
+                                            a.FillColor,
+                                            a.Transparancy,
+                                            a.LineWidth,
                                             //a.GeomColumn
                                         })
                                 )
@@ -116,6 +124,10 @@ namespace BL.Services.Administration
                                              Type = a.Type,
                                              Folder = a.Folder,
                                              ExternalReference = a.ExternalReference,
+                                             Color = a.Color,
+                                             FillColor = a.FillColor,
+                                             Transparancy = a.Transparancy,
+                                             LineWidth = (int)a.LineWidth,
                                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
                                          })
                                          .ToList();
@@ -168,6 +180,10 @@ namespace BL.Services.Administration
                                              Type = a.Type,
                                              Folder = a.Folder,
                                              ExternalReference = a.ExternalReference,
+                                             Color = a.Color,
+                                             FillColor = a.FillColor,
+                                             Transparancy = a.Transparancy,
+                                             LineWidth = (int)a.LineWidth,
                                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
                                          })
                                          .ToList();

@@ -38,5 +38,10 @@ namespace UI.Controllers
             return Json(dt.Data);
         }
 
+        public IActionResult LoadDaypilotIndex()
+        {
+            return View();
+        }
+
     }
 }
