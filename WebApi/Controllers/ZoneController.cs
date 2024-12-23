@@ -33,8 +33,7 @@ namespace WebApi.Controllers
         public ActionResult<BaseResponseDTO<List<ZoneManagementDTO>>> GetAll()
         {
             try
-            {
-                // Access HttpContext
+            {                
                 var httpContext = HttpContext;
                 
                 bool isAuthenticated = httpContext.User.Identity.IsAuthenticated;
