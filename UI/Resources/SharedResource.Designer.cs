@@ -2075,5 +2075,12 @@ namespace UI.Resources {
                 return ResourceManager.GetString("Zone Matrix", resourceCulture);
             }
         }
-    }
+		public static string Progress
+		{
+			get
+			{
+				return ResourceManager.GetString("Progress", resourceCulture);
+			}
+		}
+	}
 }

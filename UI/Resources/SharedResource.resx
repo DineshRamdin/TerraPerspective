@@ -960,4 +960,8 @@
   <data name="View Task" xml:space="preserve">
     <value>View Task</value>
   </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress</value>
+    <comment>Progress</comment>
+  </data>
 </root>

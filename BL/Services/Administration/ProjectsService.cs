@@ -5,6 +5,7 @@ using BL.Services.Common;
 using DAL.Context;
 using DAL.Models;
 using DAL.Models.Administration;
+using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -38,7 +39,7 @@ namespace BL.Services.Administration
 			ProjectsDTO user = new ProjectsDTO();
 			QueryResult queryResult = new QueryResult();
 			string errorMsg = "No Data Found";
-
+			double progress = 0;
 			try
 			{
 
@@ -86,7 +87,7 @@ namespace BL.Services.Administration
 										p.PlannedDay,
 										p.IsVisible,
 										p.CreatedBy,
-										p.CreatedDate,
+										p.CreatedDate
 									})
 							)
 							.AsEnumerable() // Move to client-side processing
@@ -110,11 +111,14 @@ namespace BL.Services.Administration
 											 .FirstOrDefault()?.Name, // Use null-safe navigation
 								StatusDetails = x.StatusDetails,
 								IsVisible = x.IsVisible == true ? "Yes" : "No",
+
 							})
 							.ToList();
 
-
-
+					foreach (var project in result)
+					{
+						project.Progress = Math.Round(CalculateProjectProgress(project.Id), 2);
+					}
 
 					dto.Data = result;
 				}
@@ -140,6 +144,10 @@ namespace BL.Services.Administration
 													StatusDetails = a.StatusDetails,
 													IsVisible = a.IsVisible == true ? "Yes" : "No",
 												}).ToList();
+					foreach (var project in result)
+					{
+						project.Progress = Math.Round(CalculateProjectProgress(project.Id),2);
+					}
 
 					dto.Data = result;
 				}
@@ -156,6 +164,25 @@ namespace BL.Services.Administration
 			}
 
 			return dto;
+		}
+
+		public double CalculateProjectProgress(long Projectid)
+		{
+			if (Projectid == 0)
+				return 0; // Return 0 if the Project ID is invalid or empty
+
+			// Get all tasks for the given project and calculate the total progress and task count
+			var projectTasks = context.SYS_Task
+				.Where(x => x.Percentage.HasValue && x.Projects.Id == Projectid)
+				.Select(x => (x.Percentage==null) ? 0 : x.Percentage)
+				.ToList();
+
+			// Calculate progress
+			int taskCount = projectTasks.Count;
+			double totalProgress = (double)projectTasks.Sum();
+
+			// Return average progress or 0 if no tasks
+			return taskCount > 0 ? totalProgress / taskCount : 0;
 		}
 
 		public BaseResponseDTO<ProjectsCRUDDTO> GetById(long Id)
@@ -632,14 +659,30 @@ namespace BL.Services.Administration
                 {
                     if (node.parent != "#")
                     {
-                        nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+						if (node.parent != "#" && nodeMap.ContainsKey(node.parent))
+						{
+							nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+						}
                     }
                 }
 
-                outputNodes = nodeMap.Values
-                    .Where(node => mlf.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
-                    .ToList();
-                BaseDto.Data = outputNodes;
+				if (mlf.Any(n => n.parent.Contains("#")))
+				{
+					// Filter the outputNodes to include only nodes with valid parents or no parents
+					outputNodes = nodeMap.Values
+					.Where(node => mlf.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
+					.ToList();
+				}
+				else
+				{
+					// Filter the outputNodes to include only nodes with valid parents or no parents
+					outputNodes = nodeMap.Values
+						.Where(node => mlf.All(n => n.parent != "#"))
+						.ToList();
+				}
+
+				
+				BaseDto.Data = outputNodes;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
             }
             catch (Exception ex)

@@ -560,6 +560,25 @@ function initializeDataGridForProject(tableID, onclickPartial, url,ViewTaskProje
                         data: dataToShow, // data to display
                         columnDefs: [ // set action column
                             {
+                                // Target the "percentage" column by its index
+                                targets: columnList.findIndex(col => col.data === 'progress'),
+                                render: function (data, type, full, meta) {
+                                    if (data === null) {
+                                        data = "0";
+                                    }
+
+                                    const percentage = parseFloat(data);
+                                    // Generate the progress bar dynamically
+                                    return `
+                                            <div class="progress" style="position: relative; height: 20px;border: 1px solid #ddd; border-radius: 4px;"">
+                                                <div class="progress-bar" role="progressbar"style="width: ${percentage}%; background-color: #007bff; border-radius: 4px;"aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100">
+                                                ${percentage}%
+                                                </div>
+                                            </div>
+                                        `;
+                                }
+                            },
+                            {
                                 //set column order for action
                                 targets: columnList.length,
                                 //remove sorting on action
