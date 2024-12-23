@@ -225,6 +225,7 @@ function renderDynamicMenu(data, langResource) {
 
         var IDText = "li" + removeSpecialCharacters(grandParent.name) + "menu";
         // Build grandparent menu item
+
         let grandParentHtml = `
                     <li class="nav-item">
                         <a href="${grandParent.url ? '/' + grandParent.url : '#'}" class="nav-link" id="${IDText}">
@@ -241,8 +242,6 @@ function renderDynamicMenu(data, langResource) {
             let parentHtml = '<ul class="nav nav-treeview" style="display: none;">';
 
             grandParent.subMenu.forEach(parent => {
-
-
                 //For Sub Menu 
                 var SubMenuName = "";
                 if (parent.name == "Dashboard") {
@@ -511,6 +510,7 @@ function initMenuToggle() {
         const submenu = $(this).next(".nav-treeview");
 
         if (submenu.length) {
+
             $(this).parent().addClass("menu-open");
             submenu.slideDown();
         }
