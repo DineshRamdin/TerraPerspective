@@ -1,0 +1,447 @@
+﻿@{
+	ViewData["Title"] = "Projects";
+}
+@using UI.Resources
+@using BL.Models.Administration;
+@model ProjectsCRUDDTO;
+<link href="~/plugins/dropdowntree/dropdowntree.css" rel="stylesheet" />
+
+<style>
+    label {
+        margin-bottom: 0; /* Prevents extra spacing under the label */
+    }
+
+    input[type="checkbox"] {
+        margin: 0; /* Removes any unwanted margin */
+    }
+
+
+    /* Ensure checkboxes inside the dropdown are visible */
+    .checkbox {
+        margin-right: 10px;
+        display: inline-block;
+    }
+
+    /* Style for the dropdown items */
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+    }
+
+        .dropdown-item label {
+            cursor: pointer;
+        }
+    /* Separator after the first item */
+    .dropdown-menu li:not(:first-child) {
+        border-top: 1px solid #e0e0e0; /* Light gray separator */
+        margin-top: 5px;
+    }
+</style>
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@SharedResource.Projects</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+                    <li class="breadcrumb-item active">@SharedResource.Projects</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-10">
+						
+                    </div>
+                      @* <div class="col-2">
+                    <button type="button" class="btn btn-block btn-primary mb-3" onclick="openPosterModal(0)">Add</button>
+                    </div> *@
+                </div>
+				<div class="row">
+                    <div class="col-12 mb-10">
+						<div class="form-panel" id="formProjectAddEdit">
+
+							@* Hidden field for Project ID *@
+							<div class="form-floating d-none">
+								@Html.TextBoxFor(m => m.Id, new { @class = "form-control", @result = "Id", @id = "hdnId", @type = "text", @placeholder = "Id" })
+							</div>
+
+							<div class="col-12 form-group">
+								<label>@SharedResource.Project_Code<span class="red-required">*</span></label>
+								@Html.TextBoxFor(m=>m.UserCode, new { @class = "form-control", @result = "UserCode", @placeholder = SharedResource.Project_Code, @readonly = "readonly" })
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Project_Name<span class="red-required">*</span></label>
+								@Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @result = "ProjectName", @placeholder = SharedResource.Project_Name, @required = "required" })
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Project_Details<span class="red-required">*</span></label>
+								@Html.TextAreaFor(m => m.ProjectDetails, new { @class = "form-control", @result = "ProjectDetails", @placeholder = SharedResource.Project_Details, @required = "required" })
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Project_Description<span class="red-required">*</span></label>
+								@Html.TextAreaFor(m => m.ProjectDescription, new { @class = "form-control", @result = "ProjectDescription", @placeholder = SharedResource.Project_Description, @required = "required" })
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Assign_To<span class="red-required">*</span></label>
+								<select class="form-control" id="ddlAssignTo" required></select>
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Planned_Day<span class="red-required">*</span></label>
+								@Html.TextBoxFor(m => m.PlannedDay, new { @class = "form-control", @type = "number", @result = "PlannedDay", @placeholder = SharedResource.Planned_Day, @required = "required" })
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Status<span class="red-required">*</span></label>
+								<select class="form-control" id="ddlStatus" required></select>
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Status_Details<span class="red-required">*</span></label>
+								@Html.TextAreaFor(m => m.StatusDetails, new { @class = "form-control", @result = "StatusDetails", @placeholder = SharedResource.Status_Details, @required = "required" })
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Start_Date<span class="red-required">*</span></label>
+								@Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @result = "StartDate", @type = "date", @placeholder = SharedResource.Start_Date, @required = "required" })
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.End_Date<span class="red-required">*</span></label>
+								@Html.TextBoxFor(m => m.EndDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @result = "EndDate", @type = "date", @placeholder = SharedResource.End_Date, @required = "required" })
+							</div>
+							<div class="col-12 row form-group">
+								<div class="col-3 d-flex align-items-center">
+									<label for="chbIsVisible" class="mr-2">@SharedResource.Is_Visible</label>
+									@Html.CheckBoxFor(m => m.IsVisible.HasValue, new { @class = "form-control-sm", @result = "IsVisible" })
+								</div>
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Project_Template</label>
+								<select class="form-control" id="ddlProjectTemplate"></select>
+							</div>
+							<div class="col-2 form-group">
+								<label>@SharedResource.Project_ColorCode<span class="red-required">*</span></label>
+								@Html.TextBoxFor(m => m.ProjectColorCode, new { @class = "form-control", @type = "color", @id = "txtProjectColorCode", @required = "required", @name = "txtProjectColorCode", @result = "ProjectColorCode" })
+
+							</div>
+							<div class="col-12 form-group">
+								<label>@SharedResource.Folder<span class="red-required">*</span></label>
+								@Html.TextBoxFor(m => m.Folder, new { @class = "form-control", @type = "text", @id = "txtFolder", @required = "required", @name = "txtFolder", @result = "Folder" })
+							</div>
+							<div class="col-12 form-group">
+								<label for="tree" class="mb-2 label-required">@SharedResource.Project_Matrix</label>
+								<div id="ProjectTreeDropdown" class="dropdown dropdown-tree"></div>
+							</div>
+							<div class="row float-lg-right mb-2">
+								<button type="button" class="btn btn-primary mr-2" onclick="SaveProjects();">@SharedResource.Save</button>
+								<a href="@Url.Action("Index","Projects")" type="button" class="btn btn-default">@SharedResource.Back_To_List</a>
+							</div>
+						</div>
+						@* <div class="container d-flex justify-content-center">
+							<div class="col-10 col-md-8 col-lg-6">
+								<!-- Adjust the width using col classes -->
+								<form id="frnProjectsCreate">
+									<div class="row">
+										<div class="col-12 form-group">
+											<label>@SharedResource.Project_Name<span class="red-required">*</span></label>
+											<input type="text" id="txtProjectName" class="form-control" placeholder="@SharedResource.Project_Name" required />
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Project_Details<span class="red-required">*</span></label>
+											<textarea id="txtProjectDetails" class="form-control" placeholder="@SharedResource.Project_Details" required></textarea>
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Project_Description<span class="red-required">*</span></label>
+											<textarea id="txtProjectDescription" class="form-control" placeholder="@SharedResource.Project_Description" required></textarea>
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Assign_To<span class="red-required">*</span></label>
+											<select class="form-control" id="ddlAssignTo" required></select>
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Planned_Day<span class="red-required">*</span></label>
+											<input type="number" id="txtPlannedDay" class="form-control" placeholder="@SharedResource.Planned_Day" required />
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Status<span class="red-required">*</span></label>
+											<select class="form-control" id="ddlStatus" required></select>
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Status_Details<span class="red-required">*</span></label>
+											<textarea id="txtStatusDetails" class="form-control" placeholder="@SharedResource.Status_Details" required></textarea>
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Start_Date<span class="red-required">*</span></label>
+											<input type="date" id="txtStartDate" class="form-control" placeholder="@SharedResource.Start_Date" required />
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.End_Date<span class="red-required">*</span></label>
+											<input type="date" id="txtEndDate" class="form-control" placeholder="@SharedResource.End_Date" required />
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Is_Visible</label>
+											<div class="form-check">
+												<input type="checkbox" id="chbIsVisible" class="form-check-input" />
+												<label class="form-check-label" for="chbIsVisible">@SharedResource.Is_Visible</label>
+											</div>
+										</div>
+										<div class="col-12 form-group">
+											<label>@SharedResource.Project_ColorCode<span class="red-required">*</span></label>
+											<input type="color" id="txtProjectColorCode" class="form-control" required />
+										</div>
+										<div class="col-12 form-group text-center">
+											<button type="submit" class="btn btn-primary">@SharedResource.Save</button>
+											<button type="button" class="btn btn-secondary">@SharedResource.Back_To_List</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div> *@
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- /.modal -->
+@section scripts
+{
+	<script src="~/plugins/dropdowntree/dropdowntree.js"></script>
+	<script>
+		var GetAllProjectsUrl = '@Url.Action("GetAll", "Projects")';
+		var ProjectsGetByIdUrl = '@Url.Action("GetById", "Projects")';
+		var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
+		var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
+		var GetProjectMatrixTree = '@Url.Action("GetTree", "Projects")';
+		var GetProjectDashBoard = '@Url.Action("Index", "ProjectDashboard", new { Id = "__ID__" })';
+		var AssignTo = '@Model.AssignTo';
+		var Status = '@Model.Status';
+		var ProjectTemplateId = '@Model.AssignTo';
+		var ProjectId = '@Model.Id';
+		
+
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liprojectsmenu').addClass('active');
+
+			if (('@Model.StartDate').includes('0001-01-01')) {
+				$("#StartDate").val("");
+			}
+
+			if (('@Model.EndDate').includes('0001-01-01')) {
+				$("#EndDate").val("");
+			}
+
+			$('#ProjectTreeDropdown').on('change', function () {
+				// Assuming the plugin has a method to get selected values
+				var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
+				console.log('Selected Values: ', selectedValues);
+			});
+
+			GetDropdownData();
+			
+			GetMetrixDetails(ProjectId);
+		});
+
+		function GetMetrixDetails(id) {
+			var dataObject = {};
+			dataObject.id = id;
+
+			// Fetch data from the server and initialize the tree
+			$.ajax({
+				url: GetProjectMatrixTree, // API endpoint to fetch the matrix data
+				type: "POST",
+				data: dataObject,
+				success: function (response) {
+					if (response && response.data) {
+						data = response.data;
+						// console.log("data : ", data);
+						var options = {
+							title: "@SharedResource.Project_Matrix",
+							data: data,
+							maxHeight: 300,
+							closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+							openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+							multiSelect: true,
+							selectChildren: true,
+						}
+
+						$("#ProjectTreeDropdown").DropDownTree(options);
+
+						//initializeTreeView(data);
+					} else {
+						console.error("@SharedResource.Failed_to_fetch_tree_data_");
+					}
+				},
+				error: function () {
+					console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
+				}
+			});
+			
+						
+					
+
+
+		}
+
+		function formatDateToInput(dateString) {
+			// Ensure the date is a valid Date object
+			const date = new Date(dateString);
+			if (isNaN(date.getTime())) {
+				console.error("Invalid date:", dateString);
+				return ""; // Return an empty string if the date is invalid
+			}
+
+			// Format the date as yyyy-MM-dd for input type="date"
+			const year = date.getFullYear();
+			const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+			const day = String(date.getDate()).padStart(2, '0');
+			return `${year}-${month}-${day}`;
+		}
+
+
+		function ClearProjectsModal() {
+			$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
+			$("#hdnId").val(0);
+			$("#txtCode").val("");
+			$("#txtProjectName").val("");
+			$("#txtProjectDetails").val("");
+			$("#txtProjectDescription").val("");
+			$("#ddlAssignTo").val("");
+			$("#txtPlannedDay").val("");
+			$("#ddlStatus").val("");
+			$("#ddlProjectTemplate").val("");
+			$("#txtStatusDetails").val("");
+			$("#txtProjectColorCode").val("");
+			$("#txtStartDate").val("");
+			$("#txtEndDate").val("");
+			$("#chbIsVisible").prop('checked', false);
+			$("#ProjectTreeDropdown").empty();
+			// Unbind all event listeners attached to the element
+			$("#ProjectTreeDropdown").off();
+
+			// Remove data associated with the element (if any)
+			$("#ProjectTreeDropdown").removeData();
+		}
+
+		function GetDropdownData() {
+			$.ajax({
+				url: getProjectsDropDownUrl,
+				type: "POST",
+				async: false,
+				// data: dataObject,  // Send data if needed
+				beforeSend: function () {
+					$("#ddlAssignTo").html('');
+					$("#ddlStatus").html('');
+					$("#ddlProjectTemplate").html('');
+				},
+				success: function (response) {
+					if (response.data) {
+						
+						$.each(response.data, function (key, value) {
+							if (value.title == "User") {
+								$("#ddlAssignTo").append($("<option></option>").val('').html("@SharedResource.Select_AssignTo"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlAssignTo").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+								if(AssignTo != null)
+									$("#ddlAssignTo").val(AssignTo);
+								
+							}
+
+							if (value.title == "Project Status") {
+								$("#ddlStatus").append($("<option></option>").val('').html("@SharedResource.Select_Status"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlStatus").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+								if (Status != null)
+									$("#ddlStatus").val(Status);
+							}
+
+							if (value.title == "Project Template") {
+								$("#ddlProjectTemplate").append($("<option></option>").val('').html("@SharedResource.Select_Project_Template"));
+								$.each(value.items, function (itemskey, itemsvalue) {
+									$("#ddlProjectTemplate").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+								});
+								if (ProjectTemplateId != null)
+									$("#ddlProjectTemplate").val(ProjectTemplateId);
+							}
+						});
+					}
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					// toastr.error("Error:" + error);
+				}
+
+			});
+		}
+
+		function SaveProjects() {
+
+			// let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedDay", "ddlStatus", "txtStatusDetails", "txtProjectColorCode", "txtStartDate", "txtEndDate"]);
+
+			// if (valid) {
+			var dataObject = {};
+
+			var data = result(document.getElementById("formProjectAddEdit"));
+
+			var treeDropDownData = $("#ProjectTreeDropdown").init.prototype.GetSelected();
+			
+			//get tree selected ids
+			var selectedIds = []
+			if (treeDropDownData.length > 0) {
+				selectedIds = treeDropDownData.map(function (datum) {
+					return parseInt(datum);
+				});
+			}
+			data["ProjectMatrix"] = selectedIds;
+			data["ProjectTemplateId"] = $("#ddlProjectTemplate").val();
+			data["AssignTo"] = $("#ddlAssignTo").val();
+			data["Status"] = $("#ddlStatus").val();
+
+			$.ajax({
+				url: CreateUpdateProjectsUrl,
+				type: "POST",
+				data: data,  // Send data if needed
+				beforeSend: function () {
+
+				},
+				success: function (response) {
+					if (response.data) {
+						toastr.success(response.errorMessage);
+						$('#AddProjectsModal').modal('hide');
+						GetAllProjects();
+					}
+					else {
+						toastr.error(response.errorMessage);
+					}
+					// Handle success (e.g., update UI with response data)
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			}).done(function () {
+
+			});
+			// }
+			// else {
+			// 	toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+			// }
+		}
+
+	</script>
+}

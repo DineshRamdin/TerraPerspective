@@ -125,6 +125,17 @@ namespace UI.Controllers
 			{
 				BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
 
+				if (!string.IsNullOrEmpty(dto.Folder))
+				{
+					string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Projects", dto.Folder);
+
+					// Check if the folder exists, and create it if not
+					if (!Directory.Exists(folderPath))
+					{
+						Directory.CreateDirectory(folderPath);
+					}
+				}
+
 				if (dto.Id == 0)
 				{
 					dt = ProjectsService.SaveAsync(dto);
@@ -170,6 +181,30 @@ namespace UI.Controllers
 			}
 
 
+		}
+
+		public IActionResult AddProjects(long Id)
+		{
+			try
+			{
+				if(Id > 0)
+				{
+					BaseResponseDTO<ProjectsCRUDDTO> dt = new BaseResponseDTO<ProjectsCRUDDTO>();
+					dt = ProjectsService.GetById(Id);
+					return View(dt.Data);
+				}
+				else
+				{
+					ProjectsCRUDDTO dt = new ProjectsCRUDDTO();
+					return View(dt);
+				}
+				
+			}
+			catch (Exception)
+			{
+				return BadRequest();
+			}
+			
 		}
 	}
 }
