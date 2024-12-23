@@ -51,4 +51,20 @@ namespace BL.Models.Administration
         public string color { get; set; }
     }
 
+    public class TaskViewDTO
+    {
+		public long Id { get; set; }
+		public string Taskname { get; set; }
+		public string ProjectName { get; set; }
+		public string ParentTaskName { get; set; }
+		public string Status { get; set; }
+		public int? Percentage { get; set; }
+	}
+
+    public class TaskDeatilsForPieChart
+    {
+        public string TaskName { get; set; }
+        public string TaskPercentage { get; set; }
+    }
+
 }

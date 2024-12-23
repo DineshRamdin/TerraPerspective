@@ -1,0 +1,296 @@
+﻿@{
+	ViewData["Title"] = "Project Dashboard";
+}
+@using UI.Resources
+
+<style>
+
+	#pie-chart {
+		width: 600px; /* Desired width */
+		height: 600px; /* Desired height */
+	}
+
+	.container {
+		/* width: 40%; */
+		margin: 5px auto;
+	}
+
+	table {
+		width: 100%;
+		border: 1px solid #ddd;
+		font-family: Arial, sans-serif;
+	}
+
+	th, td {
+		padding: 8px;
+		text-align: left;
+	}
+
+		td div {
+			border-radius: 4px;
+			overflow: hidden;
+		}
+
+			td div > div {
+				border-radius: 4px;
+				line-height: 20px;
+			}
+</style>
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@SharedResource.Project_Dashboard</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
+					<li class="breadcrumb-item active">@SharedResource.Project_Dashboard</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="card card-solid">
+			<div class="card-body pb-0">
+				<div class="row">
+					<div class="col-10">
+					</div>
+				</div>
+				<div class="row">
+					<input type="hidden" id="hdnProjectId" value="@ViewBag.ProjectId" />
+					<div class="col-6  mb-3">
+						<div class="col-12">
+							<table id="TaskDetailsTable" class="table table-bordered table-striped"></table>
+						</div>
+					</div>
+
+					<div class="col-6  mb-3">
+						@* <div id="myPieChart">
+							<canvas id="pieChart" width="400" height="400"></canvas>
+						</div> *@
+
+						<div class="container">
+							<canvas id="pie-chart"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+@section scripts
+{
+    <script src="~/plugins/chartjs/chart.min.js"></script>
+	<script src="~/plugins/chartjs/chartjs-plugin-datalabels.min.js"></script>
+	<script>
+		var GetAllTaskUrl = '@Url.Action("GetAllProjectTask", "Projects")';
+		var TaskGetByIdUrl = '@Url.Action("GetById", "Task")';
+		var getTaskDropDownUrl = '@Url.Action("GetAllDropdownValues", "Task")';
+		var CreateUpdateTaskUrl = '@Url.Action("CreateUpdate", "Task")';
+		var GetTaskURL = '@Url.Action("BarChart", "ProjectDashboard")';
+		var myChart;
+		$(function () {
+			$('.nav-link').removeClass('active');
+			$('#liprojectdashboardmenu').addClass('active');
+
+			GetAllTask();
+			// Initial setup
+			let ctx = document.getElementById("pie-chart").getContext("2d");
+
+			myChart = new Chart(ctx, {
+				type: "pie",
+				data: {
+					labels: [], // Initialize with empty data
+					datasets: [
+						{
+							data: [], // Initialize with empty data
+							borderColor: "#fff",
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					plugins: {
+						legend: {
+							display: true,
+							position: 'top',
+						},
+						tooltip: {
+							enabled: true,
+						},
+						datalabels: {
+							formatter: (value, ctx) => {
+								const datapoints = ctx.chart.data.datasets[0].data;
+								const total = datapoints.reduce((total, datapoint) => total + datapoint, 0);
+								const percentage = (value / total) * 100;
+								return percentage.toFixed(2) + "%";
+							},
+							color: "#fff",
+						},
+					},
+				},
+			});
+
+			GetPieChart();
+		});
+
+		function generateRandomColors(count) {
+			let colors = [];
+			for (let i = 0; i < count; i++) {
+				let color = `rgba(${Math.floor(Math.random() * 255)},
+								  ${Math.floor(Math.random() * 255)},
+								  ${Math.floor(Math.random() * 255)}, 0.7)`;
+				colors.push(color);
+			}
+			return colors;
+		}
+
+		function ensureColors(count, existingColors) {
+			while (existingColors.length < count) {
+				existingColors.push(
+					`rgba(${Math.floor(Math.random() * 255)},
+						  ${Math.floor(Math.random() * 255)},
+						  ${Math.floor(Math.random() * 255)}, 0.7)`
+				);
+			}
+			return existingColors;
+		}
+
+		function GetPieChart(){
+
+			dataObject={};
+			dataObject.ProjectId=$("#hdnProjectId").val();
+
+			// var data = [{
+			// 	data: [50, 55, 60, 33],
+			// 	backgroundColor: [
+			// 		"#4b77a9",
+			// 		"#5f255f",
+			// 		"#d21243",
+			// 		"#B27200"
+			// 	],
+			// 	borderColor: "#fff"
+			// }];
+
+			// var options = {
+			// 	tooltips: {
+			// 		enabled: false
+			// 	},
+			// 	plugins: {
+			// 		datalabels: {
+			// 			formatter: (value, ctx) => {
+			// 				const datapoints = ctx.chart.data.datasets[0].data
+			// 				const total = datapoints.reduce((total, datapoint) => total + datapoint, 0)
+			// 				const percentage = value / total * 100
+			// 				return percentage.toFixed(2) + "%";
+			// 			},
+			// 			color: '#fff',
+			// 		}
+			// 	}
+			// };
+
+			// var ctx = document.getElementById("pie-chart").getContext('2d');
+			// var myChart = new Chart(ctx, {
+			// 	type: 'pie',
+			// 	data: {
+			// 		labels: ['India', 'China', 'US', 'Canada'],
+			// 		datasets: data
+			// 	},
+			// 	options: options,
+			// 	plugins: [ChartDataLabels],
+			// });
+
+			// Fetch data via AJAX and update the chart
+			$.ajax({
+				url: GetTaskURL, // Replace with your API endpoint
+				type: "POST", // Or POST, depending on your API
+				data: dataObject, // Convert to JSON string if needed
+				success: function (response) {
+					console.log("Response received:", response);
+
+					// Access data safely
+					let taskNames = JSON.parse(response.data.taskName);
+					let taskPercentages = JSON.parse(response.data.taskPercentage);
+					// let TaskNames=response.data.taskname;
+					// let TaskPercentages=response.data.taskPercentage;
+					// Assuming the response has the format:
+					// { labels: ['India', 'China', 'US', 'Canada'], data: [50, 55, 60, 33] }
+
+					// Generate dynamic colors
+					let backgroundColors = generateRandomColors(taskNames.length);
+					backgroundColors = ensureColors(taskNames.length, backgroundColors); // Ensure enough colors
+
+					// Update chart labels and data
+					myChart.data.labels = taskNames;
+					myChart.data.datasets[0].data = taskPercentages;
+					myChart.data.datasets[0].backgroundColor = backgroundColors;
+					
+					// Refresh the chart
+					myChart.update();
+				},
+				error: function (error) {
+					console.log("Error:", error);
+					toastr.error("Error:" + error);
+				}
+			});
+
+		}
+
+		function GetAllTask() {
+			var ProjectId = $("#hdnProjectId").val();
+			var columnList = [
+				{ data: 'id', title: 'Id', visible: false },
+				{ data: 'taskname', title: '@SharedResource.Task_Name' },
+				{ data: 'projectName', title: '@SharedResource.Project_Name' },
+				{ data: 'parentTaskName', title: '@SharedResource.Parent_Task' },
+				{ data: 'percentage', title: '@SharedResource.Percentage' },
+				{ data: 'status', title: '@SharedResource.Status' }
+			];
+
+			var langResource = {
+				AddNewLabel: '@SharedResource.Add_New',
+				ExportLabel: '@SharedResource.Export',
+				ExportPDFLabel: '@SharedResource.Export_PDF',
+				ExportCSVLabel: '@SharedResource.Export_CSV',
+				ExportExcelLabel: '@SharedResource.Export_Excel',
+				ExcelLabel: '@SharedResource.Excel',
+				PDFLabel: '@SharedResource.PDF',
+				CSVLabel: '@SharedResource.CSV',
+				NodataavailableLabel: '@SharedResource.No_data_available',
+				SearchLabel: '@SharedResource.Search',
+				ShowingLabel: '@SharedResource.Showing',
+				EntriesLabel: '@SharedResource.entries',
+				FilteredfromLabel: '@SharedResource.filtered_from',
+				ViewLabel: '@SharedResource.View',
+				PreviewLabel: '@SharedResource.Preview',
+				DeleteLabel: '@SharedResource.Delete',
+				EditLabel: '@SharedResource.Edit',
+				ResetPasswordLabel: '@SharedResource.Reset_Password',
+				UserNameLabel: '@SharedResource.UserName',
+				DateLabel: '@SharedResource.Date',
+				PageLabel: '@SharedResource.Page',
+				OfLabel: '@SharedResource.of',
+				GeneratedonLabel: '@SharedResource.Generated_on',
+				PreviousLabel: '@SharedResource.Previous',
+				NextLabel: '@SharedResource.Next'
+			};
+
+			initializeDataGridForProjectWiseTask('TaskDetailsTable', '', GetAllTaskUrl, columnList, false, false, false, false, false, null, false, null, langResource, ProjectId);
+
+		}
+
+	</script>
+
+
+}

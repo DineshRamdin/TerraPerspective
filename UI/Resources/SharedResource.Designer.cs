@@ -295,6 +295,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color.
+        /// </summary>
+        public static string Color {
+            get {
+                return ResourceManager.GetString("Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Colour.
         /// </summary>
         public static string Colour {
@@ -628,6 +637,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fill Color.
+        /// </summary>
+        public static string Fill_Color {
+            get {
+                return ResourceManager.GetString("Fill Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to filtered from.
         /// </summary>
         public static string filtered_from {
@@ -768,6 +786,15 @@ namespace UI.Resources {
         public static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Width.
+        /// </summary>
+        public static string Line_Width {
+            get {
+                return ResourceManager.GetString("Line Width", resourceCulture);
             }
         }
         
@@ -1245,6 +1272,15 @@ namespace UI.Resources {
         public static string Project_ColorCode {
             get {
                 return ResourceManager.GetString("Project ColorCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Dashboard.
+        /// </summary>
+        public static string Project_Dashboard {
+            get {
+                return ResourceManager.GetString("Project Dashboard", resourceCulture);
             }
         }
         
@@ -1870,6 +1906,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transparancy.
+        /// </summary>
+        public static string Transparancy {
+            get {
+                return ResourceManager.GetString("Transparancy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tree View.
         /// </summary>
         public static string Tree_View {
@@ -1960,6 +2005,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View Task.
+        /// </summary>
+        public static string View_Task {
+            get {
+                return ResourceManager.GetString("View Task", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Visitor.
         /// </summary>
         public static string Visitor {
@@ -2021,5 +2075,12 @@ namespace UI.Resources {
                 return ResourceManager.GetString("Zone Matrix", resourceCulture);
             }
         }
-    }
+		public static string Progress
+		{
+			get
+			{
+				return ResourceManager.GetString("Progress", resourceCulture);
+			}
+		}
+	}
 }

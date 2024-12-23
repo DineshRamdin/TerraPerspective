@@ -5,7 +5,6 @@
 
 <style>
     #calendar {
-        max-width: 900px;
         margin: 40px auto;
     }
 
@@ -19,6 +18,10 @@
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
 
+    #custom-header {
+        text-align: right;
+        margin-bottom: 10px;
+    }
 </style>
 
 <!-- Content Header (Page header) -->
@@ -53,6 +56,8 @@
     </div>
 </section>
 
+
+
 <div id="popup"></div>
 
 
@@ -62,6 +67,22 @@
         var GetEventforDatesUrl = '@Url.Action("GetEventforDates", "ProjectView")';
         $(function () {
 
+            Loadcalendar();
+
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.fc-event, #popup').length) {
+                    $('#popup').fadeOut();
+                }
+            });
+
+            $(document).on('click', '#Back-btn', function () {
+                destroyCustomView();
+                Loadcalendar();
+            });           
+            
+        });
+      
+        function Loadcalendar() {
             $('#calendar').fullCalendar({
                 themeSystem: 'bootstrap4',
                 header: {
@@ -69,17 +90,25 @@
                     center: 'title',
                     right: 'year,month,agendaWeek,agendaDay,listMonth'
                 },
-                views: {
-                    year: {
-                        type: 'basic',  // Use basic view for year layout
-                        duration: { years: 1 },  // Set the duration to one year
-                        buttonText: 'Year'  // Button text for the year view
-                    }
-                },
+                // views: {
+                //     year: {
+                //         type: 'basic',  // Use basic view for year layout
+                //         // duration: { years: 1 },  // Set the duration to one year
+                //         buttonText: 'Year'  // Button text for the year view
+                //     }
+                // },
                 viewRender: function (view) {
                     // Replace any incorrect characters
                     var title = view.title.replace('â€“', '-');
                     $('.fc-center h2').text(title); // Manually update the title
+                },
+                customButtons: {
+                    year: {
+                        text: 'Year',
+                        click: function () {
+                            renderYearView();
+                        }
+                    }
                 },
                 weekNumbers: true,
                 eventLimit: true, // allow "more" link when too many events
@@ -126,11 +155,80 @@
                 }
 
             });
-            $(document).on('click', function (e) {
-                if (!$(e.target).closest('.fc-event, #popup').length) {
-                    $('#popup').fadeOut();
-                }
+        }
+
+        function renderYearView() {
+            const year = new Date().getFullYear(); // Current year
+            const container = $('#calendar'); // Main container
+
+            // Clear the existing calendar
+            container.empty();
+
+            // Create a header for controls
+            const header = `
+                                    <div id="custom-header" class="text-right" style="margin-bottom: 20px;">
+                                                        <button id="Back-btn" class="btn btn-primary">Back</button>
+                                            </div>
+                                `;
+            container.append(header);
+
+            // Add a grid layout for the mini-calendars
+            const yearContainer = $('<div id="year-view-container" class="month-container"></div>');
+            container.append(yearContainer);
+
+            yearContainer.css({
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '15px',
             });
-        });
+
+            // Render a calendar for each month
+            for (let month = 0; month < 12; month++) {
+                const calendarId = `calendar-${month}`;
+                const monthContainer = $(`<div id="${calendarId}" class="month-calendar"></div>`);
+                yearContainer.append(monthContainer);
+
+                $(`#${calendarId}`).fullCalendar({
+                    themeSystem: 'bootstrap4',
+                    //header: true, // Disable headers for individual calendars
+                    header: {
+                        left: '',
+                        center: 'title',
+                        right: ''
+                    },
+                    defaultView: 'month',
+                    defaultDate: moment({ year: year, month: month }),
+                    editable: false,
+                    weekNumbers: true,
+                    eventLimit: true,
+                    events: GetEventforDatesUrl, // Fetch events dynamically
+                    eventRender: function (event, element) {
+                        element.find('.fc-content').on('mouseenter', function (e) {
+                            var popupContent = `<strong>Task Name : </strong>${event.title}<br>`;
+                            popupContent += `<strong>Project Name : </strong>${event.projectName}<br>`;
+                            if (event.description) {
+                                popupContent += `<strong>Details: </strong>${event.description}<br>`;
+                            }
+
+                            $('#popup').html(popupContent)
+                                .css({
+                                    top: e.pageY + 10 + 'px',
+                                    left: e.pageX + 10 + 'px',
+                                })
+                                .fadeIn();
+                        }).on('mouseleave', function () {
+                            $('#popup').fadeOut();
+                        });
+                    }
+                });
+            }           
+            // Helper function to destroy custom year view
+
+        }
+
+        function destroyCustomView() {
+            $('#calendar').fullCalendar('destroy');
+            $('#calendar').empty('');
+        }
     </script>
 }

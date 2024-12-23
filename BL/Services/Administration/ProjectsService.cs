@@ -5,11 +5,14 @@ using BL.Services.Common;
 using DAL.Context;
 using DAL.Models;
 using DAL.Models.Administration;
+using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using NetTopologySuite.IO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +39,7 @@ namespace BL.Services.Administration
 			ProjectsDTO user = new ProjectsDTO();
 			QueryResult queryResult = new QueryResult();
 			string errorMsg = "No Data Found";
-
+			double progress = 0;
 			try
 			{
 
@@ -84,7 +87,7 @@ namespace BL.Services.Administration
 										p.PlannedDay,
 										p.IsVisible,
 										p.CreatedBy,
-										p.CreatedDate,
+										p.CreatedDate
 									})
 							)
 							.AsEnumerable() // Move to client-side processing
@@ -108,11 +111,14 @@ namespace BL.Services.Administration
 											 .FirstOrDefault()?.Name, // Use null-safe navigation
 								StatusDetails = x.StatusDetails,
 								IsVisible = x.IsVisible == true ? "Yes" : "No",
+
 							})
 							.ToList();
 
-
-
+					foreach (var project in result)
+					{
+						project.Progress = Math.Round(CalculateProjectProgress(project.Id), 2);
+					}
 
 					dto.Data = result;
 				}
@@ -138,6 +144,10 @@ namespace BL.Services.Administration
 													StatusDetails = a.StatusDetails,
 													IsVisible = a.IsVisible == true ? "Yes" : "No",
 												}).ToList();
+					foreach (var project in result)
+					{
+						project.Progress = Math.Round(CalculateProjectProgress(project.Id),2);
+					}
 
 					dto.Data = result;
 				}
@@ -154,6 +164,25 @@ namespace BL.Services.Administration
 			}
 
 			return dto;
+		}
+
+		public double CalculateProjectProgress(long Projectid)
+		{
+			if (Projectid == 0)
+				return 0; // Return 0 if the Project ID is invalid or empty
+
+			// Get all tasks for the given project and calculate the total progress and task count
+			var projectTasks = context.SYS_Task
+				.Where(x => x.Percentage.HasValue && x.Projects.Id == Projectid)
+				.Select(x => (x.Percentage==null) ? 0 : x.Percentage)
+				.ToList();
+
+			// Calculate progress
+			int taskCount = projectTasks.Count;
+			double totalProgress = (double)projectTasks.Sum();
+
+			// Return average progress or 0 if no tasks
+			return taskCount > 0 ? totalProgress / taskCount : 0;
 		}
 
 		public BaseResponseDTO<ProjectsCRUDDTO> GetById(long Id)
@@ -318,6 +347,14 @@ namespace BL.Services.Administration
 				{
 					foreach (var item in templateMapping)
 					{
+						long TaskId = 0;
+
+                        if (item.ParentTask > 0)
+						{
+							string taskName = context.SYS_ProjectTemplateMapping.Where(a => a.Sequence == item.ParentTask && a.ProjectTemplateID == item.ProjectTemplateID).Select(a => a.TaskName).FirstOrDefault();
+							TaskId = context.SYS_Task.Where(a => a.Taskname.ToLower() == taskName.ToLower() && a.Projects.Id == dt.Id).FirstOrDefault().Id;
+                        }
+
 						BaseResponseDTO<string> BaseDtoTS = new BaseResponseDTO<string>();
 						BaseDtoTS = new GenerateCode().GCodeMain(UserToken, "SYS_Task");
 						TaskCRUDDTO taskCRUDDTO = new TaskCRUDDTO()
@@ -326,9 +363,9 @@ namespace BL.Services.Administration
 							TaskName = item.TaskName,
 							TaskDescription = item.TaskName,
 							Project = dt.Id,
-							ParentTask = 0,
+							ParentTask = TaskId,
 							StartDate = dt.StartDate,
-							EndDate = dt.EndDate,
+							EndDate = dt.StartDate.AddDays(item.Duration),
 							Status = dt.Status,
 							Percentage = 0,
 							IsVisible = dt.IsVisible,
@@ -622,14 +659,30 @@ namespace BL.Services.Administration
                 {
                     if (node.parent != "#")
                     {
-                        nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+						if (node.parent != "#" && nodeMap.ContainsKey(node.parent))
+						{
+							nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+						}
                     }
                 }
 
-                outputNodes = nodeMap.Values
-                    .Where(node => mlf.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
-                    .ToList();
-                BaseDto.Data = outputNodes;
+				if (mlf.Any(n => n.parent.Contains("#")))
+				{
+					// Filter the outputNodes to include only nodes with valid parents or no parents
+					outputNodes = nodeMap.Values
+					.Where(node => mlf.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
+					.ToList();
+				}
+				else
+				{
+					// Filter the outputNodes to include only nodes with valid parents or no parents
+					outputNodes = nodeMap.Values
+						.Where(node => mlf.All(n => n.parent != "#"))
+						.ToList();
+				}
+
+				
+				BaseDto.Data = outputNodes;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
             }
             catch (Exception ex)
@@ -639,6 +692,169 @@ namespace BL.Services.Administration
                 BaseDto.QryResult = new QueryResult().FAILED;
             }
             return BaseDto;
+        }
+
+		public BaseResponseDTO<List<TaskViewDTO>> GetAllTaskByProject(string Email,long ProjectId)
+		{
+			BaseResponseDTO<List<TaskViewDTO>> dto = new BaseResponseDTO<List<TaskViewDTO>>();
+			TaskDTO user = new TaskDTO();
+			QueryResult queryResult = new QueryResult();
+			string errorMsg = "No Data Found";
+
+			try
+			{
+
+				string sQryResult = queryResult.FAILED;
+				string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
+				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+				if (Email != "admin@gmail.com")
+				{
+					List<TaskViewDTO> result = (from prj in context.SYS_Projects
+											join ts in context.SYS_Task on prj.Id equals ts.Projects.Id // Assuming it's ProjectId, not Id
+											join pm in context.SYS_ProjectsMatrix on prj.Id equals pm.IID
+											join gu in context.SYS_GroupMatrixUser on pm.IID equals gu.IID
+											where ts.DeleteStatus == false && gu.IID == UsrId
+											select new
+											{
+												ts.Id,
+												ts.Taskname,
+												ts.Projects,
+												ts.Task,
+												ts.Percentage,
+												ts.Status
+											})
+						.Union(
+							context.SYS_Task
+								.Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
+								.Select(p => new
+								{
+									p.Id,
+									p.Taskname,
+									p.Projects,
+									p.Task,
+									p.Percentage,
+									p.Status
+								})
+						)
+						.AsEnumerable() // Move to client-side processing
+						.Select(x => new TaskViewDTO
+						{
+							Id = x.Id,
+							Taskname = x.Taskname,
+							ProjectName = (from c in context.SYS_Projects
+										   where c.Id == x.Projects.Id
+										   select c.ProjectName).FirstOrDefault(),
+							ParentTaskName = (x.Task == null) ? "" : (from c in context.SYS_Task
+																	  where c.Id == x.Task.Id
+																	  select c.Taskname).FirstOrDefault(),
+							Percentage = x.Percentage,
+							Status=context.SYS_LookUpValue.Where(a=>a.Id==x.Status).FirstOrDefault().Name
+						})
+						.ToList();
+
+
+
+					dto.Data = result;
+				}
+				else
+				{
+					List<TaskViewDTO> result = (from a in context.SYS_Task
+											where a.DeleteStatus == false && a.Projects.Id == ProjectId
+											select new TaskViewDTO
+											{
+												Id = a.Id,
+												Taskname = a.Taskname,
+												ProjectName = (from c in context.SYS_Projects
+															   where c.Id == a.Projects.Id
+															   select c.ProjectName).FirstOrDefault(),
+												ParentTaskName = (from c in context.SYS_Task
+																  where c.Id == a.Task.Id
+																  select c.Taskname).FirstOrDefault(),
+												Percentage = a.Percentage,
+                                                Status = context.SYS_LookUpValue.Where(x=>x.Id==a.Status).FirstOrDefault().Name
+                                            }).ToList();
+
+					dto.Data = result;
+				}
+
+				dto.QryResult = queryResult.SUCEEDED;
+
+			}
+			catch (Exception ex)
+			{
+				dto.Data = new List<TaskViewDTO>();
+				dto.ErrorMessage = errorMsg;
+				dto.QryResult = queryResult.SUCEEDED;
+			}
+
+			return dto;
+		}
+
+		public BaseResponseDTO<TaskDeatilsForPieChart> GetAllTaskByProjectidForChart(string Email, long ProjectId)
+		{
+			BaseResponseDTO<TaskDeatilsForPieChart> PieChartData = new BaseResponseDTO<TaskDeatilsForPieChart>();
+			TaskDeatilsForPieChart taskDeatilsForPieChart = new TaskDeatilsForPieChart();
+			QueryResult queryResult = new QueryResult();
+			string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
+            long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+            if (Email != "admin@gmail.com")
+            {
+                List<string> TaskNames = (from prj in context.SYS_Projects
+                                            join ts in context.SYS_Task on prj.Id equals ts.Projects.Id // Assuming it's ProjectId, not Id
+                                            join pm in context.SYS_ProjectsMatrix on prj.Id equals pm.IID
+                                            join gu in context.SYS_GroupMatrixUser on pm.IID equals gu.IID
+                                            where ts.DeleteStatus == false && gu.IID == UsrId
+                                            select new
+                                            {
+                                                ts.Taskname
+                                            })
+                    .Union(
+                        context.SYS_Task
+                            .Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
+                            .Select(p => new
+                            {
+                                p.Taskname
+                            })
+                    )
+                    .AsEnumerable() // Move to client-side processing
+                    .Select(x => x.Taskname)
+                    .ToList();
+
+                List<int?> TaskPercentage = (from prj in context.SYS_Projects
+                                          join ts in context.SYS_Task on prj.Id equals ts.Projects.Id // Assuming it's ProjectId, not Id
+                                          join pm in context.SYS_ProjectsMatrix on prj.Id equals pm.IID
+                                          join gu in context.SYS_GroupMatrixUser on pm.IID equals gu.IID
+                                          where ts.DeleteStatus == false && gu.IID == UsrId
+                                          select new
+                                          {
+                                              ts.Percentage
+                                          })
+                   .Union(
+                       context.SYS_Task
+                           .Where(p => p.DeleteStatus == false && p.CreatedBy.ToString().ToLower() == AID.ToLower())
+                           .Select(p => new
+                           {
+                               p.Percentage
+                           })
+                   )
+                   .AsEnumerable() // Move to client-side processing
+                   .Select(x => (x.Percentage == null) ? 0 : x.Percentage)
+                   .ToList();
+				taskDeatilsForPieChart.TaskName = JsonConvert.SerializeObject(TaskNames);
+				taskDeatilsForPieChart.TaskPercentage = JsonConvert.SerializeObject(TaskPercentage);
+
+            }
+            else
+            {
+				List<string> TaskNames = context.SYS_Task.Where(a => a.DeleteStatus == false && a.Projects.Id==ProjectId).Select(a => a.Taskname).ToList();
+				List<int?> TaskPercentage = context.SYS_Task.Where(a => a.DeleteStatus == false && a.Projects.Id == ProjectId).Select(a => (a.Percentage == null) ? 0 : a.Percentage).ToList();
+                taskDeatilsForPieChart.TaskName = JsonConvert.SerializeObject(TaskNames);
+                taskDeatilsForPieChart.TaskPercentage = JsonConvert.SerializeObject(TaskPercentage);
+            }
+			PieChartData.Data = taskDeatilsForPieChart;
+			PieChartData.QryResult = queryResult.SUCEEDED;
+
+			return PieChartData;
         }
     }
 }

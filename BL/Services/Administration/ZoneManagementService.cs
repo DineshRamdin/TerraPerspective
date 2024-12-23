@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using DAL.Common;
 using static BL.Models.Administration.MatrixDTO;
 using Microsoft.AspNetCore.Http;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace BL.Services.Administration
 {
@@ -44,83 +45,95 @@ namespace BL.Services.Administration
             {
                 string sQryResult = queryResult.FAILED;
 
-				//IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-				//string claimsPrincipal = null;
-				//string UserGuidId = "";
-				//if (httpContextAccessor.HttpContext != null)
-				//{
-				//	claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
-				//	UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
-				//}
-				//else
-				//{
-				//	claimsPrincipal = "admin@gmail.com";
-				//}
+                //IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+                //string claimsPrincipal = null;
+                //string UserGuidId = "";
+                //if (httpContextAccessor.HttpContext != null)
+                //{
+                //	claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+                //	UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
+                //}
+                //else
+                //{
+                //	claimsPrincipal = "admin@gmail.com";
+                //}
 
-				string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
-				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
-				if (Email != "admin@gmail.com")
-				{
-					List<ZoneManagementDTO> result = (from zm in context.SYS_ZoneMatrix
-													  join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
-													  join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
-													  where zmn.DeleteStatus == false
-															&& gu.IID == UsrId
-													  select new
-													  {
-														  zmn.Id,
-														  zmn.Zone,
-														  zmn.Type,
-														  zmn.Folder,
-														  zmn.ExternalReference,
+                string AID = context.Users.Where(x => x.Email.ToLower() == Email.ToLower()).Select(x => x.Id).FirstOrDefault();
+                long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+                if (Email != "admin@gmail.com")
+                {
+                    List<ZoneManagementDTO> result = (from zm in context.SYS_ZoneMatrix
+                                                      join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
+                                                      join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
+                                                      where zmn.DeleteStatus == false
+                                                            && gu.IID == UsrId
+                                                      select new
+                                                      {
+                                                          zmn.Id,
+                                                          zmn.Zone,
+                                                          zmn.Type,
+                                                          zmn.Folder,
+                                                          zmn.ExternalReference,
+                                                          zmn.Color,
+                                                          zmn.FillColor,
+                                                          zmn.Transparancy,                                                          
+                                                          zmn.LineWidth,
                                                           //zmn.GeomColumn
-													  })
-								.Union(
-									context.SYS_ZoneManagement
-										.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == AID.ToLower())
-										.Select(a => new
-										{
-											a.Id,
-											a.Zone,
-											a.Type,
-											a.Folder,
-											a.ExternalReference,
+                                                      })
+                                .Union(
+                                    context.SYS_ZoneManagement
+                                        .Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == AID.ToLower())
+                                        .Select(a => new
+                                        {
+                                            a.Id,
+                                            a.Zone,
+                                            a.Type,
+                                            a.Folder,
+                                            a.ExternalReference,
+                                            a.Color,
+                                            a.FillColor,
+                                            a.Transparancy,
+                                            a.LineWidth,
                                             //a.GeomColumn
-										})
-								)
-								.AsEnumerable() // Move to client-side processing
-								.Select(x => new ZoneManagementDTO
-								{
-									Id = x.Id,
-									Zone = x.Zone,
-									Type = x.Type,
-									Folder = x.Folder,
-									ExternalReference = x.ExternalReference,
-									FeatureGeoJson = new GeoJsonWriter().Write(context.SYS_ZoneManagement.Where(a=>a.Id==x.Id).Select(a=>a.GeomColumn)) // Convert geometry to GeoJSON here
-									//FeatureGeoJson = new GeoJsonWriter().Write(x.GeomColumn) // Convert geometry to GeoJSON here
-								})
-								.ToList();
+                                        })
+                                )
+                                .AsEnumerable() // Move to client-side processing
+                                .Select(x => new ZoneManagementDTO
+                                {
+                                    Id = x.Id,
+                                    Zone = x.Zone,
+                                    Type = x.Type,
+                                    Folder = x.Folder,
+                                    ExternalReference = x.ExternalReference,
+                                    FeatureGeoJson = new GeoJsonWriter().Write(context.SYS_ZoneManagement.Where(a => a.Id == x.Id).Select(a => a.GeomColumn)) // Convert geometry to GeoJSON here
+                                                                                                                                                              //FeatureGeoJson = new GeoJsonWriter().Write(x.GeomColumn) // Convert geometry to GeoJSON here
+                                })
+                                .ToList();
 
 
-					dto.Data = result;
-				}
-				else
-				{
-					List<ZoneManagementDTO> result = context.SYS_ZoneManagement
-										 .Where(a => a.DeleteStatus == false)
-										 .Select(a => new ZoneManagementDTO
-										 {
-											 Id = a.Id,
-											 Zone = a.Zone,
-											 Type = a.Type,
-											 Folder = a.Folder,
-											 ExternalReference = a.ExternalReference,
-											 FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
-										 })
-										 .ToList();
-					dto.Data = result;
-				}
-				
+                    dto.Data = result;
+                }
+                else
+                {
+                    List<ZoneManagementDTO> result = context.SYS_ZoneManagement
+                                         .Where(a => a.DeleteStatus == false)
+                                         .Select(a => new ZoneManagementDTO
+                                         {
+                                             Id = a.Id,
+                                             Zone = a.Zone,
+                                             Type = a.Type,
+                                             Folder = a.Folder,
+                                             ExternalReference = a.ExternalReference,
+                                             Color = a.Color,
+                                             FillColor = a.FillColor,
+                                             Transparancy = a.Transparancy,
+                                             LineWidth = (int)a.LineWidth,
+                                             FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
+                                         })
+                                         .ToList();
+                    dto.Data = result;
+                }
+
                 dto.QryResult = queryResult.SUCEEDED;
 
             }
@@ -167,6 +180,10 @@ namespace BL.Services.Administration
                                              Type = a.Type,
                                              Folder = a.Folder,
                                              ExternalReference = a.ExternalReference,
+                                             Color = a.Color,
+                                             FillColor = a.FillColor,
+                                             Transparancy = a.Transparancy,
+                                             LineWidth = (int)a.LineWidth,
                                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
                                          })
                                          .ToList();
@@ -195,69 +212,69 @@ namespace BL.Services.Administration
             {
                 string sQryResult = queryResult.FAILED;
 
-               
 
 
-				IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-				string claimsPrincipal = null;
+
+                IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+                string claimsPrincipal = null;
                 string UserGuidId = null;
-				if (httpContextAccessor.HttpContext != null)
-				{
-					claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
-					UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
-					if (claimsPrincipal == null)
-					{
-						claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
-					}
-				}
-				else
-				{
-					claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
-				}
-				string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
-				long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
-                if(claimsPrincipal != "admin@gmail.com")
+                if (httpContextAccessor.HttpContext != null)
+                {
+                    claimsPrincipal = httpContextAccessor.HttpContext.User.Identity.Name;
+                    UserGuidId = httpContextAccessor.HttpContext.Session.GetString("UserId");
+                    if (claimsPrincipal == null)
+                    {
+                        claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+                    }
+                }
+                else
+                {
+                    claimsPrincipal = context.Users.Where(x => x.Email.ToLower() == "admin@gmail.com").Select(x => x.Id).FirstOrDefault();
+                }
+                string AID = context.Users.Where(x => x.Email.ToLower() == claimsPrincipal).Select(x => x.Id).FirstOrDefault();
+                long UsrId = context.SYS_User.Where(x => x.AId == AID).FirstOrDefault().Id;
+                if (claimsPrincipal != "admin@gmail.com")
                 {
 
-					List<ZoneDataDTO> result = (from zm in context.SYS_ZoneMatrix
-                                    	join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
-                                    	join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
-                                    	where zmn.DeleteStatus == false
-                                    		  && gu.IID == UsrId
-                                    		  //&& zmn.CreatedBy.ToString().ToLower() == UserGuidId
-                                    	select new
-                                    	{
-                                    		zmn.Id,
-                                    		zmn.Zone,
-                                    		zmn.Type,
-                                    		zmn.Folder,
-                                    		zmn.ExternalReference,
-                                    	}
+                    List<ZoneDataDTO> result = (from zm in context.SYS_ZoneMatrix
+                                                join gu in context.SYS_GroupMatrixUser on zm.IID equals gu.IID
+                                                join zmn in context.SYS_ZoneManagement on zm.IID equals zmn.Id
+                                                where zmn.DeleteStatus == false
+                                                      && gu.IID == UsrId
+                                                //&& zmn.CreatedBy.ToString().ToLower() == UserGuidId
+                                                select new
+                                                {
+                                                    zmn.Id,
+                                                    zmn.Zone,
+                                                    zmn.Type,
+                                                    zmn.Folder,
+                                                    zmn.ExternalReference,
+                                                }
                                     )
                                     .Union(
-                                    	context.SYS_ZoneManagement
-                                    		.Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
-                                    		.Select(a => new
-                                    		{
-                                    			a.Id,
-                                    			a.Zone,
-                                    			a.Type,
-                                    			a.Folder,
-                                    			a.ExternalReference,
-                                    		})
+                                        context.SYS_ZoneManagement
+                                            .Where(a => a.DeleteStatus == false && a.CreatedBy.ToString().ToLower() == UserGuidId)
+                                            .Select(a => new
+                                            {
+                                                a.Id,
+                                                a.Zone,
+                                                a.Type,
+                                                a.Folder,
+                                                a.ExternalReference,
+                                            })
                                     )
                                     .AsEnumerable() // Move to client-side processing after Union
                                     .Select(x => new ZoneDataDTO
                                     {
-                                    	Id = x.Id,
-                                    	Zone = x.Zone,
-                                    	Type = x.Type,
-                                    	Folder = x.Folder,
-                                    	ExternalReference = x.ExternalReference,
+                                        Id = x.Id,
+                                        Zone = x.Zone,
+                                        Type = x.Type,
+                                        Folder = x.Folder,
+                                        ExternalReference = x.ExternalReference,
                                     })
                                     .ToList();
 
-					dto.Data = result;
+                    dto.Data = result;
                 }
                 else
                 {
@@ -272,10 +289,10 @@ namespace BL.Services.Administration
                                                  ExternalReference = a.ExternalReference,
                                              })
                                              .ToList();
-					dto.Data = result;
-				}
+                    dto.Data = result;
+                }
 
-				dto.QryResult = queryResult.SUCEEDED;
+                dto.QryResult = queryResult.SUCEEDED;
 
             }
             catch (Exception ex)
@@ -303,7 +320,11 @@ namespace BL.Services.Administration
                               Type = a.Type,
                               Folder = a.Folder,
                               ExternalReference = a.ExternalReference,
-                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn) // Convert geometry to GeoJSON
+                              FeatureGeoJson = new GeoJsonWriter().Write(a.GeomColumn), // Convert geometry to GeoJSON
+                              Color = (string.IsNullOrEmpty(a.Color)) ? "" : a.Color,
+                              FillColor = (string.IsNullOrEmpty(a.Color)) ? "" : a.FillColor,
+                              Transparancy = a.Transparancy,
+                              LineWidth = (int)a.LineWidth,
                           }).FirstOrDefault();
 
                 if (result == null)
@@ -325,6 +346,42 @@ namespace BL.Services.Administration
             return dto;
         }
 
+        public BaseResponseDTO<List<DropDown>> GetAllDropDownValues()
+        {
+            BaseResponseDTO<List<DropDown>> dto = new BaseResponseDTO<List<DropDown>>();
+            List<DropDown> Ddl = new List<DropDown>();
+            DropDown Dd = new DropDown();
+            string errorMsg = "No Data Found";
+            try
+            {
+                //Line Width
+                Dd = new DropDown();
+                Dd.title = "LineWidth";
+                Dd.items = new List<DropDownItem>();
+
+                var enumList = Enum.GetValues(typeof(LineWidth))
+                    .Cast<LineWidth>()
+                    .Select(e => new DropDownItem { Id = (int)e, text = e.ToString() })
+                    .ToList();
+
+                Dd.items.AddRange(enumList);
+
+                Ddl.Add(Dd);                
+
+                dto.Data = Ddl;
+                dto.QryResult = queryResult.SUCEEDED;
+            }
+            catch (Exception ex)
+            {
+                dto.Data = Ddl;
+                dto.ErrorMessage = errorMsg;
+
+                dto.QryResult = queryResult.FAILED;
+            }
+            return dto;
+        }
+
+
         public async Task<BaseResponseDTO<bool>> SaveAsync(ZoneManagementDTO dataToSave)
         {
             BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
@@ -339,7 +396,10 @@ namespace BL.Services.Administration
                     Type = dataToSave.Type,
                     Folder = dataToSave.Folder,
                     ExternalReference = dataToSave.ExternalReference,
-
+                    Color = dataToSave.Color,
+                    FillColor = dataToSave.FillColor,
+                    Transparancy = dataToSave.Transparancy,
+                    LineWidth = (LineWidth)dataToSave.LineWidth,
                 };
                 context.SYS_ZoneManagement.Add(DSS);
                 context.SaveChanges();
@@ -371,14 +431,18 @@ namespace BL.Services.Administration
                 DSS.GeomColumn = dataToUpdate.geometry;
                 DSS.Folder = dataToUpdate.Folder;
                 DSS.ExternalReference = dataToUpdate.ExternalReference;
+                DSS.Color = dataToUpdate.Color;
+                DSS.FillColor = dataToUpdate.FillColor;
+                DSS.Transparancy = dataToUpdate.Transparancy;
+                DSS.LineWidth = (LineWidth)dataToUpdate.LineWidth;
 
                 context.SYS_ZoneManagement.Update(DSS);
                 context.SaveChanges();
 
                 BaseDto.Data = true;
                 BaseDto.ErrorMessage = "Zone Management Data update Successfully";
-				BaseDto.ExtData = Convert.ToString(dataToUpdate.Id);
-				BaseDto.QryResult = queryResult.SUCEEDED;
+                BaseDto.ExtData = Convert.ToString(dataToUpdate.Id);
+                BaseDto.QryResult = queryResult.SUCEEDED;
 
             }
             catch (Exception)
@@ -592,31 +656,45 @@ namespace BL.Services.Administration
                 {
                     ml.Where(x => x.id == gmid.ToString()).Select(w => { w.state.Checked = true; return w; }).ToList();
                 }
-				List<CRUDMatrix> mlf = new List<CRUDMatrix>();
-				mlf = ml.Where(x => x.state.Checked == true).ToList();
+                List<CRUDMatrix> mlf = new List<CRUDMatrix>();
+                mlf = ml.Where(x => x.state.Checked == true).ToList();
 
-				var nodeMap = mlf.ToDictionary(node => node.id, node => new OutputNode
-				{
-					Title = node.text,
-					Checked = node.state.Checked,
-					Href = $"#{node.id}",
-					DataAttrs = new List<DataAttr>
-					{
-						new DataAttr { Title = "value", Data = node.id }
-					}
-				});
+                var nodeMap = mlf.ToDictionary(node => node.id, node => new OutputNode
+                {
+                    Title = node.text,
+                    Checked = node.state.Checked,
+                    Href = $"#{node.id}",
+                    DataAttrs = new List<DataAttr>
+                    {
+                        new DataAttr { Title = "value", Data = node.id }
+                    }
+                });
 
 				foreach (var node in mlf)
 				{
 					if (node.parent != "#")
 					{
-						nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+						if (node.parent != "#" && nodeMap.ContainsKey(node.parent))
+						{
+							nodeMap[node.parent].Data.Add(nodeMap[node.id]);
+						}
 					}
 				}
 
-				outputNodes = nodeMap.Values
+				if (mlf.Any(n => n.parent.Contains("#")))
+				{
+					// Filter the outputNodes to include only nodes with valid parents or no parents
+					outputNodes = nodeMap.Values
 					.Where(node => mlf.Any(n => n.parent == "#" && n.id == node.Href.TrimStart('#')))
 					.ToList();
+				}
+				else
+				{
+					// Filter the outputNodes to include only nodes with valid parents or no parents
+					outputNodes = nodeMap.Values
+						.Where(node => mlf.All(n => n.parent != "#"))
+						.ToList();
+				}
 				BaseDto.Data = outputNodes;
                 BaseDto.QryResult = new QueryResult().SUCEEDED;
             }

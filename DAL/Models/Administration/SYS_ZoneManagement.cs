@@ -1,4 +1,5 @@
-﻿using NetTopologySuite.Geometries;
+﻿using DAL.Common;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,5 +20,9 @@ namespace DAL.Models.Administration
         public string Type { get; set; }
         public string Folder { get; set; }
         public string ExternalReference { get; set; }
+        public string Color { get; set; } = string.Empty;
+        public string FillColor { get; set; } = string.Empty;
+        public int? Transparancy { get; set; }
+        public LineWidth LineWidth { get; set; }
     }
 }

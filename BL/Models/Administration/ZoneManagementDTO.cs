@@ -22,7 +22,13 @@ namespace BL.Models.Administration
 
 		public List<long> ZoneMatrix { get; set; } = new List<long>();
 
-	}
+        public string Color { get; set; } = string.Empty;
+        public string FillColor { get; set; } = string.Empty;
+        public int? Transparancy { get; set; }
+        public int? LineWidth { get; set; }
+
+
+    }
 
     public class ZoneDataDTO
     {

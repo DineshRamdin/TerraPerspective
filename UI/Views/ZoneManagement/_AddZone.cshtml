@@ -1,33 +1,57 @@
 ﻿@using UI.Resources
 <form id="frnZoneManagementCreate">
-	<input type="hidden" id="hdnId" value="" />
-	<div class="row">
-		<div class="col-12 form-group">
-			<label>@SharedResource.Type<span class="red-required">*</span></label>
-			<input type="text" id="txtType" class="form-control" placeholder="@SharedResource.Type" required />
-		</div>
-		<div class="col-12 form-group">
-			<label>@SharedResource.Zone<span class="red-required">*</span></label>
-			<input type="text" id="txtZone" class="form-control" placeholder="@SharedResource.Zone" required />
-		</div>
-		<div class="col-12 form-group">
-			<label>@SharedResource.Folder<span class="red-required">*</span></label>
-			<input type="text" id="txtFolder" class="form-control" placeholder="@SharedResource.Folder" required />
-		</div>
-		<div class="col-12 form-group">
-			<label>@SharedResource.External_Reference<span class="red-required">*</span></label>
-			<input type="text" id="txtExternalReference" class="form-control" placeholder="@SharedResource.External_Reference" required />
-		</div>
-		<div class="col-12">
-			<input type="hidden" id="hdnMapdata" required />
-		</div>
-		<div class="col-12 form-group">
-			<label for="tree" class="mb-2 label-required">@SharedResource.Zone_Matrix</label>
-			<div id="ZoneManagementTreeDropdown" class="dropdown dropdown-tree"></div>
-		</div>
-		<div class="col-12 mb-3">
-			<button type="button" class="btn btn-primary" onclick="SaveZoneManagement();">@SharedResource.Save</button>
-			<button type="button" class="btn btn-default" onclick="CloseZoneManagement();">@SharedResource.Close</button>
-		</div>
-	</div>
+    <input type="hidden" id="hdnId" value="" />
+    <div class="row">
+        <div class="col-12 form-group">
+            <label>@SharedResource.Type<span class="red-required">*</span></label>
+            <input type="text" id="txtType" class="form-control" placeholder="@SharedResource.Type" required />
+        </div>
+        <div class="col-12 form-group">
+            <label>@SharedResource.Zone<span class="red-required">*</span></label>
+            <input type="text" id="txtZone" class="form-control" placeholder="@SharedResource.Zone" required />
+        </div>
+        <div class="col-12 form-group">
+            <label>@SharedResource.Folder<span class="red-required">*</span></label>
+            <input type="text" id="txtFolder" class="form-control" placeholder="@SharedResource.Folder" required />
+        </div>
+        <div class="col-12 form-group">
+            <label>@SharedResource.External_Reference<span class="red-required">*</span></label>
+            <input type="text" id="txtExternalReference" class="form-control" placeholder="@SharedResource.External_Reference" required />
+        </div>
+
+        <div class="col-12 form-group">
+            <div class="slider-container">
+                <label for="transparency-slider">@SharedResource.Transparancy (%):<span class="red-required">*</span></label>
+                <input type="range" id="transparency-slider" min="0" max="100" value="100" step="1" required>
+                <span id="transparency-value">%</span>
+            </div>
+        </div>
+
+        <div class="col-12 form-group">
+            <label>@SharedResource.Color<span class="red-required">*</span></label>
+            <input type="color" id="txtColor" name="favcolor" required />
+        </div>
+
+        <div class="col-12 form-group">
+            <label>@SharedResource.Fill_Color<span class="red-required">*</span></label>
+            <input type="color" id="txtFillColor" name="favcolor" required />
+        </div>
+
+        <div class="col-12 form-group">
+            <label>@SharedResource.Line_Width<span class="red-required">*</span></label>
+            <select class="form-control" id="ddlLineWith" required></select>
+        </div>
+
+        <div class="col-12">
+            <input type="hidden" id="hdnMapdata" required />
+        </div>
+        <div class="col-12 form-group">
+            <label for="tree" class="mb-2 label-required">@SharedResource.Zone_Matrix</label>
+            <div id="ZoneManagementTreeDropdown" class="dropdown dropdown-tree"></div>
+        </div>
+        <div class="col-12 mb-3">
+            <button type="button" class="btn btn-primary" onclick="SaveZoneManagement();">@SharedResource.Save</button>
+            <button type="button" class="btn btn-default" onclick="CloseZoneManagement();">@SharedResource.Close</button>
+        </div>
+    </div>
 </form>

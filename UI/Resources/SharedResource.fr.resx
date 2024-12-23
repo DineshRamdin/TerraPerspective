@@ -696,11 +696,19 @@
   <data name="Sequence already Added" xml:space="preserve">
     <value>Séquence déjà ajoutée</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Percentage" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="Please Parent Task" xml:space="preserve">
     <value>S'il vous plaît, tâche parentale</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Couleur</value>
+  </data>
+  <data name="Fill Color" xml:space="preserve">
+    <value>Couleur de remplissage</value>
+  </data>
+  <data name="Transparancy" xml:space="preserve">
+    <value>Transparence</value>
+  </data>
+  <data name="Line Width" xml:space="preserve">
+    <value>Largeur de ligne</value>
   </data>
 </root>
