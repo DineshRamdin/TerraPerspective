@@ -14,8 +14,7 @@ namespace UI.Controllers
         #region constructor
         public TaskService TaskService;
 
-        public TaskController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext)
-        : base(userManager, signInManager, rolemanager, Dbcontext)
+        public TaskController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> rolemanager, PerspectiveContext Dbcontext) : base(userManager, signInManager, rolemanager, Dbcontext)
         {
             TaskService = new TaskService();
         }
@@ -32,9 +31,9 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<List<TaskDTO>> dt = new BaseResponseDTO<List<TaskDTO>>();
-				ISession session = HttpContext.Session;
-				string Email = HttpContext.Session.GetString("Username");
-				dt = TaskService.GetAll(Email);
+                ISession session = HttpContext.Session;
+                string Email = HttpContext.Session.GetString("Username");
+                dt = TaskService.GetAll(Email);
 
                 return Ok(dt);
             }
@@ -42,8 +41,6 @@ namespace UI.Controllers
             {
                 return BadRequest();
             }
-
-
         }
 
         [HttpPost]
@@ -64,8 +61,6 @@ namespace UI.Controllers
             {
                 return BadRequest();
             }
-
-
         }
 
 
@@ -75,18 +70,14 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<List<DropDown>> List = new BaseResponseDTO<List<DropDown>>();
-				ISession session = HttpContext.Session;
-				string Email = HttpContext.Session.GetString("Username");
-				List = TaskService.GetAllDropDownValues(Email);
+                ISession session = HttpContext.Session;
+                string Email = HttpContext.Session.GetString("Username");
+                List = TaskService.GetAllDropDownValues(Email);
                 return Ok(List);
-
-
             }
             catch (Exception ex)
             {
-
                 return BadRequest();
-
             }
         }
 
@@ -113,7 +104,7 @@ namespace UI.Controllers
                 return BadRequest();
             }
 
-
         }
+
     }
 }
