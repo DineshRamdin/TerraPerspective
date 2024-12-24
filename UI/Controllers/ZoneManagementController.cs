@@ -47,10 +47,10 @@ namespace UI.Controllers
             {
                 BaseResponseDTO<List<ZoneManagementDTO>> dt = new BaseResponseDTO<List<ZoneManagementDTO>>();
 
-				ISession session = HttpContext.Session;
-				string Email = HttpContext.Session.GetString("Username");
+                ISession session = HttpContext.Session;
+                string Email = HttpContext.Session.GetString("Username");
 
-				dt = service.GetAll(Email);
+                dt = service.GetAll(Email);
 
                 return Ok(dt);
             }
@@ -142,7 +142,7 @@ namespace UI.Controllers
 
                 var reader = new WKTReader();
                 dto.geometry = reader.Read(dto.FeatureGeoJson);
-                
+
                 // Ensure the geometry is a polygon and check orientation
                 if (dto.geometry is Polygon polygon)
                 {
@@ -170,19 +170,19 @@ namespace UI.Controllers
                 if (dto.Id == 0)
                 {
                     dt = await service.SaveAsync(dto);
-					if (dt.Data == true)
-					{
-						dt = _MatrixService.SaveZoneM(dto.ZoneMatrix,Convert.ToInt64(dt.ExtData));
-					}
-				}
+                    if (dt.Data == true)
+                    {
+                        dt = _MatrixService.SaveZoneM(dto.ZoneMatrix, Convert.ToInt64(dt.ExtData));
+                    }
+                }
                 else
                 {
                     dt = await service.UpdateAsync(dto);
-					if (dt.Data == true)
-					{
-						dt = _MatrixService.UpdateZoneM(dto.ZoneMatrix, Convert.ToInt64(dt.ExtData));
-					}
-				}
+                    if (dt.Data == true)
+                    {
+                        dt = _MatrixService.UpdateZoneM(dto.ZoneMatrix, Convert.ToInt64(dt.ExtData));
+                    }
+                }
 
                 return Ok(dt);
             }
@@ -206,9 +206,10 @@ namespace UI.Controllers
         public async Task<IActionResult> Fileview(string folder)
         {
 
+            ViewBag.folderName = folder;
+
             // Define the folder path where the files are stored
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Assets", folder);
-
             // Create a new DataTable
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("File Name", typeof(string));
@@ -237,7 +238,7 @@ namespace UI.Controllers
             try
             {
                 BaseResponseDTO<List<OutputNode>> tree = new BaseResponseDTO<List<OutputNode>>();
-                if(Id== 0)
+                if (Id == 0)
                 {
                     tree = _MatrixService.GetTreeDropdown();
                 }
@@ -317,7 +318,7 @@ namespace UI.Controllers
                             Folder = string.Empty,
                             geometry = geometry,
                         };
-                        SaveZonedt= await service.SaveAsync(ZoneManagementDTO);
+                        SaveZonedt = await service.SaveAsync(ZoneManagementDTO);
                         if (SaveZonedt.Data == true)
                         {
                             if (LoginUserMatrix.QryResult == _queryResult.SUCEEDED)
@@ -354,6 +355,40 @@ namespace UI.Controllers
             }
         }
 
+        public async Task<IActionResult> FileUpload(IFormFile file, string folderName)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File is not selected or is empty.");
+            }
 
+            if (string.IsNullOrEmpty(folderName))
+            {
+                return BadRequest("Folder name is required.");
+            }
+
+            try
+            {
+                // Create the specific folder if it does not exist
+                var targetFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Assets", folderName);
+                if (!Directory.Exists(targetFolder))
+                {
+                    Directory.CreateDirectory(targetFolder);
+                }
+
+                var filePath = Path.Combine(targetFolder, file.FileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                return Ok(new { Message = "File uploaded successfully.", FilePath = filePath });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

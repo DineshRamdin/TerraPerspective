@@ -37,6 +37,10 @@
         border-top: 1px solid #e0e0e0; /* Light gray separator */
         margin-top: 5px;
     }
+
+	.list-group-item {
+		background-color: #f0f0f0;
+	}
 </style>
 
 <!-- Content Header (Page header) -->
@@ -78,68 +82,105 @@
 								@Html.TextBoxFor(m => m.Id, new { @class = "form-control", @result = "Id", @id = "hdnId", @type = "text", @placeholder = "Id" })
 							</div>
 
-							<div class="col-12 form-group">
-								<label>@SharedResource.Project_Code<span class="red-required">*</span></label>
-								@Html.TextBoxFor(m=>m.UserCode, new { @class = "form-control", @result = "UserCode", @placeholder = SharedResource.Project_Code, @readonly = "readonly" })
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Project_Name<span class="red-required">*</span></label>
-								@Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @result = "ProjectName", @placeholder = SharedResource.Project_Name, @required = "required" })
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Project_Details<span class="red-required">*</span></label>
-								@Html.TextAreaFor(m => m.ProjectDetails, new { @class = "form-control", @result = "ProjectDetails", @placeholder = SharedResource.Project_Details, @required = "required" })
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Project_Description<span class="red-required">*</span></label>
-								@Html.TextAreaFor(m => m.ProjectDescription, new { @class = "form-control", @result = "ProjectDescription", @placeholder = SharedResource.Project_Description, @required = "required" })
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Assign_To<span class="red-required">*</span></label>
-								<select class="form-control" id="ddlAssignTo" required></select>
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Planned_Day<span class="red-required">*</span></label>
-								@Html.TextBoxFor(m => m.PlannedDay, new { @class = "form-control", @type = "number", @result = "PlannedDay", @placeholder = SharedResource.Planned_Day, @required = "required" })
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Status<span class="red-required">*</span></label>
-								<select class="form-control" id="ddlStatus" required></select>
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Status_Details<span class="red-required">*</span></label>
-								@Html.TextAreaFor(m => m.StatusDetails, new { @class = "form-control", @result = "StatusDetails", @placeholder = SharedResource.Status_Details, @required = "required" })
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Start_Date<span class="red-required">*</span></label>
-								@Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @result = "StartDate", @type = "date", @placeholder = SharedResource.Start_Date, @required = "required" })
-							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.End_Date<span class="red-required">*</span></label>
-								@Html.TextBoxFor(m => m.EndDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @result = "EndDate", @type = "date", @placeholder = SharedResource.End_Date, @required = "required" })
-							</div>
-							<div class="col-12 row form-group">
-								<div class="col-3 d-flex align-items-center">
-									<label for="chbIsVisible" class="mr-2">@SharedResource.Is_Visible</label>
-									@Html.CheckBoxFor(m => m.IsVisible.HasValue, new { @class = "form-control-sm", @result = "IsVisible" })
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Project_Code<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+									@Html.TextBoxFor(m => m.UserCode, new { @class = "form-control", @result = "UserCode", @placeholder = SharedResource.Project_Code, @readonly = "readonly" })
 								</div>
 							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Project_Template</label>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Project_Name<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+									@Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @result = "ProjectName", @placeholder = SharedResource.Project_Name, @required = "required" })
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Project_Details<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+								@Html.TextAreaFor(m => m.ProjectDetails, new { @class = "form-control", @result = "ProjectDetails", @placeholder = SharedResource.Project_Details, @required = "required" })
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Project_Description<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+								@Html.TextAreaFor(m => m.ProjectDescription, new { @class = "form-control", @result = "ProjectDescription", @placeholder = SharedResource.Project_Description, @required = "required" })
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Assign_To<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+								<select class="form-control" id="ddlAssignTo" required></select>
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Planned_Day<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+								@Html.TextBoxFor(m => m.PlannedDay, new { @class = "form-control", @type = "number", @result = "PlannedDay", @placeholder = SharedResource.Planned_Day, @required = "required" })
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Status<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+								<select class="form-control" id="ddlStatus" required></select>
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Status_Details<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+								@Html.TextAreaFor(m => m.StatusDetails, new { @class = "form-control", @result = "StatusDetails", @placeholder = SharedResource.Status_Details, @required = "required" })
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Start_Date<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+								@Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @result = "StartDate", @type = "date", @placeholder = SharedResource.Start_Date, @required = "required" })
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.End_Date<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+								@Html.TextBoxFor(m => m.EndDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @result = "EndDate", @type = "date", @placeholder = SharedResource.End_Date, @required = "required" })
+								</div>
+							</div>
+							<div class="col-12 row form-group">
+								<div class="col-12 d-flex align-items-center">
+									<label for="chbIsVisible" class="mr-2 col-sm-3 col-form-label">@SharedResource.Is_Visible</label>
+									<div class="col-sm-9">
+									@Html.CheckBoxFor(m => m.IsVisible.HasValue, new { @class = "form-control-sm", @result = "IsVisible" })
+									</div>
+								</div>
+							</div>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Project_Template</label>
+								<div class="col-sm-9">
 								<select class="form-control" id="ddlProjectTemplate"></select>
+								</div>
 							</div>
-							<div class="col-2 form-group">
-								<label>@SharedResource.Project_ColorCode<span class="red-required">*</span></label>
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Project_ColorCode<span class="red-required">*</span></label>
+								<div class="col-sm-2">
 								@Html.TextBoxFor(m => m.ProjectColorCode, new { @class = "form-control", @type = "color", @id = "txtProjectColorCode", @required = "required", @name = "txtProjectColorCode", @result = "ProjectColorCode" })
-
+								</div>
 							</div>
-							<div class="col-12 form-group">
-								<label>@SharedResource.Folder<span class="red-required">*</span></label>
-								@Html.TextBoxFor(m => m.Folder, new { @class = "form-control", @type = "text", @id = "txtFolder", @required = "required", @name = "txtFolder", @result = "Folder" })
+							<div class="col-12 form-group row align-items-center">
+								<label class="col-sm-3 col-form-label">@SharedResource.Folder<span class="red-required">*</span></label>
+								<div class="col-sm-9">
+									@if (Model.Id > 0)
+									{
+										<ul id="folderList" class="list-group">
+											<!-- List items will be populated dynamically -->
+										</ul>
+									}
+									else
+									{
+										@Html.TextBoxFor(m => m.Folder, new { @class = "form-control", @type = "text", @id = "txtFolder", @required = "required", @name = "txtFolder", @result = "Folder" })
+									}
+								</div>
 							</div>
-							<div class="col-12 form-group">
-								<label for="tree" class="mb-2 label-required">@SharedResource.Project_Matrix</label>
-								<div id="ProjectTreeDropdown" class="dropdown dropdown-tree"></div>
+							<div class="col-12 form-group row align-items-center">
+								<label for="tree" class="col-sm-3 col-form-label mb-2 label-required">@SharedResource.Project_Matrix</label>
+								
+									<div id="ProjectTreeDropdown" class="col-sm-9 dropdown dropdown-tree"></div>
 							</div>
 							<div class="row float-lg-right mb-2">
 								<button type="button" class="btn btn-primary mr-2" onclick="SaveProjects();">@SharedResource.Save</button>
@@ -151,54 +192,54 @@
 								<!-- Adjust the width using col classes -->
 								<form id="frnProjectsCreate">
 									<div class="row">
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Project_Name<span class="red-required">*</span></label>
 											<input type="text" id="txtProjectName" class="form-control" placeholder="@SharedResource.Project_Name" required />
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Project_Details<span class="red-required">*</span></label>
 											<textarea id="txtProjectDetails" class="form-control" placeholder="@SharedResource.Project_Details" required></textarea>
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Project_Description<span class="red-required">*</span></label>
 											<textarea id="txtProjectDescription" class="form-control" placeholder="@SharedResource.Project_Description" required></textarea>
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Assign_To<span class="red-required">*</span></label>
 											<select class="form-control" id="ddlAssignTo" required></select>
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Planned_Day<span class="red-required">*</span></label>
 											<input type="number" id="txtPlannedDay" class="form-control" placeholder="@SharedResource.Planned_Day" required />
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Status<span class="red-required">*</span></label>
 											<select class="form-control" id="ddlStatus" required></select>
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Status_Details<span class="red-required">*</span></label>
 											<textarea id="txtStatusDetails" class="form-control" placeholder="@SharedResource.Status_Details" required></textarea>
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Start_Date<span class="red-required">*</span></label>
 											<input type="date" id="txtStartDate" class="form-control" placeholder="@SharedResource.Start_Date" required />
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.End_Date<span class="red-required">*</span></label>
 											<input type="date" id="txtEndDate" class="form-control" placeholder="@SharedResource.End_Date" required />
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Is_Visible</label>
 											<div class="form-check">
 												<input type="checkbox" id="chbIsVisible" class="form-check-input" />
 												<label class="form-check-label" for="chbIsVisible">@SharedResource.Is_Visible</label>
 											</div>
 										</div>
-										<div class="col-12 form-group">
+										<div class="col-12 form-group row align-items-center">
 											<label>@SharedResource.Project_ColorCode<span class="red-required">*</span></label>
 											<input type="color" id="txtProjectColorCode" class="form-control" required />
 										</div>
-										<div class="col-12 form-group text-center">
+										<div class="col-12 form-group row align-items-center text-center">
 											<button type="submit" class="btn btn-primary">@SharedResource.Save</button>
 											<button type="button" class="btn btn-secondary">@SharedResource.Back_To_List</button>
 										</div>
@@ -230,7 +271,8 @@
 		var Status = '@Model.Status';
 		var ProjectTemplateId = '@Model.AssignTo';
 		var ProjectId = '@Model.Id';
-		
+		// Safely pass the Model.Files data to JavaScript
+		var data = @Html.Raw(Json.Serialize(Model.Files));
 
 		$(function () {
 			$('.nav-link').removeClass('active');
@@ -253,7 +295,28 @@
 			GetDropdownData();
 			
 			GetMetrixDetails(ProjectId);
+
+			if (ProjectId > 0) {
+				ShowFiles();
+			}
 		});
+
+		function ShowFiles() {
+			
+
+			// Reference the folder list DOM element
+			var folderList = $('#folderList');
+			folderList.empty();
+
+			if (data.length > 0) {
+				data.forEach(file => {
+					folderList.append(`<li class="list-group-item">${file}</li>`);
+				});
+			} else {
+				folderList.append(`<li class="list-group-item">No Files</li>`);
+			}
+			
+		}
 
 		function GetMetrixDetails(id) {
 			var dataObject = {};
