@@ -8,6 +8,8 @@
 <section class="content">
     <div class="container-fluid">
         <div class="card card-solid">
+            <input type="hidden" id="hdnfolderName" value="@ViewBag.folderName" />
+            <input type="file" id="hdnfileInput" style="display: none;">
             <div class="card-body pb-0">
                 <div class="row">
                     <div class="col-10">
@@ -42,43 +44,82 @@
             </div>
         </div>
     </div>
-</section>
 
+</section>
 
 @section scripts
 {
     <script>
+
+        var FileUploadUrl = '@Url.Action("FileUpload", "ZoneManagement")';
+
         $(function () {
             var langResource = {
                 AddNewLabel: '@SharedResource.Add_New',
                 ExportLabel: '@SharedResource.Export',
-                ExportPDFLabel:'@SharedResource.Export_PDF',
-                ExportCSVLabel:'@SharedResource.Export_CSV',
-                ExportExcelLabel:'@SharedResource.Export_Excel',
-                ExcelLabel:'@SharedResource.Excel',
-                PDFLabel:'@SharedResource.PDF',
-                CSVLabel:'@SharedResource.CSV',
-                NodataavailableLabel :'@SharedResource.No_data_available',
-                SearchLabel :'@SharedResource.Search',
-                ShowingLabel :'@SharedResource.Showing',
-                EntriesLabel :'@SharedResource.entries',
-                FilteredfromLabel :'@SharedResource.filtered_from',
-                ViewLabel :'@SharedResource.View',
-                PreviewLabel :'@SharedResource.Preview',
-                DeleteLabel :'@SharedResource.Delete',
-                EditLabel :'@SharedResource.Edit',
-                ResetPasswordLabel :'@SharedResource.Reset_Password',
-                UserNameLabel :'@SharedResource.UserName',
-                DateLabel :'@SharedResource.Date',
-                PageLabel :'@SharedResource.Page',
-                OfLabel :'@SharedResource.of',
-                GeneratedonLabel :'@SharedResource.Generated_on',
-                PreviousLabel :'@SharedResource.Previous',
-                NextLabel :'@SharedResource.Next',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+                UploadFileLabel: '@SharedResource.Upload_File',
             };
 
-            initializeDataGridForViews('FileViewTable', true,langResource);
+            initializeDataGridForViews('FileViewTable', true, langResource, true, "FileUploadbtn");
         });
+
+        function FileUploadbtn() {            
+            document.getElementById('hdnfileInput').click();
+
+            document.getElementById('hdnfileInput').addEventListener('change', function () {
+                const folderName = $("#hdnfolderName").val(); // Get folder name
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+
+                    const formData = new FormData();
+                    formData.append("file", file); // Add file to FormData
+                    formData.append("folderName", folderName); // Add folder name to FormData
+
+                    $.ajax({
+                        url: FileUploadUrl,
+                        type: "POST",
+                        data: formData,
+                        processData: false,  // Prevent jQuery from processing the data
+                        contentType: false,  // Allow sending files
+                        success: function (response) {
+                            if (response) {
+                                toastr.success("File uploaded successfully");
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1000); // 1-second delay                                
+                            }
+                        },
+                        error: function (error) {
+                            console.log("Error:", error);
+                            toastr.error("Error:" + error);
+                        }
+                    });
+                }
+            });
+        }
     </script>
 
 }

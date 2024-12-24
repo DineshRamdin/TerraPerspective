@@ -65,9 +65,9 @@
 	</div>
 </section>
 
-<div class="modal fade" id="AddTaskModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+@* <div class="modal fade" id="AddTaskModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<partial name="_AddTask.cshtml" />
-</div>
+</div> *@
 <!-- /.modal -->
 @section scripts
 {
@@ -76,6 +76,7 @@
 		var TaskGetByIdUrl = '@Url.Action("GetById", "Task")';
 		var getTaskDropDownUrl = '@Url.Action("GetAllDropdownValues", "Task")';
 		var CreateUpdateTaskUrl = '@Url.Action("CreateUpdate", "Task")';
+		var AddTaskURL = '@Url.Action("AddTask", "Task", new { Id = "__ID__" })';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
@@ -127,7 +128,7 @@
 				NextLabel: '@SharedResource.Next',
 			};
 
-			initializeDataGridForTask('TaskTable', 'openTaskModal', GetAllTaskUrl, columnList, false, true, true, false, false, null, true, null, langResource);
+			initializeDataGridForTask('TaskTable', 'openTaskModal', GetAllTaskUrl, AddTaskURL, columnList, false, true, false, false, false, null, true, null, langResource);
 
 		}
 

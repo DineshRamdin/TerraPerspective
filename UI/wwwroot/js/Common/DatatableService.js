@@ -506,7 +506,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
 }
 
-function initializeDataGridForProject(tableID, onclickPartial, url, ViewTaskProjectUrl, AddProjectURL, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
+function initializeDataGridForProject(tableID, onclickPartial, url,ViewTaskProjectUrl, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
     showExcel = true, onclickDelete = null, langResource = null) {
 
     var dataToShow = null; //init data variable
@@ -1038,7 +1038,7 @@ function initializeDataGridForProject(tableID, onclickPartial, url, ViewTaskProj
 
 }
 
-function initializeDataGridForTask(tableID, onclickPartial, url, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
+function initializeDataGridForTask(tableID, onclickPartial, url, AddTaskURL, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
     showExcel = true, onclickDelete = null, langResource = null) {
 
     var dataToShow = null; //init data variable
@@ -1047,7 +1047,7 @@ function initializeDataGridForTask(tableID, onclickPartial, url, columnList, sho
 
     var UserNamelocal = localStorage.getItem('UserName');
     var GlobalParamValuelocal = localStorage.getItem('GlobalParamValue');
- 
+
     $.ajax({
         url: url,
         type: "POST",
@@ -1095,8 +1095,8 @@ function initializeDataGridForTask(tableID, onclickPartial, url, columnList, sho
                                 // Target the "percentage" column by its index
                                 targets: columnList.findIndex(col => col.data === 'percentage'),
                                 render: function (data, type, full, meta) {
-                                        if (data === null) {
-                                            data = "0";
+                                    if (data === null) {
+                                        data = "0";
                                     }
 
                                     // Determine the color based on task status
@@ -1118,8 +1118,8 @@ function initializeDataGridForTask(tableID, onclickPartial, url, columnList, sho
                                             color = "grey"; // Default color for unknown status
                                             break;
                                     }
-                                        // Generate the progress bar dynamically
-                                        return `
+                                    // Generate the progress bar dynamically
+                                    return `
                                             <div style="width: 100%; position: relative; height: 20px;border: 1px solid #ddd; border-radius: 4px;">
                                                 <div style="
                                                     background-color: ${color};
@@ -1206,6 +1206,12 @@ function initializeDataGridForTask(tableID, onclickPartial, url, columnList, sho
                                             btn += preview
                                         }
                                     }
+                                    if (tableID == "TaskTable") {
+
+                                        // Append the ID dynamically using JavaScript
+                                        btn += '<a href="' + AddTaskURL.replace("__ID__", full.id) + '" title="' + langResource.EditLabel + '"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+
+                                    }
 
                                     data = '<div class="text-nowrap">' + btn + '</div>';
                                     return data;
@@ -1218,11 +1224,16 @@ function initializeDataGridForTask(tableID, onclickPartial, url, columnList, sho
                                 text: '<i class="fa fa-plus me-2"></i> ' + langResource.AddNewLabel, // Add New',
                                 className: 'btn btn-sm btn-primary custom-class addbtn',
                                 action: function (e, dt, node, config) {
-                                    // Replace this with your custom action
-                                    // You can dynamically invoke a function if onclickPartial is a string
-                                    window[onclickPartial]();  // 
-
+                                    // Redirect to the AddProjectURL with the desired ID
+                                    const url = AddTaskURL.replace("__ID__", 0);
+                                    window.location.href = url; // Navigate to the constructed URL
                                 }
+                                //action: function (e, dt, node, config) {
+                                //    // Replace this with your custom action
+                                //    // You can dynamically invoke a function if onclickPartial is a string
+                                //    window[onclickPartial]();  // 
+
+                                //}
                             },
                             //Excel Export Button
                             {
@@ -2150,7 +2161,7 @@ function addDataToChild(d, rowIndex, childColumns) {
     });
 }
 
-function initializeDataGridForViews(tableID, showExcel = true, langResource = null) {
+function initializeDataGridForViews(tableID, showExcel = true, langResource = null, showUpload = false, onclickUpload = null) {
 
     var UserNamelocal = localStorage.getItem('UserName');
     var GlobalParamValuelocal = localStorage.getItem('GlobalParamValue');
@@ -2411,6 +2422,12 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
             },
             initComplete: function () {
 
+
+                if (showUpload) {
+                    var ShowFileUploadbtn = `<button type="button" class="btn btn-sm btn-success mb-3 ml-3 clsShowFileUploadbtn" onclick="${onclickUpload}()">${langResource.UploadFileLabel}</button>`;
+                    $('div.dataTables_filter').append(ShowFileUploadbtn);
+                }
+
                 // Create custom dropdown HTML with icons and a non-blank "Export" option
                 var dropdownHtml = `
                                     <div class="custom-dropdown">
@@ -2470,6 +2487,13 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
             },
 
         })
+
+
+        $('div.dt-buttons').prepend($('.clsShowFileUploadbtn'));
+
+        $('.clsShowFileUploadbtn').css('border-radius', '.25rem');
+
+        $('.dataTables_filter label input').css('height', '32px');
 
         $('div.dt-buttons').prepend($('.clsDownload'));
         $('div.dt-buttons').css('float', 'inline-end');

@@ -62,6 +62,11 @@
                         <label>@SharedResource.End_Date<span class="red-required">*</span></label>
                         <input type="date" id="txtEndDate" class="form-control" placeholder="@SharedResource.End_Date" required />
                     </div>
+                    <div class="col-4 form-group">
+                        <label>@SharedResource.Folder<span class="red-required">*</span></label>
+                        <input type="date" id="txtFolder" class="form-control" placeholder="@SharedResource.Folder" required />
+                        @*  @Html.TextBoxFor(m => m.Folder, new { @class = "form-control", @type = "text", @id = "txtFolder", @required = "required", @name = "txtFolder", @result = "Folder" }) *@
+                    </div>
 
                     <div class="col-4 form-group">
                         <div class="form-group clearfix">
