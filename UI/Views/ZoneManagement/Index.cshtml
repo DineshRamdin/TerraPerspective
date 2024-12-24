@@ -95,11 +95,64 @@
             cursor: pointer;
         }
 
-    /* Separator after the first item */
-    .dropdown-menu li:not(:first-child) {
-        border-top: 1px solid #e0e0e0 !important; /* Light gray separator */
-        margin-top: 5px;
+    /* Target the specific tree dropdown's LI elements */
+    #ZoneManagementTreeDropdown ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
     }
+
+        #ZoneManagementTreeDropdown ul > li {
+            position: relative;
+            padding-left: 20px; /* Space for the vertical line */
+        }
+
+            /* Add vertical and horizontal lines */
+            #ZoneManagementTreeDropdown ul > li::before,
+            #ZoneManagementTreeDropdown ul > li::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                border-color: #800000; /* Match line color to the image */
+                border-style: solid;
+            }
+
+            #ZoneManagementTreeDropdown ul > li::before {
+                border-left-width: 1px; /* Match line thickness */
+                height: 100%;
+                top: 0;
+            }
+
+            #ZoneManagementTreeDropdown ul > li::after {
+                border-top-width: 1px; /* Match line thickness */
+                width: 20px;
+                top: 50%;
+            }
+
+            /* Remove vertical line for last child */
+            #ZoneManagementTreeDropdown ul > li:last-child::before {
+                height: 50%;
+            }
+
+            /* Indentation for child nodes */
+            #ZoneManagementTreeDropdown ul > li > ul {
+                margin-left: 20px;
+            }
+
+            /* Styling for links inside tree dropdown */
+            #ZoneManagementTreeDropdown ul > li > a {
+                display: inline-block;
+                text-decoration: none;
+                color: #333;
+                font-size: 14px;
+                vertical-align: middle;
+            }
+
+                /* Hover effect for better UI */
+                #ZoneManagementTreeDropdown ul > li > a:hover {
+                    text-decoration: underline;
+                }
 </style>
 
 <!-- Content Header (Page header) -->

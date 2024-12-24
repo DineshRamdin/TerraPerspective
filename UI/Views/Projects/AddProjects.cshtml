@@ -32,11 +32,64 @@
         .dropdown-item label {
             cursor: pointer;
         }
-    /* Separator after the first item */
-    .dropdown-menu li:not(:first-child) {
-        border-top: 1px solid #e0e0e0; /* Light gray separator */
-        margin-top: 5px;
-    }
+	/* Target the specific tree dropdown's LI elements */
+	#ProjectTreeDropdown ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+
+		#ProjectTreeDropdown ul > li {
+			position: relative;
+			padding-left: 20px; /* Space for the vertical line */
+		}
+
+			/* Add vertical and horizontal lines */
+			#ProjectTreeDropdown ul > li::before,
+			#ProjectTreeDropdown ul > li::after {
+				content: '';
+				position: absolute;
+				left: 0;
+				border-color: #800000; /* Match line color to the image */
+				border-style: solid;
+			}
+
+			#ProjectTreeDropdown ul > li::before {
+				border-left-width: 1px; /* Match line thickness */
+				height: 100%;
+				top: 0;
+			}
+
+			#ProjectTreeDropdown ul > li::after {
+				border-top-width: 1px; /* Match line thickness */
+				width: 20px;
+				top: 50%;
+			}
+
+			/* Remove vertical line for last child */
+			#ProjectTreeDropdown ul > li:last-child::before {
+				height: 50%;
+			}
+
+			/* Indentation for child nodes */
+			#ProjectTreeDropdown ul > li > ul {
+				margin-left: 20px;
+			}
+
+			/* Styling for links inside tree dropdown */
+			#ProjectTreeDropdown ul > li > a {
+				display: inline-block;
+				text-decoration: none;
+				color: #333;
+				font-size: 14px;
+				vertical-align: middle;
+			}
+
+				/* Hover effect for better UI */
+				#ProjectTreeDropdown ul > li > a:hover {
+					text-decoration: underline;
+				}
 
 	.list-group-item {
 		background-color: #f0f0f0;
@@ -187,67 +240,6 @@
 								<a href="@Url.Action("Index","Projects")" type="button" class="btn btn-default">@SharedResource.Back_To_List</a>
 							</div>
 						</div>
-						@* <div class="container d-flex justify-content-center">
-							<div class="col-10 col-md-8 col-lg-6">
-								<!-- Adjust the width using col classes -->
-								<form id="frnProjectsCreate">
-									<div class="row">
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Project_Name<span class="red-required">*</span></label>
-											<input type="text" id="txtProjectName" class="form-control" placeholder="@SharedResource.Project_Name" required />
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Project_Details<span class="red-required">*</span></label>
-											<textarea id="txtProjectDetails" class="form-control" placeholder="@SharedResource.Project_Details" required></textarea>
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Project_Description<span class="red-required">*</span></label>
-											<textarea id="txtProjectDescription" class="form-control" placeholder="@SharedResource.Project_Description" required></textarea>
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Assign_To<span class="red-required">*</span></label>
-											<select class="form-control" id="ddlAssignTo" required></select>
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Planned_Day<span class="red-required">*</span></label>
-											<input type="number" id="txtPlannedDay" class="form-control" placeholder="@SharedResource.Planned_Day" required />
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Status<span class="red-required">*</span></label>
-											<select class="form-control" id="ddlStatus" required></select>
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Status_Details<span class="red-required">*</span></label>
-											<textarea id="txtStatusDetails" class="form-control" placeholder="@SharedResource.Status_Details" required></textarea>
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Start_Date<span class="red-required">*</span></label>
-											<input type="date" id="txtStartDate" class="form-control" placeholder="@SharedResource.Start_Date" required />
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.End_Date<span class="red-required">*</span></label>
-											<input type="date" id="txtEndDate" class="form-control" placeholder="@SharedResource.End_Date" required />
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Is_Visible</label>
-											<div class="form-check">
-												<input type="checkbox" id="chbIsVisible" class="form-check-input" />
-												<label class="form-check-label" for="chbIsVisible">@SharedResource.Is_Visible</label>
-											</div>
-										</div>
-										<div class="col-12 form-group row align-items-center">
-											<label>@SharedResource.Project_ColorCode<span class="red-required">*</span></label>
-											<input type="color" id="txtProjectColorCode" class="form-control" required />
-										</div>
-										<div class="col-12 form-group row align-items-center text-center">
-											<button type="submit" class="btn btn-primary">@SharedResource.Save</button>
-											<button type="button" class="btn btn-secondary">@SharedResource.Back_To_List</button>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div> *@
-
                     </div>
                 </div>
             </div>
@@ -278,11 +270,12 @@
 			$('.nav-link').removeClass('active');
 			$('#liprojectsmenu').addClass('active');
 
-			if (('@Model.StartDate').includes('0001-01-01')) {
+
+			if ($('#StartDate').val() === '0001-01-01') {
 				$("#StartDate").val("");
 			}
 
-			if (('@Model.EndDate').includes('0001-01-01')) {
+			if ($("#EndDate").val() === '0001-01-01') {
 				$("#EndDate").val("");
 			}
 
