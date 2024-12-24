@@ -711,4 +711,22 @@
   <data name="Line Width" xml:space="preserve">
     <value>Largura da linha</value>
   </data>
+  <data name="Select Parent Task" xml:space="preserve">
+    <value>Selecione Tarefa Pai</value>
+  </data>
+  <data name="End date must be greater than or equal to start date" xml:space="preserve">
+    <value>A data de término precisa ser maior ou igual à data de início</value>
+  </data>
+  <data name="Invalid end date" xml:space="preserve">
+    <value>Data de término inválida</value>
+  </data>
+  <data name="Invalid start date" xml:space="preserve">
+    <value>Data de início inválida</value>
+  </data>
+  <data name="Percentage must be between 0 and 100" xml:space="preserve">
+    <value>A porcentagem deve estar entre 0 e 100</value>
+  </data>
+  <data name="This field is required." xml:space="preserve">
+    <value>Este campo é obrigatório.</value>
+  </data>
 </root>

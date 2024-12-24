@@ -38,6 +38,8 @@ namespace BL.Models.Administration
         public DateTime EndDate { get; set; }
         public bool? IsVisible { get; set; }
         public string? Folder { get; set; }
+        public string? ProjectText { get; set; }
+        public List<string> Files { get; set; } = new List<string>();
     }
 
     public class ProjectViewEventDTO
@@ -55,12 +57,12 @@ namespace BL.Models.Administration
 
     public class TaskViewDTO
     {
-		public long Id { get; set; }
-		public string Taskname { get; set; }
-		public string ProjectName { get; set; }
-		public string ParentTaskName { get; set; }
-		public string Status { get; set; }
-		public int? Percentage { get; set; }
+        public long Id { get; set; }
+        public string Taskname { get; set; }
+        public string ProjectName { get; set; }
+        public string ParentTaskName { get; set; }
+        public string Status { get; set; }
+        public int? Percentage { get; set; }
         public string? Folder { get; set; }
     }
 

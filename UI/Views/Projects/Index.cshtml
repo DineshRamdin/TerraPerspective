@@ -5,53 +5,53 @@
 <link href="~/plugins/dropdowntree/dropdowntree.css" rel="stylesheet" />
 <style>
 
-	.progress-bar-container {
-		width: 100%;
-		background-color: #e0e0e0;
-		border-radius: 5px;
-		overflow: hidden;
-		position: relative;
-		height: 20px;
-	}
+    .progress-bar-container {
+        width: 100%;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+        overflow: hidden;
+        position: relative;
+        height: 20px;
+    }
 
-	.progress-bar {
-		height: 100%;
-		background-color: #4caf50;
-		width: 0;
-		transition: width 0.5s ease-in-out;
-	}
+    .progress-bar {
+        height: 100%;
+        background-color: #4caf50;
+        width: 0;
+        transition: width 0.5s ease-in-out;
+    }
 
-	.progress-text {
-		position: absolute;
-		width: 100%;
-		text-align: center;
-		top: 0;
-		line-height: 20px;
-		font-size: 12px;
-		color: #fff;
-	}
+    .progress-text {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: 0;
+        line-height: 20px;
+        font-size: 12px;
+        color: #fff;
+    }
 
-	/* Ensure checkboxes inside the dropdown are visible */
-	.checkbox {
-		margin-right: 10px;
-		display: inline-block;
-	}
+    /* Ensure checkboxes inside the dropdown are visible */
+    .checkbox {
+        margin-right: 10px;
+        display: inline-block;
+    }
 
-	/* Style for the dropdown items */
-	.dropdown-item {
-		display: flex;
-		align-items: center;
-		padding: 5px;
-	}
+    /* Style for the dropdown items */
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+    }
 
-		.dropdown-item label {
-			cursor: pointer;
-		}
-	/* Separator after the first item */
-	.dropdown-menu li:not(:first-child) {
-		border-top: 1px solid #e0e0e0; /* Light gray separator */
-		margin-top: 5px;
-	}
+        .dropdown-item label {
+            cursor: pointer;
+        }
+    /* Separator after the first item */
+    .dropdown-menu li:not(:first-child) {
+        border-top: 1px solid #e0e0e0; /* Light gray separator */
+        margin-top: 5px;
+    }
 </style>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -98,312 +98,312 @@
 <!-- /.modal -->
 @section scripts
 {
-	<script src="~/plugins/dropdowntree/dropdowntree.js"></script>
-	<script>
-		var GetAllProjectsUrl = '@Url.Action("GetAll", "Projects")';
-		var ProjectsGetByIdUrl = '@Url.Action("GetById", "Projects")';
-		var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
-		var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
-		var GetProjectMatrixTree = '@Url.Action("GetTree", "Projects")';
-		var GetProjectDashBoard = '@Url.Action("Index", "ProjectDashboard", new { Id = "__ID__" })';
-		var AddProjectURL = '@Url.Action("AddProjects", "Projects", new { Id = "__ID__" })';
+    <script src="~/plugins/dropdowntree/dropdowntree.js"></script>
+    <script>
+        var GetAllProjectsUrl = '@Url.Action("GetAll", "Projects")';
+        var ProjectsGetByIdUrl = '@Url.Action("GetById", "Projects")';
+        var getProjectsDropDownUrl = '@Url.Action("GetAllDropdownValues", "Projects")';
+        var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
+        var GetProjectMatrixTree = '@Url.Action("GetTree", "Projects")';
+        var GetProjectDashBoard = '@Url.Action("Index", "ProjectDashboard", new { Id = "__ID__" })';
+        var AddProjectURL = '@Url.Action("AddProjects", "Projects", new { Id = "__ID__" })';
 
-		$(function () {
-			$('.nav-link').removeClass('active');
-			$('#liprojectsmenu').addClass('active');
+        $(function () {
+            $('.nav-link').removeClass('active');
+            $('#liprojectsmenu').addClass('active');
 
-			GetAllProjects();
+            GetAllProjects();
 
-			$('#ProjectTreeDropdown').on('change', function () {
-				// Assuming the plugin has a method to get selected values
-				var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
-				console.log('Selected Values: ', selectedValues);
-			});
-		});
+            $('#ProjectTreeDropdown').on('change', function () {
+                // Assuming the plugin has a method to get selected values
+                var selectedValues = $(this).DropdownTree('getSelectedValues'); // Adjust based on the actual method
+                console.log('Selected Values: ', selectedValues);
+            });
+        });
 
-		function GetAllProjects() {
-			var columnList = [
-				{ data: 'id', title: 'Id', visible: false },
-				{ data: 'userCode', title: '@SharedResource.Project_Code' },
-				{ data: 'projectName', title: '@SharedResource.Project_Name' },
-				{ data: 'projectDetails', title: '@SharedResource.Project_Details' },
-				{ data: 'projectDescription', title: '@SharedResource.Project_Description' },
-				{ data: 'projectManager', title: '@SharedResource.Project_Manager' },
-				{ data: 'status', title: '@SharedResource.Status' },
-				{ data: 'statusDetails', title: '@SharedResource.Status_Details' },
-				{ data: 'startDate', title: '@SharedResource.Start_Date' },
-				{ data: 'endDate', title: '@SharedResource.End_Date' },
-				{ data: 'plannedDay', title: '@SharedResource.Planned_Day' },
-				{ data: 'progress', title: '@SharedResource.Progress' },
-				{ data: 'isVisible', title: '@SharedResource.Is_Visible' },
-			];
+        function GetAllProjects() {
+            var columnList = [
+                { data: 'id', title: 'Id', visible: false },
+                { data: 'userCode', title: '@SharedResource.Project_Code' },
+                { data: 'projectName', title: '@SharedResource.Project_Name' },
+                { data: 'projectDetails', title: '@SharedResource.Project_Details' },
+                { data: 'projectDescription', title: '@SharedResource.Project_Description' },
+                { data: 'projectManager', title: '@SharedResource.Project_Manager' },
+                { data: 'status', title: '@SharedResource.Status' },
+                { data: 'statusDetails', title: '@SharedResource.Status_Details' },
+                { data: 'startDate', title: '@SharedResource.Start_Date' },
+                { data: 'endDate', title: '@SharedResource.End_Date' },
+                { data: 'plannedDay', title: '@SharedResource.Planned_Day' },
+                { data: 'progress', title: '@SharedResource.Progress' },
+                { data: 'isVisible', title: '@SharedResource.Is_Visible' },
+            ];
 
-			var langResource = {
-				AddNewLabel: '@SharedResource.Add_New',
-				ExportLabel: '@SharedResource.Export',
-				ExportPDFLabel: '@SharedResource.Export_PDF',
-				ExportCSVLabel: '@SharedResource.Export_CSV',
-				ExportExcelLabel: '@SharedResource.Export_Excel',
-				ExcelLabel: '@SharedResource.Excel',
-				PDFLabel: '@SharedResource.PDF',
-				CSVLabel: '@SharedResource.CSV',
-				NodataavailableLabel: '@SharedResource.No_data_available',
-				SearchLabel: '@SharedResource.Search',
-				ShowingLabel: '@SharedResource.Showing',
-				EntriesLabel: '@SharedResource.entries',
-				FilteredfromLabel: '@SharedResource.filtered_from',
-				ViewLabel: '@SharedResource.View',
-				PreviewLabel: '@SharedResource.Preview',
-				DeleteLabel: '@SharedResource.Delete',
-				EditLabel: '@SharedResource.Edit',
-				ResetPasswordLabel: '@SharedResource.Reset_Password',
-				UserNameLabel: '@SharedResource.UserName',
-				DateLabel: '@SharedResource.Date',
-				PageLabel: '@SharedResource.Page',
-				OfLabel: '@SharedResource.of',
-				GeneratedonLabel: '@SharedResource.Generated_on',
-				PreviousLabel: '@SharedResource.Previous',
-				NextLabel: '@SharedResource.Next',
-				ViewTaskLabel: '@SharedResource.View_Task'
-			};
+            var langResource = {
+                AddNewLabel: '@SharedResource.Add_New',
+                ExportLabel: '@SharedResource.Export',
+                ExportPDFLabel: '@SharedResource.Export_PDF',
+                ExportCSVLabel: '@SharedResource.Export_CSV',
+                ExportExcelLabel: '@SharedResource.Export_Excel',
+                ExcelLabel: '@SharedResource.Excel',
+                PDFLabel: '@SharedResource.PDF',
+                CSVLabel: '@SharedResource.CSV',
+                NodataavailableLabel: '@SharedResource.No_data_available',
+                SearchLabel: '@SharedResource.Search',
+                ShowingLabel: '@SharedResource.Showing',
+                EntriesLabel: '@SharedResource.entries',
+                FilteredfromLabel: '@SharedResource.filtered_from',
+                ViewLabel: '@SharedResource.View',
+                PreviewLabel: '@SharedResource.Preview',
+                DeleteLabel: '@SharedResource.Delete',
+                EditLabel: '@SharedResource.Edit',
+                ResetPasswordLabel: '@SharedResource.Reset_Password',
+                UserNameLabel: '@SharedResource.UserName',
+                DateLabel: '@SharedResource.Date',
+                PageLabel: '@SharedResource.Page',
+                OfLabel: '@SharedResource.of',
+                GeneratedonLabel: '@SharedResource.Generated_on',
+                PreviousLabel: '@SharedResource.Previous',
+                NextLabel: '@SharedResource.Next',
+                ViewTaskLabel: '@SharedResource.View_Task'
+            };
 
-			initializeDataGridForProject('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, GetProjectDashBoard, AddProjectURL, columnList, false, true, false, false, false, null, true, null, langResource);
+            initializeDataGridForProject('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, GetProjectDashBoard, AddProjectURL, columnList, false, true, false, false, false, null, true, null, langResource);
 
-		}
+        }
 
-		function openProjectsModal(id) {
-			var dataObject = {};
-			dataObject.id = id;
+        function openProjectsModal(id) {
+            var dataObject = {};
+            dataObject.id = id;
 
-			$.ajax({
-				url: ProjectsGetByIdUrl,
-				type: "POST",
-				data: dataObject,  // Send data if needed
-				beforeSend: function () {
-					ClearProjectsModal();
-					GetDropdownData();
-				},
-				success: function (response) {
-					if (response.data) {
-						if (response.data.id > 0)
-							$("#h4ProjectsTitle").html("@SharedResource.Modify  @SharedResource.Projects");
-						else
-							$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
-						// console.data("Data : ", data);
-						// return;
-						$("#hdnId").val(response.data.id);
-						$("#txtCode").val(response.data.userCode);
-						$("#txtProjectName").val(response.data.projectName);
-						$("#txtProjectDetails").val(response.data.projectDetails);
-						$("#txtProjectDescription").val(response.data.projectDescription);
-						$("#ddlAssignTo").val(response.data.assignTo == null || response.data.assignTo == 0 ? "" : response.data.assignTo);
-						$("#txtPlannedDay").val(response.data.plannedDay);
-						$("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
-						$("#ddlProjectTemplate").val(response.data.projectTemplateId == null || response.data.projectTemplateId == 0 ? "" : response.data.projectTemplateId);
-						$("#txtStatusDetails").val(response.data.statusDetails);
-						$("#txtProjectColorCode").val(response.data.projectColorCode == null || response.data.projectColorCode == 0 ? "" : response.data.projectColorCode);
-						const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
-						const formattedEndDate = formatDateToInput(response.data.endDate); // Convert to yyyy-MM-dd
+            $.ajax({
+                url: ProjectsGetByIdUrl,
+                type: "POST",
+                data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    ClearProjectsModal();
+                    GetDropdownData();
+                },
+                success: function (response) {
+                    if (response.data) {
+                        if (response.data.id > 0)
+                            $("#h4ProjectsTitle").html("@SharedResource.Modify  @SharedResource.Projects");
+                        else
+                            $("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
+                        // console.data("Data : ", data);
+                        // return;
+                        $("#hdnId").val(response.data.id);
+                        $("#txtCode").val(response.data.userCode);
+                        $("#txtProjectName").val(response.data.projectName);
+                        $("#txtProjectDetails").val(response.data.projectDetails);
+                        $("#txtProjectDescription").val(response.data.projectDescription);
+                        $("#ddlAssignTo").val(response.data.assignTo == null || response.data.assignTo == 0 ? "" : response.data.assignTo);
+                        $("#txtPlannedDay").val(response.data.plannedDay);
+                        $("#ddlStatus").val(response.data.status == null || response.data.status == 0 ? "" : response.data.status);
+                        $("#ddlProjectTemplate").val(response.data.projectTemplateId == null || response.data.projectTemplateId == 0 ? "" : response.data.projectTemplateId);
+                        $("#txtStatusDetails").val(response.data.statusDetails);
+                        $("#txtProjectColorCode").val(response.data.projectColorCode == null || response.data.projectColorCode == 0 ? "" : response.data.projectColorCode);
+                        const formattedStartDate = formatDateToInput(response.data.startDate); // Convert to yyyy-MM-dd
+                        const formattedEndDate = formatDateToInput(response.data.endDate); // Convert to yyyy-MM-dd
 
-						$("#txtStartDate").val(formattedStartDate);
-						$("#txtEndDate").val(formattedEndDate);
+                        $("#txtStartDate").val(formattedStartDate);
+                        $("#txtEndDate").val(formattedEndDate);
 
-						$('#chbIsVisible').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
+                        $('#chbIsVisible').prop('checked', response.data.isVisible == null ? false : response.data.isVisible);
 
-						// Fetch data from the server and initialize the tree
-						$.ajax({
-							url: GetProjectMatrixTree, // API endpoint to fetch the matrix data
-							type: "POST",
-							data: dataObject,
-							success: function (response) {
-								if (response && response.data) {
-									data = response.data;
-									// console.log("data : ", data);
-									var options = {
-										title: "@SharedResource.Project_Matrix",
-										data: data,
-										maxHeight: 300,
-										closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
-										openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
-										multiSelect: true,
-										selectChildren: true,
-									}
+                        // Fetch data from the server and initialize the tree
+                        $.ajax({
+                            url: GetProjectMatrixTree, // API endpoint to fetch the matrix data
+                            type: "POST",
+                            data: dataObject,
+                            success: function (response) {
+                                if (response && response.data) {
+                                    data = response.data;
+                                    // console.log("data : ", data);
+                                    var options = {
+                                        title: "@SharedResource.Project_Matrix",
+                                        data: data,
+                                        maxHeight: 300,
+                                        closedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+                                        openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+                                        multiSelect: true,
+                                        selectChildren: true,
+                                    }
 
-									$("#ProjectTreeDropdown").DropDownTree(options);
+                                    $("#ProjectTreeDropdown").DropDownTree(options);
 
-									//initializeTreeView(data);
-								} else {
-									console.error("@SharedResource.Failed_to_fetch_tree_data_");
-								}
-							},
-							error: function () {
-								console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
-							}
-						});
-					}
-					else {
-						toastr.error(response.errorMessage);
-					}
-					// Handle success (e.g., update UI with response data)
-				},
-				error: function (error) {
-					console.log("Error:", error);
-					toastr.error("Error:" + error);
-				}
-			}).done(function () {
-				// $('#AddProjectsModal').modal('show');
-				$("#frnProjectsCreate").validate({}).resetForm();
-			});
-
-
-		}
-
-		function formatDateToInput(dateString) {
-			// Ensure the date is a valid Date object
-			const date = new Date(dateString);
-			if (isNaN(date.getTime())) {
-			    console.error("Invalid date:", dateString);
-			    return ""; // Return an empty string if the date is invalid
-			}
-
-			// Format the date as yyyy-MM-dd for input type="date"
-			const year = date.getFullYear();
-			const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-			const day = String(date.getDate()).padStart(2, '0');
-			return `${year}-${month}-${day}`;
-		}
+                                    //initializeTreeView(data);
+                                } else {
+                                    console.error("@SharedResource.Failed_to_fetch_tree_data_");
+                                }
+                            },
+                            error: function () {
+                                console.error("@SharedResource.An_error_occurred_while_fetching_tree_data_");
+                            }
+                        });
+                    }
+                    else {
+                        toastr.error(response.errorMessage);
+                    }
+                    // Handle success (e.g., update UI with response data)
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    toastr.error("Error:" + error);
+                }
+            }).done(function () {
+                // $('#AddProjectsModal').modal('show');
+                $("#frnProjectsCreate").validate({}).resetForm();
+            });
 
 
-		function ClearProjectsModal() {
-			$("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
-			$("#hdnId").val(0);
-			$("#txtCode").val("");
-			$("#txtProjectName").val("");
-			$("#txtProjectDetails").val("");
-			$("#txtProjectDescription").val("");
-			$("#ddlAssignTo").val("");
-			$("#txtPlannedDay").val("");
-			$("#ddlStatus").val("");
-			$("#ddlProjectTemplate").val("");
-			$("#txtStatusDetails").val("");
-			$("#txtProjectColorCode").val("");
-			$("#txtStartDate").val("");
-			$("#txtEndDate").val("");
-			$("#chbIsVisible").prop('checked', false);
-			$("#ProjectTreeDropdown").empty();
-			// Unbind all event listeners attached to the element
-			$("#ProjectTreeDropdown").off();
+        }
 
-			// Remove data associated with the element (if any)
-			$("#ProjectTreeDropdown").removeData();
-		}
+        function formatDateToInput(dateString) {
+            // Ensure the date is a valid Date object
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                console.error("Invalid date:", dateString);
+                return ""; // Return an empty string if the date is invalid
+            }
 
-		function GetDropdownData() {
-			$.ajax({
-				url: getProjectsDropDownUrl,
-				type: "POST",
-				async: false,
-				// data: dataObject,  // Send data if needed
-				beforeSend: function () {
-					$("#ddlAssignTo").html('');
-					$("#ddlStatus").html('');
-					$("#ddlProjectTemplate").html('');
-				},
-				success: function (response) {
-					if (response.data) {
-						$.each(response.data, function (key, value) {
-							if (value.title == "User") {
-								$("#ddlAssignTo").append($("<option></option>").val('').html("@SharedResource.Select_AssignTo"));
-								$.each(value.items, function (itemskey, itemsvalue) {
-									$("#ddlAssignTo").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-								});
-							}
+            // Format the date as yyyy-MM-dd for input type="date"
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
-							if (value.title == "Project Status") {
-								$("#ddlStatus").append($("<option></option>").val('').html("@SharedResource.Select_Status"));
-								$.each(value.items, function (itemskey, itemsvalue) {
-									$("#ddlStatus").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-								});
-							}
 
-							if (value.title == "Project Template") {
-								$("#ddlProjectTemplate").append($("<option></option>").val('').html("@SharedResource.Select_Project_Template"));
-								$.each(value.items, function (itemskey, itemsvalue) {
-									$("#ddlProjectTemplate").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
-								});
-							}
-						});
-					}
-				},
-				error: function (error) {
-					console.log("Error:", error);
-					// toastr.error("Error:" + error);
-				}
+        function ClearProjectsModal() {
+            $("#h4ProjectsTitle").html("@SharedResource.Add  @SharedResource.Projects");
+            $("#hdnId").val(0);
+            $("#txtCode").val("");
+            $("#txtProjectName").val("");
+            $("#txtProjectDetails").val("");
+            $("#txtProjectDescription").val("");
+            $("#ddlAssignTo").val("");
+            $("#txtPlannedDay").val("");
+            $("#ddlStatus").val("");
+            $("#ddlProjectTemplate").val("");
+            $("#txtStatusDetails").val("");
+            $("#txtProjectColorCode").val("");
+            $("#txtStartDate").val("");
+            $("#txtEndDate").val("");
+            $("#chbIsVisible").prop('checked', false);
+            $("#ProjectTreeDropdown").empty();
+            // Unbind all event listeners attached to the element
+            $("#ProjectTreeDropdown").off();
 
-			});
-		}
+            // Remove data associated with the element (if any)
+            $("#ProjectTreeDropdown").removeData();
+        }
 
-		 function SaveProjects() {
+        function GetDropdownData() {
+            $.ajax({
+                url: getProjectsDropDownUrl,
+                type: "POST",
+                async: false,
+                // data: dataObject,  // Send data if needed
+                beforeSend: function () {
+                    $("#ddlAssignTo").html('');
+                    $("#ddlStatus").html('');
+                    $("#ddlProjectTemplate").html('');
+                },
+                success: function (response) {
+                    if (response.data) {
+                        $.each(response.data, function (key, value) {
+                            if (value.title == "User") {
+                                $("#ddlAssignTo").append($("<option></option>").val('').html("@SharedResource.Select_AssignTo"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlAssignTo").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
 
-			let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedDay", "ddlStatus", "txtStatusDetails", "txtProjectColorCode", "txtStartDate", "txtEndDate"]);
+                            if (value.title == "Project Status") {
+                                $("#ddlStatus").append($("<option></option>").val('').html("@SharedResource.Select_Status"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlStatus").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
 
-			if (valid) {
-				var dataObject = {};
-				var treeDropDownData = $("#ZoneManagementTreeDropdown").init.prototype.GetSelected();
+                            if (value.title == "Project Template") {
+                                $("#ddlProjectTemplate").append($("<option></option>").val('').html("@SharedResource.Select_Project_Template"));
+                                $.each(value.items, function (itemskey, itemsvalue) {
+                                    $("#ddlProjectTemplate").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
+                                });
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                    // toastr.error("Error:" + error);
+                }
 
-				//get tree selected ids
-				var selectedIds = []
-				if (treeDropDownData.length > 0) {
-					selectedIds = treeDropDownData.map(function (datum) {
-						return parseInt(datum);
-					});
-				}
-				dataObject.Id = $("#hdnId").val();
-				dataObject.UserCode =$("#txtCode").val();
-				dataObject.ProjectName =$("#txtProjectName").val();
-				dataObject.ProjectDetails = $("#txtProjectDetails").val();
-				dataObject.ProjectDescription = $("#txtProjectDescription").val();
-				dataObject.AssignTo =$("#ddlAssignTo").val();
-				dataObject.PlannedDay = $("#txtPlannedDay").val();
-				dataObject.Status =$("#ddlStatus").val();
-				dataObject.ProjectTemplateId = $("#ddlProjectTemplate").val();
-				dataObject.StatusDetails =$("#txtStatusDetails").val();
-				dataObject.ProjectColorCode = $("#txtProjectColorCode").val();
-				dataObject.StartDate =$("#txtStartDate").val();
-				dataObject.EndDate =$("#txtEndDate").val();
-				dataObject.IsVisible = $('#chbIsVisible').prop('checked');
-				dataObject.ProjectMatrix = selectedIds;
+            });
+        }
 
-				$.ajax({
-					url: CreateUpdateProjectsUrl,
-					type: "POST",
-					data: dataObject,  // Send data if needed
-					beforeSend: function () {
+        function SaveProjects() {
 
-					},
-					success: function (response) {
-						if (response.data) {
-							toastr.success(response.errorMessage);
-							$('#AddProjectsModal').modal('hide');
-							GetAllProjects();
-						}
-						else {
-							toastr.error(response.errorMessage);
-						}
-						// Handle success (e.g., update UI with response data)
-					},
-					error: function (error) {
-						console.log("Error:", error);
-						toastr.error("Error:" + error);
-					}
-				}).done(function () {
+            let valid = formValidation(["txtProjectName", "txtProjectDescription", "ddlAssignTo", "txtPlannedDay", "ddlStatus", "txtStatusDetails", "txtProjectColorCode", "txtStartDate", "txtEndDate"]);
 
-				});
-			}
-			else {
-				toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
-			}
-		}
+            if (valid) {
+                var dataObject = {};
+                var treeDropDownData = $("#ZoneManagementTreeDropdown").init.prototype.GetSelected();
 
-	</script>
+                //get tree selected ids
+                var selectedIds = []
+                if (treeDropDownData.length > 0) {
+                    selectedIds = treeDropDownData.map(function (datum) {
+                        return parseInt(datum);
+                    });
+                }
+                dataObject.Id = $("#hdnId").val();
+                dataObject.UserCode = $("#txtCode").val();
+                dataObject.ProjectName = $("#txtProjectName").val();
+                dataObject.ProjectDetails = $("#txtProjectDetails").val();
+                dataObject.ProjectDescription = $("#txtProjectDescription").val();
+                dataObject.AssignTo = $("#ddlAssignTo").val();
+                dataObject.PlannedDay = $("#txtPlannedDay").val();
+                dataObject.Status = $("#ddlStatus").val();
+                dataObject.ProjectTemplateId = $("#ddlProjectTemplate").val();
+                dataObject.StatusDetails = $("#txtStatusDetails").val();
+                dataObject.ProjectColorCode = $("#txtProjectColorCode").val();
+                dataObject.StartDate = $("#txtStartDate").val();
+                dataObject.EndDate = $("#txtEndDate").val();
+                dataObject.IsVisible = $('#chbIsVisible').prop('checked');
+                dataObject.ProjectMatrix = selectedIds;
+
+                $.ajax({
+                    url: CreateUpdateProjectsUrl,
+                    type: "POST",
+                    data: dataObject,  // Send data if needed
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        if (response.data) {
+                            toastr.success(response.errorMessage);
+                            $('#AddProjectsModal').modal('hide');
+                            GetAllProjects();
+                        }
+                        else {
+                            toastr.error(response.errorMessage);
+                        }
+                        // Handle success (e.g., update UI with response data)
+                    },
+                    error: function (error) {
+                        console.log("Error:", error);
+                        toastr.error("Error:" + error);
+                    }
+                }).done(function () {
+
+                });
+            }
+            else {
+                toastr.warning("@SharedResource.Please_fill_in_required_field_s_");
+            }
+        }
+
+    </script>
 }

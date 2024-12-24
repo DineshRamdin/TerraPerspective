@@ -205,6 +205,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back To List.
+        /// </summary>
+        public static string Back_To_List {
+            get {
+                return ResourceManager.GetString("Back To List", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Carousel.
         /// </summary>
         public static string Carousel {
@@ -565,6 +574,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End date must be greater than or equal to start date.
+        /// </summary>
+        public static string End_date_must_be_greater_than_or_equal_to_start_date {
+            get {
+                return ResourceManager.GetString("End date must be greater than or equal to start date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to entries.
         /// </summary>
         public static string entries {
@@ -759,6 +777,24 @@ namespace UI.Resources {
         public static string Invalid_date {
             get {
                 return ResourceManager.GetString("Invalid date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid end date.
+        /// </summary>
+        public static string Invalid_end_date {
+            get {
+                return ResourceManager.GetString("Invalid end date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid start date.
+        /// </summary>
+        public static string Invalid_start_date {
+            get {
+                return ResourceManager.GetString("Invalid start date", resourceCulture);
             }
         }
         
@@ -1087,6 +1123,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Percentage must be between 0 and 100.
+        /// </summary>
+        public static string Percentage_must_be_between_0_and_100 {
+            get {
+                return ResourceManager.GetString("Percentage must be between 0 and 100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Planned Day.
         /// </summary>
         public static string Planned_Day {
@@ -1254,6 +1299,15 @@ namespace UI.Resources {
         public static string Profile_Image {
             get {
                 return ResourceManager.GetString("Profile Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress.
+        /// </summary>
+        public static string Progress {
+            get {
+                return ResourceManager.GetString("Progress", resourceCulture);
             }
         }
         
@@ -1582,6 +1636,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Parent Task.
+        /// </summary>
+        public static string Select_Parent_Task {
+            get {
+                return ResourceManager.GetString("Select Parent Task", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Project.
         /// </summary>
         public static string Select_Project {
@@ -1897,6 +1960,15 @@ namespace UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field is required..
+        /// </summary>
+        public static string This_field_is_required_ {
+            get {
+                return ResourceManager.GetString("This field is required.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Time Zone.
         /// </summary>
         public static string Time_Zone {
@@ -2075,19 +2147,5 @@ namespace UI.Resources {
                 return ResourceManager.GetString("Zone Matrix", resourceCulture);
             }
         }
-		public static string Progress
-		{
-			get
-			{
-				return ResourceManager.GetString("Progress", resourceCulture);
-			}
-		}
-		public static string Back_To_List
-		{
-			get
-			{
-				return ResourceManager.GetString("Back To List", resourceCulture);
-			}
-		}
-	}
+    }
 }

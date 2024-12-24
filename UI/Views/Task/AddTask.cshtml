@@ -110,8 +110,16 @@
                         </div>
                         <div class="col-3 form-group">
                             <label>@SharedResource.Folder<span class="red-required">*</span></label>
-                            @Html.TextBoxFor(m => m.Folder, new { @class = "form-control", @type = "text", @id = "txtFolder", @required = "required", @name = "txtFolder", @result = "Folder" })
+                            @if (Model.Folder == null)
+                            {
+                                @Html.TextBoxFor(m => m.Folder, new { @class = "form-control", @type = "text", @id = "txtFolder", @required = "required", @name = "txtFolder", @result = "Folder" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.Folder, new { @class = "form-control", @type = "text", @result = "Folder", @readonly = "readonly" })
+                            }
                         </div>
+
                         <div class="col-4 row form-group clearfix">
                             <div class="col-4 d-flex align-items-center">
                                 <label for="chbIsVisible" class="mr-2">@SharedResource.Is_Visible</label>
@@ -119,8 +127,24 @@
 
                             </div>
                         </div>
-
                     </div>
+                    @if (Model.Folder != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-3">
+                                <table id="folderList" class="table table-bordered table-striped">
+                                    <thead style="background: #d5e8ff;">
+                                        <tr>
+                                            <th>File Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    }
                     <div class="row mb-2"></div>
                     <div class="row">
                         <div class="col-3 mb-2">
@@ -137,7 +161,7 @@
     </div>
 </section>
 @section scripts
-{
+    {
     <script src="~/plugins/dropdowntree/dropdowntree.js"></script>
     <script>
         var GetAllTaskUrl = '@Url.Action("GetAll", "Task")';
@@ -149,6 +173,7 @@
         var ParentTask = '@Model.ParentTask';
         var Status = '@Model.Status';
         var TaskId = '@Model.Id';
+        var data = @Html.Raw(Json.Serialize(Model.Files));
 
         $(function () {
             $('.nav-link').removeClass('active');
@@ -163,6 +188,10 @@
             }
 
             GetDropdownData();
+
+            if (TaskId > 0) {
+                ShowFiles();
+            }
         });
 
         function GetDropdownData() {
@@ -198,7 +227,7 @@
                             }
 
                             if (value.title == "ParentTask") {
-                                $("#ddlParentTask").append($("<option></option>").val('').html("Select Parent Task"));
+                                $("#ddlParentTask").append($("<option></option>").val('').html("@SharedResource.Select_Parent_Task"));
                                 $.each(value.items, function (itemskey, itemsvalue) {
                                     $("#ddlParentTask").append($("<option></option>").val(itemsvalue.id).html(itemsvalue.text));
                                 });
@@ -217,14 +246,77 @@
         }
 
 
+        function ShowFiles() {
+
+            // Reference the folder list DOM element
+            var folderList = $('#folderList tbody');
+            folderList.empty();
+
+            if (data.length > 0) {
+                data.forEach(file => {
+                    folderList.append(`<tr><td>${file}</td></tr>`);
+                });
+            } else {
+                folderList.append(`<tr><td colspan="1">No Files</td></tr>`);
+            }
+
+        }
 
         function SaveTask() {
 
+            $('.error').remove();
+
+            // Validate required fields
+            var isValid = true;
+
+            // Check required fields
+            $('#formTaskAddEdit input, #formTaskAddEdit select, #formTaskAddEdit textarea').each(function () {
+                var field = $(this);
+                if (field.prop('required') && !field.val()) {
+                    isValid = false;
+                    field.after('<span class="error" style="color: red;">@SharedResource.This_field_is_required_</span>');
+                }
+            });
+
+            // Validate percentage
+            var percentage = $('#Percentage').val();
+            if (percentage < 0 || percentage > 100) {
+                isValid = false;
+                $('#Percentage').after('<span class="error" style="color: red;">@SharedResource.Percentage_must_be_between_0_and_100.</span>');
+            }
+
+            // Validate date fields
+            var startDate = $('#StartDate').val();
+            var endDate = $('#EndDate').val();
+
+            if (startDate && !isValidDate(startDate)) {
+                isValid = false;
+                $('#StartDate').after('<span class="error" style="color: red;">@SharedResource.Invalid_start_date.</span>');
+            }
+
+            if (endDate && !isValidDate(endDate)) {
+                isValid = false;
+                $('#EndDate').after('<span class="error" style="color: red;">@SharedResource.Invalid_end_date.</span>');
+            }
+
+            // Check if end date is greater than or equal to start date
+            if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+                isValid = false;
+                $('#EndDate').after('<span class="error" style="color: red;">@SharedResource.End_date_must_be_greater_than_or_equal_to_start_date.</span>');
+            }
+
+            if (!isValid) {
+                toastr.error("@SharedResource.Please_fill_in_required_field_s_");
+                return; // Prevent form submission if validation fails
+            }
+
+            var projectDropdown = $("#ddlProjects");
             var dataObject = {};
             var data = result(document.getElementById("formTaskAddEdit"));
             data["Project"] = $("#ddlProjects").val();
             data["ParentTask"] = $("#ddlParentTask").val();
             data["Status"] = $("#ddlStatus").val();
+            data["ProjectText"] = projectDropdown.find("option:selected").text();
 
             $.ajax({
                 url: CreateUpdateTaskUrl,
@@ -237,7 +329,7 @@
                     if (response.data) {
                         toastr.success(response.errorMessage);
                         $('#AddTaskModal').modal('hide');
-                        GetAllTask();
+                        //location.reload();
                     }
                     else {
                         toastr.error(response.errorMessage);
@@ -253,6 +345,21 @@
             });
 
         }
+        function isValidDate(dateString) {
+            var regex = /^\d{4}-\d{2}-\d{2}$/; // Format YYYY-MM-DD
+            return dateString.match(regex) !== null;
+        }
+
+        $('#Percentage').on('input', function () {
+            var value = $(this).val();
+            // Remove non-numeric characters (except for the decimal point)
+            $(this).val(value.replace(/[^0-9]/g, ''));
+
+            // Limit input to 3 digits (up to 100)
+            if ($(this).val() > 100) {
+                $(this).val(100);
+            }
+        });
 
     </script>
 }

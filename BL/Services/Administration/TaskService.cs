@@ -15,6 +15,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.EntityFrameworkCore;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.InkML;
+using System.Data;
 
 namespace BL.Services.Administration
 {
@@ -158,6 +159,7 @@ namespace BL.Services.Administration
             try
             {
                 result = (from a in context.SYS_Task
+                          join prj in context.SYS_Projects on a.Projects.Id equals prj.Id
                           where a.DeleteStatus == false && a.Id == Id
                           select new TaskCRUDDTO()
                           {
@@ -173,8 +175,31 @@ namespace BL.Services.Administration
                               Percentage = a.Percentage,
                               IsVisible = a.IsVisible,
                               Folder = a.Folder,
+                              ProjectText = prj.ProjectName,
                           }).FirstOrDefault();
 
+                if (!string.IsNullOrEmpty(result.Folder))
+                {
+                    // Define the folder path where the files are stored
+                    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Projects", result.ProjectText, result.Folder);
+                    if (Directory.Exists(folderPath))
+                    {
+                        // Create a new DataTable
+                        DataTable dataTable = new DataTable();
+                        dataTable.Columns.Add("File Name", typeof(string));
+
+                        // Get all file names in the folder
+                        string[] fileNames = Directory.GetFiles(folderPath)
+                                                      .Select(filePath => Path.GetFileName(filePath))
+                                                      .ToArray();
+
+                        // Populate the DataTable with file names
+                        foreach (var fileName in fileNames)
+                        {
+                            result.Files.Add(Path.GetFileName(fileName));
+                        }
+                    }
+                }
                 if (result == null)
                 {
                     dto.Data = result;

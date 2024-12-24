@@ -82,31 +82,6 @@ namespace UI.Controllers
             }
         }
 
-        //[HttpPost]
-        //public ActionResult<BaseResponseDTO<bool>> CreateUpdate(TaskCRUDDTO dto)
-        //{
-        //    try
-        //    {
-        //        BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
-
-        //        if (dto.Id == 0)
-        //        {
-        //            dt = TaskService.SaveAsync(dto);
-        //        }
-        //        else
-        //        {
-        //            dt = TaskService.UpdateAsync(dto);
-        //        }
-
-        //        return Ok(dt);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //}
-
         [HttpPost]
         public ActionResult<BaseResponseDTO<bool>> CreateUpdate(TaskCRUDDTO dto)
         {
@@ -114,16 +89,22 @@ namespace UI.Controllers
             {
                 BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
 
-                //if (!string.IsNullOrEmpty(dto.Folder))
-                //{
-                //    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Projects", dto.Folder);
+                if (!string.IsNullOrEmpty(dto.Folder))
+                {
+                    //string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", dto.ProjectText, dto.Folder);
+                    string mainFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Projects");
+                    string mainSubFolderPath = Path.Combine(mainFolderPath, dto.ProjectText);
+                    string subFolderPath = Path.Combine(mainSubFolderPath, dto.Folder);
 
-                //    // Check if the folder exists, and create it if not
-                //    if (!Directory.Exists(folderPath))
-                //    {
-                //        Directory.CreateDirectory(folderPath);
-                //    }
-                //}
+                    if (Directory.Exists(mainFolderPath))
+                    {
+                        if (!Directory.Exists(subFolderPath))
+                        {
+                            // Create the subfolder if it does not exist
+                            Directory.CreateDirectory(subFolderPath);
+                        }
+                    }
+                }
 
                 if (dto.Id == 0)
                 {

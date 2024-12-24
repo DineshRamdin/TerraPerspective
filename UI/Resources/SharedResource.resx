@@ -968,4 +968,28 @@
     <value>Back To List</value>
     <comment>Back To List</comment>
   </data>
+  <data name="Select Parent Task" xml:space="preserve">
+    <value>Select Parent Task</value>
+    <comment>Select Parent Task</comment>
+  </data>
+  <data name="End date must be greater than or equal to start date" xml:space="preserve">
+    <value>End date must be greater than or equal to start date</value>
+    <comment>End date must be greater than or equal to start date</comment>
+  </data>
+  <data name="Invalid end date" xml:space="preserve">
+    <value>Invalid end date</value>
+    <comment>Invalid end date</comment>
+  </data>
+  <data name="Invalid start date" xml:space="preserve">
+    <value>Invalid start date</value>
+    <comment>Invalid start date</comment>
+  </data>
+  <data name="Percentage must be between 0 and 100" xml:space="preserve">
+    <value>Percentage must be between 0 and 100</value>
+    <comment>Percentage must be between 0 and 100</comment>
+  </data>
+  <data name="This field is required." xml:space="preserve">
+    <value>This field is required.</value>
+    <comment>This field is required.</comment>
+  </data>
 </root>

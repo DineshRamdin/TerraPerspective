@@ -506,7 +506,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
 }
 
-function initializeDataGridForProject(tableID, onclickPartial, url,ViewTaskProjectUrl, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
+function initializeDataGridForProject(tableID, onclickPartial, url, ViewTaskProjectUrl, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
     showExcel = true, onclickDelete = null, langResource = null) {
 
     var dataToShow = null; //init data variable
@@ -549,7 +549,7 @@ function initializeDataGridForProject(tableID, onclickPartial, url,ViewTaskProje
                         lengthChange: false,
                         language: { // search anf info bars
                             search: '',
-                            emptyTable: langResource.NodataavailableLabel,  //'No data available',
+                            emptyTable: langResource.NodataavailableLabel,
                             searchPlaceholder: langResource.SearchLabel, //'Search',
                             info: langResource.ShowingLabel + " _TOTAL_ " + langResource.EntriesLabel, //"Showing _TOTAL_ entries",
                             infoEmpty: langResource.ShowingLabel + " 0 " + langResource.EntriesLabel,//"Showing 0 entries",
