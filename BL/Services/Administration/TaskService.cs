@@ -460,6 +460,7 @@ namespace BL.Services.Administration
                     BaseDto.Data = true;
                     BaseDto.ErrorMessage = "Task update Successfully";
                     BaseDto.QryResult = queryResult.SUCEEDED;
+                    BaseDto.ExtData = dataToUpdate.Id.ToString();
                 }
                 else
                 {

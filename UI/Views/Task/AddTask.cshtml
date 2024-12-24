@@ -44,12 +44,21 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">@SharedResource.Task</h1>
+                @*  <h1 class="m-0">@SharedResource.Task</h1> *@
+                @if (Model.Id > 0)
+                {
+                    <h1 class="m-0">@SharedResource.Modify @SharedResource.Task</h1>
+                }
+                else
+                {
+                    <h1 class="m-0">@SharedResource.Add @SharedResource.Task</h1>
+                }
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a asp-area="" asp-controller="Dashboard" asp-action="index">@SharedResource.Home</a></li>
-                    <li class="breadcrumb-item active">@SharedResource.Task</li>
+                    <li class="breadcrumb-item active"> @SharedResource.Task</li>
+
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -161,7 +170,7 @@
     </div>
 </section>
 @section scripts
-    {
+{
     <script src="~/plugins/dropdowntree/dropdowntree.js"></script>
     <script>
         var GetAllTaskUrl = '@Url.Action("GetAll", "Task")';
@@ -328,7 +337,14 @@
                 success: function (response) {
                     if (response.data) {
                         toastr.success(response.errorMessage);
-                        $('#AddTaskModal').modal('hide');
+
+                        // Delay the reload to allow toastr to display
+                        setTimeout(function () {
+                            $('#AddTaskModal').modal('hide');
+                            var AddTaskURL = '@Url.Action("AddTask", "Task", new { Id = "__ID__" })';
+                            var url = AddTaskURL.replace("__ID__", response.extData);
+                            window.location.href = url; // Navigate to the constructed URL
+                        }, 2000); // Delay by 1 second (1000 ms)
                         //location.reload();
                     }
                     else {
@@ -345,6 +361,7 @@
             });
 
         }
+
         function isValidDate(dateString) {
             var regex = /^\d{4}-\d{2}-\d{2}$/; // Format YYYY-MM-DD
             return dateString.match(regex) !== null;
