@@ -2082,5 +2082,12 @@ namespace UI.Resources {
 				return ResourceManager.GetString("Progress", resourceCulture);
 			}
 		}
+		public static string Back_To_List
+		{
+			get
+			{
+				return ResourceManager.GetString("Back To List", resourceCulture);
+			}
+		}
 	}
 }

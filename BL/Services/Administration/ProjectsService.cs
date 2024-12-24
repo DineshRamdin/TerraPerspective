@@ -65,6 +65,7 @@ namespace BL.Services.Administration
 													prj.StartDate,
 													prj.EndDate,
 													prj.PlannedDay,
+													prj.Folder,
 													prj.IsVisible,
 													prj.CreatedBy,
 													prj.CreatedDate
@@ -85,6 +86,7 @@ namespace BL.Services.Administration
 										p.StartDate,
 										p.EndDate,
 										p.PlannedDay,
+										p.Folder,
 										p.IsVisible,
 										p.CreatedBy,
 										p.CreatedDate
@@ -110,6 +112,7 @@ namespace BL.Services.Administration
 											 .Where(lv => lv.Id == x.Status) // Use a different lambda variable
 											 .FirstOrDefault()?.Name, // Use null-safe navigation
 								StatusDetails = x.StatusDetails,
+								Folder = x.Folder,
 								IsVisible = x.IsVisible == true ? "Yes" : "No",
 
 							})
@@ -142,6 +145,7 @@ namespace BL.Services.Administration
 													EndDate = a.EndDate.ToString("yyyy/MM/dd"),
 													Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
 													StatusDetails = a.StatusDetails,
+													Folder = a.Folder,
 													IsVisible = a.IsVisible == true ? "Yes" : "No",
 												}).ToList();
 					foreach (var project in result)
@@ -206,6 +210,7 @@ namespace BL.Services.Administration
 							  EndDate = a.EndDate,
 							  Status = a.Status,
 							  StatusDetails = a.StatusDetails,
+							  Folder = a.Folder,
 							  IsVisible = a.IsVisible,
 							  ProjectTemplateId=(a.ProjectTemplate == null)? 0 : a.ProjectTemplate.Id,
 							  ProjectColorCode=(string.IsNullOrEmpty(a.ProjectColorCode))? "" : a.ProjectColorCode,
@@ -334,6 +339,7 @@ namespace BL.Services.Administration
 					EndDate = dataToSave.EndDate,
 					Status = dataToSave.Status,
 					StatusDetails = dataToSave.StatusDetails,
+					Folder = dataToSave.Folder,
 					ProjectColorCode = dataToSave.ProjectColorCode,
 					ProjectTemplate= context.SYS_ProjectTemplate.Where(x => x.Id == dataToSave.ProjectTemplateId).FirstOrDefault(),
 					IsVisible = dataToSave.IsVisible,
@@ -457,6 +463,7 @@ namespace BL.Services.Administration
 					Sys_Projects.EndDate = dataToUpdate.EndDate;
 					Sys_Projects.Status = dataToUpdate.Status;
 					Sys_Projects.StatusDetails = dataToUpdate.StatusDetails;
+					Sys_Projects.Folder = dataToUpdate.Folder;
 					Sys_Projects.ProjectColorCode = dataToUpdate.ProjectColorCode;
 					Sys_Projects.ProjectTemplate= context.SYS_ProjectTemplate.Where(x => x.Id == dataToUpdate.ProjectTemplateId).FirstOrDefault();
 					Sys_Projects.IsVisible = dataToUpdate.IsVisible;

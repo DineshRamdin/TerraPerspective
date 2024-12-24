@@ -21,6 +21,7 @@ namespace BL.Models.Administration
 		public string StartDate { get; set; }
 		public string EndDate { get; set; }
 		public int? PlannedDay { get; set; }
+		public string? Folder { get; set; }
 		public string IsVisible { get; set; }
 		public double Progress { get; set; }
 	}
@@ -40,6 +41,7 @@ namespace BL.Models.Administration
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public int? PlannedDay { get; set; }
+		public string? Folder { get; set; }
 		public Nullable<bool> IsVisible { get; set; }
 		public List<long> ProjectMatrix { get; set; } = new List<long>();
 	}

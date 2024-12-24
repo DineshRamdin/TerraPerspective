@@ -506,7 +506,7 @@ function initializeDataGrid(tableID, onclickPartial, url, columnList, showDelete
 
 }
 
-function initializeDataGridForProject(tableID, onclickPartial, url, ViewTaskProjectUrl, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
+function initializeDataGridForProject(tableID, onclickPartial, url,ViewTaskProjectUrl, columnList, showDelete, showAdd, showEdit, showResetUserPassword = false, showPreview = false, onclickPreview = null,
     showExcel = true, onclickDelete = null, langResource = null) {
 
     var dataToShow = null; //init data variable
@@ -652,6 +652,9 @@ function initializeDataGridForProject(tableID, onclickPartial, url, ViewTaskProj
                                     if (tableID == "ProjectsTable") {
 
                                         // Append the ID dynamically using JavaScript
+                                        btn += '| <a href="' + AddProjectURL.replace("__ID__", full.id) + '" title="' + langResource.EditLabel + '"><i class="fa fa-edit text-secondary ms-1"></i></a> ';
+
+                                        // Append the ID dynamically using JavaScript
                                         btn += '| <a href="' + ViewTaskProjectUrl.replace("__ID__", full.id) + '" title="' + langResource.ViewTaskLabel + '"><i class="fa fa-eye text-secondary ms-1"></i></a> ';
                                     }
                                     data = '<div class="text-nowrap">' + btn + '</div>';
@@ -662,13 +665,12 @@ function initializeDataGridForProject(tableID, onclickPartial, url, ViewTaskProj
                         columns: columnList, //column list
                         buttons: [
                             {
-                                text: '<i class="fa fa-plus me-2"></i>  &nbsp;' + langResource.AddNewLabel, // Add New',
+                                text: '<i class="fa fa-plus me-2"></i> &nbsp;' + langResource.AddNewLabel,
                                 className: 'btn btn-sm btn-primary custom-class addbtn',
                                 action: function (e, dt, node, config) {
-                                    // Replace this with your custom action
-                                    // You can dynamically invoke a function if onclickPartial is a string
-                                    window[onclickPartial]();  // 
-
+                                    // Redirect to the AddProjectURL with the desired ID
+                                    const url = AddProjectURL.replace("__ID__", 0);
+                                    window.location.href = url; // Navigate to the constructed URL
                                 }
                             },
                             //Excel Export Button
@@ -2411,7 +2413,7 @@ function initializeDataGridForViews(tableID, showExcel = true, langResource = nu
 
 
                 if (showUpload) {
-                    var ShowFileUploadbtn = `<button type="button" class="btn btn-sm btn-success mb-3 ml-3 clsShowFileUploadbtn" onclick="${onclickUpload}()">Upload File</button>`;
+                    var ShowFileUploadbtn = `<button type="button" class="btn btn-sm btn-success mb-3 ml-3 clsShowFileUploadbtn" onclick="${onclickUpload}()">${langResource.UploadFileLabel}</button>`;
                     $('div.dataTables_filter').append(ShowFileUploadbtn);
                 }
 
