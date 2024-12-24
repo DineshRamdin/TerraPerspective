@@ -21,6 +21,7 @@ namespace BL.Models.Administration
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string IsVisible { get; set; }
+        public string? Folder { get; set; }
     }
 
     public class TaskCRUDDTO
@@ -35,7 +36,8 @@ namespace BL.Models.Administration
         public int? Percentage { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Nullable<bool> IsVisible { get; set; }
+        public bool? IsVisible { get; set; }
+        public string? Folder { get; set; }
     }
 
     public class ProjectViewEventDTO
@@ -59,7 +61,8 @@ namespace BL.Models.Administration
 		public string ParentTaskName { get; set; }
 		public string Status { get; set; }
 		public int? Percentage { get; set; }
-	}
+        public string? Folder { get; set; }
+    }
 
     public class TaskDeatilsForPieChart
     {

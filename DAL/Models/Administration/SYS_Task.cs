@@ -24,5 +24,6 @@ namespace DAL.Models.Administration
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool? IsVisible { get; set; }
+        public string? Folder { get; set; }
     }
 }

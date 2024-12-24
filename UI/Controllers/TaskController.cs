@@ -1,6 +1,7 @@
 ﻿using BL.Models.Administration;
 using BL.Models.Common;
 using BL.Services.Administration;
+using BL.Services.Common;
 using DAL.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
@@ -81,12 +82,48 @@ namespace UI.Controllers
             }
         }
 
+        //[HttpPost]
+        //public ActionResult<BaseResponseDTO<bool>> CreateUpdate(TaskCRUDDTO dto)
+        //{
+        //    try
+        //    {
+        //        BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+
+        //        if (dto.Id == 0)
+        //        {
+        //            dt = TaskService.SaveAsync(dto);
+        //        }
+        //        else
+        //        {
+        //            dt = TaskService.UpdateAsync(dto);
+        //        }
+
+        //        return Ok(dt);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //}
+
         [HttpPost]
         public ActionResult<BaseResponseDTO<bool>> CreateUpdate(TaskCRUDDTO dto)
         {
             try
             {
                 BaseResponseDTO<bool> dt = new BaseResponseDTO<bool>();
+
+                //if (!string.IsNullOrEmpty(dto.Folder))
+                //{
+                //    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Projects", dto.Folder);
+
+                //    // Check if the folder exists, and create it if not
+                //    if (!Directory.Exists(folderPath))
+                //    {
+                //        Directory.CreateDirectory(folderPath);
+                //    }
+                //}
 
                 if (dto.Id == 0)
                 {
@@ -98,6 +135,30 @@ namespace UI.Controllers
                 }
 
                 return Ok(dt);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+
+        }
+        public IActionResult AddTask(long Id)
+        {
+            try
+            {
+                if (Id > 0)
+                {
+                    BaseResponseDTO<TaskCRUDDTO> dt = new BaseResponseDTO<TaskCRUDDTO>();
+                    dt = TaskService.GetById(Id);
+                    return View(dt.Data);
+                }
+                else
+                {
+                    TaskCRUDDTO dt = new TaskCRUDDTO();
+                    return View(dt);
+                }
+
             }
             catch (Exception)
             {
