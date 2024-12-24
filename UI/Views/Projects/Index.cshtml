@@ -92,9 +92,9 @@
     </div>
 </section>
 
-<div class="modal fade" id="AddProjectsModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+@* <div class="modal fade" id="AddProjectsModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<partial name="_AddProjects.cshtml" />
-</div>
+</div> *@
 <!-- /.modal -->
 @section scripts
 {
@@ -106,6 +106,7 @@
 		var CreateUpdateProjectsUrl = '@Url.Action("CreateUpdate", "Projects")';
 		var GetProjectMatrixTree = '@Url.Action("GetTree", "Projects")';
 		var GetProjectDashBoard = '@Url.Action("Index", "ProjectDashboard", new { Id = "__ID__" })';
+		var AddProjectURL = '@Url.Action("AddProjects", "Projects", new { Id = "__ID__" })';
 
 		$(function () {
 			$('.nav-link').removeClass('active');
@@ -166,7 +167,7 @@
 				ViewTaskLabel: '@SharedResource.View_Task'
 			};
 
-			initializeDataGridForProject('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, GetProjectDashBoard, columnList, false, true, true, false, false, null, true, null, langResource);
+			initializeDataGridForProject('ProjectsTable', 'openProjectsModal', GetAllProjectsUrl, GetProjectDashBoard, AddProjectURL, columnList, false, true, false, false, false, null, true, null, langResource);
 
 		}
 
@@ -250,7 +251,7 @@
 					toastr.error("Error:" + error);
 				}
 			}).done(function () {
-				$('#AddProjectsModal').modal('show');
+				// $('#AddProjectsModal').modal('show');
 				$("#frnProjectsCreate").validate({}).resetForm();
 			});
 

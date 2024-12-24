@@ -50,6 +50,7 @@ namespace UI.Controllers.API
 			var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
 
 			Result = await LoginService.Login(model, _signInManager, _userManager, _roleManager,Convert.ToString(ipAddress), "");
+
 			if (Result.QryResult == queryResult.SUCEEDED)
 			{
 				Result.Token = GetJWTToken(Result.Data,Result.Role,Result.RoleId.ToString());
@@ -59,10 +60,7 @@ namespace UI.Controllers.API
 			{
 				Result.Data = null;
 				return BadRequest(Result);
-			}
-			
-
-
+			}			
 		}
 
 		private string GetJWTToken(ApplicationUser model,string Role,string RoleId)
