@@ -12,7 +12,7 @@
         margin: 0; /* Removes any unwanted margin */
     }
 </style>
-<div class="modal-dialog">
+<div class="modal-dialog modal-xl">
     <form id="frnTaskCreate">
         <input type="hidden" id="hdnId" value="" />
         <div class="modal-content">
@@ -25,48 +25,58 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.Task_Code<span class="red-required">*</span></label>
                         <input type="text" id="txtCode" class="form-control" placeholder=@SharedResource.Task_Code readonly />
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.Parent_Task<span class="red-required">*</span></label>
                         <select class="form-control" id="ddlParentTask" required></select>
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.Task_Name<span class="red-required">*</span></label>
                         <input type="text" id="txtTaskName" class="form-control" placeholder=@SharedResource.Task_Name required />
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.Task_Description<span class="red-required">*</span></label>
                         <textarea type="text" id="txtTaskDescription" class="form-control" placeholder="@SharedResource.Task_Description" required> </textarea>
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.Projects<span class="red-required">*</span></label>
                         <select class="form-control" id="ddlProjects" required></select>
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.Status<span class="red-required">*</span></label>
                         <select class="form-control" id="ddlStatus" required></select>
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.Percentage<span class="red-required">*</span></label>
                         @* <textarea type="text" id="txtStatusDetails" class="form-control" placeholder="@SharedResource.Status_Details" required> </textarea> *@
                         <input type="number" id="txtPercentage" class="form-control" name="percentage" min="0" max="100" placeholder="Enter a number" required />
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.Start_Date<span class="red-required">*</span></label>
                         <input type="date" id="txtStartDate" class="form-control" placeholder="@SharedResource.Start_Date" required />
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-4 form-group">
                         <label>@SharedResource.End_Date<span class="red-required">*</span></label>
                         <input type="date" id="txtEndDate" class="form-control" placeholder="@SharedResource.End_Date" required />
                     </div>
-                    <div class="col-12 row form-group">
-                        <div class="col-3 d-flex align-items-center">
-                            <label for="chbIsVisible" class="mr-2">@SharedResource.Is_Visible</label>
-                            <input type="checkbox" id="chbIsVisible" class="form-control-sm" />
+
+                    <div class="col-4 form-group">
+                        <div class="form-group clearfix">
+                            <div class="icheck-primary d-inline">
+                                <input type="checkbox" id="chbIsVisible">
+                                <label for="chbIsVisible">
+                                    @SharedResource.Is_Visible
+                                </label>
+                            </div>
                         </div>
+
+                        @*  <div class="col-4 d-flex align-items-center">
+                        <label for="chbIsVisible" class="mr-2">@SharedResource.Is_Visible</label>
+                        <input type="checkbox" id="chbIsVisible" class="form-control-sm" />
+                        </div> *@
                     </div>
                 </div>
             </div>
