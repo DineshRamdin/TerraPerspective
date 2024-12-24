@@ -6,6 +6,7 @@ using DAL.Context;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using UI.Controllers.Common;
 
 namespace UI.Controllers
@@ -139,6 +140,7 @@ namespace UI.Controllers
 				if (dto.Id == 0)
 				{
 					dt = ProjectsService.SaveAsync(dto);
+					
 					if (dt.Data == true)
 					{
 						dt = _MatrixService.SaveProjectM(dto.ProjectMatrix, Convert.ToInt64(dt.ExtData));

@@ -503,6 +503,7 @@ namespace DAL.Context
         public DbSet<SYS_ProjectsMatrix> SYS_ProjectsMatrix { get; set; }
         public DbSet<SYS_ProjectTemplate> SYS_ProjectTemplate { get; set; }
         public DbSet<SYS_ProjectTemplateMapping> SYS_ProjectTemplateMapping { get; set; }
+        public DbSet<SYS_ProjectFolderFiles> SYS_ProjectFolderFiles { get; set; }
 
     }
 }

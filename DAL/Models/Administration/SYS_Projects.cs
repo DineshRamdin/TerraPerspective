@@ -30,7 +30,6 @@ namespace DAL.Models.Administration
 		public string StatusDetails { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
-		public string? Folder { get; set; }
 		public bool? IsVisible { get; set; }
 	}
 }

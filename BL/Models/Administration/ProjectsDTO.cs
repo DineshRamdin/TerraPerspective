@@ -44,5 +44,6 @@ namespace BL.Models.Administration
 		public string? Folder { get; set; }
 		public Nullable<bool> IsVisible { get; set; }
 		public List<long> ProjectMatrix { get; set; } = new List<long>();
+		public List<string> Files { get; set; } = new List<string>();
 	}
 }
