@@ -15,6 +15,7 @@ using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,7 +66,6 @@ namespace BL.Services.Administration
 													prj.StartDate,
 													prj.EndDate,
 													prj.PlannedDay,
-													prj.Folder,
 													prj.IsVisible,
 													prj.CreatedBy,
 													prj.CreatedDate
@@ -86,7 +86,6 @@ namespace BL.Services.Administration
 										p.StartDate,
 										p.EndDate,
 										p.PlannedDay,
-										p.Folder,
 										p.IsVisible,
 										p.CreatedBy,
 										p.CreatedDate
@@ -112,7 +111,7 @@ namespace BL.Services.Administration
 											 .Where(lv => lv.Id == x.Status) // Use a different lambda variable
 											 .FirstOrDefault()?.Name, // Use null-safe navigation
 								StatusDetails = x.StatusDetails,
-								Folder = x.Folder,
+								Folder = context.SYS_ProjectFolderFiles.Where(x => x.ProjectId == x.Id).FirstOrDefault().Folder,
 								IsVisible = x.IsVisible == true ? "Yes" : "No",
 
 							})
@@ -145,7 +144,7 @@ namespace BL.Services.Administration
 													EndDate = a.EndDate.ToString("yyyy/MM/dd"),
 													Status = context.SYS_LookUpValue.Where(x => x.Id == a.Status).FirstOrDefault().Name,
 													StatusDetails = a.StatusDetails,
-													Folder = a.Folder,
+													Folder = context.SYS_ProjectFolderFiles.Where(x => x.ProjectId == a.Id).FirstOrDefault().Folder,
 													IsVisible = a.IsVisible == true ? "Yes" : "No",
 												}).ToList();
 					foreach (var project in result)
@@ -210,12 +209,32 @@ namespace BL.Services.Administration
 							  EndDate = a.EndDate,
 							  Status = a.Status,
 							  StatusDetails = a.StatusDetails,
-							  Folder = a.Folder,
+							  Folder = context.SYS_ProjectFolderFiles.Where(x=>x.ProjectId==a.Id).FirstOrDefault().Folder,
 							  IsVisible = a.IsVisible,
 							  ProjectTemplateId=(a.ProjectTemplate == null)? 0 : a.ProjectTemplate.Id,
 							  ProjectColorCode=(string.IsNullOrEmpty(a.ProjectColorCode))? "" : a.ProjectColorCode,
 						  }).FirstOrDefault();
+				if (!string.IsNullOrEmpty(result.Folder))
+				{
+					// Define the folder path where the files are stored
+					string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Projects", result.Folder);
 
+					// Create a new DataTable
+					DataTable dataTable = new DataTable();
+					dataTable.Columns.Add("File Name", typeof(string));
+
+					// Get all file names in the folder
+					string[] fileNames = Directory.GetFiles(folderPath)
+												  .Select(filePath => Path.GetFileName(filePath))
+												  .ToArray();
+
+					// Populate the DataTable with file names
+					foreach (var fileName in fileNames)
+					{
+						result.Files.Add(Path.GetFileName(fileName));
+					}
+				}
+				
 				if (result == null)
 				{
 					dto.Data = result;
@@ -339,12 +358,19 @@ namespace BL.Services.Administration
 					EndDate = dataToSave.EndDate,
 					Status = dataToSave.Status,
 					StatusDetails = dataToSave.StatusDetails,
-					Folder = dataToSave.Folder,
 					ProjectColorCode = dataToSave.ProjectColorCode,
 					ProjectTemplate= context.SYS_ProjectTemplate.Where(x => x.Id == dataToSave.ProjectTemplateId).FirstOrDefault(),
 					IsVisible = dataToSave.IsVisible,
 				};
 				context.SYS_Projects.Add(dt);
+				context.SaveChanges();
+
+				SYS_ProjectFolderFiles dtf = new SYS_ProjectFolderFiles()
+				{
+					Folder=dataToSave.Folder,
+					ProjectId=dt.Id,
+				};
+				context.SYS_ProjectFolderFiles.Add(dtf);
 				context.SaveChanges();
 
 				List<SYS_ProjectTemplateMapping> templateMapping = context.SYS_ProjectTemplateMapping.Where(x => x.ProjectTemplateID == dataToSave.ProjectTemplateId).OrderBy(x=>x.Sequence).ToList();
@@ -448,7 +474,7 @@ namespace BL.Services.Administration
 			BaseResponseDTO<bool> BaseDto = new BaseResponseDTO<bool>();
 			try
 			{
-				if (!context.SYS_LookUpValue.Any(x => x.Name.ToLower() == dataToUpdate.ProjectName.ToLower() && x.DeleteStatus != true
+				if (!context.SYS_Projects.Any(x => x.ProjectName.ToLower() == dataToUpdate.ProjectName.ToLower() && x.DeleteStatus != true
 				&& x.Id != dataToUpdate.Id))
 				{
 					SYS_Projects Sys_Projects = context.SYS_Projects.Where(x => x.Id == dataToUpdate.Id).FirstOrDefault();
@@ -463,7 +489,6 @@ namespace BL.Services.Administration
 					Sys_Projects.EndDate = dataToUpdate.EndDate;
 					Sys_Projects.Status = dataToUpdate.Status;
 					Sys_Projects.StatusDetails = dataToUpdate.StatusDetails;
-					Sys_Projects.Folder = dataToUpdate.Folder;
 					Sys_Projects.ProjectColorCode = dataToUpdate.ProjectColorCode;
 					Sys_Projects.ProjectTemplate= context.SYS_ProjectTemplate.Where(x => x.Id == dataToUpdate.ProjectTemplateId).FirstOrDefault();
 					Sys_Projects.IsVisible = dataToUpdate.IsVisible;
